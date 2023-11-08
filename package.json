@@ -1,11 +1,15 @@
 {
   "name": "fulltazaskin",
   "version": "0.0.0",
+  "engines": {
+    "node": "18.x"
+  },
   "license": "MIT",
   "scripts": {
     "ng": "nx",
     "build": "nx build api",
     "start": "node dist/apps/api/main.js",
+    "start:prod": "node dist/apps/api/main.js",
     "test": "nx test"
   },
   "private": true,
