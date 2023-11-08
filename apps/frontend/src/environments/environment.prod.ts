@@ -1,3 +1,4 @@
 export const environment = {
-  production: true,
+  APIURL:'https://tazaskin-f2c378be7f7d.herokuapp.com',
+  production:true
 };
