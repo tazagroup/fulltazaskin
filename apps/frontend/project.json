@@ -99,6 +99,12 @@
         "jestConfig": "apps/frontend/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "deploy": {
+      "executor": "angular-cli-ghpages:deploy",
+      "options": {
+        "baseHref": "https://chikiet88.com/"
+      }
     }
   },
   "tags": []
