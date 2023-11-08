@@ -14,7 +14,7 @@ npx ng build --prod --base-href https://chikiet.com
 
 npx ng add angular-cli-ghpages --project site
 
-npx ngh --dir=dist/apps/site  --no-silent
+npx ngh --dir=dist/apps/frontend  --no-silent
 
 git config --global user.email "quocbao280783@gmail.com"
 
