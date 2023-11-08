@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "ng": "nx",
+    "build": "nx build api",
     "start": "node dist/apps/api/main.js",
-    "build": "nx build api --prod",
     "test": "nx test"
   },
   "private": true,
