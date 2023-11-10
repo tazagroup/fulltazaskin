@@ -6,14 +6,12 @@ import { UpdateZaloDto } from './update-zalo.dto';
 @Controller('zalo')
 export class ZaloController {
   constructor(private readonly zaloService: ZaloService) {}
-  @Get('/me')
+  @Post('/me')
   async getMeInfo(@Body() data: any): Promise<any> {
     console.error(data);
-    
     const userAccessToken = data.userAccessToken;
     const token = data.token;
-    const secretKey = data.secretKey;
-    const meInfo = await this.zaloService.getMeInfo(userAccessToken, token, secretKey);
+    const meInfo = await this.zaloService.getMeInfo(userAccessToken, token);
     return meInfo;
   }
   @Post()
