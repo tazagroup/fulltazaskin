@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { KhachhangModule } from './khachhang/khachhang.module';
 import { CauhinhModule } from './cauhinh/cauhinh.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ZaloModule } from './zalo/zalo.module';
+import { HttpModule} from '@nestjs/axios';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -17,7 +19,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true,
       charset: "utf8mb4",
     }),
-    KhachhangModule, CauhinhModule,],
+    KhachhangModule, 
+    CauhinhModule,
+    ZaloModule,
+    HttpModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
