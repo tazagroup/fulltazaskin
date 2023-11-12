@@ -22,6 +22,8 @@ export class KhachhangEntity {
     Doanhso: number;
     @Column()
     Congno: number;
+    @Column({ collation: "utf8_general_ci", type: "simple-json", default: () => "('{}')" })
+    Hangthanhvien: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     idCN: string;
     @Column({ default: '' })

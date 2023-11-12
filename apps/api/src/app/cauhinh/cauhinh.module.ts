@@ -7,5 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [TypeOrmModule.forFeature([CauhinhEntity])],
   controllers: [CauhinhController],
   providers: [CauhinhService],
+  exports:[CauhinhService]
 })
 export class CauhinhModule {}
