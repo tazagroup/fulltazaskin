@@ -6,6 +6,7 @@ import { CauhinhModule } from './cauhinh/cauhinh.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ZaloModule } from './zalo/zalo.module';
 import { HttpModule} from '@nestjs/axios';
+import { DanhmucModule } from './danhmuc/danhmuc.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -23,6 +24,7 @@ import { HttpModule} from '@nestjs/axios';
     CauhinhModule,
     ZaloModule,
     HttpModule,
+    DanhmucModule,
   ],
   controllers: [AppController],
   providers: [AppService],

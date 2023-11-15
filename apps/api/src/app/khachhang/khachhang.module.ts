@@ -4,10 +4,11 @@ import { KhachhangController } from './khachhang.controller';
 import { KhachhangEntity } from './entities/khachhang.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CauhinhModule } from '../cauhinh/cauhinh.module';
+import { DanhmucModule } from '../danhmuc/danhmuc.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([KhachhangEntity]),
-    CauhinhModule
+    CauhinhModule,
 ],
   controllers: [KhachhangController],
   providers: [KhachhangService],
