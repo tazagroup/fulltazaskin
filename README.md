@@ -1,3 +1,7 @@
+## Git CLI
+git remote prune origin "Đồng Bộ Nhánh Trên máy Chủ"
+git push origin --delete  xóa nhánh remote
+git branch -D xóa nhánh local
 git branch gh-pages
 
 git checkout gh-pages
