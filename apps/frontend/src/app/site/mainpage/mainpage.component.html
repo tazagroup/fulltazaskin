@@ -1,0 +1,39 @@
+<!-- <div class="w-screen h-screen flex flex-col space-x-2 bg-gray-100 p-4">
+  <div class="w-full flex flex-row space-x-3">
+  <div class="w-1/4 flex flex-col space-y-3 rounded-lg bg-white p-4">
+      <div class="font-bold">Menu</div>
+      <div class="p-4 rounded-lg" [routerLink]="[item.url]" routerLinkActive="bg-gray-100 font-bold"  *ngFor="let item of [
+        {id:1,title:'Khách Hàng',url:'khach-hang'},
+        {id:2,title:'Danh Mục',url:'danh-muc'},
+        {id:3,title:'Dịch Vụ',url:'dich-vu'},
+       ]; let i=index"> 
+        {{item.title}}
+      </div>
+  </div>
+  <div class="w-full">
+    <router-outlet></router-outlet>
+  </div>
+  </div>
+</div> -->
+<div class="w-screen h-screen flex flex-col space-x-2 bg-gray-100">
+<mat-drawer-container class="example-container w-full h-full" autosize>
+  <mat-drawer-content class="!flex flex-col flex-auto w-40  relative bg-white">
+    <div class="font-bold text-center p-4 text-2xl">Menu</div>
+    <div class="relative flex flex-col space-y-2 h-full w-full overflow-auto p-4">
+      <div class="p-3 rounded-lg hover:bg-gray-100 hover:font-bold" [routerLink]="[item.url]" routerLinkActive="bg-gray-100 font-bold"  *ngFor="let item of [
+        {id:1,title:'Khách Hàng',url:'khach-hang'},
+        {id:2,title:'Danh Mục',url:'danh-muc'},
+        {id:3,title:'Dịch Vụ',url:'dich-vu'},
+        {id:4,title:'Cấu Hình',url:'cau-hinh'},
+       ]; let i=index"> 
+        {{item.title}}
+      </div>
+    </div>
+</mat-drawer-content>
+  <mat-drawer #drawer mode="side" opened="true" class="!flex flex-col flex-auto min-w-0 relative h-full w-screen-40" position="end">
+        <div class="relative flex flex-col h-full w-full overflow-auto">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-drawer>
+  </mat-drawer-container>
+</div>

@@ -8,7 +8,12 @@ module.exports = {
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
-    extend: {},
+    extend: {
+      width: {
+        'screen-40': 'calc(100% - 160px)',      
+      },
+    },
+    
   },
   plugins: [],
 };

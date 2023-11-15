@@ -1,0 +1,146 @@
+<mat-drawer-container class="w-full h-[100vh]" autosize>
+     <mat-drawer-content class="relative !flex flex-col h-full flex-auto min-w-0 bg-white">
+        <div class="relative flex flex-col h-full w-full shadow">
+          <div class="relative flex flex-col">
+            <div class="flex flex-row space-x-2 justify-between items-center p-2">
+              <div class="flex flex-row space-x-2 items-center">
+                <button mat-icon-button (click)="openDialog(dialogTemplate);Detail = {}">
+                  <span class="material-symbols-outlined text-blue-500">
+                    add_circle
+                  </span>
+                </button>
+              </div>
+              <mat-form-field appearance="outline" class="w-full text-xs">
+                    <mat-label>Tiêu Đề</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" class="w-full" placeholder="Mô Tả">
+                    <span matPrefix class="material-symbols-outlined mr-2">search</span>
+              </mat-form-field>
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <span class="material-symbols-outlined">more_vert</span>
+               </button>
+                <mat-menu #menu="matMenu">
+                      <button mat-menu-item>
+                          <div class="flex flex-row space-x-2 items-center">
+                              <span class="material-symbols-outlined text-xl" matTooltip="Tùy Chỉnh">tune</span>
+                              <span class="text-sm">Cấu Hình</span>
+                          </div>
+                      </button>
+                      <button mat-menu-item>
+                          <div class="flex flex-row space-x-2 items-center">
+                              <span class="material-symbols-outlined text-xl" matTooltip="Lấy Mẫu">file_download</span>
+                              <span class="text-sm">Download</span>
+                          </div>
+                      </button>
+                      <button mat-menu-item>
+                          <div class="flex flex-row space-x-2 items-center">
+                              <span class="material-symbols-outlined text-xl" matTooltip="Upload File">file_upload</span>
+                              <span class="text-sm">Upload</span>
+                          </div>
+                      </button>
+                  </mat-menu>
+            </div>
+          </div>
+          <div class="h-full border-y overflow-auto py-4">
+              <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="text-primary">
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+                  <button mat-icon-button disabled></button>
+                  <a (click)="drawer.open()" routerLink="{{node.id}}" routerLinkActive="bg-gray-100 font-bold" class="p-3 rounded-lg hover:bg-gray-100 hover:font-bold">{{node.Title}}</a>
+                </mat-tree-node>
+                <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+                  <button mat-icon-button matTreeNodeToggle
+                          [attr.aria-label]="'Toggle ' + node.Title">
+                    <span class="material-symbols-outlined">{{treeControl.isExpanded(node)?'expand_more':'navigate_next'}}</span>
+                  </button>
+                  <a (click)="drawer.open()" routerLink="{{node.id}}" routerLinkActive="bg-gray-100 font-bold" class="p-3 rounded-lg hover:bg-gray-100 hover:font-bold">{{node.Title}}</a>
+              </mat-tree-node>
+            </mat-tree>
+          </div>
+        </div>
+    </mat-drawer-content>
+  <mat-drawer #drawer mode="side" opened="true" class="!flex flex-col flex-auto min-w-0 relative h-full w-2/3" position="end">
+        <div class="relative flex flex-col h-full w-full overflow-auto">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-drawer>
+  </mat-drawer-container>
+
+  <ng-template #dialogTemplate>
+    <div class="min-w-[375px]">
+      <div mat-dialog-title>Thêm Mới</div>
+      <div mat-dialog-content>
+        <div class="flex flex-col w-full space-y-4 p-4">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Tiêu Đề</mat-label>
+            <input matInput [(ngModel)]="Detail.Title" [ngModelOptions]="{standalone: true}" placeholder="Tiêu Đề" (input)="convertToSlug(Detail.Title)">
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Slug</mat-label>
+            <input matInput [(ngModel)]="Detail.Slug" [ngModelOptions]="{standalone: true}" placeholder="Số Điện Thoại">
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+              <mat-label>Danh Mục</mat-label>
+              <mat-select [(ngModel)]="Detail.pid" [ngModelOptions]="{standalone: true}">
+                <mat-option [value]="item.id" *ngFor="let item of Danhmucs">{{item.Title}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+      </div>
+      <div mat-dialog-actions class="justify-center">
+        <button mat-button class="bg-red-400 hover:bg-red-600 text-white" mat-dialog-close="false">Huỷ</button>
+        <button mat-button class="bg-blue-400 hover:bg-blue-600 text-white" mat-dialog-close="true">Đồng Ý</button>
+      </div>
+    </div>
+  </ng-template>
+  
+  <ng-template #dialogEdit>
+    <div class="min-w-[375px]">
+      <div mat-dialog-title>Cập Nhật</div>
+        <div mat-dialog-content>
+          <div class="flex flex-col w-full space-y-4 p-4">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Tiêu Đề</mat-label>
+              <input matInput [(ngModel)]="Detail.Title" [ngModelOptions]="{standalone: true}" placeholder="Tiêu Đề" (input)="convertToSlug(Detail.Title)">
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Slug</mat-label>
+              <input matInput [(ngModel)]="Detail.Slug" [ngModelOptions]="{standalone: true}" placeholder="Số Điện Thoại">
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Danh Mục</mat-label>
+                <mat-select [(ngModel)]="Detail.pid" [ngModelOptions]="{standalone: true}">
+                  <mat-option [value]="item.id" *ngFor="let item of Danhmucs">{{item.Title}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+      </div>
+      <div mat-dialog-actions class="justify-center">
+        <button mat-button class="bg-red-400 hover:bg-red-600 text-white" mat-dialog-close="false">Huỷ</button>
+        <button mat-button class="bg-blue-400 hover:bg-blue-600 text-white" mat-dialog-close="true">Cập Nhật</button>
+      </div>
+    </div>
+  </ng-template>
+
+
+
+<!-- <div class="w-full flex flex-col bg-white rounded-lg p-8">
+  <div class="flex flex-row space-x-2 items-center justify-between">
+    <div>
+      <button mat-icon-button (click)="openDialog(dialogTemplate);Detail = {}">
+        <span class="material-symbols-outlined text-blue-500">
+          add_circle
+        </span>
+      </button>
+    </div>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Tiêu Đề</mat-label>
+      <input type="text" #input matInput [placeholder]="'Tìm kiếm bài viết'" (input)="applyFilter($event)" />
+    </mat-form-field>
+  </div>
+  <div class="w-full flex flex-col space-y-2">
+
+  </div>
+</div> -->

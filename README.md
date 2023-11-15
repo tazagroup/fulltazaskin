@@ -8,7 +8,7 @@ npx ng add angular-cli-ghpages
 
 npx ng add angular-cli-ghpages
 
-npx ng deploy --base-href=https://chikiet.com
+npx ng deploy --base-href=https://tazagroup.github.io/fulltazaskin/
 
 npx ng build --prod --base-href https://chikiet.com
 
@@ -21,3 +21,4 @@ git config --global user.email "quocbao280783@gmail.com"
 git config --global user.name "quocbao1983"
 
 npx nx build --prod --outputHashing=all
+npm install angular-cli-ghpages
