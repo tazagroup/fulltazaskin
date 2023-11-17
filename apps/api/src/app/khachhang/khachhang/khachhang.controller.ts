@@ -22,6 +22,10 @@ export class KhachhangController {
   LoadSDT(@Query('SDT') SDT: string) {
       return this.khachhangService.findBySDT(SDT);
   }
+  @Get('findsdt/:sdt')
+  findOne(@Param('sdt') sdt: string) {
+    return this.khachhangService.findBySDT(sdt);
+  }
   @Get('paged')
   LoadTenKH(@Query('TenKH') TenKH: string) {
       return this.khachhangService.findByTenKH(TenKH);
