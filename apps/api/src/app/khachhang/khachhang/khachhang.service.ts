@@ -24,6 +24,11 @@ export class KhachhangService {
       { where :{Chinhanh:Chinhanh}}
     );
   }
+  async findOneBySDT(SDT: string) {
+    return await this.KhachhangRepository.findOne(
+      { where :{SDT:SDT}}
+    );
+  }
   async findBySDT(SDT: string) {
     return await this.KhachhangRepository.find(
       { where :{SDT:SDT}}

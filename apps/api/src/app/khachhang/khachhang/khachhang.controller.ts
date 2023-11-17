@@ -24,7 +24,7 @@ export class KhachhangController {
   }
   @Get('findsdt/:sdt')
   findOne(@Param('sdt') sdt: string) {
-    return this.khachhangService.findBySDT(sdt);
+    return this.khachhangService.findOneBySDT(sdt);
   }
   @Get('paged')
   LoadTenKH(@Query('TenKH') TenKH: string) {
