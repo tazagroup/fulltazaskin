@@ -6,6 +6,8 @@ import { environment } from 'apps/frontend/src/environments/environment';
   providedIn: 'root'
 })
 export class KhachhangService {
+  //http://localhost:3001/khachhangs/chitiet/findpaged?take=1&skip=10
+  //http://localhost:3001//khachhangs/chitiet
   private urlApi = environment.APIURL;
   private _khachhangs: BehaviorSubject<any[] | null> = new BehaviorSubject<any[] | null>(null);
   private _khachhang: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
@@ -17,8 +19,17 @@ export class KhachhangService {
   }
   constructor(private http: HttpClient) { }
   getKhachhangs() {
-    return this.http.get(this.urlApi + '/khachhang').pipe(
+    return this.http.get(this.urlApi + '/khachhangs/khachhang').pipe(
       map((data: any) => { 
+        this._khachhangs.next(data);
+        return data;
+      })
+    );
+  }
+  getLazyloadKhachhangs(skip: number, take: number) {
+    const params ={ skip: String(skip), take: String(take) }
+    return this.http.get(this.urlApi+'/khachhangs/khachhang/findpaged',{ params }).pipe(
+      map((data: any) => {
         this._khachhangs.next(data);
         return data;
       })

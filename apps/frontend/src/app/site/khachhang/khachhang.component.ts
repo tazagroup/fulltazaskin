@@ -2,8 +2,9 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { KhachhangService } from './khachhang.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDrawer } from '@angular/material/sidenav';
 @Component({
   selector: 'app-khachhang',
   templateUrl: './khachhang.component.html',
@@ -12,23 +13,27 @@ import { MatTableDataSource } from '@angular/material/table';
 export class KhachhangComponent implements OnInit {
   Khachhangs:any[]=[]
   Detail:any={}
-  displayedColumns: string[] = ['Hoten','SDT', 'Doanhso', 'Doanhthu', 'Congno'];
+  displayedColumns: string[] = ['TenKH','SDT', 'Doanhso', 'Dathu', 'Congno'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   constructor(
     private _KhachhangService:KhachhangService,
     public dialog: MatDialog
   ) {}
   ngOnInit() {
-    this._KhachhangService.getKhachhangs().subscribe()
+    this._KhachhangService.getLazyloadKhachhangs(0,400000).subscribe()
     this._KhachhangService.khachhangs$.subscribe((data:any)=>
       {
-        console.log(data);
-        this.Khachhangs = data
-        this.dataSource = new MatTableDataSource(data);
+        if(data)
+        {
+        console.log(data.data);
+        this.Khachhangs = data.data
+        this.dataSource = new MatTableDataSource(data.data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        }
       })
   }
   applyFilter(event: Event) {

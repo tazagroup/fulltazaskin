@@ -17,7 +17,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
         path: '', component: MainpageComponent,
         children: [
           { path: 'khach-hang', loadChildren: () => import('../khachhang/khachhang.module').then(m => m.KhachhangModule)},
-          { path: 'danh-muc', loadChildren: () => import('../danhmuc/danhmuc.module').then(m => m.DanhmucModule)},
+          { path: 'dich-vu', loadChildren: () => import('../dichvu/dichvu.module').then(m => m.DanhmucModule)},
           { path: 'cau-hinh', loadChildren: () => import('../cauhinh/cauhinh.module').then(m => m.CauhinhModule)},
       ]
       }

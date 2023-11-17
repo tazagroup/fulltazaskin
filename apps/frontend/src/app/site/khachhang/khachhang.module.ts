@@ -8,6 +8,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSortModule } from '@angular/material/sort';
+import { KhachhangChitietComponent } from './khachhang-chitiet/khachhang-chitiet.component';
 
 @NgModule({
   imports: [
@@ -19,16 +22,18 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatDialogModule,
     MatTableModule,
     MatPaginatorModule,
+    MatSidenavModule,
+    MatSortModule,
     RouterModule.forChild([
       {
         path: '', component: KhachhangComponent,
-        // children: [{
-        //   path: ':id', component: PhanloaidaChitietComponent
-        // }]
+        children: [{
+          path: ':SDT', component: KhachhangChitietComponent
+        }]
     
       }
     ])
   ],
-  declarations: [KhachhangComponent]
+  declarations: [KhachhangComponent,KhachhangChitietComponent]
 })
 export class KhachhangModule { }

@@ -27,3 +27,17 @@ body {
 .mat-form-field-wrapper {
   padding-bottom: 0;
 }
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+  padding: 0;
+  border-width: 1px;
+  border-style: solid;
+  padding: 12px !important;
+}
+.mat-sort-header-container {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  letter-spacing: normal;
+  outline: 0;
+  justify-content: center;
+}
