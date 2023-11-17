@@ -7,10 +7,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ZaloModule } from './zalo/zalo.module';
 import { HttpModule} from '@nestjs/axios';
 import { DanhmucModule } from './danhmuc/danhmuc.module';
+import { DichvuModule } from './cauhinh/dichvu/dichvu.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
+      // host: '103.221.222.71',
+      // port: 3306,
+      // username: 'tazaspac_chikiet',
+      // password: '@Hikiet88',
+      // database: 'tazaspac_zalotazaskin',
+
       host: '103.221.222.71',
       port: 3306,
       username: 'tazaspac_chikiet',
@@ -25,6 +32,7 @@ import { DanhmucModule } from './danhmuc/danhmuc.module';
     ZaloModule,
     HttpModule,
     DanhmucModule,
+    DichvuModule,
   ],
   controllers: [AppController],
   providers: [AppService],
