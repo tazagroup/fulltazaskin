@@ -4,11 +4,13 @@ import { Repository } from 'typeorm';
 import { CreateDanhmucDto } from './dto/create-danhmuc.dto';
 import { UpdateDanhmucDto } from './dto/update-danhmuc.dto';
 import { DanhmucEntity } from './entities/danhmuc.entity';
+import { DichvuService } from '../dichvu/dichvu.service';
 @Injectable()
 export class DanhmucService {
   constructor(
     @InjectRepository(DanhmucEntity)
-    private DanhmucRepository: Repository<DanhmucEntity>
+    private DanhmucRepository: Repository<DanhmucEntity>,
+    private _DichvuService: DichvuService
   ) {}
   async create(CreateDanhmucDto: CreateDanhmucDto) {
     this.DanhmucRepository.create(CreateDanhmucDto);
@@ -26,9 +28,14 @@ export class DanhmucService {
     return nestedData;
   }
   async findAll() {
-    const result = await this.DanhmucRepository.find();
-    const nestedDataOneLiner = this.nestDataByPid(result, '');   
-    return nestedDataOneLiner
+    const Danhmucs = await this.DanhmucRepository.find();
+    const Dichvus = await this._DichvuService.findAll();
+    Danhmucs.map((v:any) => {
+      v.isDM = true
+      v.Dichvu = Dichvus.filter((dichvu) => dichvu.idDM === v.id)||[];
+    });
+    const result = this.nestDataByPid(Danhmucs, '');   
+    return result
   }
   async findid(id: string) {
     return await this.DanhmucRepository.findOne({

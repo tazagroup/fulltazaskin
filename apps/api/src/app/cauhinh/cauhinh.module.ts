@@ -3,9 +3,8 @@ import { CauhinhService } from './cauhinh.service';
 import { CauhinhController } from './cauhinh.controller';
 import { CauhinhEntity } from './entities/cauhinh.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DichvuModule } from './dichvu/dichvu.module';
 @Module({
-  imports: [TypeOrmModule.forFeature([CauhinhEntity]), DichvuModule],
+  imports: [TypeOrmModule.forFeature([CauhinhEntity])],
   controllers: [CauhinhController],
   providers: [CauhinhService],
   exports:[CauhinhService]

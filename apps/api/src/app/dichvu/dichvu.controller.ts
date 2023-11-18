@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import {DichvuService } from './dichvu.service';
 import { CreateDichvuDto } from './dto/create-dichvu.dto';
 import { UpdateDichvuDto } from './dto/update-dichvu.dto';
@@ -11,16 +11,24 @@ export class DichvuController {
     return this.dichvuService.create(createDichvuDto);
   }
   @Get()
-  findAll() {
-    return this.dichvuService.findAll();
+  async findAll() {
+    return await this.dichvuService.findAll();
   }
   @Get('findid/:id')
-  findOne(@Param('id') id: string) {
-    return this.dichvuService.findid(id);
+  async findOne(@Param('id') id: string) {
+    return await this.dichvuService.findid(id);
   }
   @Get('findslug/:slug')
-  findslug(@Param('slug') slug: string) {
-    return this.dichvuService.findslug(slug);
+  async findslug(@Param('slug') slug: string) {
+    return await this.dichvuService.findslug(slug);
+  }
+  @Get('pagination')
+  async findPagination(@Query('page') page: number,@Query('perPage') perPage: number){
+       return await this.dichvuService.findPagination(page,perPage);
+    }
+  @Get('findquery')
+    async findQuery(@Query('query') query: string){
+      return await this.dichvuService.findQuery(query);
   }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDichvuDto: UpdateDichvuDto) {

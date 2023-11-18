@@ -11,7 +11,7 @@ export class DichvuEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
-  pid: string;
+  idDM: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Title: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
@@ -19,7 +19,7 @@ export class DichvuEntity {
   @Column({ default: '' })
   Slug: string;
   @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
-  Hinhanh: string;
+  Image: string;
   @Column({ default: '' })
   Type: string;
   @Column({ default: 1 })

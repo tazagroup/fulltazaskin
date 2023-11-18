@@ -6,6 +6,7 @@ import { DichvuEntity } from './entities/dichvu.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([DichvuEntity])],
   controllers: [DichvuController],
-  providers: [DichvuService]
+  providers: [DichvuService],
+  exports:[DichvuService]
 })
 export class DichvuModule {}

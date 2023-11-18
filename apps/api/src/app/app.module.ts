@@ -7,7 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ZaloModule } from './zalo/zalo.module';
 import { HttpModule} from '@nestjs/axios';
 import { DanhmucModule } from './danhmuc/danhmuc.module';
-import { DichvuModule } from './cauhinh/dichvu/dichvu.module';
+import { DichvuModule } from './dichvu/dichvu.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
