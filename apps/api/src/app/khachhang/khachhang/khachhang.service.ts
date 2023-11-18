@@ -4,13 +4,14 @@ import { Like, Repository } from 'typeorm';
 import { CreateKhachhangDto } from './dto/create-khachhang.dto';
 import { UpdateKhachhangDto } from './dto/update-khachhang.dto';
 import { KhachhangEntity } from './entities/khachhang.entity';
+import { CauhinhService } from '../../cauhinh/cauhinh.service';
 
 @Injectable()
 export class KhachhangService {
-
   constructor(
     @InjectRepository(KhachhangEntity)
     private KhachhangRepository: Repository<KhachhangEntity>,
+    private _CauhinhService: CauhinhService
   ) {}
   async create(CreateKhachhangDto: CreateKhachhangDto) {
     this.KhachhangRepository.create(CreateKhachhangDto);
@@ -25,9 +26,14 @@ export class KhachhangService {
     );
   }
   async findOneBySDT(SDT: string) {
-    return await this.KhachhangRepository.findOne(
-      { where :{SDT:SDT}}
-    );
+    // return await this.KhachhangRepository.findOne(
+    //   { where :{SDT:SDT}}
+    // );
+      let Hangthanhvien:any={Data:[]}
+      Hangthanhvien = await this._CauhinhService.findslug('hang-thanh-vien')
+      const Khachhang = await this.KhachhangRepository.findOne({where: { SDT: SDT}});
+      Khachhang.Hangthanhvien = Hangthanhvien.Data.find((v:any)=>Khachhang.Dathu>=v.FromAmount && Khachhang.Dathu<v.ToAmount)
+      return Khachhang
   }
   async findBySDT(SDT: string) {
     return await this.KhachhangRepository.find(

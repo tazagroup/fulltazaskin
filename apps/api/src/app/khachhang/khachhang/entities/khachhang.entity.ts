@@ -15,6 +15,8 @@ export class KhachhangEntity {
     SDT2:string;
     @Column()
     Dathu: number;
+    @Column({ collation: "utf8_general_ci", type: "simple-json", default: () => "('{}')" })
+    Hangthanhvien: string;
     @Column({type: 'datetime',nullable: true})
     Ghichu: string;
     @Column({collation: "utf8_general_ci"})
