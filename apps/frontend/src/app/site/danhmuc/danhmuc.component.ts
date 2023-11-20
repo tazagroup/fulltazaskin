@@ -45,7 +45,7 @@ export class DanhmucComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._DanhmucService.getDanhmucs().subscribe()
+    this._DanhmucService.getAllDanhmucs().subscribe()
     this._DanhmucService.danhmucs$.subscribe((data: any) => {
       if (data) {
         console.log(data);

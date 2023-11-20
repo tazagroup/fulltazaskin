@@ -16,7 +16,7 @@ export class DanhmucService {
     return this._danhmuc.asObservable();
   }
   constructor(private http: HttpClient) { }
-  getDanhmucs() {
+  getAllDanhmucs() {
     return this.http.get(this.urlApi + '/danhmuc').pipe(
       map((data: any) => { 
         this._danhmucs.next(data);

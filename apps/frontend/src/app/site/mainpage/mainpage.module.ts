@@ -4,12 +4,14 @@ import { MainpageComponent } from './mainpage.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatTreeModule} from '@angular/material/tree';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     MatSidenavModule,
+    MatTreeModule,
     ReactiveFormsModule,
     RouterModule.forChild([
       {path:'',redirectTo:'khach-hang',pathMatch:'full'},

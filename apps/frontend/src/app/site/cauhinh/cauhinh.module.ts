@@ -7,6 +7,7 @@ import { CauhinhChitietComponent } from './cauhinh-chitiet/cauhinh-chitiet.compo
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { HangthanhvienModule } from './hangthanhvien/hangthanhvien.module';
 
 @NgModule({
   imports: [
@@ -18,11 +19,13 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDialogModule,
     RouterModule.forChild([
       {
-        path: '', component: CauhinhComponent,
-        children: [{
-          path: ':slug', component: CauhinhChitietComponent
-        }]   
-      }
+        path: '', component: CauhinhComponent,  
+        children:[
+          { path: 'hang-thanh-vien', loadChildren: () => import('./hangthanhvien/hangthanhvien.module').then(m => m.HangthanhvienModule) },
+          { path: 'chi-nhanh', loadChildren: () => import('./chinhanh/chinhanh.module').then(m => m.ChinhanhModule) },
+        ]
+      },
+ 
     ])
   ],
   declarations: [CauhinhComponent,CauhinhChitietComponent]

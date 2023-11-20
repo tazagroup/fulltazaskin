@@ -12,6 +12,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { DichvuChitietComponent } from './dichvu-chitiet/dichvu-chitiet.component';
 import { DichvuComponent } from './dichvu.component';
+import { DichvuDanhmucComponent } from './dichvu-danhmuc/dichvu-danhmuc.component';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 @NgModule({
   imports: [
@@ -26,16 +28,18 @@ import { DichvuComponent } from './dichvu.component';
     MatTreeModule,
     MatSidenavModule,
     MatMenuModule,
+    EditorModule,
     RouterModule.forChild([
       {
         path: '', component: DichvuComponent,
-        children: [{
-          path: ':id', component: DichvuChitietComponent
-        }]
+        children: [
+          {path: 'chitiet/:id', component: DichvuChitietComponent},
+          {path: 'danhmuc/:id', component: DichvuDanhmucComponent},
+        ]
     
       }
     ])
   ],
-  declarations: [DichvuComponent]
+  declarations: [DichvuComponent,DichvuChitietComponent,DichvuDanhmucComponent]
 })
 export class DanhmucModule { }
