@@ -16,9 +16,9 @@ import {
     Mota: string;
     @Column({ default: '' })
     Slug: string;
-    @Column()
+    @Column({type:'bigint'})
     FromAmount: number;
-    @Column()
+    @Column({type:'bigint'})
     ToAmount: number;
     @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
     Image: string;
