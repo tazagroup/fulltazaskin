@@ -18,15 +18,15 @@ export class DichvuService {
 
   getAllDichvus() {
     return this.http.get(environment.APIURL + '/dichvu').pipe(
-      map((data: any) => { 
+      map((data: any) => {
         this._dichvus.next(data);
         return data;
       })
     );
   }
-  searchDichvu(query:any) {
+  searchDichvu(query: any) {
     return this.http.get(environment.APIURL + `/dichvu/search?query=${query}`).pipe(
-      map((data: any) => { 
+      map((data: any) => {
         return data;
       })
     );
@@ -40,8 +40,8 @@ export class DichvuService {
     );
   }
   getPaginaDichvus(page: number, limit: number) {
-    const params ={ page: String(page), limit: String(limit) }
-    return this.http.get(environment.APIURL+'/dichvu/pagina',{ params }).pipe(
+    const params = { page: String(page), limit: String(limit) }
+    return this.http.get(environment.APIURL + '/dichvu/pagina', { params }).pipe(
       map((data: any) => {
         return data;
       })
@@ -56,37 +56,25 @@ export class DichvuService {
     );
   }
   CreateDichvu(data: any) {
-       return  this.http.post(environment.APIURL + '/dichvu', data).pipe(
-          map(() => {
-            this.getAllDichvus()
-          })
-        )
+    return this.http.post(environment.APIURL + '/dichvu', data).pipe(
+      map(() => {
+        this.getAllDichvus()
+      })
+    )
   }
   UpdateDichvu(data: any) {
-    return this.dichvus$.pipe(
-      take(1),
-      switchMap((dichvus: any) =>
-        this.http.patch(environment.APIURL + `/dichvu/${data.id}`, data).pipe(
-          map((dichvu) => {
-            const index = dichvus.findIndex((item: any) => item.id === data.id);
-            if (index != -1) {
-              dichvus[index] = data;
-              this._dichvus.next(dichvus as any[]);
-            } else {
-              this._dichvus.next([dichvu]);
-
-            }
-            return dichvu;
-          })
-        )
-      )
-    );
+    return this.http.patch(environment.APIURL + `/dichvu/${data.id}`, data).pipe(
+      map((dichvu) => {
+        this._dichvu.next(dichvu);
+        this.getAllDichvus()
+      })
+    )
   }
   DeleteDichvu(id: string) {
     return this.http.delete(environment.APIURL + `/dichvu/${id}`).pipe(
-          map(() => {
-              this.getAllDichvus()
-          })
-        )
+      map(() => {
+        this.getAllDichvus()
+      })
+    )
   }
 }

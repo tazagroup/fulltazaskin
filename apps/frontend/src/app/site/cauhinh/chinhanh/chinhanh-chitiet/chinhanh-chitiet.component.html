@@ -26,11 +26,16 @@
               <input [(ngModel)]="Detail.Linkmap" [ngModelOptions]="{standalone: true}" matInput type="text"
                 class="w-full" placeholder="Link Google Map" />
             </mat-form-field>
-              <div class="grid grid-cols-3 gap-2" *ngFor="let item of Detail.ListSocial;let i = index">
+              <div class="grid grid-cols-4 gap-2" *ngFor="let item of Detail.ListSocial;let i = index">
                 <mat-form-field appearance="outline">
                   <mat-label>Tiêu Đề</mat-label>
                   <input [(ngModel)]="Detail.ListSocial[i].Title" [ngModelOptions]="{standalone: true}" matInput type="text"
                     class="w-full" placeholder="Tiêu Đề" />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Key</mat-label>
+                  <input [(ngModel)]="Detail.ListSocial[i].Key" [ngModelOptions]="{standalone: true}" matInput type="text"
+                    class="w-full" placeholder="Key" />
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                   <mat-label>Value</mat-label>

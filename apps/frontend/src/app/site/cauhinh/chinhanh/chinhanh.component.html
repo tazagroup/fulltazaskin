@@ -45,13 +45,13 @@
       </div>
       <div class="relative flex flex-col h-full w-full overflow-auto">
           <div class="flex flex-col">
-              <div class="flex flex-row justify-between items-center p-4 hover:bg-gray-200"
+              <div class="flex flex-row justify-between items-center p-4 hover:bg-gray-200"  [routerLink]="[item.id]" routerLinkActive="font-bold bg-gray-200" (click)="drawer.open()"
                   *ngFor="let item of FilterLists; let i = index">
                   <div class="flex flex-row space-x-2 items-center justify-between w-full">
-                      <div class="flex flex-col space-y-2" [routerLink]="[item.id]" routerLinkActive="font-bold" (click)="drawer.open()">
+                      <div class="flex flex-col space-y-2">
                           <span>{{item.Title}} </span>
                       </div>
-                      <button mat-icon-button (click)="openDeleteDialog(dlgDeleteTemplate,item)">
+                      <button class="z-20" mat-icon-button (click)="openDeleteDialog(dlgDeleteTemplate,item)">
                         <span class="material-symbols-outlined text-xl text-red-500" matTooltip="Xoá">delete</span>
                       </button>
                   </div>

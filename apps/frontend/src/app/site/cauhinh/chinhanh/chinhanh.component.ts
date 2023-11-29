@@ -36,7 +36,7 @@ export class ChinhanhComponent implements OnInit {
     const dialogRef = this.dialog.open(teamplate, {
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result="true") {
+      if (result=="true") {
         this._ChinhanhService.CreateChinhanh(this.Detail).subscribe()
       }
     });

@@ -28,7 +28,9 @@ export class DichvuComponent implements OnInit {
       Title: node.Title,
       id: node.id,
       isDM: node.isDM,
+      Noibat: node.Noibat,
       level: level,
+      Data:node
     };
   };
   treeControl = new FlatTreeControl<any>(
@@ -130,6 +132,12 @@ export class DichvuComponent implements OnInit {
         })
       }
     });
+  }
+  UpdateNoibat(item:any) {
+    item.Data.Noibat = !item.Data.Noibat
+    this._DichvuService.UpdateDichvu(item.Data).subscribe((data) => {
+      console.log(data)
+    })
   }
   TinhCongno() {
     this.Detail.Congno = this.Detail.Doanhso - this.Detail.Doanhthu
