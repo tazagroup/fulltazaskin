@@ -28,15 +28,25 @@ export class DanhmucService {
     return nestedData;
   }
   async findAll() {
-    const Danhmucs = await this.DanhmucRepository.find();
-    const Dichvus = await this._DichvuService.findAll();
-    Danhmucs.map((v:any) => {
-      v.isDM = true
-      v.Dichvu = Dichvus.filter((dichvu) => dichvu.idDM === v.id)||[];
-    });
-    const result = this.nestDataByPid(Danhmucs, '');   
-    return result
+    // const Danhmucs = await this.DanhmucRepository.find();
+    // const Dichvus = await this._DichvuService.findAll();
+    // Danhmucs.map((v:any) => {
+    //   v.isDM = true
+    //   v.Dichvu = Dichvus.filter((dichvu) => dichvu.idDM === v.id)||[];
+    // });
+    // const result = this.nestDataByPid(Danhmucs, '');   
+    return await this.DanhmucRepository.find();
   }
+  // async findAll() {
+  //   const Danhmucs = await this.DanhmucRepository.find();
+  //   const Dichvus = await this._DichvuService.findAll();
+  //   Danhmucs.map((v:any) => {
+  //     v.isDM = true
+  //     v.Dichvu = Dichvus.filter((dichvu) => dichvu.idDM === v.id)||[];
+  //   });
+  //   const result = this.nestDataByPid(Danhmucs, '');   
+  //   return result
+  // }
   async findid(id: string) {
     return await this.DanhmucRepository.findOne({
       where: { id: id },

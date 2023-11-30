@@ -20,8 +20,12 @@ export class DichvuEntity {
   Slug: string;
   @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
   Image: string;
+  @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('[]')" })
+  ListImage: string;
   @Column({ default: '' })
   Type: string;
+  @Column({ default: false })
+  Noibat: boolean;
   @Column({ default: 1 })
   Ordering: number;
   @Column({ default: 0 })

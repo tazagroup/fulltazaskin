@@ -8,6 +8,7 @@ import { ZaloModule } from './zalo/zalo.module';
 import { HttpModule} from '@nestjs/axios';
 import { DanhmucModule } from './danhmuc/danhmuc.module';
 import { DichvuModule } from './dichvu/dichvu.module';
+import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -33,6 +34,7 @@ import { DichvuModule } from './dichvu/dichvu.module';
     HttpModule,
     DanhmucModule,
     DichvuModule,
+    UploadModule
   ],
   controllers: [AppController],
   providers: [AppService],

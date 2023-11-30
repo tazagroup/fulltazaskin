@@ -36,6 +36,7 @@
     "nestjs-fetch": "^0.0.4",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.5.0",
+    "sharp": "^0.33.0",
     "tslib": "^2.3.0",
     "typeorm": "^0.3.17",
     "zone.js": "~0.11.4"

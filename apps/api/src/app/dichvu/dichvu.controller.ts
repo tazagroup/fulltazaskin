@@ -18,6 +18,14 @@ export class DichvuController {
   async findOne(@Param('id') id: string) {
     return await this.dichvuService.findid(id);
   }
+  @Get('findbyDM/:id')
+  findbyDM(@Param('id') id: string) {
+    return this.dichvuService.findbyDM(id);
+  }
+  @Get('findNoibat')
+  async findNoibat() {
+    return await this.dichvuService.findNoibat();
+  }
   @Get('findslug/:slug')
   async findslug(@Param('slug') slug: string) {
     return await this.dichvuService.findslug(slug);

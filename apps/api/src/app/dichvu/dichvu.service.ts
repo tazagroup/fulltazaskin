@@ -21,8 +21,15 @@ export class DichvuService {
   async findid(id: string) {
     return await this.DichvuRepository.findOne({
       where: { id: id },
-
     });
+  }
+  async findbyDM(id: string) {
+    return await this.DichvuRepository.find({
+      where: { idDM: id },
+    });
+  }
+  async findNoibat() {
+    return await this.DichvuRepository.find({where: { Noibat: true }});
   }
   async findslug(slug: any) {
     return await this.DichvuRepository.findOne({
