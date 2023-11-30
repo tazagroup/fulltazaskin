@@ -14,15 +14,16 @@ import {MatTreeModule} from '@angular/material/tree';
     MatTreeModule,
     ReactiveFormsModule,
     RouterModule.forChild([
-      {path:'',redirectTo:'khach-hang',pathMatch:'full'},
-      {
-        path: '', component: MainpageComponent,
-        children: [
-          { path: 'khach-hang', loadChildren: () => import('../khachhang/khachhang.module').then(m => m.KhachhangModule)},
-          { path: 'dich-vu', loadChildren: () => import('../dichvu/dichvu.module').then(m => m.DanhmucModule)},
-          { path: 'cau-hinh', loadChildren: () => import('../cauhinh/cauhinh.module').then(m => m.CauhinhModule)},
-      ]
-      }
+      {     path: '', component: MainpageComponent}
+      // {path:'',redirectTo:'khach-hang',pathMatch:'full'},
+      // {
+      //   path: '', component: MainpageComponent,
+      //   children: [
+      //     { path: 'khach-hang', loadChildren: () => import('../khachhang/khachhang.module').then(m => m.KhachhangModule)},
+      //     { path: 'dich-vu', loadChildren: () => import('../dichvu/dichvu.module').then(m => m.DanhmucModule)},
+      //     { path: 'cau-hinh', loadChildren: () => import('../cauhinh/cauhinh.module').then(m => m.CauhinhModule)},
+      // ]
+      // }
     ])
   ],
   declarations: [MainpageComponent]

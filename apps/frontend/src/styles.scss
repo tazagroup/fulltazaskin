@@ -41,3 +41,9 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   outline: 0;
   justify-content: center;
 }
+.mat-tree-node[aria-level="2"] {
+  padding-left: 24px !important;
+}
+.mat-tree-node[aria-level="3"] {
+  padding-left: 36px !important;
+}

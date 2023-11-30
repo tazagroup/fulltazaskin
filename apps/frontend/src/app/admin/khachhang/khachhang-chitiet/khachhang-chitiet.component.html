@@ -1,0 +1,70 @@
+
+<div class="!flex flex-col flex-auto min-w-0 relative bg-white">
+  <div class="relative border-b-2 flex flex-row justify-between items-center p-3">
+    <span class="material-icons p-2 hover:bg-gray-200 rounded-full" [routerLink]="['../']" (click)="CloseDrawer()">
+      arrow_back
+    </span>
+    <div class="text-xl">{{Detail.Title}}</div>
+    <!-- <div>
+      <button mat-raised-button color="primary" (click)="Update(Detail)">Cập Nhật</button>
+    </div> -->
+  </div>
+  <div class="relative h-full w-full overflow-auto flex flex-col space-y-2 justify-between p-4">
+    <div class="flex flex-col space-y-3 p-4">
+      <div class="w-full overflow-auto">
+        <table class="w-full mat-elevation-z8" mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="TenKH">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Họ Tên </th>
+            <td mat-cell *matCellDef="let row">
+              <span class="text-blue-500 font-bold">{{row.TenKH}} </span>
+            </td>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container>
+          <ng-container matColumnDef="SDT">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại </th>
+            <td mat-cell *matCellDef="let row">
+              {{row.SDT}}
+            </td>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container>
+          <ng-container matColumnDef="Dichvu">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Dịch Vụ </th>
+            <td mat-cell *matCellDef="let row">
+              {{row.Dichvu}}
+            </td>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container>
+          <ng-container matColumnDef="Doanhso">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Doanh Số </th>
+            <td mat-cell *matCellDef="let row" class="text-right"> {{row.Doanhso|number:'1.0-2'}}</td>
+            <td mat-footer-cell *matFooterCellDef class="text-right font-bold">{{Subtotal(Detail,'Doanhso')|number:'1.0-2'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="Tonglieutrinh">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tổng Liệu Trình </th>
+            <td mat-cell *matCellDef="let row" class="text-right"> {{row.Tonglieutrinh|number:'1.0-2'}} </td>
+            <td mat-footer-cell *matFooterCellDef class="text-right font-bold"> {{Subtotal(Detail,'Tonglieutrinh')|number:'1.0-2'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="Dathu">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Doanh Thu </th>
+            <td mat-cell *matCellDef="let row" class="text-right"> {{row.Dathu|number:'1.0-2'}} </td>
+            <td mat-footer-cell *matFooterCellDef class="text-right font-bold"> {{Subtotal(Detail,'Dathu')|number:'1.0-2'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="Congno">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Công Nợ </th>
+            <td mat-cell *matCellDef="let row" class="text-right"> {{row.Congno|number:'1.0-2'}} </td>
+            <td mat-footer-cell *matFooterCellDef class="text-right font-bold">{{Subtotal(Detail,'Congno')|number:'1.0-2'}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+          <!-- <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr> -->
+          <!-- <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr> -->
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      </div>
+    </div>
+  </div>
