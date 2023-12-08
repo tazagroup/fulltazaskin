@@ -3,16 +3,15 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  OneToMany,
   UpdateDateColumn,
   DeleteDateColumn,
 } from 'typeorm';
-@Entity('danhmuc', {orderBy: { CreateAt: 'DESC' }})
-export class DanhmucEntity {
+@Entity('banner', {orderBy: { CreateAt: 'DESC' } })
+export class BannerEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
-  pid: string;
+  idDM: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Title: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })

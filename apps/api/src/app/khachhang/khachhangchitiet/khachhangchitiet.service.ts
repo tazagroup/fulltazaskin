@@ -29,6 +29,11 @@ export class KhachhangchitietService {
       where: { Slug: slug},
     });
   }
+  async findsdt(sdt: any) {
+    return await this.KhachhangchitietRepository.find({
+      where: { SDT: sdt},
+    });
+  }
   async update(id: string, UpdateKhachhangchitietDto: UpdateKhachhangchitietDto) {
     this.KhachhangchitietRepository.save(UpdateKhachhangchitietDto);
     return await this.KhachhangchitietRepository.findOne({ where: { id: id } });

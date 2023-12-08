@@ -3,22 +3,23 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  OneToMany,
   UpdateDateColumn,
   DeleteDateColumn,
 } from 'typeorm';
-@Entity('danhmuc', {orderBy: { CreateAt: 'DESC' }})
-export class DanhmucEntity {
+@Entity('khuyenmai', {orderBy: { CreateAt: 'DESC' } })
+export class KhuyenmaiEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
-  pid: string;
+  idDM: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Title: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Mota: string;
   @Column({ default: '' })
   Slug: string;
+  @Column({type:'bigint'})
+  Value: number;
   @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
   Image: string;
   @Column({ default: '' })

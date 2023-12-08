@@ -73,7 +73,7 @@ export class UploadService {
         name: item.originalname,
         Mime: item.mimetype,
         spath:relativePath,
-        url:host+relativePath,
+        src:host+relativePath,
         alt: item.alt,
       }; 
       return this.create(data);

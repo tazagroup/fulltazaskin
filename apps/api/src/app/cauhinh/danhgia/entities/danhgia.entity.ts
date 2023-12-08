@@ -3,16 +3,15 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  OneToMany,
   UpdateDateColumn,
   DeleteDateColumn,
 } from 'typeorm';
-@Entity('danhmuc', {orderBy: { CreateAt: 'DESC' }})
-export class DanhmucEntity {
+@Entity('danhgia', {orderBy: { CreateAt: 'DESC' } })
+export class DanhgiaEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
-  pid: string;
+  idDM: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Title: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
@@ -23,6 +22,8 @@ export class DanhmucEntity {
   Image: string;
   @Column({ default: '' })
   Type: string;
+  @Column({ default: 1 })
+  Diem: number;
   @Column({ default: 1 })
   Ordering: number;
   @Column({ default: 0 })

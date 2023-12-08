@@ -9,7 +9,7 @@ export class UploadEntity {
     @Column({ type: "text", collation: "utf8_general_ci" ,nullable: true })
     spath: string;
     @Column({ type: "text", collation: "utf8_general_ci" ,nullable: true })
-    url: string;
+    src: string;
     @Column({ type: "text", collation: "utf8_general_ci" ,nullable: true })
     Lienket: string;
     @Column({ type: "text", collation: "utf8_general_ci" ,nullable: true })

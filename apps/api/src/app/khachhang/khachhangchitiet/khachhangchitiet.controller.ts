@@ -22,6 +22,10 @@ export class KhachhangchitietController {
   findslug(@Param('slug') slug: string) {
     return this.khachhangchitietService.findslug(slug);
   }
+  @Get('findsdt/:sdt')
+  findsdt(@Param('sdt') sdt: string) {
+    return this.khachhangchitietService.findsdt(sdt);
+  }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateKhachhangchitietDto: UpdateKhachhangchitietDto) {
     return this.khachhangchitietService.update(id, updateKhachhangchitietDto);

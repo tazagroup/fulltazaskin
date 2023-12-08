@@ -9,6 +9,9 @@ import { HttpModule} from '@nestjs/axios';
 import { DanhmucModule } from './danhmuc/danhmuc.module';
 import { DichvuModule } from './dichvu/dichvu.module';
 import { UploadModule } from './upload/upload.module';
+import { DanhgiaModule } from './cauhinh/danhgia/danhgia.module';
+import { KhachhangdanhgiaModule } from './khachhangdanhgia/khachhangdanhgia.module';
+import { LichhenModule } from './lichhen/lichhen.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -34,7 +37,10 @@ import { UploadModule } from './upload/upload.module';
     HttpModule,
     DanhmucModule,
     DichvuModule,
-    UploadModule
+    UploadModule,
+    DanhgiaModule,
+    KhachhangdanhgiaModule,
+    LichhenModule
   ],
   controllers: [AppController],
   providers: [AppService],
