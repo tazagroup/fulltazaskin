@@ -29,8 +29,8 @@ export class UploadService {
   }
 
   async remove(id:string,data:any) {
-     if (fs.existsSync('/home/tazaspac/tazaskinclinic/images/'+data.spath)) {
-        fs.unlinkSync('/home/tazaspac/tazaskinclinic/images/'+data.spath);
+     if (fs.existsSync('/home/tazaspac/tazaskin/images/'+data.spath)) {
+        fs.unlinkSync('/home/tazaspac/tazaskin/images/'+data.spath);
         await this.UploadRepository.delete(id);
         return { deleted: true };
       } 
@@ -44,7 +44,7 @@ export class UploadService {
     //bufferStream.end(item.buffer);
     try {
       const absolutePath = item.path;
-      const rootPath = '/home/tazaspac/tazaskinclinic/images';   
+      const rootPath = '/home/tazaspac/tazaskin/images';   
       const relativePath = path.relative(rootPath, absolutePath);
       // const parts = item.path.split('/');
       // const extractedPath = parts.slice(2).join('/');
@@ -64,10 +64,10 @@ export class UploadService {
   }
   async uploadlocal(item: any) {
     try {
-      //const host = 'https://images.tazaskinclinic.com/'
-      const host = 'https://images.tazaskinclinic.com/'
+      //const host = 'https://images.tazaskin.com/'
+      const host = 'https://images.tazaskin.com/'
       const absolutePath = item.path;
-      const rootPath = '/home/tazaspac/tazaskinclinic/images';   
+      const rootPath = '/home/tazaspac/tazaskin/images';   
       const relativePath = path.relative(rootPath, absolutePath);
       let data = {
         name: item.originalname,

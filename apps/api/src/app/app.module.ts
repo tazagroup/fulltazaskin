@@ -12,8 +12,13 @@ import { UploadModule } from './upload/upload.module';
 import { DanhgiaModule } from './cauhinh/danhgia/danhgia.module';
 import { KhachhangdanhgiaModule } from './khachhangdanhgia/khachhangdanhgia.module';
 import { LichhenModule } from './lichhen/lichhen.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { VttechthanhtoanModule } from './dulieuvttech/vttechthanhtoan/vttechthanhtoan.module';
+// import { UsersModule } from './users/users.module';
+// import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
       // host: '103.221.222.71',
@@ -40,7 +45,10 @@ import { LichhenModule } from './lichhen/lichhen.module';
     UploadModule,
     DanhgiaModule,
     KhachhangdanhgiaModule,
-    LichhenModule
+    LichhenModule,
+    VttechthanhtoanModule,
+    // AuthModule,
+    // UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],

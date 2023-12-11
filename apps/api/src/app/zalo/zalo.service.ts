@@ -6,14 +6,12 @@ import { UpdateZaloDto } from './update-zalo.dto';
 import { GenId } from '../shared.utils';
 import axios from 'axios';
 import { environment } from '../../environments/environment';
-
 @Injectable()
 export class ZaloService {
   constructor(
     @InjectRepository(ZaloEntity)
     private ZaloRepository: Repository<ZaloEntity>,
   ) {}
-
   async getMeInfo(userAccessToken: string, token: string): Promise<any> {
     const options = {
       url: 'https://graph.zalo.me/v2.0/me/info',
@@ -23,9 +21,7 @@ export class ZaloService {
         secret_key: environment.secret_key
       }
     };
-
     const response = await axios.get(options.url, { headers: options.headers });
-
     return response.data;
   }
   async create(CreateZaloDto: any) {

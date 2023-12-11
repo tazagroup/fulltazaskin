@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Req, Res } from '@nestjs/common';
 import { ZaloService } from './zalo.service';
 import { CreateZaloDto } from './create-zalo.dto';
 import { UpdateZaloDto } from './update-zalo.dto';
 
 @Controller('zalo')
 export class ZaloController {
-  constructor(private readonly zaloService: ZaloService) {}
+  constructor(
+    private readonly zaloService: ZaloService,
+    ) {}
   @Post('/me')
   async getMeInfo(@Body() data: any): Promise<any> {
     console.error(data);

@@ -17,6 +17,7 @@ export class LichhenService {
 
   async findAll() {
     return await this.LichhenRepository.find();
+    
   }
   async findid(id: string) {
     return await this.LichhenRepository.findOne({

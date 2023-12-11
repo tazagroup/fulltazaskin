@@ -46,7 +46,7 @@ export class UploadController {
       storage: diskStorage({
         destination: (req, file, cb) => {
           // const path = './dist/' + req.query.folder;
-          const path = '/home/tazaspac/tazaskinclinic/images/' + req.query.folder;
+          const path = '/home/tazaspac/tazaskin/images/' + req.query.folder;
           if (!fs.existsSync(path)) {
             fs.mkdirSync(path, { recursive: true });
             console.log('Folder created:', path);
@@ -69,7 +69,7 @@ export class UploadController {
       storage: diskStorage({
         destination: (req, file, cb) => {
           // const path = './dist/' + req.query.folder;
-          const path = '/home/tazaspac/tazaskinclinic/images/' + req.query.folder;
+          const path = '/home/tazaspac/tazaskin/images/' + req.query.folder;
           if (!fs.existsSync(path)) {
             fs.mkdirSync(path, { recursive: true });
             console.log('Folder created:', path);

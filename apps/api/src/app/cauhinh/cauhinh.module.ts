@@ -8,8 +8,9 @@ import { ChinhanhModule } from './chinhanh/chinhanh.module';
 import { BannerModule } from './banner/banner.module';
 import { NavigateModule } from './navigate/navigate.module';
 import { KhuyenmaiModule } from './khuyenmai/khuyenmai.module';
+import { CauhinhchungModule } from './cauhinhchung/cauhinhchung.module';
 @Module({
-  imports: [TypeOrmModule.forFeature([CauhinhEntity]), HangthanhvienModule, ChinhanhModule, BannerModule, NavigateModule, KhuyenmaiModule],
+  imports: [TypeOrmModule.forFeature([CauhinhEntity]), HangthanhvienModule, ChinhanhModule, BannerModule, NavigateModule, KhuyenmaiModule, CauhinhchungModule],
   controllers: [CauhinhController],
   providers: [CauhinhService],
   exports:[CauhinhService]
