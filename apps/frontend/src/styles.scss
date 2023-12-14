@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'node_modules/angular-notifier/styles';
 html,
 body {
   height: 100%;

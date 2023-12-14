@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { HinhanhModule } from '../../../shared/common/hinhanh/hinhanh.module';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatMenuModule,
     MatButtonModule,
     MatDialogModule,
+    HinhanhModule,
     RouterModule.forChild([
       {
         path: '', component: ChinhanhComponent,

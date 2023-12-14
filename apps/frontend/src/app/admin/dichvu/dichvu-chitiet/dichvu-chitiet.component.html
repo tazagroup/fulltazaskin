@@ -20,8 +20,16 @@
         [init]="configTiny"></editor>  
         <app-hinhanh class="h-full" [Image]="Detail.Image"
         (UploadEmit)="GetUpload($event)"></app-hinhanh>
+        <div class="flex flex-col space-y-2">
+        <div class="grid grid-cols-3 gap-4">
+          <div class="flex relative" *ngFor="let item of Detail.ListImage; let i = index">
+            <app-hinhanh class="h-full" [Image]="Detail.ListImage[i]"
+            (UploadEmit)="GetUploadList($event,i)"></app-hinhanh>
+            <span (click)="DeleteImage(i)" *ngIf="CheckImage(Detail.ListImage[i])" class="material-symbols-outlined absolute top-0 right-0 text-red-500">cancel</span>
+          </div> 
+        </div>
+        <div class="text-center"> <button mat-raised-button (click)="Detail.ListImage.push({})">Thêm Hình</button></div>
+      </div>
 
-        <app-hinhanh class="h-full" [Image]="Detail.Image"
-        (UploadEmit)="GetUpload($event)"></app-hinhanh>
     </div>  
   </div>

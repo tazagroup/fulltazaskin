@@ -93,6 +93,7 @@
           </mat-tree-node>
           <mat-tree-node class="flex flex-row justify-between" *matTreeNodeDef="let node;when: hasChild"
             matTreeNodePadding>
+            <div class="flex flex-row space-x-2 items-center">
               <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.Title">
                 <span
                   class="material-symbols-outlined">{{treeControl.isExpanded(node)?'expand_more':'navigate_next'}}</span>
@@ -109,6 +110,7 @@
                 {{node.Title}}
               </a>
               </ng-template>
+            </div>
             <button mat-icon-button [matMenuTriggerFor]="menu3">
               <span class="material-symbols-outlined">more_vert</span>
             </button>

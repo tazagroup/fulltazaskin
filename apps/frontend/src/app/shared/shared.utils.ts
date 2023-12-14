@@ -1,3 +1,30 @@
+export function TYPE_ZNS(item:any) {
+  const ListType:any = {
+    user_received_message: "Sự kiện người dùng nhận thông báo ZNS",
+    change_template_quota: "Thông báo thay đổi quota mẫu ZNS rủi ro",
+    change_template_quality: "Thông báo thay đổi về chất lượng gửi của mẫu tin ZNS",
+    change_oa_template_tags: "Thông báo thay đổi về loại nội dung ZNS có thể gửi",
+    change_oa_daily_quota: "Thông báo về thay đổi hạn mức gửi ZNS",
+    user_feedback: "Sự kiện người dùng phản hồi template đánh giá dịch vụ",
+  }
+         return ListType[item]
+}
+export function ZALO_OA(item:any) {
+  const ListType:any = {
+    "3605866963832105989": "Taza Skin Clinic Quận 10",
+    "4353626177205058888": "Taza Skin Clinic Gò Vấp",
+  }
+        return ListType[item]
+}
+export function convertPhoneNum(phoneNumber:any) {
+  if (phoneNumber.startsWith("0")) {
+      return phoneNumber.replace(/^0/, "84");
+  } else if (phoneNumber.length === 10) {
+      return `84${phoneNumber}`;
+  } else {
+      throw new Error("Invalid phone number format");
+  }
+}
 export function nest(items: any[], id:any = '', link:any = 'pid'):any {
       if (items) {
         return items.filter((item) => item[link] == id)
@@ -7,6 +34,7 @@ export function nest(items: any[], id:any = '', link:any = 'pid'):any {
           }));
       };
 }
+
 export function getInitials(name:any):any {
     const words = name.split(' ');
     const initials = words.map((word:any) => word[0].toUpperCase()).join('');

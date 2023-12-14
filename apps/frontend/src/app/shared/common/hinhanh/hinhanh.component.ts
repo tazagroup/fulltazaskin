@@ -16,7 +16,6 @@ export class HinhanhComponent implements OnInit {
   }
   onSelect(event: any) {
     this._UploadService.uploadDriver(event.addedFiles[0]).subscribe((data) => {
-      console.log(data);
       this.Image = data
       this.UploadEmit.emit(this.Image);
       }
@@ -24,7 +23,6 @@ export class HinhanhComponent implements OnInit {
   }
   onRemove(data: any) {
     this._UploadService.DeleteuploadDriver(data).subscribe(() => {
-      console.log(data);
       this.Image = {}
       this.UploadEmit.emit(this.Image);
     })

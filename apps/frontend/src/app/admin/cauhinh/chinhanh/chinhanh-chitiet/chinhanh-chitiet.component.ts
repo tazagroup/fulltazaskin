@@ -87,4 +87,9 @@ export class ChinhanhChitietComponent implements OnInit {
     item.id= GenId(5,true)
     this.Detail.ListSocial.push(item)
   }
+  GetUpload(e:any)
+  {
+    this.Detail.Image = e
+    this._ChinhanhService.UpdateChinhanh(this.Detail).subscribe();
+  }
 }

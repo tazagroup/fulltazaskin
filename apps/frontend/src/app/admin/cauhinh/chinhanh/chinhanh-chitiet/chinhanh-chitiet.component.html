@@ -26,6 +26,8 @@
               <input [(ngModel)]="Detail.Linkmap" [ngModelOptions]="{standalone: true}" matInput type="text"
                 class="w-full" placeholder="Link Google Map" />
             </mat-form-field>
+              <app-hinhanh class="h-full" [Image]="Detail.Image"
+              (UploadEmit)="GetUpload($event)"></app-hinhanh>
               <div class="grid grid-cols-4 gap-2" *ngFor="let item of Detail.ListSocial;let i = index">
                 <mat-form-field appearance="outline">
                   <mat-label>Tiêu Đề</mat-label>

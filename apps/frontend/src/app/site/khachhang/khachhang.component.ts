@@ -23,7 +23,7 @@ export class KhachhangComponent implements OnInit {
     public dialog: MatDialog
   ) {}
   ngOnInit() {
-    this._KhachhangService.getLazyloadKhachhangs(0,400000).subscribe()
+    this._KhachhangService.getLazyloadKhachhangs(0,10).subscribe()
     this._KhachhangService.khachhangs$.subscribe((data:any)=>
       {
         if(data)

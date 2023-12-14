@@ -1,0 +1,64 @@
+<div class="!flex flex-col flex-auto min-w-0 relative bg-white">
+  <div class="relative border-b flex flex-row justify-between items-center p-2">
+    <span class="material-icons p-3 hover:bg-gray-200 rounded-full" [routerLink]="['../']" (click)="CloseDrawer()">
+      arrow_back
+    </span>
+    <div class="text-xl">{{Detail.Title}}</div>
+    <div>
+      <button mat-raised-button color="primary" (click)="Update(Detail)">Cập Nhật</button>
+    </div>
+  </div>
+  <div class="relative h-full w-full overflow-auto flex flex-col space-y-2 justify-between p-4">
+    <div class="flex flex-col space-y-3 p-4">
+        <div class="w-full grid lg:grid-cols-2 grid-cols-1 gap-2 p-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Tiêu Đề</mat-label>
+              <input [(ngModel)]="Detail.Title" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Tiêu Đề" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Loại</mat-label>
+              <input [(ngModel)]="Detail.Slug" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Loại" />
+            </mat-form-field>
+
+            <ng-container *ngIf="Detail.Slug=='vttechtoken'">           
+            <mat-form-field appearance="outline">
+              <mat-label>Cookie</mat-label>
+              <input [(ngModel)]="Detail.Content.Cookie" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Cookie" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Xsrf-Token</mat-label>
+              <input [(ngModel)]="Detail.Content.XsrfToken" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Xsrf-Token" />
+            </mat-form-field>
+            </ng-container>
+
+            <ng-container *ngIf="Detail.Slug=='zalotoken'">           
+            <mat-form-field appearance="outline">
+              <mat-label>App ID</mat-label>
+              <input [(ngModel)]="Detail.Content.AppId" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Cookie" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>OA Secret Key</mat-label>
+              <input [(ngModel)]="Detail.Content.OAsecretKey" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="OA Secret Key" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Access token</mat-label>
+              <input [(ngModel)]="Detail.Content.Accesstoken" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Access token" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Refresh token</mat-label>
+              <input [(ngModel)]="Detail.Content.Refreshtoken" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Refresh token" />
+            </mat-form-field>
+            </ng-container>
+
+        </div>
+      </div>
+    </div>
+  </div>

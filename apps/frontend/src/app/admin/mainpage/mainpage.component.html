@@ -11,7 +11,7 @@
             <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
               <div
                 class="flex flex-row space-x-2 justify-between p-3 w-full rounded-lg hover:bg-gray-100 hover:font-bold"
-                [routerLink]="[node.URL]" routerLinkActive="bg-gray-100 font-bold">
+                [routerLink]="[node.Slug]" routerLinkActive="bg-gray-100 font-bold">
                 <span>
                   {{node.Title}}
                 </span>
@@ -19,8 +19,7 @@
             </mat-tree-node>
             <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding class="pl-2">
               <div
-                class="flex flex-row space-x-2 items-center justify-between p-3 w-full rounded-lg hover:bg-gray-100 hover:font-bold"
-                [routerLink]="[node.URL]" routerLinkActive="bg-gray-100 font-bold">
+                class="flex flex-row space-x-2 items-center justify-between p-3 w-full rounded-lg hover:bg-gray-100 hover:font-bold">
                 <span>
                   {{node.Title}}
                 </span>
@@ -58,9 +57,13 @@
           <button mat-icon-button> <span class="material-symbols-outlined">
               account_circle
             </span></button>
-          <button mat-icon-button> <span class="material-symbols-outlined">
+          <a href="/">
+          <button mat-icon-button> 
+            <span class="material-symbols-outlined">
               captive_portal
-            </span></button>
+            </span>
+          </button>
+        </a>
         </div>
       </div>
       <div class="relative flex flex-col h-full w-full overflow-auto">

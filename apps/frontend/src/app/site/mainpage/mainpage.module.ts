@@ -5,16 +5,30 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatTreeModule} from '@angular/material/tree';
+import { MaterialModule } from '../../shared/material.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    MatSidenavModule,
-    MatTreeModule,
+    MaterialModule,
     ReactiveFormsModule,
     RouterModule.forChild([
-      {     path: '', component: MainpageComponent}
+      {     path: '', component: MainpageComponent,
+      children: [
+        { path: 'khach-hang', loadChildren: () => import('../../admin/khachhang/khachhang.module').then(m => m.KhachhangModule)},
+        { path: 'khachhangdanhgia', loadChildren: () => import('../../admin/khachhangdanhgia/khachhangdanhgia.module').then(m => m.KhachhangdanhgiaModule)},
+        { path: 'lichhen', loadChildren: () => import('../../admin/lichhen/lichhen.module').then(m => m.LichhenModule)},
+        { path: 'zalozns', loadChildren: () => import('../../admin/zalo/zalozns/zalozns.module').then(m => m.ZaloznsModule)},
+    ]
+
+    //   children: [
+    //     { path: 'khach-hang', loadChildren: () => import('../khachhang/khachhang.module').then(m => m.KhachhangModule)},
+    //     { path: 'khachhangdanhgia', loadChildren: () => import('../khachhangdanhgia/khachhangdanhgia.module').then(m => m.KhachhangdanhgiaModule)},
+    //     { path: 'lichhen', loadChildren: () => import('../lichhen/lichhen.module').then(m => m.LichhenModule)},
+    //     { path: 'zalozns', loadChildren: () => import('../zalo/zalozns/zalozns.module').then(m => m.ZaloznsModule)},
+    // ]
+  }
       // {path:'',redirectTo:'khach-hang',pathMatch:'full'},
       // {
       //   path: '', component: MainpageComponent,

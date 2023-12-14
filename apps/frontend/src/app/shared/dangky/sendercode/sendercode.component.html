@@ -1,0 +1,36 @@
+<section class="h-full gradient-form bg-gray-200 md:h-screen">
+    <div class="container py-12 px-6 h-full m-auto">
+      <div class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
+        <div class="xl:w-6/12 w-full">
+          <div class="block bg-white shadow-lg rounded-lg">
+            <div class="lg:flex lg:flex-wrap g-0">
+              <div class="lg:w-full px-4 md:px-0">
+                <div class="md:p-12 md:mx-6">
+                  <div class="m-auto p-4" routerLink="/">
+                    <img class="mx-auto w-48"
+                    src="/assets/image/logo.svg"
+                      alt="logo" />
+                  </div>
+  
+                  <form class="flex flex-col space-y-2 max-w-[400px] m-auto">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Nhập Mã Code</mat-label>
+                      <input matInput placeholder="Nhập Mã Code" [(ngModel)]="User.Code"
+                        [ngModelOptions]="{standalone: true}">
+                      <mat-icon matPrefix class="mr-4"><span class="material-icons">
+                          account_circle
+                        </span></mat-icon>
+                    </mat-form-field>
+                    <div class="text-center pt-1 mb-12 pb-1">
+                      <button mat-raised-button color="primary" (click)="Xacthuc(User)">Xác Thực</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

@@ -71,7 +71,25 @@ export class DichvuChitietComponent implements OnInit {
   GetUpload(e:any)
   {
     this.Detail.Image = e
-    console.log(e);   
+    this._DichvuService.UpdateDichvu(this.Detail).subscribe();
+  }
+  GetUploadList(e:any,i:any)
+  {   
+    this.Detail.ListImage[i] = e
+    console.log(this.Detail);
+    this._DichvuService.UpdateDichvu(this.Detail).subscribe();
+  }
+  CheckImage(item:any)
+  {
+    if (Object.keys(item).length === 0) {
+      return true
+    }
+    else return false
+  }
+  DeleteImage(i:any)
+  {
+    this.Detail.ListImage.splice(i, 1);
+    this._DichvuService.UpdateDichvu(this.Detail).subscribe();
   }
   Update(item:any)
   {

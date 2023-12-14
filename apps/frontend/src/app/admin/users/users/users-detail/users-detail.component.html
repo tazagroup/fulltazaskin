@@ -1,0 +1,44 @@
+<div class="!flex flex-col flex-auto min-w-0 relative bg-white">
+  <div class="relative border-b flex flex-row justify-between items-center p-2">
+    <span class="material-icons p-3 hover:bg-gray-200 rounded-full" [routerLink]="['../']" (click)="CloseDrawer()">
+      arrow_back
+    </span>
+    <div class="text-xl">{{Detail.Title}}</div>
+    <div>
+      <button mat-raised-button color="primary" (click)="Update(Detail)">Cập Nhật</button>
+    </div>
+  </div>
+  <div class="relative h-full w-full overflow-auto flex flex-col space-y-2 justify-between p-4">
+    <div class="flex flex-col space-y-3 p-4">
+        <div class="w-full grid lg:grid-cols-2 grid-cols-1 gap-2 p-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Họ Tên</mat-label>
+              <input [(ngModel)]="Detail.Hoten" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Họ Tên" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Số Điện Thoại</mat-label>
+              <input [(ngModel)]="Detail.SDT" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Số Điện Thoại" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Role</mat-label>
+                <mat-select [(ngModel)]="Detail.Role" [ngModelOptions]="{standalone: true}">
+                  <mat-option [value]="item.value" *ngFor="let item of Role|keyvalue">{{item.value}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Groups</mat-label>
+                <mat-select [(ngModel)]="Detail.idGroup" [ngModelOptions]="{standalone: true}">
+                  <mat-option [value]="item.id" *ngFor="let item of Groups">{{item.Title}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <div *ngFor="let item of Detail.Groups; let i = index">
+                <mat-slide-toggle [color]="'primary'" disabled [(ngModel)]="Detail.Groups[i].Checked" [ngModelOptions]="{standalone: true}"> {{item.Title}}</mat-slide-toggle>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>

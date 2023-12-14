@@ -1,0 +1,65 @@
+<section class="h-full gradient-form bg-gray-200 md:h-screen">
+  <div class="container py-12 px-6 h-full m-auto">
+    <div class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
+      <div class="xl:w-6/12 w-full">
+        <div class="block bg-white shadow-lg rounded-lg">
+          <div class="lg:flex lg:flex-wrap g-0">
+            <div class="lg:w-full px-4 md:px-0">
+              <div class="md:p-12 md:mx-6">
+                <div class="m-auto p-4" routerLink="/">
+                  <img class="mx-auto w-48"
+                  src="/assets/image/logo.svg"
+                    alt="logo" />
+                </div>
+
+                <form class="flex flex-col space-y-2 max-w-[400px] m-auto">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Tên Đăng Nhập</mat-label>
+                    <input matInput placeholder="Tên Đăng Nhập" [(ngModel)]="User.SDT"
+                      [ngModelOptions]="{standalone: true}">
+                    <mat-icon matPrefix class="mr-4"><span class="material-icons">
+                        account_circle
+                      </span></mat-icon>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Mật Khẩu</mat-label>
+                    <input matInput type="password" placeholder="Mật Khẩu" [(ngModel)]="User.password"
+                      [ngModelOptions]="{standalone: true}">
+                    <mat-icon matPrefix class="mr-4"><span class="material-icons">
+                        vpn_key
+                      </span></mat-icon>
+                  </mat-form-field>
+                  <!-- <div> <a class="text-[#3154A1] font-bold" [routerLink]="['/quenmatkhau']">Quên Mật Khẩu ?</a></div> -->
+                  <div class="text-center pt-1 mb-12 pb-1">
+                    <button mat-raised-button color="primary" (click)="Dangnhap(User)">Đăng Nhập</button>
+                  </div>
+                  <div class="flex items-center m-auto pb-6">
+                    <span class="mb-0 mr-2">Chưa Có Tài Khoản?</span> <span class="text-[#3154A1] font-bold"
+                      [routerLink]="['/dangky']" routerLinkActive="router-link-active">Đăng Ký</span>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- <div class="lg:w-6/12 flex items-center lg:rounded-r-lg rounded-b-lg lg:rounded-bl-none bg-[#3154A1]">
+              <div class="text-white px-4 py-6 md:p-12 md:mx-6">
+                <h4 class="text-xl font-semibold mb-6">CÔNG TY TNHH TAZA GROUP</h4>
+                  <div class="flex items-center mt-8 ng-tns-c130-1">
+                    <div class="flex flex-0 items-center -space-x-1.5 ng-tns-c130-1"><img
+                        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                        class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover ng-tns-c130-1"><img
+                        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                        class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover ng-tns-c130-1"><img
+                        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                        class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover ng-tns-c130-1"><img
+                        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                        class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover ng-tns-c130-1">
+                    </div>
+                  </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

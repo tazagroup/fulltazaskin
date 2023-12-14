@@ -11,6 +11,9 @@
         "{options.outputPath}"
       ],
       "options": {
+        "allowedCommonJsDependencies": [
+          "moment"
+        ],
         "outputPath": "dist/apps/frontend",
         "index": "apps/frontend/src/index.html",
         "main": "apps/frontend/src/main.ts",

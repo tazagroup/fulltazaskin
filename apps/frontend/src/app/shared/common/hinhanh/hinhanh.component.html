@@ -1,6 +1,6 @@
-<ng-container *ngIf="Image?.url; else elseTemplate">
+<ng-container *ngIf="Image?.src; else elseTemplate">
   <div class="p-4 group relative">
-    <img [src]="Image?.url" class="w-full mx-auto rounded-md"  [alt]="Image?.alt"/>
+    <img [src]="Image?.src" class="w-full mx-auto rounded-md"  [alt]="Image?.alt"/>
     <div
       class="group-hover:block rounded-md hidden absolute inset-0 items-center justify-center bg-black opacity-10"
       (click)="onRemove(Image)">
