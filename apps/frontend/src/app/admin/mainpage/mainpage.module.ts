@@ -7,6 +7,9 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatInputModule} from '@angular/material/input';
 import {MatMenuModule} from '@angular/material/menu';
+import { NotificationsModule } from '../../shared/common/notifications/notifications.module';
+import { ChatrealtimeModule } from '../../shared/common/chatrealtime/chatrealtime.module';
+import { ProfileModule } from '../../shared/common/profile/profile.module';
 
 @NgModule({
   imports: [
@@ -17,6 +20,9 @@ import {MatMenuModule} from '@angular/material/menu';
     ReactiveFormsModule,
     MatInputModule,
     MatMenuModule,
+    NotificationsModule,
+    ChatrealtimeModule,
+    ProfileModule,
     RouterModule.forChild([
       {path:'',redirectTo:'lichhen',pathMatch:'full'},
       {

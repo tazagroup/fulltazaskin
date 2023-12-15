@@ -6,6 +6,8 @@ import { UsersService } from '../users.service';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { Role } from '../../user';
 import { UsergroupService } from '../../usergroup/usergroup.service';
+import { ChinhanhService } from '../../../cauhinh/chinhanh/chinhanh.service';
+import { NotifierService } from 'angular-notifier';
 @Component({
   selector: 'app-users-detail',
   templateUrl: './users-detail.component.html',
@@ -23,13 +25,13 @@ export class UsersDetailComponent implements OnInit {
     private _UsersComponent: UsersComponent,
     private _UsersService: UsersService,
     private _UsergroupService: UsergroupService,
+    private _ChinhanhService: ChinhanhService,
+    private _NotifierService: NotifierService,
     
   ) {}
   ngOnInit(): void {
     this._UsergroupService.getAllUsergroups().subscribe()
-    this._UsergroupService.usergroups$.subscribe((data:any)=>{
-      this.Groups  = data
-    })
+    this._UsergroupService.usergroups$.subscribe((data:any)=>{this.Groups  = data})
     this._UsersService.getAllUserss().subscribe(data=> this.List= data)
     this.route.params.subscribe((paramsId) => {
       const id = paramsId['id'];
@@ -38,8 +40,24 @@ export class UsersDetailComponent implements OnInit {
         this._UsersService.getUsersById(id).subscribe();
         this._UsersService.users$.subscribe((res:any) => {
           if (res) {
+            this._ChinhanhService.getAllChinhanhs().subscribe()
+            this._ChinhanhService.chinhanhs$.subscribe((data:any)=>
+            {
+              if(data)
+              {
+                console.log(data);  
+                const ListChinhanh = data.map((v:any)=>({Title:v.Title,id:v.id,Checked:false}))
+                console.log(ListChinhanh);
+                
+                ListChinhanh.forEach((v:any) => {
+                  if (!res.EditChinhanhs.find((v1:any)=> v1.id === v.id)) {
+                    res.EditChinhanhs.push(v);
+                  }
+                });
+              }
+            })
+            this.Detail = res; 
             console.log(res);    
-            this.Detail = res;
           }
         });
       }
@@ -87,6 +105,8 @@ export class UsersDetailComponent implements OnInit {
   }
   Update(data:any)
   {
-    this._UsersService.UpdateUsers(data).subscribe();
+    this._UsersService.UpdateUsers(data).subscribe(()=>
+    this._NotifierService.notify("success","Cập Nhật Thành Công")
+    );
   }
 }

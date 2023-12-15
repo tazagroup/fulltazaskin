@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, switchMap, take } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'apps/frontend/src/environments/environment';
+import { SearchParams } from '../../shared/shared.utils';
 @Injectable({
   providedIn: 'root'
 })
@@ -35,8 +36,8 @@ export class KhachhangService {
       })
     );
   }
-  searchKhachhang(query:any) {
-    return this.http.get(this.urlApi + `/khachhang/search?query=${query}`).pipe(
+  searchKhachhang(params: SearchParams) {
+    return this.http.post(this.urlApi + `/khachhangs/khachhang/search`,params).pipe(
       map((data: any) => { 
         return data;
       })

@@ -10,7 +10,9 @@
   </div>
   <div class="relative h-full w-full overflow-auto flex flex-col space-y-2 justify-between p-4">
     <div class="flex flex-col space-y-3 p-4">
-        <div class="w-full grid lg:grid-cols-2 grid-cols-1 gap-2 p-3">
+        <div class="w-full grid lg:grid-cols-2 grid-cols-1 gap-4 p-3">
+          <div class="w-full flex flex-col space-y-2">
+            <div class="font-bold text-xl">Thông Tin</div>
             <mat-form-field appearance="outline">
               <mat-label>Họ Tên</mat-label>
               <input [(ngModel)]="Detail.Hoten" [ngModelOptions]="{standalone: true}" matInput type="text"
@@ -27,16 +29,21 @@
                   <mat-option [value]="item.value" *ngFor="let item of Role|keyvalue">{{item.value}}</mat-option>
                 </mat-select>
               </mat-form-field>
-
             <mat-form-field appearance="outline">
                 <mat-label>Groups</mat-label>
                 <mat-select [(ngModel)]="Detail.idGroup" [ngModelOptions]="{standalone: true}">
                   <mat-option [value]="item.id" *ngFor="let item of Groups">{{item.Title}}</mat-option>
                 </mat-select>
               </mat-form-field>
-
-              <div *ngFor="let item of Detail.Groups; let i = index">
-                <mat-slide-toggle [color]="'primary'" disabled [(ngModel)]="Detail.Groups[i].Checked" [ngModelOptions]="{standalone: true}"> {{item.Title}}</mat-slide-toggle>
+              <div *ngFor="let item of Detail.EditChinhanhs; let i = index">
+                <mat-slide-toggle [color]="'primary'" [(ngModel)]="Detail.EditChinhanhs[i].Checked" [ngModelOptions]="{standalone: true}"> {{item.Title}}</mat-slide-toggle>
+            </div>
+          </div>
+              <div class="flex flex-col space-y-2">
+                <div class="font-bold text-xl">Phân Quyền Menu</div>
+                <div *ngFor="let item of Detail.Groups; let i = index">
+                  <mat-slide-toggle [color]="'primary'" disabled [(ngModel)]="Detail.Groups[i].Checked" [ngModelOptions]="{standalone: true}"> {{item.Title}}</mat-slide-toggle>
+              </div>
             </div>
         </div>
       </div>

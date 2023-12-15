@@ -15,7 +15,7 @@ export class ZalotokenComponent implements OnInit {
   Detail: any = {};
   Lists: any[] = []
   FilterLists: any[] = []
-  Today:any = new Date()
+  Today: any = new Date()
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   constructor(
     private dialog: MatDialog,
@@ -26,35 +26,31 @@ export class ZalotokenComponent implements OnInit {
   }
   ngOnInit(): void {
     moment.locale('vi');
-    this.activatedRoute.queryParams.subscribe((params:any) => {
-      if(params.oa_id)
-      {
-        const data={
-          oa_id:params.oa_id,
-          code:params.code,
-          app_id:environment.app_id,
-          secret_key:environment.secret_key
+    this.activatedRoute.queryParams.subscribe((params: any) => {
+      if (params.oa_id) {
+        const data = {
+          oa_id: params.oa_id,
+          code: params.code,
+          app_id: environment.app_id,
+          secret_key: environment.secret_key
         }
-        this._ZalotokenService.get_accesstoken(data).subscribe((res:any)=>
-        {
+        this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
           console.log(res)
-          if(res.status==200)
-          {
-            this._NotifierService.notify("success",res.note)
+          if (res.status == 200) {
+            this._NotifierService.notify("success", res.note)
           }
-          else
-          {
-            this._NotifierService.notify("error",res.note)
+          else {
+            this._NotifierService.notify("error", res.note)
           }
           setTimeout(() => {
-              window.location.href=window.location.pathname
+            window.location.href = window.location.pathname
           }, 1000);
         }
-      )
+        )
       }
     });
     this._ZalotokenService.getAllZalotokens().subscribe()
-    this._ZalotokenService.zalotokens$.subscribe((data:any)=>{
+    this._ZalotokenService.zalotokens$.subscribe((data: any) => {
       this.FilterLists = this.Lists = data
     })
   }
@@ -62,8 +58,8 @@ export class ZalotokenComponent implements OnInit {
     const value = (event.target as HTMLInputElement).value;
     if (value.length > 2) {
       this.Lists = this.Lists.filter((v) => {
-     return  v.Hoten.toLowerCase().includes(value)||v.SDT.toLowerCase().includes(value)
-       }
+        return v.Hoten.toLowerCase().includes(value) || v.SDT.toLowerCase().includes(value)
+      }
       )
     }
   }
@@ -71,62 +67,56 @@ export class ZalotokenComponent implements OnInit {
     const dialogRef = this.dialog.open(teamplate, {
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result=="true") {
+      if (result == "true") {
         this._ZalotokenService.CreateZalotoken(this.Detail).subscribe()
       }
     });
   }
-  openDeleteDialog(teamplate: TemplateRef<any>,item:any): void {
+  openDeleteDialog(teamplate: TemplateRef<any>, item: any): void {
     const dialogRef = this.dialog.open(teamplate, {});
     dialogRef.afterClosed().subscribe((result) => {
-      if (result=="true") {
+      if (result == "true") {
         this._ZalotokenService.DeleteZalotoken(item.id).subscribe()
       }
     });
   }
-  Xacthuc()
-  {
+  Xacthuc() {
     window.location.href = "https://oauth.zaloapp.com/v4/oa/permission?app_id=1416835846626859002&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fadmin%2Fzalotoken"
   }
-  Checktime(timein:Date,timeout:Date)
-  {
-    let result={message:'Chưa Xác Thực',status:false,text:'text-red-500'}
-    if(timein&&timeout)
-    {
-      const milliseconds  = timein.getTime() - (new Date(timeout)).getTime()
-      const seconds = Math.round(milliseconds / 1000);
-      if(seconds>90000)
-        result = {message:'Hết Hạn',status:true,text:'text-red-500'}
-      else
-        {
-          result = {message:`Còn Hạn Đến ${moment(timeout).format("hh:mm:ss DD/MM/YYYY")}`,status:true,text:'text-blue-500'}
-        }
+  Checktime(timein: Date, timeout: Date) {
+    let result = { message: 'Chưa Xác Thực', status: false, text: 'text-red-500' }
+    if (timein && timeout) {
+      const milliseconds = timein.getTime() - (new Date(timeout)).getTime()
+      // const seconds = Math.round(milliseconds / 1000);
+      // console.log(seconds);
+
+      if (milliseconds > 0)
+        result = { message: 'Hết Hạn', status: true, text: 'text-red-500' }
+      else {
+        result = { message: `Còn Hạn Đến ${moment(timeout).format("hh:mm:ss DD/MM/YYYY")}`, status: true, text: 'text-blue-500' }
+      }
       return result
     }
-    else return result 
+    else return result
   }
-  getrefreshToken(item:any)
-  {
+  getrefreshToken(item: any) {
     console.log(item);
-    const data={
-      oa_id:item.oa_id,
-      app_id:environment.app_id,
-      secret_key:environment.secret_key,
-      refresh_token:item.Token.refresh_token
+    const data = {
+      oa_id: item.oa_id,
+      app_id: environment.app_id,
+      secret_key: environment.secret_key,
+      refresh_token: item.Token.refresh_token
     }
-    this._ZalotokenService.get_refreshToken(data).subscribe((res:any)=>
-    {
-      if(res.status==200)
-      {
-        this._NotifierService.notify("success",res.note)
+    this._ZalotokenService.get_refreshToken(data).subscribe((res: any) => {
+      if (res.status == 200) {
+        this._NotifierService.notify("success", res.note)
         setTimeout(() => {
-          window.location.href=window.location.pathname
-      }, 1000);
+          window.location.href = window.location.pathname
+        }, 1000);
       }
-      else
-      {
-        this._NotifierService.notify("error",res.note)
-        
+      else {
+        this._NotifierService.notify("error", res.note)
+
       }
     })
   }

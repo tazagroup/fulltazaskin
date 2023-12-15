@@ -26,3 +26,6 @@ git config --global user.name "quocbao1983"
 
 npx nx build --prod --outputHashing=all
 npm install angular-cli-ghpages
+
+npm install @angular/pwa --save-dev
+npx nx g @angular/pwa:ng-add --project=frontend

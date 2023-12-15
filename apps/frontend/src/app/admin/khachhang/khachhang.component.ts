@@ -5,36 +5,51 @@ import { MatPaginator } from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDrawer } from '@angular/material/sidenav';
+import { CHI_NHANH, SearchParams } from '../../shared/shared.utils';
+import { UsersService } from '../../shared/auth/users.service';
+export interface Khachangs {
+  rows: [];
+  count:number
+}
 @Component({
   selector: 'app-khachhang',
   templateUrl: './khachhang.component.html',
   styleUrls: ['./khachhang.component.css']
 })
 export class KhachhangComponent implements OnInit {
-  Khachhangs:any[]=[]
+  itemsPerPageLabel = 'Item';
+  Khachhangs:Khachangs ={rows:[],count:0}
   Detail:any={}
-  displayedColumns: string[] = ['TenKH','SDT', 'Doanhso', 'Dathu', 'Congno'];
+  CUser:any={}
+  searchParams: SearchParams = {};
+  ShowMore:boolean=false
+  dateRange:any={
+    Batdau:new Date(new Date().setDate(new Date().getDate() - 7)),
+    Ketthuc: new Date()
+  }
+  displayedColumns: string[] = ['TenKH','SDT',  'Dathu','Chinhanh'];
+  // displayedColumns: string[] = ['TenKH','SDT', 'Doanhso', 'Dathu', 'Congno','Chinhanh'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   constructor(
     private _KhachhangService:KhachhangService,
+    private _UsersService:UsersService,
     public dialog: MatDialog
   ) {}
   ngOnInit() {
-    this._KhachhangService.getLazyloadKhachhangs(0,10).subscribe()
-    this._KhachhangService.khachhangs$.subscribe((data:any)=>
+    this._UsersService.getProfile().subscribe()
+    this._UsersService.profile$.subscribe((data)=>
+    {
+      if(data)
       {
-        if(data)
-        {
-        console.log(data.data);
-        this.Khachhangs = data.data
-        this.dataSource = new MatTableDataSource(data.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        }
-      })
+        data.EditChinhanhs = data.EditChinhanhs.filter((v:any)=>v.Checked==true)  
+        this.searchParams.idChinhanh = data.EditChinhanhs[0].id     
+        this.CUser = data
+        this.TimKiem(10,0)
+      }
+    })
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -76,5 +91,29 @@ export class KhachhangComponent implements OnInit {
         console.log(data)
       }
       )
+  }
+  onDateChange(event: any) {
+    console.log(event); 
+  }
+  GetChinhanh(item:any)
+  {
+    return CHI_NHANH(item)
+  }
+  TimKiem(take:any=10,skip:any=0)
+  {
+    this.searchParams.Dateranger = this.dateRange
+    console.log(this.searchParams);
+    this._KhachhangService.searchKhachhang(this.searchParams).subscribe((data)=>
+    {
+      this.Khachhangs = data
+      this.dataSource = new MatTableDataSource(data.rows);
+      this.paginator.length = data.count
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    })
+  }
+  onPageChange(event:any)
+  {
+    this.TimKiem(event.pageSize,event.pageIndex)
   }
 }
