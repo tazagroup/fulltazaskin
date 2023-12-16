@@ -33,7 +33,7 @@ export class JwtCustomStrategy extends PassportStrategy(Strategy,'tazaskin') {
         });
     }
     async validate(payload: any) {
-        console.error(payload);
+        // console.error(payload);
         return payload;        
       }
     // async validate(user:User): Promise<any> {

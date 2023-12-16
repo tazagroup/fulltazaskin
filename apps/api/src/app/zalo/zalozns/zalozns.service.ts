@@ -2,13 +2,24 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { ZaloznsEntity } from './entities/zalozns.entity';
+import { CauhinhchungService } from '../../cauhinh/cauhinhchung/cauhinhchung.service';
+import { ZalotokenService } from '../zalotoken/zalotoken.service';
 const axios = require('axios');
 @Injectable()
 export class ZaloznsService {
+  Accesstoken:any=''
   constructor(
     @InjectRepository(ZaloznsEntity)
-    private ZaloznsRepository: Repository<ZaloznsEntity>
-  ) {}
+    private ZaloznsRepository: Repository<ZaloznsEntity>,
+    private _CauhinhchungService: CauhinhchungService,
+    private _ZalotokenService: ZalotokenService,
+  ) {
+    this._CauhinhchungService.findslug('zalotoken').then((data:any)=>
+    {
+      this.Accesstoken = data.Content.Accesstoken
+    // console.error(this.Accesstoken); 
+    })
+  }
 
   async createzns(req:any) {
     const result:any={}
@@ -17,27 +28,56 @@ export class ZaloznsService {
     this.ZaloznsRepository.create(result);
     return await this.ZaloznsRepository.save(result);
   }
-  async sendZns(item:any) {
-    let data = item;
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: 'https://business.openapi.zalo.me/message/template',
-      headers: { 
-        'access_token': 'oZ3_57jMR4JEFlCHU5nkIiqrzHb_ImG2db_g4sbTTGEyVArMMdbB3QiUrbTVVp9jfaZ-O6uk8cg0ITeuJMj1QeD9ZsHvQMLia0gTMMTtUdEW4w5QPmXWJhSX-5vrBX9sbYJR82OYE7lC8COXA48XCS8cwne17Xeyi6E65LzoQ1MDQx0xOtOh5wHKoY9cJZGFidRoMLTbDsojOQr2NMHAGl0DYKuHRcX-wrQNNoPS3W_fIz8U65WOBkvIupqQHtmPo26xJN0SHaId2gLKL1X01ESXZGCZIM0ObtJ_92KM4dFSBCvq2nSGOSulzcyOA2eygmdr5dCRQasxBu1N3KqP1yLhmGbnRX0CX52234PvQb_hJfbC3MG0OCfxvKSfP1rNt5x1MXXhKrZw2vvL8Yv2LpbIW52hOtvEPKC', 
-        'Content-Type': 'application/json'
-      },
-      data : data
-    };
-   return axios.request(config)
-    .then((response) => {
-      console.error(response.data);
+
+  async sendZns(item:any,idCN:any) {
+    await this._ZalotokenService.findid(idCN).then((data:any)=>
+    {
+          if(data)
+          {
+            let config = {
+              method: 'post',
+              maxBodyLength: Infinity,
+              url: 'https://business.openapi.zalo.me/message/template',
+              headers: { 
+                'access_token': data.Token.access_token, 
+                'Content-Type': 'application/json'
+              },
+              data : item
+            };
+          return axios.request(config)
+            .then((response) => {
+              //console.error(response.data);
+              
+              return response.data
+            })
+            .catch((error) => {
+              return error
+            });
+          }
+
+
+  });
+  //   access_token = this.Accesstoken
+  //   let data = item;
+  //   let config = {
+  //     method: 'post',
+  //     maxBodyLength: Infinity,
+  //     url: 'https://business.openapi.zalo.me/message/template',
+  //     headers: { 
+  //       'access_token': this.Accesstoken, 
+  //       'Content-Type': 'application/json'
+  //     },
+  //     data : data
+  //   };
+  //  return axios.request(config)
+  //   .then((response) => {
+  //     //console.error(response.data);
       
-      return response.data
-    })
-    .catch((error) => {
-      return error
-    });
+  //     return response.data
+  //   })
+  //   .catch((error) => {
+  //     return error
+  //   });
   }
   async getRating(msgid:any) {
     let config = {
@@ -107,7 +147,7 @@ export class ZaloznsService {
     return await this.ZaloznsRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+    //console.error(id)
     await this.ZaloznsRepository.delete(id);
     return { deleted: true };
   }

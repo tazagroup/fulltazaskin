@@ -36,7 +36,7 @@ export class UploadService {
       } 
      else
       {
-        console.error(false);
+        //console.error(false);
         return false;
       }
   }
@@ -55,8 +55,8 @@ export class UploadService {
         spath:relativePath,
         alt: item.alt,
       }; 
-      console.error(data);
-      console.error(relativePath);
+      //console.error(data);
+      //console.error(relativePath);
       return this.create(data);
     } catch (err) {
       throw err;
@@ -86,7 +86,7 @@ export class UploadService {
       fs.unlinkSync(path);
       return true;
     } else {
-      console.error(false);
+     // console.error(false);
       return false;
     }
   }

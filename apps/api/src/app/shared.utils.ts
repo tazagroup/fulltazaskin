@@ -1,12 +1,13 @@
 export function convertPhoneNum(phoneNumber:any) {
   if (phoneNumber.startsWith("0")) {
-      return phoneNumber.replace(/^0/, "+84");
+      return phoneNumber.replace(/^0/, "84");
   } else if (phoneNumber.length === 10) {
       return `+84${phoneNumber}`;
   } else {
       throw new Error("Invalid phone number format");
   }
 }
+
 export function nest(items: any[], id:any = '', link:any = 'pid'):any {
       if (items) {
         return items.filter((item) => item[link] == id)

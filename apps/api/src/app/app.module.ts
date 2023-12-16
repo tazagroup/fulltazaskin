@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { KhachhangModule } from './khachhang/khachhang.module';
 import { CauhinhModule } from './cauhinh/cauhinh.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ZaloModule } from './zalo/zalo.module';
@@ -14,19 +13,15 @@ import { KhachhangdanhgiaModule } from './khachhangdanhgia/khachhangdanhgia.modu
 import { LichhenModule } from './lichhen/lichhen.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { VttechthanhtoanModule } from './dulieuvttech/vttechthanhtoan/vttechthanhtoan.module';
-// import { UsersModule } from './users/users.module';
-// import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { KhachhangsModule } from './khachhang/khachhang/khachhang.module';
+import { ChitietModule } from './khachhang/chitiet/chitiet.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      // host: '103.221.222.71',
-      // port: 3306,
-      // username: 'tazaspac_chikiet',
-      // password: '@Hikiet88',
-      // database: 'tazaspac_zalotazaskin',
-
       host: '103.221.222.71',
       port: 3306,
       username: 'tazaspac_chikiet',
@@ -36,7 +31,8 @@ import { VttechthanhtoanModule } from './dulieuvttech/vttechthanhtoan/vttechthan
       synchronize: true,
       charset: "utf8mb4",
     }),
-    KhachhangModule, 
+    KhachhangsModule, 
+    ChitietModule,
     CauhinhModule,
     ZaloModule,
     HttpModule,
@@ -47,8 +43,8 @@ import { VttechthanhtoanModule } from './dulieuvttech/vttechthanhtoan/vttechthan
     KhachhangdanhgiaModule,
     LichhenModule,
     VttechthanhtoanModule,
-    // AuthModule,
-    // UsersModule
+    AuthModule,
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],

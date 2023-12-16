@@ -51,7 +51,7 @@ export class KhachhangdanhgiaService {
     return await this.KhachhangdanhgiaRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+    //console.error(id)
     await this.KhachhangdanhgiaRepository.delete(id);
     return { deleted: true };
   }

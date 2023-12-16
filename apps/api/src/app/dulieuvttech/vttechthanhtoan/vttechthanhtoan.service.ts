@@ -24,13 +24,13 @@ export class VttechthanhtoanService {
       this.XsrfToken = data.Content.XsrfToken
     })
   }
-  // @Cron('* * 2 * * *')
-  @Interval(7200000)
   async getApiRealtime() {
+    const begin = moment(new Date()).format("DD-MM-YYYY")
+    const end = moment(new Date()).add(1, 'day').format("DD-MM-YYYY")
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://tmtaza.vttechsolution.com/Report/Revenue/Branch/AllBranchGrid/?handler=LoadataDetailByBranch&branchID=0&dateFrom=08-12-2023&dateTo=09-12-2023',
+      url: `https://tmtaza.vttechsolution.com/Report/Revenue/Branch/AllBranchGrid/?handler=LoadataDetailByBranch&branchID=0&dateFrom=${begin}&dateTo=${end}`,
       headers: { 
         'Cookie': this.Cookie, 
         'Xsrf-Token': this.XsrfToken
@@ -38,7 +38,6 @@ export class VttechthanhtoanService {
     };
     return axios.request(config)
     .then((response) => {   
-      console.error(response);
       const data1 = response.data      
       this.findAll().then((data)=>
       {
@@ -110,7 +109,7 @@ export class VttechthanhtoanService {
     return await this.VttechthanhtoanRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+   // console.error(id)
     await this.VttechthanhtoanRepository.delete(id);
     return { deleted: true };
   }

@@ -3,10 +3,12 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { UsergroupService } from '../cauhinh/usergroup/usergroup.service';
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
+    private _UsergroupService: UsergroupService,
     ) {}
   @Post("dangky")
   async create(@Body() createUserDto: CreateUserDto) {
@@ -29,9 +31,19 @@ export class UsersController {
   findOne(@Param('id') id: string) {
     return this.usersService.read(id);
   }
+  @Get('findid/:id')
+  async findid(@Param('id') id: string) {
+    const user = await this.usersService.findid(id);
+    const Groups = await this._UsergroupService.findAll()
+    user['Groups'] = Groups.find((v)=>v.id==user.idGroup)?.ListMenu
+    return user
+  }
   @Get('SDT/:sdt')
-  findSDT(@Param('sdt') sdt: string) {
-    return this.usersService.findSDT(sdt);
+  async findSDT(@Param('sdt') sdt: string) {
+    const user = await this.usersService.findSDT(sdt);
+    const Groups = await this._UsergroupService.findAll()
+    user['Groups'] = Groups.find((v)=>v.id==user.idGroup)
+    return user
   }
   @Get('/get/admin')
   @UseGuards(AuthGuard('tazaskin'))

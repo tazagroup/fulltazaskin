@@ -37,7 +37,7 @@ export class ChitietService {
     
       return acc;
     }, []);
-    console.error(groupedData);
+    //console.error(groupedData);
     return groupedData
   }
   async findpaged(skip:number=0,take: number = 10) {

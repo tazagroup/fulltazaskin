@@ -62,7 +62,7 @@ export class LichhenService {
     return await this.LichhenRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+    //console.error(id)
     await this.LichhenRepository.delete(id);
     return { deleted: true };
   }

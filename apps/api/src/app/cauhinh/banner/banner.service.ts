@@ -51,7 +51,7 @@ export class BannerService {
     return await this.BannerRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+    //console.error(id)
     await this.BannerRepository.delete(id);
     return { deleted: true };
   }

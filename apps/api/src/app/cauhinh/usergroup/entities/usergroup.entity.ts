@@ -3,16 +3,15 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  OneToMany,
   UpdateDateColumn,
   DeleteDateColumn,
 } from 'typeorm';
-@Entity('khachhangchitiet', {orderBy: { CreateAt: 'DESC' } })
-export class KhachhangchitietEntity {
+@Entity('usergroup', {orderBy: { CreateAt: 'DESC' } })
+export class UsergroupEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
-  pid: string;
+  idDM: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Title: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
@@ -20,7 +19,9 @@ export class KhachhangchitietEntity {
   @Column({ default: '' })
   Slug: string;
   @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
-  Hinhanh: string;
+  Image: string;
+  @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('[]')" })
+  ListMenu: string;
   @Column({ default: '' })
   Type: string;
   @Column({ default: 1 })
@@ -35,26 +36,4 @@ export class KhachhangchitietEntity {
   DeleteAt: Date;
   @Column({ nullable: true })
   idCreate: string;
-  @Column({collation: "utf8_general_ci"})
-  TenKH: string;
-  @Column({collation: "utf8_general_ci"})
-  Dichvu: string;
-  @Column({nullable: true})
-  SDT:string;
-  @Column({nullable: true})
-  SDT2:string;
-  @Column()
-  Doanhso: number;
-  @Column()
-  Tonglieutrinh: number;
-  @Column()
-  Dathu: number;
-  @Column({type: 'datetime',nullable: true})
-  NgayTaoDV: Date;
-  @Column({collation: "utf8_general_ci"})
-  Ghichu: string;
-  @Column({collation: "utf8_general_ci"})
-  Chinhanh: string;
-  @CreateDateColumn()
-  Ngaytao: Date;
 }

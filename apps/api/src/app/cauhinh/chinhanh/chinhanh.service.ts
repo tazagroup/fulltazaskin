@@ -51,7 +51,7 @@ export class ChinhanhService {
     return await this.ChinhanhRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+   // console.error(id)
     await this.ChinhanhRepository.delete(id);
     return { deleted: true };
   }

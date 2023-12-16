@@ -51,7 +51,7 @@ export class HangthanhvienService {
     return await this.HangthanhvienRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+    //console.error(id)
     await this.HangthanhvienRepository.delete(id);
     return { deleted: true };
   }

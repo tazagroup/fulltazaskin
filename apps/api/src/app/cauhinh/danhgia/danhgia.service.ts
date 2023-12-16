@@ -56,7 +56,7 @@ export class DanhgiaService {
     return await this.DanhgiaRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+   // console.error(id)
     await this.DanhgiaRepository.delete(id);
     return { deleted: true };
   }

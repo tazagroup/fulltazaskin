@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { KhachhangService } from './khachhang.service';
-import { CreateKhachhangDto } from './dto/create-khachhang.dto';
+import { CreateKhachhangDto, SearchParamsDto } from './dto/create-khachhang.dto';
 import { UpdateKhachhangDto } from './dto/update-khachhang.dto';
 
 @Controller('khachhangs/khachhang')
@@ -14,6 +14,10 @@ export class KhachhangController {
   findAll() {
     return this.khachhangService.findAll();
   }
+  @Post('/search')
+  async search(@Body() params: SearchParamsDto){
+      return this.khachhangService.search(params);
+    }
   // @Get(':Chinhanh')
   // findByChinhanh(@Param('Chinhanh') Chinhanh: string) {
   //   return this.khachhangService.findByChinhanh(Chinhanh);
@@ -31,10 +35,7 @@ export class KhachhangController {
       return this.khachhangService.findByTenKH(TenKH);
   }
   @Get('findpaged')
-  findpaged(
-    @Query('take') take: any,
-    @Query('skip') skip: any,
-    ) 
+  findpaged(@Query('take') take: any,@Query('skip') skip: any) 
     {
        return this.khachhangService.findpaged(skip,take);
     }

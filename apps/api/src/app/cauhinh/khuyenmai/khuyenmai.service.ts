@@ -51,7 +51,7 @@ export class KhuyenmaiService {
     return await this.KhuyenmaiRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+    //console.error(id)
     await this.KhuyenmaiRepository.delete(id);
     return { deleted: true };
   }

@@ -16,6 +16,8 @@ import { Role } from '../dto/create-user.dto';
   @Column()
   SDT: string;
   @Column({collation: "utf8_general_ci"})
+  idGroup: string;
+  @Column({collation: "utf8_general_ci"})
   Code: string;
   @Column({collation: "utf8_general_ci"})
   Hoten: string;
@@ -23,6 +25,8 @@ import { Role } from '../dto/create-user.dto';
   email: string;
   @Column({ type: "text", collation: "utf8_general_ci" })
   Gioitinh: string;
+  @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('[]')" })
+  EditChinhanhs: string;
   @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('[]')" })
   Diachi: string;
   @Column()

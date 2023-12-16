@@ -8,6 +8,9 @@ export class VttechthanhtoanController {
   constructor(private readonly vttechthanhtoanService:VttechthanhtoanService) {}
    //@Timeout(1000)
    //@Interval(1000) 
+  // @Cron('* * 2 * * *')
+  // 1s = 1000
+  // @Interval(3600000)
    @Get('getapi')
   async getApiRealtime() {      
     return this.vttechthanhtoanService.getApiRealtime();

@@ -10,7 +10,7 @@ export class ZaloController {
     ) {}
   @Post('/me')
   async getMeInfo(@Body() data: any): Promise<any> {
-    console.error(data);
+    //console.error(data);
     const userAccessToken = data.userAccessToken;
     const token = data.token;
     const meInfo = await this.zaloService.getMeInfo(userAccessToken, token);
@@ -31,7 +31,7 @@ export class ZaloController {
   }
   @Get('pagina')
   findPagina(@Query('page') page: number, @Query('limit') limit: number) {
-    console.error();
+    //console.error();
     return this.zaloService.findPagina(page,limit);
   }
   @Get('findslug/:slug')

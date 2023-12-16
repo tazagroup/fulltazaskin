@@ -63,7 +63,7 @@ export class DanhmucService {
     return await this.DanhmucRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+    //console.error(id)
     await this.DanhmucRepository.delete(id);
     return { deleted: true };
   }

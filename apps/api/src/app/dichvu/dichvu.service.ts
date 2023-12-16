@@ -58,7 +58,7 @@ export class DichvuService {
     return await this.DichvuRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+   // console.error(id)
     await this.DichvuRepository.delete(id);
     return { deleted: true };
   }

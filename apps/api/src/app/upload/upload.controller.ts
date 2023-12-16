@@ -31,7 +31,7 @@ export const DeleteFile = (path: any) => {
     fs.unlinkSync(path);
     return true;
   } else {
-    console.error(false);
+    //console.error(false);
     return false;
   }
 };

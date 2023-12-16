@@ -51,7 +51,7 @@ export class CauhinhchungService {
     return await this.CauhinhchungRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+    //console.error(id)
     await this.CauhinhchungRepository.delete(id);
     return { deleted: true };
   }

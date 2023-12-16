@@ -33,7 +33,7 @@ export class CauhinhService {
     return await this.CauhinhRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    console.error(id)
+   // console.error(id)
     await this.CauhinhRepository.delete(id);
     return { deleted: true };
   }

@@ -9,9 +9,10 @@ import { PassportModule } from '@nestjs/passport';
 import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
 import { LocalStrategy } from './entities/local.strategy';
+import { UsergroupModule } from '../cauhinh/usergroup/usergroup.module';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UsersEntity]),UsersModule,PassportModule,
+    TypeOrmModule.forFeature([UsersEntity]),UsersModule,PassportModule,UsergroupModule,
     JwtModule.register({
       secret: 'tazaskin',
       signOptions: { expiresIn: '30days' },
