@@ -4,7 +4,7 @@ import { Like, Repository } from 'typeorm';
 import { ZaloznsEntity } from './entities/zalozns.entity';
 import { CauhinhchungService } from '../../cauhinh/cauhinhchung/cauhinhchung.service';
 import { ZalotokenService } from '../zalotoken/zalotoken.service';
-import { convertPhoneNum } from '../../shared.utils';
+import { GenId, convertPhoneNum, formatVND } from '../../shared.utils';
 import moment = require('moment');
 const axios = require('axios');
 @Injectable()
@@ -30,19 +30,20 @@ export class ZaloznsService {
     return await this.ZaloznsRepository.save(result);
   }
 
-  async sendtestzns(item: any, idCN: any) {
-    const item1 = {
-      "phone": convertPhoneNum(item.SDT),
-      "template_id": "7895417a7d3f9461cd2e",
-      "template_data": {
-        "order_code": item.id,
-        "note": moment(item.Created).format('DD/MM/YYYY'),
-        "price": item.Amount,
-        "customer_name": item.CustName
-      },
-      "tracking_id": "tracking_id"
-    }
+  async sendtestzns(item: any, idCN: any,idtemp:any) {
     await this._ZalotokenService.findid(idCN).then((data: any) => {
+      console.log(data,idCN);
+      const item1 = {
+        "phone": convertPhoneNum(item.SDT),
+        "template_id": idtemp,
+        "template_data": {
+          "order_code": GenId(8,false),
+          "note": moment(item.Created).format('DD/MM/YYYY'),
+          "price": parseFloat(item.Amount).toFixed(0),
+          "customer_name": item.CustName
+        },
+        "tracking_id": GenId(12,true)
+      }
       if (data) {
         let config = {
           method: 'post',
@@ -56,8 +57,17 @@ export class ZaloznsService {
         };
         return axios.request(config)
           .then((response) => {
-            //console.error(response.data);
-            return response.data
+            console.error(response.data);
+            if(response.data.error)
+            {
+
+              return response.data
+            }
+            else
+            {
+              return response.data
+            }
+        
           })
           .catch((error) => {
             return error

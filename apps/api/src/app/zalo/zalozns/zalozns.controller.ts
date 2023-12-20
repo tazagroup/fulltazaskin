@@ -19,7 +19,7 @@ export class ZaloznsController {
    }
   @Post('sendtestzns')
   sendtestzns(@Body() data: any) {   
-    const result =this.zaloznsService.sendtestzns(data,'');
+    const result =this.zaloznsService.sendtestzns(data,'','');
     return result
   }
   @Post('auto9')

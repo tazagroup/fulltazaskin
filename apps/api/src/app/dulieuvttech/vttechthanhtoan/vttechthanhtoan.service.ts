@@ -112,9 +112,7 @@ export class VttechthanhtoanService {
       const response = await axios.request(config);
       console.log(response.data);
       const item1 = {...item,time:moment(new Date(item.Created)).add(1, 'hours'),SDT:response.data.Table[0].CustomerPhone } 
-      // { idKH: item.id, time: moment(new Date(item.Created)).add(1, 'hours'),SDT:response.data.Table[0].CustomerPhone }
       this._TasksService.addCron(item1)
-     // return response.data;
     } catch (error) {
       console.error(error);
     }
