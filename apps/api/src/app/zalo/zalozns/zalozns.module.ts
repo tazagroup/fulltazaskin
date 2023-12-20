@@ -9,6 +9,7 @@ import { HttpModule } from '@nestjs/axios';
 @Module({
   imports: [TypeOrmModule.forFeature([ZaloznsEntity]),CauhinhchungModule,ZalotokenModule,HttpModule],
   controllers: [ZaloznsController],
-  providers: [ZaloznsService]
+  providers: [ZaloznsService],
+  exports: [ZaloznsService]
 })
 export class ZaloznsModule {}

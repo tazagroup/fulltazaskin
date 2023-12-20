@@ -10,6 +10,7 @@ import { CauhinhModule } from '../../cauhinh/cauhinh.module';
   CauhinhModule,
   ],
   controllers: [KhachhangController],
-  providers: [KhachhangService]
+  providers: [KhachhangService],
+  exports: [KhachhangService]
 })
 export class KhachhangsModule {}

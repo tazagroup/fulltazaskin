@@ -17,6 +17,9 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { KhachhangsModule } from './khachhang/khachhang/khachhang.module';
 import { ChitietModule } from './khachhang/chitiet/chitiet.module';
+import { KhachhangdichvuModule } from './khachhang/khachhangdichvu/khachhangdichvu.module';
+import { VttechModule } from './vttech/vttech.module';
+import { TasksModule } from './tasks/tasks.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -44,7 +47,10 @@ import { ChitietModule } from './khachhang/chitiet/chitiet.module';
     LichhenModule,
     VttechthanhtoanModule,
     AuthModule,
-    UsersModule
+    UsersModule,
+    KhachhangdichvuModule,
+    VttechModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

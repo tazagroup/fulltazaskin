@@ -10,7 +10,7 @@ export class VttechthanhtoanController {
    //@Interval(1000) 
   // @Cron('* * 2 * * *')
   // 1s = 1000
-  // @Interval(3600000)
+   @Interval(2400000)
    @Get('getapi')
   async getApiRealtime() {      
     return this.vttechthanhtoanService.getApiRealtime();
@@ -32,7 +32,7 @@ export class VttechthanhtoanController {
     return await this.vttechthanhtoanService.findslug(slug);
   }
   @Get('pagination')
-  async findPagination(@Query('page') page: number,@Query('perPage') perPage: number){
+  async findPagination(@Query('page') page: number,@Query('perPage') perPage: number){    
        return await this.vttechthanhtoanService.findPagination(page,perPage);
     }
   @Get('findquery')

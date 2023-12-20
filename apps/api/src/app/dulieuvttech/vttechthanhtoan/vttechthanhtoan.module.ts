@@ -4,9 +4,11 @@ import { VttechthanhtoanController } from './vttechthanhtoan.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VttechthanhtoanEntity } from './entities/vttechthanhtoan.entity';
 import { CauhinhchungModule } from '../../cauhinh/cauhinhchung/cauhinhchung.module';
+import { TasksModule } from '../../tasks/tasks.module';
 @Module({
   imports: [TypeOrmModule.forFeature([VttechthanhtoanEntity]),
-  CauhinhchungModule
+  CauhinhchungModule,
+  TasksModule
 ],
   controllers: [VttechthanhtoanController],
   providers: [VttechthanhtoanService]

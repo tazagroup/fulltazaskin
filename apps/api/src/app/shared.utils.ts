@@ -1,3 +1,20 @@
+export const LIST_CHI_NHANH:any[] = 
+[
+  {id:'268b7a06-d2c5-4c98-af1d-334144ae280f',idVttech:3,Title:'Taza Skin Clinic Gò Vấp'}, 
+  {id:'f54de1e1-66bd-4690-8015-ad7315d6f14e',idVttech:1,Title:'Taza Skin Clinic Thủ Đức'}, 
+  {id:'ca725bf4-4810-4ea2-8ef2-520b2a3121cc',idVttech:2,Title:'Taza Skin Clinic Quận 10'}, 
+  {id:'e173b1c0-fbdb-4eeb-a00c-b56664068515',idVttech:4,Title:'Taza Skin Clinic Nha Trang'}, 
+  {id:'9887ad61-4b2c-4db1-83e6-570f33cb540a',idVttech:6,Title:'Taza Skin Clinic Đà Nẵng'}, 
+  {id:'ca725bf4-4810-4ea2-8ef2-520b2a3121cc',idVttech:7,Title:'Văn Phòng'}, 
+]
+export const ListTrangthailichhen: any[] = [
+  {id:0,Title:"Chờ Xác Nhận",Class:"text-yellow-400"},
+  {id:1,Title:"Đã Đặt Lịch",Class:"text-blue-400"},
+  {id:2,Title:"Đã Đến",Class:"text-green-400"},
+  {id:3,Title:"Đang Tham Khám",Class:"text-blue-400"},
+  {id:4,Title:"Đang Tư Vấn",Class:"text-blue-400"},
+  {id:5,Title:"Đang Lên phòng dịch vụ",Class:"text-blue-400"}
+]
 export function convertPhoneNum(phoneNumber:any) {
   if (phoneNumber.startsWith("0")) {
       return phoneNumber.replace(/^0/, "84");
