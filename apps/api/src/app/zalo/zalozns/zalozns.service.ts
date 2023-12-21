@@ -6,7 +6,7 @@ import { CauhinhchungService } from '../../cauhinh/cauhinhchung/cauhinhchung.ser
 import { ZalotokenService } from '../zalotoken/zalotoken.service';
 import { GenId, convertPhoneNum, formatVND } from '../../shared.utils';
 import moment = require('moment');
-const axios = require('axios');
+import axios from 'axios';
 @Injectable()
 export class ZaloznsService {
   Accesstoken: any = ''
@@ -29,7 +29,6 @@ export class ZaloznsService {
     this.ZaloznsRepository.create(result);
     return await this.ZaloznsRepository.save(result);
   }
-
   async sendtestzns(item: any, idCN: any,idtemp:any) {
     await this._ZalotokenService.findid(idCN).then((data: any) => {
       console.log(data,idCN);
@@ -37,7 +36,7 @@ export class ZaloznsService {
         "phone": convertPhoneNum(item.SDT),
         "template_id": idtemp,
         "template_data": {
-          "order_code": GenId(8,false),
+          "order_code": item.InvoiceNum,
           "note": moment(item.Created).format('DD/MM/YYYY'),
           "price": parseFloat(item.Amount).toFixed(0),
           "customer_name": item.CustName
@@ -56,7 +55,7 @@ export class ZaloznsService {
           data: item1
         };
         return axios.request(config)
-          .then((response) => {
+          .then((response:any) => {
             console.error(response.data);
             if(response.data.error)
             {
@@ -66,8 +65,7 @@ export class ZaloznsService {
             else
             {
               return response.data
-            }
-        
+            }   
           })
           .catch((error) => {
             return error

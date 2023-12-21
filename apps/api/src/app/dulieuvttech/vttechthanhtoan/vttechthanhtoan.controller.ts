@@ -10,7 +10,7 @@ export class VttechthanhtoanController {
    //@Interval(1000) 
   // @Cron('* * 2 * * *')
   // 1s = 1000
-   @Interval(2400000)
+  // @Interval(1800000)
    @Get('getapi')
   async getApiRealtime() {      
     return this.vttechthanhtoanService.getApiRealtime();

@@ -20,6 +20,7 @@ import { ChitietModule } from './khachhang/chitiet/chitiet.module';
 import { KhachhangdichvuModule } from './khachhang/khachhangdichvu/khachhangdichvu.module';
 import { VttechModule } from './vttech/vttech.module';
 import { TasksModule } from './tasks/tasks.module';
+import { SmsModule } from './sms/sms.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -51,6 +52,7 @@ import { TasksModule } from './tasks/tasks.module';
     KhachhangdichvuModule,
     VttechModule,
     TasksModule,
+    SmsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
