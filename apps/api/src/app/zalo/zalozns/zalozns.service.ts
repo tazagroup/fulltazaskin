@@ -30,7 +30,7 @@ export class ZaloznsService {
     return await this.ZaloznsRepository.save(result);
   }
   async sendtestzns(item: any, idCN: any,idtemp:any) {
-    await this._ZalotokenService.findid(idCN).then((data: any) => {
+   return await this._ZalotokenService.findid(idCN).then((data: any) => {
       console.log(data,idCN);
       const item1 = {
         "phone": convertPhoneNum(item.SDT),

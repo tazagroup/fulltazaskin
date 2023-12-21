@@ -75,6 +75,7 @@ export class TasksService {
     }
     else {
       teletime = CronNgaymai
+      //cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
       cronExpression = `0 ${CronNgaymai.minute()} ${CronNgaymai.hour()} ${CronNgaymai.date()} ${CronNgaymai.month() + 1} ${CronNgaymai.isoWeekday()}`;
     }
     console.log('Cron expression for the target date:', cronExpression);
@@ -88,7 +89,7 @@ export class TasksService {
           try {
             console.log(`Zalozns service call successful.`);
             this._ZaloznsService.sendtestzns(data, Chinhanh.idtoken, Chinhanh.idtemp).then((zns: any) => {
-              console.log(zns);   
+              console.log("Log ZNS",zns);   
               // reponse = {
               //   error: 0,
               //   message: 'Success',
@@ -104,7 +105,7 @@ export class TasksService {
               //   {
 
               //   }
-             const result = `ZNS có message có id <b><u>${zns.msg_id}</u></b> đã được gửi`;
+             const result = `ZNS có message có id <b><u>${zns.data.msg_id}</u></b> đã được gửi`;
              this.SendTelegram(result)
             })
           } catch (error) {

@@ -128,7 +128,6 @@ export class VttechthanhtoanService {
       })
       console.log(Hoadon_id);
       const item1 = {...item,time:moment(new Date(item.Created)).add(1, 'hours'),SDT:response.data.Table[0].CustomerPhone,InvoiceNum:Hoadon_id.InvoiceNum } 
-      item1.TimeZNS = new Date(item1.time)
       this.update(item1.id,item1)
       this._TasksService.addCron(item1)
     } catch (error) {
