@@ -30,13 +30,13 @@ export class SmsController {
 
     axios.request(config)
       .then((response) => {
+        return response.data
         console.log(JSON.stringify(response.data));
       })
       .catch((error) => {
         console.log(error);
       });
-
-    return this.smsService.create(createSmDto);
+    //return this.smsService.create(data);
   }
   @Post()
   create(@Body() createSmDto: CreateSmDto) {
