@@ -38,6 +38,12 @@ import {
 export class VttechthanhtoanEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
+    @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
+    Dulieu: string;
+    @Column({ type: 'text', collation: 'utf8_general_ci' })
+    SDT: string;
+    @Column()
+    time: Date;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     BranchID: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
