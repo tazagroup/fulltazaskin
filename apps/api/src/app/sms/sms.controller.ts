@@ -25,18 +25,16 @@ export class SmsController {
       headers: {
         'Content-Type': 'application/json'
       },
-      data: data
+      data: JSON.stringify(data)
     };
 
-    axios.request(config)
+   return axios.request(config)
       .then((response) => {
         return response.data
-        console.log(JSON.stringify(response.data));
       })
       .catch((error) => {
-        console.log(error);
+        return error
       });
-    //return this.smsService.create(data);
   }
   @Post()
   create(@Body() createSmDto: CreateSmDto) {
