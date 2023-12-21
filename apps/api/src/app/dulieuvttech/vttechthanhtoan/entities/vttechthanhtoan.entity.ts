@@ -42,8 +42,12 @@ export class VttechthanhtoanEntity {
     Dulieu: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     SDT: string;
+    @Column({ type: 'text', collation: 'utf8_general_ci' })
+    InvoiceNum: string;
     @Column()
     time: Date;
+    @Column()
+    TimeZNS: Date;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     BranchID: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })

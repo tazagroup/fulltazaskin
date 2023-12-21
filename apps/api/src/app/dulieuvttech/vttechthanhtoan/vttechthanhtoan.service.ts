@@ -91,6 +91,7 @@ export class VttechthanhtoanService {
           await Promise.all(uniqueInData2.map((v: any) => {
             this.create(v).then((item: any) => {
             console.log(item);
+              item.Dulieu = item
               this.GetVttechKhachhang(item)})
           }));
           const result = `Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
@@ -127,6 +128,7 @@ export class VttechthanhtoanService {
       })
       console.log(Hoadon_id);
       const item1 = {...item,time:moment(new Date(item.Created)).add(1, 'hours'),SDT:response.data.Table[0].CustomerPhone,InvoiceNum:Hoadon_id.InvoiceNum } 
+      item1.TimeZNS = new Date(item1.time)
       this.update(item1.id,item1)
       this._TasksService.addCron(item1)
     } catch (error) {
