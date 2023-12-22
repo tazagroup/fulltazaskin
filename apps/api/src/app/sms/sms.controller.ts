@@ -8,7 +8,7 @@ export class SmsController {
   constructor(private readonly smsService: SmsService) { }
 
   @Post('sendsms')
-  sendsms(@Body() data: any) {
+  async sendsms(@Body() data: any) {
     // let item = JSON.stringify({
     //   "Brandname": "TAZA",
     //   "Message": "It Test",
@@ -17,24 +17,28 @@ export class SmsController {
     //   "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
     //   "messageId": "0977272967"
     // });
-
+    return await this.smsService.sendsms(data)
+  }
+  @Post('sendsms')
+  async GetTrangthai(@Body() data: any) {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://sms.cmctelecom.vn/SMS_CMCTelecom/api/sms/send',
-      headers: {
+      url: 'https://sms.cmctelecom.vn/SMS_CMCTelecom/api/sms/reconcile',
+      headers: { 
         'Content-Type': 'application/json'
       },
-      data: JSON.stringify(data)
+      data : data
     };
-
-   return axios.request(config)
-      .then((response) => {
-        return response.data
-      })
-      .catch((error) => {
-        return error
-      });
+    
+   try {
+      const response = await axios.request(config);
+      return data;
+      console.log(JSON.stringify(response.data));
+    } catch (error) {
+      console.log(error);
+    }
+    
   }
   @Post()
   create(@Body() createSmDto: CreateSmDto) {

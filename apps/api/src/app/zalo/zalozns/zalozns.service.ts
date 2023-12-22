@@ -7,6 +7,7 @@ import { ZalotokenService } from '../zalotoken/zalotoken.service';
 import { GenId, convertPhoneNum, formatVND } from '../../shared.utils';
 import moment = require('moment');
 import axios from 'axios';
+import { SmsService } from '../../sms/sms.service';
 @Injectable()
 export class ZaloznsService {
   Accesstoken: any = ''
@@ -15,6 +16,7 @@ export class ZaloznsService {
     private ZaloznsRepository: Repository<ZaloznsEntity>,
     private _CauhinhchungService: CauhinhchungService,
     private _ZalotokenService: ZalotokenService,
+    private _SmsService: SmsService,
   ) {
     this._CauhinhchungService.findslug('zalotoken').then((data: any) => {
       this.Accesstoken = data.Content.Accesstoken
@@ -29,9 +31,9 @@ export class ZaloznsService {
     this.ZaloznsRepository.create(result);
     return await this.ZaloznsRepository.save(result);
   }
-  async sendtestzns(item: any, idCN: any,idtemp:any) {
-   return await this._ZalotokenService.findid(idCN).then((data: any) => {
-      console.log(data,idCN);
+  async sendtestzns(item: any, idCN: any, idtemp: any) {
+    return await this._ZalotokenService.findid(idCN).then((data: any) => {
+      console.log(data, idCN);
       const item1 = {
         "phone": convertPhoneNum(item.SDT),
         "template_id": idtemp,
@@ -41,7 +43,7 @@ export class ZaloznsService {
           "price": parseFloat(item.Amount).toFixed(0),
           "customer_name": item.CustName
         },
-        "tracking_id": GenId(12,true)
+        "tracking_id": GenId(12, true)
       }
       if (data) {
         let config = {
@@ -55,17 +57,26 @@ export class ZaloznsService {
           data: item1
         };
         return axios.request(config)
-          .then((response:any) => {
+          .then((response: any) => {
             console.error(response.data);
-            if(response.data.error)
-            {
-
+            if (response.error != 0) {
+              const sms = JSON.stringify({
+                "Brandname": "TAZA",
+                "Message": `${item.CustName} da thanh toan so tien ${parseFloat(item.Amount).toFixed(0)} co ma hoa don la ${item.InvoiceNum}. Taza cam on quy khach`,
+                "Phonenumber": convertPhoneNum(item.SDT),
+                "user": "ctytaza2",
+                "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
+                "messageId": GenId(8,true)
+              });
+              this._SmsService.sendsms(sms).then((data)=>
+              {
+                console.error(data);
+              })
               return response.data
             }
-            else
-            {
+            else {
               return response.data
-            }   
+            }
           })
           .catch((error) => {
             return error

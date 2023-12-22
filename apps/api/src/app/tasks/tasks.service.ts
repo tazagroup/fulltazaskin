@@ -89,23 +89,7 @@ export class TasksService {
           try {
             console.log(`Zalozns service call successful.`);
             this._ZaloznsService.sendtestzns(data, Chinhanh.idtoken, Chinhanh.idtemp).then((zns: any) => {
-              console.log("Log ZNS",zns);   
-              // reponse = {
-              //   error: 0,
-              //   message: 'Success',
-              //   data: {
-              //     sent_time: '1703124900766',
-              //     sending_mode: '1',
-              //     quota: { remainingQuota: '496', dailyQuota: '500' },
-              //     msg_id: '0fde00015cac3ff666b9'
-              //   }
-              // }
-              // if(data.SDT=='0977272967')
-              //   data.status==100
-              //   {
-
-              //   }
-             const result = `ZNS có message có id <b><u>${zns.data.msg_id}</u></b> đã được gửi`;
+             const result = `ZNS có message có id <b><u>${zns?.data?.msg_id}</u></b> đã được gửi`;
              this.SendTelegram(result)
             })
           } catch (error) {
@@ -123,7 +107,7 @@ export class TasksService {
       //   console.log("Lỗi Số Điện Thoại");
       // }
     }
-    else { console.log('Lỗi Get API') }
+    else { console.log('Không Tìm Thấy Chi Nhánh') }
   }
   deleteJob(idKH: string) {
     this.schedulerRegistry.deleteCronJob(idKH);

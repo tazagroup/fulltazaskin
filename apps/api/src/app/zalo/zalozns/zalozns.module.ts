@@ -6,8 +6,9 @@ import { ZaloznsEntity } from './entities/zalozns.entity';
 import { CauhinhchungModule } from '../../cauhinh/cauhinhchung/cauhinhchung.module';
 import { ZalotokenModule } from '../zalotoken/zalotoken.module';
 import { HttpModule } from '@nestjs/axios';
+import { SmsModule } from '../../sms/sms.module';
 @Module({
-  imports: [TypeOrmModule.forFeature([ZaloznsEntity]),CauhinhchungModule,ZalotokenModule,HttpModule],
+  imports: [TypeOrmModule.forFeature([ZaloznsEntity]),CauhinhchungModule,ZalotokenModule,HttpModule,SmsModule],
   controllers: [ZaloznsController],
   providers: [ZaloznsService],
   exports: [ZaloznsService]

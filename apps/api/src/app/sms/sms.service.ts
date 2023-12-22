@@ -1,9 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSmDto } from './dto/create-sm.dto';
 import { UpdateSmDto } from './dto/update-sm.dto';
+import axios from 'axios';
 
 @Injectable()
 export class SmsService {
+  
+  async sendsms(data: any) {
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://sms.cmctelecom.vn/SMS_CMCTelecom/api/sms/send',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: JSON.stringify(data)
+    };
+
+   try {
+      const response = await axios.request(config);
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
   create(createSmDto: CreateSmDto) {
     return 'This action adds a new sm';
   }
