@@ -88,22 +88,21 @@ export class TasksService {
         const job = new CronJob(cronExpression, () => {
           const result = `ZNS <b><u>${data.id}</u></b> sẽ được gửi lúc ${data.teletime}`;
           this._TelegramService.SendLogdev(result)
-          // try {
-          //   console.log(`Zalozns service call successful.`);
-          //   this._ZaloznsService.sendtestzns(data, Chinhanh.idtoken, Chinhanh.idtemp).then((zns: any) => {
-          //    const result = `ZNS có message có id <b><u>${zns?.data?.msg_id}</u></b> đã được gửi`;
-          //    this._TelegramService.SendLogdev(result)
-          //   })
-          // } catch (error) {
-          //   console.error(`Error calling Zalozns service: ${error.message}`);
-          // }
+          try {
+            this._ZaloznsService.sendtestzns(data, Chinhanh.idtoken, Chinhanh.idtemp).then((zns: any) => {
+             const result = `ZNS có message có id <b><u>${zns?.data?.msg_id}</u></b> đã được gửi`;
+             this._TelegramService.SendNoti(result)
+            })
+          } catch (error) {
+            console.error(`Error calling Zalozns service: ${error.message}`);
+          }
         })
         this.schedulerRegistry.addCronJob(data.id, job);
         console.log("Send ZNS");   
         job.start();
         console.log("ZNS Start");  
-      // const result = `Zns Thanh Toán Số Hoá Đơn <b><u> ${data.InvoiceNum} </u></b> của khách hàng <b><u> ${data.CustName} </u></b> có số điện thoại <b><u>${data.SDT} </u></b> Thêm Vào Hàng Chờ Lúc <b><u>${teletime.format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
-      // this._TelegramService.SendLogdev(result)
+      const result = `Zns Thanh Toán Số Hoá Đơn <b><u> ${data.InvoiceNum} </u></b> của khách hàng <b><u> ${data.CustName} </u></b> có số điện thoại <b><u>${data.SDT} </u></b> Thêm Vào Hàng Chờ Lúc <b><u>${teletime.format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
+      this._TelegramService.SendNoti(result)
       // }
       // else {
       //   console.log("Lỗi Số Điện Thoại");
