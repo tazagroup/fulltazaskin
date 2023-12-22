@@ -8,6 +8,7 @@ import { GenId, convertPhoneNum, formatVND } from '../../shared.utils';
 import moment = require('moment');
 import axios from 'axios';
 import { SmsService } from '../../sms/sms.service';
+import { environment } from 'apps/api/src/environments/environment';
 @Injectable()
 export class ZaloznsService {
   Accesstoken: any = ''
@@ -71,6 +72,7 @@ export class ZaloznsService {
               this._SmsService.sendsms(sms).then((data)=>
               {
                 console.error(data);
+                this.SendTelegram(JSON.stringify(data))
               })
               return response.data
             }
@@ -83,6 +85,13 @@ export class ZaloznsService {
           });
       }
     });
+  }
+  async SendTelegram(data: string): Promise<any> {
+    const options = {
+      url: `https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage?chat_id=${environment.APITelegram_idGroup}&text=${data}&parse_mode=html`,
+    };
+    const response = await axios.request(options);
+    return response.data;
   }
   async sendZns(item: any, idCN: any) {
     await this._ZalotokenService.findid(idCN).then((data: any) => {
