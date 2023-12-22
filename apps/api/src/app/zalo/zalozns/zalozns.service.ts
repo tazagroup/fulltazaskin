@@ -61,14 +61,14 @@ export class ZaloznsService {
           .then((response: any) => {
             console.error(response.data);
             if (response.error != 0) {
-              const sms = JSON.stringify({
+              const sms = {
                 "Brandname": "TAZA",
                 "Message": `${item.CustName} da thanh toan so tien ${parseFloat(item.Amount).toFixed(0)} co ma hoa don la ${item.InvoiceNum}. Taza cam on quy khach`,
                 "Phonenumber": convertPhoneNum(item.SDT),
                 "user": "ctytaza2",
                 "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
                 "messageId": GenId(8,true)
-              });
+              }
               this._SmsService.sendsms(sms).then((data)=>
               {
                 console.error(data);
@@ -88,7 +88,7 @@ export class ZaloznsService {
   }
   async SendTelegram(data: string): Promise<any> {
     const options = {
-      url: `https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage?chat_id=${environment.APITelegram_idGroup}&text=${data}&parse_mode=html`,
+      url: `https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage?chat_id=${environment.APITelegram_Logdev}&text=${data}&parse_mode=html`,
     };
     const response = await axios.request(options);
     return response.data;
