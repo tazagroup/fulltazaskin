@@ -98,7 +98,13 @@ export class VttechthanhtoanService {
           this.SendTelegram(result);
           return { status: 201 };
         }
-        return { status: 200 };
+        else
+        {
+          const result = `Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
+          this.SendTelegram(result);
+          return { status: 200 };
+        }
+
       }
       else return {status: 404,title:'Lỗi Data Trả Về'}
     } catch (error) {
@@ -203,6 +209,7 @@ export class VttechthanhtoanService {
     return { deleted: true };
   }
   async SendTelegram(data: string): Promise<any> {
+    console.error(data);
     const options = {
       url: `https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage?chat_id=${environment.APITelegram_idGroup}&text=${data}&parse_mode=html`,
     };
