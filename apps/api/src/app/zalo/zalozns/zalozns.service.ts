@@ -62,7 +62,8 @@ export class ZaloznsService {
         return axios.request(config)
           .then((response: any) => {
             console.error(response.data);
-            if (response.error != 0) {
+            this._TelegramService.SendLogdev(response.data)
+            if (response.data.error != 0) {
               const sms = {
                 "Brandname": "TAZA",
                 "Message": `${item.CustName} da thanh toan so tien ${parseFloat(item.Amount).toFixed(0)} co ma hoa don la ${item.InvoiceNum}. Taza cam on quy khach`,
@@ -79,10 +80,12 @@ export class ZaloznsService {
               return response.data
             }
             else {
+              this._TelegramService.SendLogdev(response.data)
               return response.data
             }
           })
           .catch((error) => {
+            this._TelegramService.SendLogdev(error)
             return error
           });
       }
