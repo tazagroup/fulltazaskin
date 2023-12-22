@@ -74,18 +74,17 @@ export class ZaloznsService {
               }
               this._SmsService.sendsms(sms).then((data)=>
               {
-                console.error(data);
-                this._TelegramService.SendLogdev(data)
+                this._TelegramService.SendLogdev(JSON.stringify(data))
               })
               return response.data
             }
             else {
-              this._TelegramService.SendLogdev(response.data)
+              this._TelegramService.SendLogdev(JSON.stringify(response.data))
               return response.data
             }
           })
           .catch((error) => {
-            this._TelegramService.SendLogdev(error)
+            this._TelegramService.SendLogdev(JSON.stringify(error))
             return error
           });
       }
