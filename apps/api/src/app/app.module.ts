@@ -21,6 +21,7 @@ import { KhachhangdichvuModule } from './khachhang/khachhangdichvu/khachhangdich
 import { VttechModule } from './vttech/vttech.module';
 import { TasksModule } from './tasks/tasks.module';
 import { SmsModule } from './sms/sms.module';
+import { TelegramService } from './shared/telegram.service';
 @Module({
   imports: [
     ScheduleModule.forRoot(),

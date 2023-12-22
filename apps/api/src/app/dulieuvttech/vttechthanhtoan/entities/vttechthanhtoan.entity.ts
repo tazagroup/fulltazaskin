@@ -44,9 +44,9 @@ export class VttechthanhtoanEntity {
     SDT: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     InvoiceNum: string;
-    @Column()
+    @Column({default:null})
     time: Date;
-    @Column()
+    @Column({default:null})
     TimeZNS: Date;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     BranchID: string;

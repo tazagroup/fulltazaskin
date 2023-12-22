@@ -10,6 +10,7 @@ import { CauhinhchungService } from '../../cauhinh/cauhinhchung/cauhinhchung.ser
 import { environment } from 'apps/api/src/environments/environment';
 import * as moment from 'moment';
 import { TasksService } from '../../tasks/tasks.service';
+import { TelegramService } from '../../shared/telegram.service';
 @Injectable()
 export class VttechthanhtoanService {
   Cookie: any = ''
@@ -19,55 +20,14 @@ export class VttechthanhtoanService {
     private VttechthanhtoanRepository: Repository<VttechthanhtoanEntity>,
     private _CauhinhchungService: CauhinhchungService,
     private _TasksService: TasksService,
+    private _TelegramService: TelegramService,
   ) {
     this._CauhinhchungService.findslug('vttechtoken').then((data: any) => {
       this.Cookie = data.Content.Cookie
       this.XsrfToken = data.Content.XsrfToken
     })
   }
-  // async getApiRealtime() {
-  //   const begin = moment(new Date()).format("DD-MM-YYYY")
-  //   const end = moment(new Date()).add(1, 'day').format("DD-MM-YYYY")
-  //   let config = {
-  //     method: 'post',
-  //     maxBodyLength: Infinity,
-  //     url: `https://tmtaza.vttechsolution.com/Report/Revenue/Branch/AllBranchGrid/?handler=LoadataDetailByBranch&branchID=0&dateFrom=${begin}&dateTo=${end}`,
-  //     headers: { 
-  //       'Cookie': this.Cookie, 
-  //       'Xsrf-Token': this.XsrfToken
-  //     }
-  //   };
-  //   return axios.request(config)
-  //   .then((response) => {   
-  //     const data1 = response.data      
-  //     this.findAll().then((data)=>
-  //     {
-  //       const data2 = data.map((obj) => ({
-  //         ...obj,
-  //       }));
-  //       const uniqueInData2 = data1.filter(
-  //         (item:any) => !data2.some((data1Item:any) => this.Getdatetime(data1Item.Created)==(this.Getdatetime(item.Created)))
-  //       );      
-  //       if(uniqueInData2.length>0)
-  //       {
-  //         uniqueInData2.forEach((v:any) => {
-  //           console.error(v);
-
-  //         this.create(v)
-  //       })}
-  //       const result =`Cập Nhật Lúc <b><u>${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng : <b><u>${uniqueInData2.length}</u></b>`
-  //       this.SendTelegram(result)
-  //     }) 
-  //    return ({status:200});
-  //   })
-  //   .catch((error) => {
-  //     const result =`Lỗi Xác Thực Lúc <b><u>${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}</u></b>`
-  //     this.SendTelegram(result)
-  //     return ({status:400});
-  //   });
-  // }
-
-  async getApiRealtime() {
+    async getApiRealtime() {
     console.log('todo');
     
     const begin = moment(new Date()).format("DD-MM-YYYY")
@@ -82,36 +42,35 @@ export class VttechthanhtoanService {
       const response = await axios.request(config);
       if(Array.isArray(response.data))
       {
-       // console.error(response.data);
         const data1 = response.data;
         const data2 = await this.findAll();
         const uniqueInData2 = data1.filter((item: { Created: any; }) => !data2.some((data1Item) => this.Getdatetime(data1Item.Created) === this.Getdatetime(item.Created)));
-  
         if (uniqueInData2.length > 0) {
           await Promise.all(uniqueInData2.map((v: any) => {
             this.create(v).then((item: any) => {
-            console.log(item);
-              item.Dulieu = item
+              item.Dulieu = JSON.stringify(item)
               this.GetVttechKhachhang(item)})
           }));
-          const result = `Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
-          this.SendTelegram(result);
+          const result = `Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
+          this._TelegramService.SendLogdev(result);
           return { status: 201 };
         }
         else
         {
-          const result = `Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
-          this.SendTelegram(result);
+          const result = `Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
+          this._TelegramService.SendLogdev(result);
           return { status: 200 };
         }
-
       }
-      else return {status: 404,title:'Lỗi Data Trả Về'}
+      else 
+      {
+        const result = "Code 403: Lỗi Xác thực"
+        this._TelegramService.SendLogdev(result);
+        return { status: 404,title:'Lỗi Data Trả Về' };
+      }
     } catch (error) {
       const result = `Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
-      this.SendTelegram(result);
-      console.error(error);
-      
+      this._TelegramService.SendLogdev(result);
       return { status: 400,title:'Lỗi Xác Thực',Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
     }
   }
@@ -124,7 +83,6 @@ export class VttechthanhtoanService {
     };
     try {
       const response = await axios.request(config);
-      //console.log(response.data);
       const Hoadon = await this.GetHoadon(response.data.Table[0].CustomerID)
       const Hoadon_id = Hoadon.Table.find((v:any)=>
       {
@@ -133,8 +91,16 @@ export class VttechthanhtoanService {
         return Date1.getTime() == Date2.getTime()
       })
       console.log(Hoadon_id);
-      const item1 = {...item,time:moment(new Date(item.Created)).add(1, 'hours'),SDT:response.data.Table[0].CustomerPhone,InvoiceNum:Hoadon_id.InvoiceNum } 
-      this.update(item1.id,item1)
+      const item1 = {...item,time:moment(new Date(item.Created)).add(1, 'hours'),SDT:response.data.Table[0].CustomerPhone,InvoiceNum:Hoadon_id?.InvoiceNum } 
+      const Updatedata = 
+      {
+        TimeZNS: new Date(item1.time),
+        id: item1.id,
+        Dulieu: item1.Dulieu,
+        SDT: item1.SDT,
+        InvoiceNum: item1.InvoiceNum
+      }
+      this.update(Updatedata.id,Updatedata).then((data)=>{console.log("cập nhật thành công")})
       this._TasksService.addCron(item1)
     } catch (error) {
       console.error(error);
@@ -208,12 +174,12 @@ export class VttechthanhtoanService {
     await this.VttechthanhtoanRepository.delete(id);
     return { deleted: true };
   }
-  async SendTelegram(data: string): Promise<any> {
-    console.error(data);
-    const options = {
-      url: `https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage?chat_id=${environment.APITelegram_idGroup}&text=${data}&parse_mode=html`,
-    };
-    const response = await axios.post(options.url);
-    return response.data;
-  }
+  // async SendTelegram(data: string): Promise<any> {
+  //   console.error(data);
+  //   const options = {
+  //     url: `https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage?chat_id=${environment.APITelegram_Logdev}&text=${data}&parse_mode=html`,
+  //   };
+  //   const response = await axios.post(options.url);
+  //   return response.data;
+  // }
 }

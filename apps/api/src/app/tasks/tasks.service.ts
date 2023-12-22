@@ -9,11 +9,13 @@ import { ZaloznsService } from '../zalo/zalozns/zalozns.service';
 import { LIST_CHI_NHANH } from '../shared.utils';
 import { environment } from '../../environments/environment';
 import axios from 'axios';
+import { TelegramService } from '../shared/telegram.service';
 @Injectable()
 export class TasksService {
   constructor(
     private schedulerRegistry: SchedulerRegistry,
     private _ZaloznsService: ZaloznsService,
+    private _TelegramService: TelegramService,
   ) { }
   // @Timeout('messaging', 3500)
   // handleNamedTimeout() {
@@ -78,46 +80,42 @@ export class TasksService {
       //cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
       cronExpression = `0 ${CronNgaymai.minute()} ${CronNgaymai.hour()} ${CronNgaymai.date()} ${CronNgaymai.month() + 1} ${CronNgaymai.isoWeekday()}`;
     }
-    console.log('Cron expression for the target date:', cronExpression);
+    console.log('Cron expression :', cronExpression);
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == data.BranchID)
     if (Chinhanh) {
       // if (data.SDT == '0977272967') {
       //   console.log(data);
-        
         const job = new CronJob(cronExpression, () => {
-          console.log(`time (${data.id}) for job to run!`)
-          try {
-            console.log(`Zalozns service call successful.`);
-            this._ZaloznsService.sendtestzns(data, Chinhanh.idtoken, Chinhanh.idtemp).then((zns: any) => {
-             const result = `ZNS có message có id <b><u>${zns?.data?.msg_id}</u></b> đã được gửi`;
-             this.SendTelegram(result)
-            })
-          } catch (error) {
-            console.error(`Error calling Zalozns service: ${error.message}`);
-          }
+          const result = `ZNS <b><u>${data.id}</u></b> sẽ được gửi lúc ${data.teletime}`;
+          this._TelegramService.SendLogdev(result)
+          // try {
+          //   console.log(`Zalozns service call successful.`);
+          //   this._ZaloznsService.sendtestzns(data, Chinhanh.idtoken, Chinhanh.idtemp).then((zns: any) => {
+          //    const result = `ZNS có message có id <b><u>${zns?.data?.msg_id}</u></b> đã được gửi`;
+          //    this._TelegramService.SendLogdev(result)
+          //   })
+          // } catch (error) {
+          //   console.error(`Error calling Zalozns service: ${error.message}`);
+          // }
         })
         this.schedulerRegistry.addCronJob(data.id, job);
-        console.log("Send ZNS");
-        
+        console.log("Send ZNS");   
         job.start();
-      const result = `Zns Thanh Toán Số Hoá Đơn <b><u> ${data.InvoiceNum} </u></b> của khách hàng <b><u> ${data.CustName} </u></b> có số điện thoại <b><u>${data.SDT} </u></b> Thêm Vào Hàng Chờ Lúc <b><u>${teletime.format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
-      this.SendTelegram(result)
+        console.log("ZNS Start");  
+      // const result = `Zns Thanh Toán Số Hoá Đơn <b><u> ${data.InvoiceNum} </u></b> của khách hàng <b><u> ${data.CustName} </u></b> có số điện thoại <b><u>${data.SDT} </u></b> Thêm Vào Hàng Chờ Lúc <b><u>${teletime.format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
+      // this._TelegramService.SendLogdev(result)
       // }
       // else {
       //   console.log("Lỗi Số Điện Thoại");
       // }
     }
-    else { console.log('Không Tìm Thấy Chi Nhánh') }
+    else { 
+      const result = `Chi nhánh chưa đăng ký ZNS`;
+      this._TelegramService.SendLogdev(result)
+     }
   }
   deleteJob(idKH: string) {
     this.schedulerRegistry.deleteCronJob(idKH);
-  }
-  async SendTelegram(data: string): Promise<any> {
-    const options = {
-      url: `https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage?chat_id=${environment.APITelegram_Logdev}&text=${data}&parse_mode=html`,
-    };
-    const response = await axios.request(options);
-    return response.data;
   }
   create(createTaskDto: CreateTaskDto) {
     return 'This action adds a new task';

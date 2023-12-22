@@ -14,7 +14,7 @@ export class SmsService {
       headers: {
         'Content-Type': 'application/json'
       },
-      data: JSON.stringify(data)
+      data: data
     };
 
    try {

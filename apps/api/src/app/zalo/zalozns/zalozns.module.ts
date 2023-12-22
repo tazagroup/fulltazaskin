@@ -7,10 +7,11 @@ import { CauhinhchungModule } from '../../cauhinh/cauhinhchung/cauhinhchung.modu
 import { ZalotokenModule } from '../zalotoken/zalotoken.module';
 import { HttpModule } from '@nestjs/axios';
 import { SmsModule } from '../../sms/sms.module';
+import { TelegramService } from '../../shared/telegram.service';
 @Module({
   imports: [TypeOrmModule.forFeature([ZaloznsEntity]),CauhinhchungModule,ZalotokenModule,HttpModule,SmsModule],
   controllers: [ZaloznsController],
-  providers: [ZaloznsService],
+  providers: [ZaloznsService,TelegramService],
   exports: [ZaloznsService]
 })
 export class ZaloznsModule {}
