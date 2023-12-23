@@ -29,7 +29,6 @@ export class VttechthanhtoanService {
   }
     async getApiRealtime() {
     console.log('todo');
-    
     const begin = moment(new Date()).format("DD-MM-YYYY")
     const end = moment(new Date()).add(1, 'day').format("DD-MM-YYYY")
     const config = {
@@ -136,6 +135,12 @@ export class VttechthanhtoanService {
 
   async findAll() {
     return await this.VttechthanhtoanRepository.find();
+  }
+  async Checkthanhtoan() {
+    const now = new Date()
+    // return await this.VttechthanhtoanRepository.findOne({
+    //   where: { id: id },
+    // });
   }
   async findid(id: string) {
     return await this.VttechthanhtoanRepository.findOne({

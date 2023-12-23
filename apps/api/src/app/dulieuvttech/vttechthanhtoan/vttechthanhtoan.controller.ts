@@ -11,9 +11,13 @@ export class VttechthanhtoanController {
   // @Cron('* * 2 * * *')
   // 1s = 1000
   @Interval(1800000)
-   @Get('getapi')
+  @Get('getapi')
   async getApiRealtime() {      
     return this.vttechthanhtoanService.getApiRealtime();
+  }
+  @Get('checkthanhtoan')
+  async CheckThanhtoan() {      
+    return this.vttechthanhtoanService.Checkthanhtoan();
   }
   @Post()
   create(@Body() createVttechthanhtoanDto: CreateVttechthanhtoanDto) {

@@ -66,7 +66,7 @@ export class TasksService {
     const targetDate = moment(data.time);
     const current = new Date(data.time)
     const now = new Date();
-    const Homnay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0, 0);
+    const Homnay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0, 0);
     const Ngaymai = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 9, 0, 0);
     const CronNgaymai = moment(Ngaymai);
     let cronExpression: any;
