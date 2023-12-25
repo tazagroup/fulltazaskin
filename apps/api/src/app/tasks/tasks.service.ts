@@ -81,7 +81,6 @@ export class TasksService {
     if (Chinhanh) {
         const job = new CronJob(cronExpression, () => {
           console.error('Đã Gửi');
-          
           const result = `ZNS <b><u>${data.id}</u></b> sẽ được gửi lúc ${data.teletime}`;
           this._TelegramService.SendLogdev(result)
           try {
@@ -92,13 +91,11 @@ export class TasksService {
                 if(zns.status=='sms')
                 {
                   data.sms = zns.data
-                  data.Status = 1
                   this._VttechthanhtoanService.update(data.id,data)
                 }
                 else
                 {
                   data.ZNZ.Thucte = new Date()
-                  data.Status = 1
                   this._VttechthanhtoanService.update(data.id,data)
                 }
                 const result = `<b><u>${zns?.Title}</u></b>`;
@@ -112,6 +109,8 @@ export class TasksService {
         })
         this.schedulerRegistry.addCronJob(data.id, job);
         job.start();
+        data.Status = 1
+        this._VttechthanhtoanService.update(data.id,data)
         const result = `Zns Thanh Toán Số Hoá Đơn <b><u> ${data.InvoiceNum} </u></b> của khách hàng <b><u> ${data.CustName} </u></b> có số điện thoại <b><u>${data.SDT} </u></b> Thêm Vào Hàng Chờ Lúc <b><u>${targetDate.format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
         this._TelegramService.SendNoti(result)
     }
