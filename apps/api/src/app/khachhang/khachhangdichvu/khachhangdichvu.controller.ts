@@ -25,8 +25,6 @@ export class KhachhangdichvuController {
     const [Khachhang] = await Promise.all([Khachhangpromise]); 
     if(Khachhang)
     {
-      console.error(Khachhang);
-      
         let config = {
           method: 'post',
           maxBodyLength: Infinity,

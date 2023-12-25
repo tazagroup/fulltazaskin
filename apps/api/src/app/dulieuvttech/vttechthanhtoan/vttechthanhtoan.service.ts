@@ -158,7 +158,7 @@ export class VttechthanhtoanService {
   async findbetween(start: any,end:any) {
     const startTime = new Date(start)
     const endTime = new Date(end)
-    return await this.VttechthanhtoanRepository.findOne({
+    return await this.VttechthanhtoanRepository.find({
       where: {
         TimeZNS: Between(startTime, endTime),
         Status:0
