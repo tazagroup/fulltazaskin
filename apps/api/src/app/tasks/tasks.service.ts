@@ -68,18 +68,19 @@ export class TasksService {
   }
   addCron(data: any) {
     let cronExpression: any;
-    console.error(data);
     const targetDate = moment(data.DukienZNS);
     cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
     console.error(cronExpression);
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == data.BranchID)
+    
+    console.log(data);
+    console.log(Chinhanh);
+    
     if (Chinhanh) {
       const job = new CronJob(cronExpression, () => {
-        console.error('Đã Gửi');
         const result = `ZNS <b><u>${data.id}</u></b> sẽ được gửi lúc ${data.teletime}`;
         this._TelegramService.SendLogdev(result)
         try {
-          console.log(data, Chinhanh.idtoken, Chinhanh.idtemp);
           this._ZaloznsService.sendtestzns(data, Chinhanh.idtoken, Chinhanh.idtemp).then((zns: any) => {
             if (zns) {
               if (zns.status == 'sms') {
@@ -88,6 +89,7 @@ export class TasksService {
               }
               else {
                 data.ThucteZNS = new Date()
+                data.StatusZNS = 1
                 this._VttechthanhtoanService.update(data.id, data)
               }
               const result = `<b><u>${zns?.Title}</u></b>`;
@@ -107,6 +109,8 @@ export class TasksService {
       this._TelegramService.SendNoti(result)
     }
     else {
+      data.Status = 1
+      this._VttechthanhtoanService.update(data.id, data)
       const result = `Chi nhánh chưa đăng ký ZNS`;
       this._TelegramService.SendLogdev(result)
     }

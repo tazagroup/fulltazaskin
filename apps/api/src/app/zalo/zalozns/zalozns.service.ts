@@ -35,7 +35,6 @@ export class ZaloznsService {
   }
   async sendtestzns(item: any, idCN: any, idtemp: any) {
     return await this._ZalotokenService.findid(idCN).then((data: any) => {
-      console.log(data, idCN);
       const item1 = {
         "phone": convertPhoneNum(item.SDT),
         "template_id": idtemp,
@@ -75,17 +74,12 @@ export class ZaloznsService {
               {
                 this._TelegramService.SendLogdev(JSON.stringify(data))
                 return {status:'sms',Title:'Lỗi Gửi ZNZ, Đã Gửi SMS',data:data}
-                // item.sms = data
-                // this._VttechthanhtoanService.update(item.id,item)
               })
               return response.data
             }
             else {
               this._TelegramService.SendLogdev(JSON.stringify(response.data))
               return {status:'zns',Title:`ZNS có ID : ${response.data?.data?.msg_id} Đã Được Gửi`}
-              // item.ZNS.Thucte = new Date()
-              // this._VttechthanhtoanService.update(item.id,item)
-
             }
           })
           .catch((error) => {

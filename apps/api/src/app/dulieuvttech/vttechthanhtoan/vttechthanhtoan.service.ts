@@ -159,8 +159,6 @@ export class VttechthanhtoanService {
   async findbetween(start: any,end:any) {
     const startTime = new Date(start)
     const endTime = new Date(end)
-    console.error(startTime);
-    console.error(endTime);
     return await this.VttechthanhtoanRepository.find({
       where: {
         DukienZNS: Between(startTime, endTime),
