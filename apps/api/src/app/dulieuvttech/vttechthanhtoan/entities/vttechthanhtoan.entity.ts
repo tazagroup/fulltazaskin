@@ -7,34 +7,6 @@ import {
     DeleteDateColumn,
 } from 'typeorm';
 @Entity('vttechthanhtoan', { orderBy: { CreateAt: 'DESC' } })
-// export class VttechthanhtoanEntity {
-//   @PrimaryGeneratedColumn('uuid')
-//   id: string;
-//   @Column({ type: 'text', collation: 'utf8_general_ci' })
-//   idDM: string;
-//   @Column({ type: 'text', collation: 'utf8_general_ci' })
-//   Title: string;
-//   @Column({ type: 'text', collation: 'utf8_general_ci' })
-//   Mota: string;
-//   @Column({ default: '' })
-//   Slug: string;
-//   @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
-//   Image: string;
-//   @Column({ default: '' })
-//   Type: string;
-//   @Column({ default: 1 })
-//   Ordering: number;
-//   @Column({ default: 0 })
-//   Status: number;
-//   @CreateDateColumn()
-//   CreateAt: Date;
-//   @UpdateDateColumn()
-//   UpdateAt: Date;
-//   @DeleteDateColumn()
-//   DeleteAt: Date;
-//   @Column({ nullable: true })
-//   idCreate: string;
-// }
 export class VttechthanhtoanEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -48,6 +20,10 @@ export class VttechthanhtoanEntity {
     time: Date;
     @Column({default:null})
     TimeZNS: Date;
+    @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
+    ZNS: string;
+    @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
+    SMS: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     BranchID: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })

@@ -90,7 +90,6 @@ export class TasksService {
           this._TelegramService.SendLogdev(result)
           try {
             console.log(data,Chinhanh.idtoken,Chinhanh.idtemp);
-            
             this._ZaloznsService.sendtestzns(data, Chinhanh.idtoken, Chinhanh.idtemp).then((zns: any) => {
              const result = `ZNS có message có id <b><u>${zns.data.msg_id}</u></b> đã được gửi`;
              this._TelegramService.SendNoti(result)
