@@ -19,6 +19,22 @@ export class TasksService {
     private _TelegramService: TelegramService,
     private _VttechthanhtoanService: VttechthanhtoanService,
   ) { }
+  
+  @Cron('0 30 8 * * 1-5')
+  async ThanhtoanDaungay() {
+    const now = new Date()
+    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1, 17, 0, 0);
+    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+    const Thanhtoanpromise = await this._VttechthanhtoanService.findbetween(Start, End)
+    const [Thanhtoan] = await Promise.all([Thanhtoanpromise])    
+    if (Thanhtoan.length>0) {
+      Thanhtoan.forEach((v: any) => {
+      this.addCron(v)
+      });
+      return Thanhtoan
+    }
+    else { return {Title:"Không Có Thanh Toán Mới"}}
+  }
   async getThanhtoan() {
     const now = new Date()
     const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
@@ -67,15 +83,13 @@ export class TasksService {
     })
   }
   addCron(data: any) {
+    console.error('Cron data : ',data);
+    
     let cronExpression: any;
     const targetDate = moment(data.DukienZNS);
     cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
     console.error(cronExpression);
-    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == data.BranchID)
-    
-    console.log(data);
-    console.log(Chinhanh);
-    
+    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == data.BranchID)    
     if (Chinhanh) {
       const job = new CronJob(cronExpression, () => {
         const result = `ZNS <b><u>${data.id}</u></b> sẽ được gửi lúc ${data.teletime}`;
