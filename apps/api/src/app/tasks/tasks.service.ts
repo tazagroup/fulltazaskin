@@ -69,7 +69,7 @@ export class TasksService {
   addCron(data: any) {
     let cronExpression: any;
     console.error(data);
-    const targetDate = moment(data.ZNS.Dukien);
+    const targetDate = moment(data.DukienZNS);
     cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
     console.error(cronExpression);
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == data.BranchID)
