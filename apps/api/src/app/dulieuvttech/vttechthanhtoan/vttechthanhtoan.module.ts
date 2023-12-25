@@ -4,14 +4,15 @@ import { VttechthanhtoanController } from './vttechthanhtoan.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VttechthanhtoanEntity } from './entities/vttechthanhtoan.entity';
 import { CauhinhchungModule } from '../../cauhinh/cauhinhchung/cauhinhchung.module';
-import { TasksModule } from '../../tasks/tasks.module';
+//import { TasksModule } from '../../tasks/tasks.module';
 import { TelegramService } from '../../shared/telegram.service';
 @Module({
   imports: [TypeOrmModule.forFeature([VttechthanhtoanEntity]),
   CauhinhchungModule,
-  TasksModule
+ // TasksModule
 ],
   controllers: [VttechthanhtoanController],
-  providers: [VttechthanhtoanService,TelegramService]
+  providers: [VttechthanhtoanService,TelegramService],
+  exports:[VttechthanhtoanService]
 })
 export class VttechthanhtoanModule {}

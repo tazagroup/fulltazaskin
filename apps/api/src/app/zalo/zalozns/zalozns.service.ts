@@ -8,7 +8,6 @@ import { GenId, convertPhoneNum, formatVND } from '../../shared.utils';
 import moment = require('moment');
 import axios from 'axios';
 import { SmsService } from '../../sms/sms.service';
-import { environment } from 'apps/api/src/environments/environment';
 import { TelegramService } from '../../shared/telegram.service';
 @Injectable()
 export class ZaloznsService {
@@ -62,7 +61,7 @@ export class ZaloznsService {
         return axios.request(config)
           .then((response: any) => {
             console.error(response.data);
-            this._TelegramService.SendLogdev(response.data)
+            this._TelegramService.SendLogdev(JSON.stringify(response.data))
             if (response.data.error != 0) {
               const sms = {
                 "Brandname": "TAZA",
@@ -75,12 +74,18 @@ export class ZaloznsService {
               this._SmsService.sendsms(sms).then((data)=>
               {
                 this._TelegramService.SendLogdev(JSON.stringify(data))
+                return {status:'sms',Title:'Lỗi Gửi ZNZ, Đã Gửi SMS',data:data}
+                // item.sms = data
+                // this._VttechthanhtoanService.update(item.id,item)
               })
               return response.data
             }
             else {
               this._TelegramService.SendLogdev(JSON.stringify(response.data))
-              return response.data
+              return {status:'zns',Title:`ZNS có ID : ${response.data?.data?.msg_id} Đã Được Gửi`}
+              // item.ZNS.Thucte = new Date()
+              // this._VttechthanhtoanService.update(item.id,item)
+
             }
           })
           .catch((error) => {

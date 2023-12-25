@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Between, Like, Repository } from 'typeorm';
 import { CreateVttechthanhtoanDto } from './dto/create-vttechthanhtoan.dto';
 import { UpdateVttechthanhtoanDto } from './dto/update-vttechthanhtoan.dto';
 import { VttechthanhtoanEntity } from './entities/vttechthanhtoan.entity';
@@ -19,7 +19,7 @@ export class VttechthanhtoanService {
     @InjectRepository(VttechthanhtoanEntity)
     private VttechthanhtoanRepository: Repository<VttechthanhtoanEntity>,
     private _CauhinhchungService: CauhinhchungService,
-    private _TasksService: TasksService,
+    // private _TasksService: TasksService,
     private _TelegramService: TelegramService,
   ) {
     this._CauhinhchungService.findslug('vttechtoken').then((data: any) => {
@@ -89,20 +89,34 @@ export class VttechthanhtoanService {
         const Date2 = new Date(item.Created)
         return Date1.getTime() == Date2.getTime()
       })
-      console.log(Hoadon_id);
       const item1 = {...item,time:moment(new Date(item.Created)).add(1, 'hours'),SDT:response.data.Table[0].CustomerPhone,InvoiceNum:Hoadon_id?.InvoiceNum } 
       const Updatedata = 
-      {
-        TimeZNS: new Date(item1.time),
+      { 
+        ZNS: {Dukien:this.SetRuleTimeZns(item1.time),Thucte:null,Status:0},
+        TimeZNS: this.SetRuleTimeZns(item1.time),
         id: item1.id,
         Dulieu: item1.Dulieu,
         SDT: item1.SDT,
         InvoiceNum: item1.InvoiceNum
       }
-      this.update(Updatedata.id,Updatedata).then((data)=>{console.log("cập nhật thành công")})
-      this._TasksService.addCron(item1)
+      this.update(Updatedata.id,Updatedata)
     } catch (error) {
       console.error(error);
+    }
+  }
+  SetRuleTimeZns(time:any)
+  {
+    const targetDate = moment(time);
+    const current = new Date(time)
+    const now = new Date();
+    const Homnay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0, 0);
+    const Ngaymai = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 9, 0, 0);
+    const CronNgaymai = moment(Ngaymai);
+    if (current.getTime() <= Homnay.getTime()) {
+      return targetDate 
+    }
+    else {
+      return CronNgaymai
     }
   }
   async GetHoadon(CustomerID:any) {
@@ -116,7 +130,6 @@ export class VttechthanhtoanService {
    return axios.request(config)
     .then((response) => {
       return response.data
-      console.log(JSON.stringify(response.data));
     })
     .catch((error) => {
       console.log(error);
@@ -141,6 +154,16 @@ export class VttechthanhtoanService {
     // return await this.VttechthanhtoanRepository.findOne({
     //   where: { id: id },
     // });
+  }
+  async findbetween(start: any,end:any) {
+    const startTime = new Date(start)
+    const endTime = new Date(end)
+    return await this.VttechthanhtoanRepository.findOne({
+      where: {
+        TimeZNS: Between(startTime, endTime),
+        Status:0
+      },
+    });
   }
   async findid(id: string) {
     return await this.VttechthanhtoanRepository.findOne({
@@ -170,12 +193,11 @@ export class VttechthanhtoanService {
       where: { CustName: Like(`%query%`) },
     });
   }
-  async update(id: string, UpdateVttechthanhtoanDto: UpdateVttechthanhtoanDto) {
+  async update(id: string, UpdateVttechthanhtoanDto: any) {
     this.VttechthanhtoanRepository.save(UpdateVttechthanhtoanDto);
     return await this.VttechthanhtoanRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
-    // console.error(id)
     await this.VttechthanhtoanRepository.delete(id);
     return { deleted: true };
   }
