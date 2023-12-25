@@ -89,16 +89,17 @@ export class VttechthanhtoanService {
         const Date2 = new Date(item.Created)
         return Date1.getTime() == Date2.getTime()
       })
-      const item1 = {...item,time:moment(new Date(item.Created)).add(1, 'hours'),SDT:response.data.Table[0].CustomerPhone,InvoiceNum:Hoadon_id?.InvoiceNum } 
+      const item1 = {...item,time:moment(new Date(item.Created)).add(1, 'hours'),SDT:response.data.Table[0].CustomerPhone,InvoiceNum:Hoadon_id?.InvoiceNum }       
       const Updatedata = 
       { 
-        ZNS: {Dukien:this.SetRuleTimeZns(item1.time),Thucte:null,Status:0},
-        TimeZNS: this.SetRuleTimeZns(item1.time),
-        id: item1.id,
-        Dulieu: item1.Dulieu,
-        SDT: item1.SDT,
-        InvoiceNum: item1.InvoiceNum
+        ...item,
+        DukienZNS: (this.SetRuleTimeZns(moment(new Date(item.Created)).add(1, 'hours'))).toDate(),
+        StatusZNS:0,
+        TimeZNS: (this.SetRuleTimeZns(moment(new Date(item.Created)).add(1, 'hours'))).toDate(),
+        SDT:response.data.Table[0].CustomerPhone,
+        InvoiceNum:Hoadon_id?.InvoiceNum,
       }
+      console.error(Updatedata);
       this.update(Updatedata.id,Updatedata)
     } catch (error) {
       console.error(error);
@@ -158,9 +159,11 @@ export class VttechthanhtoanService {
   async findbetween(start: any,end:any) {
     const startTime = new Date(start)
     const endTime = new Date(end)
+    console.error(startTime);
+    console.error(endTime);
     return await this.VttechthanhtoanRepository.find({
       where: {
-        TimeZNS: Between(startTime, endTime),
+        DukienZNS: Between(startTime, endTime),
         Status:0
       },
     });
@@ -193,7 +196,7 @@ export class VttechthanhtoanService {
       where: { CustName: Like(`%query%`) },
     });
   }
-  async update(id: string, UpdateVttechthanhtoanDto: any) {
+  async update(id: string, UpdateVttechthanhtoanDto: UpdateVttechthanhtoanDto) {
     this.VttechthanhtoanRepository.save(UpdateVttechthanhtoanDto);
     return await this.VttechthanhtoanRepository.findOne({ where: { id: id } });
   }

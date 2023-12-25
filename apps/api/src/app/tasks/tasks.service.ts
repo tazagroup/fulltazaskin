@@ -21,21 +21,18 @@ export class TasksService {
   ) { }
   async getThanhtoan() {
     const now = new Date()
-    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
     const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0, 0);
     const Thanhtoanpromise = await this._VttechthanhtoanService.findbetween(Start, End)
-    const [Thanhtoan] = await Promise.all([Thanhtoanpromise])
+    const [Thanhtoan] = await Promise.all([Thanhtoanpromise])    
     if (Thanhtoan.length>0) {
       Thanhtoan.forEach((v: any) => {
-       this.addCron(v)
+      this.addCron(v)
       });
-      console.error(Thanhtoan);
       return Thanhtoan
     }
     else { return {Title:"Không Có Thanh Toán Mới"}}
-
   }
-
   listTimeouts() {
     const timeouts = this.schedulerRegistry.getTimeouts();
     timeouts.forEach(key => console.log(`Timeout Name: ${key}`))
@@ -86,11 +83,11 @@ export class TasksService {
           this._ZaloznsService.sendtestzns(data, Chinhanh.idtoken, Chinhanh.idtemp).then((zns: any) => {
             if (zns) {
               if (zns.status == 'sms') {
-                data.sms = zns.data
+                data.sms = JSON.stringify(zns.data)
                 this._VttechthanhtoanService.update(data.id, data)
               }
               else {
-                data.ZNZ.Thucte = new Date()
+                data.ThucteZNS = new Date()
                 this._VttechthanhtoanService.update(data.id, data)
               }
               const result = `<b><u>${zns?.Title}</u></b>`;

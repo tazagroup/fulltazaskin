@@ -19,6 +19,12 @@ export class VttechthanhtoanEntity {
     @Column({default:null})
     time: Date;
     @Column({default:null})
+    DukienZNS: Date;
+    @Column({default:null})
+    ThucteZNS: Date;
+    @Column({default:0})
+    StatusZNS: number;
+    @Column({default:null})
     TimeZNS: Date;
     @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
     ZNS: string;
