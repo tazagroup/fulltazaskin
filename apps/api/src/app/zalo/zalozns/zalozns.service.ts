@@ -59,7 +59,7 @@ export class ZaloznsService {
           data: item1
         };
         return axios.request(config)
-          .then((response: any) => {
+          .then(async (response: any) => {
             console.error(response.data);
             this._TelegramService.SendLogdev(JSON.stringify(response.data))
             if (response.data.error != 0) {
@@ -71,12 +71,9 @@ export class ZaloznsService {
                 "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
                 "messageId": GenId(8,true)
               }
-              this._SmsService.sendsms(sms).then((data)=>
-              {
-                this._TelegramService.SendLogdev(JSON.stringify(data))
-                return {status:'sms',Title:'Lỗi Gửi ZNZ, Đã Gửi SMS',data:data}
-              })
-              return response.data
+             const SMSPromise = await this._SmsService.sendsms(sms)
+              this._TelegramService.SendLogdev(JSON.stringify(SMSPromise.data))
+              return {status:'sms',Title:'Lỗi Gửi ZNZ, Đã Gửi SMS',data:SMSPromise.data}
             }
             else {
               this._TelegramService.SendLogdev(JSON.stringify(response.data))
