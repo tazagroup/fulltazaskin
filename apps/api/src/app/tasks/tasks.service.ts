@@ -25,14 +25,8 @@ export class TasksService {
     const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
     const Thanhtoanpromise = await this._VttechthanhtoanService.findbetween(Start, End)
     const [Thanhtoan] = await Promise.all([Thanhtoanpromise])   
-    const Start1 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
-    const End1 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0, 0); 
-    console.error(Start);
-    console.error(End);
-    console.error(Start1);
-    console.error(End1);
-    console.error(Thanhtoan);
-    
+    const result = `Lấy Dữ Liệu Thanh Toán 9h hàng Ngày. Có<b><u>${Thanhtoan.length}</u></b> bill thanh toán`;
+    this._TelegramService.SendNoti(result) 
     if (Thanhtoan.length>0) {
       Thanhtoan.forEach((v: any) => {
       this.addCron(v)
@@ -47,6 +41,8 @@ export class TasksService {
     const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0, 0);
     const Thanhtoanpromise = await this._VttechthanhtoanService.findbetween(Start, End)
     const [Thanhtoan] = await Promise.all([Thanhtoanpromise])    
+    const result = `Lấy Dữ Liệu Thanh Toán 10 Phút 1 lần. <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Có<b><u>${Thanhtoan.length}</u></b> bill thanh toán`;
+    this._TelegramService.SendNoti(result)
     if (Thanhtoan.length>0) {
       Thanhtoan.forEach((v: any) => {
       this.addCron(v)
