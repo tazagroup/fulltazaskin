@@ -57,6 +57,10 @@
                     <span>{{item.CustName}}</span>
                   </div>
                   <div class="flex flex-row">
+                    <span class="lg:block hidden">Chi Nhánh : </span>
+                    <span>{{GetNameChinhanh(item.Dulieu.BranchID)}}</span>
+                  </div>
+                  <div class="flex flex-row">
                     <span class="lg:block hidden">Giới Tính : </span>
                     <span>{{item.Gender}}</span>
                   </div>
@@ -66,7 +70,7 @@
                   </div>
                   <div class="flex flex-grow">
                     <span class="lg:block hidden">Gửi ZNS Dự kiến : </span>
-                    <span class="{{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.TimeZNS|date:'hh:mm:ss dd/MM/yyyy'}}</span>
+                    <span class="font-bold {{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.TimeZNS|date:'hh:mm:ss dd/MM/yyyy'}}</span>
                   </div>
                   <div class="flex flex-row">
                     <span class="lg:block hidden">Gửi SMS : </span>
