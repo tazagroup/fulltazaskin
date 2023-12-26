@@ -47,7 +47,7 @@ export class VttechthanhtoanService {
         if (uniqueInData2.length > 0) {
           await Promise.all(uniqueInData2.map((v: any) => {
             this.create(v).then((item: any) => {
-              item.Dulieu = (item)
+              item.Dulieu = JSON.stringify(item)
               this.GetVttechKhachhang(item)})
           }));
           const result = `Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
@@ -188,7 +188,9 @@ export class VttechthanhtoanService {
       data: vttechthanhtoans,
     };
   }
-  async findQuery(query: string) {
+  async findQuery(SearchParams: string) {
+    console.error(SearchParams);
+    
     return await this.VttechthanhtoanRepository.find({
       where: { CustName: Like(`%query%`) },
     });
