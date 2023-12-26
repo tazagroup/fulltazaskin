@@ -82,11 +82,13 @@ export class TasksService {
     console.log(job.lastDate());
   }
   getCronJobs() {
+    const result:any = []
     const jobs = this.schedulerRegistry.getCronJobs();
-    return jobs
     jobs.forEach((value, key, map) => {
+    result.push(value.cronTime)
       console.log("Value:", value);
     })
+    return result
   }
   addCron(data: any) {
     console.error('Cron data : ',data);

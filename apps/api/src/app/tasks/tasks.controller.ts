@@ -11,7 +11,7 @@ export class TasksController {
   getList() {
     return this.tasksService.listTimeouts();
   }
-  @Cron('0 30 8 * * 0-6')
+  @Cron('0 0 9 * * 0-6')
   @Get('thanhtoandaungay')
   ThanhtoanDaungay() {
     return this.tasksService.ThanhtoanDaungay();
