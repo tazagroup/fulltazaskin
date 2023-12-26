@@ -73,7 +73,7 @@ export class ZaloznsService {
               }
              const SMSPromise = await this._SmsService.sendsms(sms)
               this._TelegramService.SendLogdev(JSON.stringify(SMSPromise.data))
-              return {status:'sms',Title:'Lỗi Gửi ZNZ, Đã Gửi SMS',data:SMSPromise.data}
+              return {status:'sms',Title:'Lỗi Gửi ZNZ, Đã Gửi SMS',data:JSON.stringify(SMSPromise.data)}
             }
             else {
               this._TelegramService.SendLogdev(JSON.stringify(response.data))
