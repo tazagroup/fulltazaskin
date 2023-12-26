@@ -19,14 +19,20 @@ export class TasksService {
     private _TelegramService: TelegramService,
     private _VttechthanhtoanService: VttechthanhtoanService,
   ) { }
-  
-  @Cron('0 30 8 * * 1-5')
-  async ThanhtoanDaungay() {
+    async ThanhtoanDaungay() {
     const now = new Date()
     const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1, 17, 0, 0);
     const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
     const Thanhtoanpromise = await this._VttechthanhtoanService.findbetween(Start, End)
-    const [Thanhtoan] = await Promise.all([Thanhtoanpromise])    
+    const [Thanhtoan] = await Promise.all([Thanhtoanpromise])   
+    const Start1 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+    const End1 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0, 0); 
+    console.error(Start);
+    console.error(End);
+    console.error(Start1);
+    console.error(End1);
+    console.error(Thanhtoan);
+    
     if (Thanhtoan.length>0) {
       Thanhtoan.forEach((v: any) => {
       this.addCron(v)

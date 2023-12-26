@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { Interval } from '@nestjs/schedule';
+import { Cron, Interval } from '@nestjs/schedule';
 
 @Controller('tasks')
 export class TasksController {
@@ -10,6 +10,11 @@ export class TasksController {
   @Get('list')
   getList() {
     return this.tasksService.listTimeouts();
+  }
+  @Cron('0 30 8 * * 0-6')
+  @Get('thanhtoandaungay')
+  ThanhtoanDaungay() {
+    return this.tasksService.ThanhtoanDaungay();
   }
   @Interval(600000)
   @Get('thanhtoan')
