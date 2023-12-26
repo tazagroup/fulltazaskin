@@ -47,7 +47,7 @@ export class VttechthanhtoanService {
         if (uniqueInData2.length > 0) {
           await Promise.all(uniqueInData2.map((v: any) => {
             this.create(v).then((item: any) => {
-              item.Dulieu = JSON.stringify(item)
+              item.Dulieu = (item)
               this.GetVttechKhachhang(item)})
           }));
           const result = `Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
@@ -88,8 +88,7 @@ export class VttechthanhtoanService {
         const Date1 = new Date(v.Created)
         const Date2 = new Date(item.Created)
         return Date1.getTime() == Date2.getTime()
-      })
-      const item1 = {...item,time:moment(new Date(item.Created)).add(1, 'hours'),SDT:response.data.Table[0].CustomerPhone,InvoiceNum:Hoadon_id?.InvoiceNum }       
+      })      
       const Updatedata = 
       { 
         ...item,

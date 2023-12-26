@@ -42,6 +42,7 @@ export class ZaloznsService {
           "order_code": item.InvoiceNum,
           "note": moment(item.Created).format('DD/MM/YYYY'),
           "price": parseFloat(item.Amount).toFixed(0),
+          "code": parseFloat(item.Amount).toFixed(0),
           "customer_name": item.CustName
         },
         "tracking_id": GenId(12, true)

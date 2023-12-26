@@ -80,10 +80,9 @@ export class TasksService {
   getCronJobs() {
     const result:any = []
     const jobs = this.schedulerRegistry.getCronJobs();
-    jobs.forEach((value, key, map) => {
-    result.push(value.cronTime)
-      console.log("Value:", value);
-    })
+    for (const job of jobs) {
+        result.push(job)
+    }
     return result
   }
   addCron(data: any) {

@@ -21,58 +21,58 @@ export class VttechService {
       this.XsrfToken = data.Content.XsrfToken
     })
   }
-  async GetAllKhachhang(idCN:any) {
-    const begin = moment(new Date()).format("DD-MM-YYYY")
-    const end = moment(new Date()).add(1, 'day').format("DD-MM-YYYY")
+  async GetAllKhachhang(data:any) {
+    const begin = moment(new Date(data.begin)).format("DD-MM-YYYY")
+    const end = moment(new Date(data.end)).format("DD-MM-YYYY")
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `https://tmtaza.vttechsolution.com/Customer/ListCustomer/?handler=LoadData&date=01-01-2019+to+31-12-2023&branchID=${idCN}&maxdate=9999`,
+      url: `https://tmtaza.vttechsolution.com/Customer/ListCustomer/?handler=LoadData&date=${begin}+to+${end}&branchID=${data.brandID}&maxdate=${data.Maxdate}`,
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
     };
     try {
       const response = await axios.request(config);
-      if (Array.isArray(response?.data?.Table1)) {
+      console.error(response.data);
+      if (Array.isArray(response.data.Table1)) {
         const data1 = response.data.Table1;
         const data2 = await this._Vttech_khachhangService.findAll();
         const uniqueInData2 = data1.filter((item:any) => !data2.some((data1Item: any) => data1Item.SDT === item.Phone));
   
-        console.error(uniqueInData2[0]);
+        console.error(uniqueInData2);
         console.error(uniqueInData2[0]);
         
         if (data1.length>0 && uniqueInData2.length > 0) {
-          await Promise.all(uniqueInData2.map((v:any) => {  // Use `map` for creating promises
+          await Promise.all(uniqueInData2.map((v:any) => {
             if(v.SDT)
             {
             const item = {
               Hoten: v.CustName,
               Dulieu: JSON.stringify(v),
-              SDT: v.Phone || v.SDT,  // Handle potential missing Phone property
-              idCN: idCN,
+              SDT: v.Phone || v.SDT,
+              idCN: data.brandID,
               Created: new Date(v.Created),
             };
-            return this._Vttech_khachhangService.create(item);  // Pass `item`, not `v`
-        
+            return this._Vttech_khachhangService.create(item);
           }
           }));
           const result = `Load Dữ Liệu Khách Hàng Vttech Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
-          this._TelegramService.SendLogdev(result);
+          this._TelegramService.SendDulieuVttech(result);
           return { status: 201 };
         }
         else {
           const result = `Load Dữ Liệu Khách Hàng Vttech Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
-          this._TelegramService.SendLogdev(result);
+          this._TelegramService.SendDulieuVttech(result);
           return { status: 200 };
         }
       }
       else {
         const result = "Load Dữ Liệu Khách Hàng Vttech Code 403: Lỗi Xác thực"
-        this._TelegramService.SendLogdev(result);
+        this._TelegramService.SendDulieuVttech(result);
         return { status: 404, title: 'Lỗi Data Trả Về' };
       }
     } catch (error) { 
       const result = `Lỗi Function Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
-      this._TelegramService.SendLogdev(result);
+      this._TelegramService.SendDulieuVttech(result);
       return { error:error,status: 400, title: 'Lỗi Function', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
     }
   }
