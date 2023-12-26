@@ -24,6 +24,13 @@ export class CauhinhchungService {
       })
     );
   }
+  TestTokenVttech() {
+    return this.http.get(environment.APIURL + '/vttechthanhtoan/getapi').pipe(
+      map((data: any) => { 
+        return data;
+      })
+    );
+  }
   searchCauhinhchung(query:any) {
     return this.http.get(environment.APIURL + `/cauhinhchung/search?query=${query}`).pipe(
       map((data: any) => { 

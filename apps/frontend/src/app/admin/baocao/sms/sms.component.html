@@ -6,7 +6,7 @@
   </mat-drawer>
   <mat-drawer-content class="!flex flex-col flex-auto min-w-0 relative bg-white !h-[90vh]">
     <div class="relative border-b flex flex-col">
-      <!-- <div class="flex flex-row space-x-2 justify-between items-center p-2 h-16">
+      <div class="flex flex-row space-x-2 justify-between items-center p-2 h-16">
         <mat-form-field appearance="outline" class="w-full text-xs">
           <mat-label>Tiêu Đề</mat-label>
           <input matInput (keyup)="applyFilter($event)" class="w-full" placeholder="Mô Tả">
@@ -41,69 +41,24 @@
             </div>
           </button>
         </mat-menu>
-      </div> -->
+      </div>
     </div>
-    <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
-      <div class="flex flex-col max-w-4xl rounded-lg border">
-        <div class="flex flex-row justify-between items-center p-2 hover:bg-gray-200 border-b"
+    <div class="relative flex flex-col h-full w-full overflow-auto">
+      <div class="flex flex-col">
+        <div class="flex flex-row justify-between items-center p-4 hover:bg-gray-200"
           *ngFor="let item of FilterLists; let i = index">
-          <div class="flex flex-row space-x-2 items-center w-full">
-            <div class="w-full grid grid-cols-2 gap-2">
-              <div class="flex flex-row space-x-2">
-                <!-- <img [src]="'https://tazaskinclinic.com/images/taza-skin-clinic-logo.svg'" class="h-10 lg:block hidden"> -->
-                <div class="flex flex-col">
-                  <div class="flex flex-row">
-                    <span class="lg:block hidden">Khách hàng : </span>
-                    <span>{{item.CustName}}</span>
-                  </div>
-                  <div class="flex flex-row">
-                    <span class="lg:block hidden">Giới Tính : </span>
-                    <span>{{item.Gender}}</span>
-                  </div>
-                  <div class="flex flex-row">
-                    <span class="lg:block hidden">Số Điện Thoại : </span>
-                    <span>{{item.SDT}}</span>
-                  </div>
-                  <div class="flex flex-grow">
-                    <span class="lg:block hidden">Gửi ZNS Dự kiến : </span>
-                    <span class="{{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.TimeZNS|date:'hh:mm:ss dd/MM/yyyy'}}</span>
-                  </div>
-                  <div class="flex flex-row">
-                    <span class="lg:block hidden">Gửi SMS : </span>
-                    <span></span>
-                  </div>
-                </div>
-              </div>
+         <div class="flex flex-row space-x-2 items-center justify-between w-full" [routerLink]="[item.id]"
+            routerLinkActive="font-bold" (click)="drawer.open()">
+            <div class="flex flex-row space-x-4 items-center">
+              <img [src]="item.Image.src||'https://tazaskinclinic.com/images/taza-skin-clinic-logo.svg'" class="h-10">
               <div class="flex flex-col">
-                <div class="flex flex-row space-x-2  justify-end">
-                  <span class="lg:block hidden">Mã Phiếu:</span>
-                  <span>{{item.InvoiceNum}}</span>
-                </div>
-                <div class="flex flex-row space-x-2 justify-end">
-                  <span class="lg:block hidden">Ngày Tạo Phiếu:</span>
-                  <span>{{item.Created|date:'hh:mm:ss dd/MM/yyyy'}}</span>
-                </div>
-                <div class="flex flex-row space-x-2 items-center  justify-end">
-                  <span>Tiền Thu</span>
-                  <span>{{(item.Amount|number:'1.0-0')}}đ</span>
-                </div>
-                <div class="flex flex-row space-x-2 items-center  justify-end">
-                  <span>Phát Sinh</span>
-                  <span>{{(item.PriceDiscounted|number:'1.0-0')}}đ</span>
-                </div>
-                <div class="flex flex-row space-x-2 items-center  justify-end">
-                  <span>Thanh Toán</span>
-                  <span>{{(item.Paid|number:'1.0-0')}}đ</span>
-                </div>
-                <div class="flex flex-row space-x-2 items-center  justify-end">
-                  <span>Công Nợ</span>
-                  <span>{{(item.Debt|number:'1.0-0')}}đ</span>
-                </div>
+                <span>{{item.Title}}</span>
+                <span class="italic text-xs">{{item.Type}}</span>
               </div>
             </div>
-            <!-- <button mat-icon-button (click)="openDeleteDialog(dlgDeleteTemplate,item)">
+            <button mat-icon-button (click)="openDeleteDialog(dlgDeleteTemplate,item)">
               <span class="material-symbols-outlined text-xl text-red-500" matTooltip="Xoá">delete</span>
-            </button> -->
+            </button>
           </div>
         </div>
       </div>

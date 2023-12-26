@@ -44,7 +44,7 @@ export class KhachhangService {
     );
   }
   getKhachhangBySlug(slug: string) {
-    return this.http.get(this.urlApi + `/khachhang/findslug/${slug}`).pipe(
+    return this.http.get(this.urlApi + `/khachhangs/khachhang/findslug/${slug}`).pipe(
       map((data: any) => {
         this._khachhang.next(data);
         return data;
@@ -53,14 +53,22 @@ export class KhachhangService {
   }
   getPaginaKhachhangs(page: number, limit: number) {
     const params ={ page: String(page), limit: String(limit) }
-    return this.http.get(this.urlApi+'/khachhang/pagina',{ params }).pipe(
+    return this.http.get(this.urlApi+'/khachhangs/khachhang/pagina',{ params }).pipe(
       map((data: any) => {
         return data;
       })
     );
   }
   getKhachhangById(id: string) {
-    return this.http.get(this.urlApi + `/khachhang/findid/${id}`).pipe(
+    return this.http.get(this.urlApi + `/khachhangs/khachhang/findid/${id}`).pipe(
+      map((data: any) => {
+        this._khachhang.next(data);
+        return data;
+      })
+    );
+  }
+  getKhachhangBySDT(SDT: string) {
+    return this.http.get(this.urlApi + `/khachhangs/khachhang/findsdt/${SDT}`).pipe(
       map((data: any) => {
         this._khachhang.next(data);
         return data;

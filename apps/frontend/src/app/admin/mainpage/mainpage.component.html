@@ -10,8 +10,8 @@
           <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
             <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
               <div
-                class="flex flex-row space-x-2 justify-between p-3 w-full rounded-lg hover:bg-gray-100 hover:font-bold"
-                [routerLink]="[node.Slug]" routerLinkActive="bg-gray-100 font-bold">
+                class="cursor-pointer flex flex-row space-x-2 justify-between p-3 w-full rounded-lg hover:bg-gray-100 hover:font-bold"
+                [routerLink]="[node.Slug]" routerLinkActive="bg-gray-100 font-bold" (click)="ChoosenMenu()">
                 <span>
                   {{node.Title}}
                 </span>
@@ -19,7 +19,7 @@
             </mat-tree-node>
             <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding class="pl-2">
               <div
-                class="flex flex-row space-x-2 items-center justify-between p-3 w-full rounded-lg hover:bg-gray-100 hover:font-bold">
+                class="cursor-pointer flex flex-row space-x-2 items-center justify-between p-3 w-full rounded-lg hover:bg-gray-100 hover:font-bold">
                 <span>
                   {{node.Title}}
                 </span>
@@ -39,25 +39,25 @@
       <div class="flex flex-row space-x-2 justify-between items-center py-2 px-4 border-b h-16">
         <div class="flex flex-row space-x-4 items-center">
           <button mat-icon-button><span class="material-symbols-outlined" (click)="drawer.toggle()">menu</span></button>
-          <div class="w-full text-xs lg:flex hidden">
+          <!-- <div class="w-full text-xs lg:flex hidden">
             <mat-form-field appearance="outline">
               <mat-label>Tìm Kiếm</mat-label>
               <input matInput (keyup)="applyFilter($event)" class="w-full" placeholder="Tìm Kiếm">
               <span matPrefix class="material-symbols-outlined mr-2">search</span>
             </mat-form-field>
-          </div>
+          </div> -->
         </div>
         <div class="flex flex-row space-x-4 items-center">
           <app-notifications></app-notifications>
           <app-chatrealtime></app-chatrealtime>
           <app-profile></app-profile>
-          <a href="/">
+          <!-- <a href="/">
             <button mat-icon-button>
                 <span class="material-symbols-outlined">
                   captive_portal
                 </span>
             </button>
-           </a>
+           </a> -->
         </div>
       </div>
       <div class="relative flex flex-col h-full w-full overflow-auto">

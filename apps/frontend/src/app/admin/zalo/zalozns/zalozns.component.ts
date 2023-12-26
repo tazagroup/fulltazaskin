@@ -2,7 +2,11 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ZaloznsService } from './zalozns.service';
-import { TYPE_ZNS, ZALO_OA, convertPhoneNum } from '../../../shared/shared.utils';
+import { GenId, TYPE_TEMPLATE, TYPE_ZNS, ZALO_OA, convertPhoneNum } from '../../../shared/shared.utils';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ZalotokenService } from '../zalotoken/zalotoken.service';
+import * as moment from 'moment';
 @Component({
   selector: 'app-zalozns',
   templateUrl: './zalozns.component.html',
@@ -10,21 +14,60 @@ import { TYPE_ZNS, ZALO_OA, convertPhoneNum } from '../../../shared/shared.utils
 })
 export class ZaloznsComponent implements OnInit {
   Detail: any = {};
-  ZNS: any = { template_id: "272889" };
+  ZNS: any = { template_id: "272889",tracking_id:GenId(8,true) };
   Lists: any[] = []
   FilterLists: any[] = []
+  ZaloTokens: any[] = []
+  ZaloToken: any
+  Teamplates: any[] = []
+  Teamplate: any = {}
+  TypeTeamplates:any = TYPE_TEMPLATE
+  TypeTeamplate:any ={}
+  isShowDemo:boolean = false
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   constructor(
     private dialog: MatDialog,
     private _ZaloznsService: ZaloznsService,
+    private _ZalotokenService: ZalotokenService,
+    private sanitizer: DomSanitizer
   ) {
   }
   ngOnInit(): void {
-    this._ZaloznsService.getAllZaloznss().subscribe()
+    this.TypeTeamplate = "user_received_message",
+    this._ZalotokenService.getAllZalotokens().subscribe()
+    this._ZalotokenService.zalotokens$.subscribe((data)=>{if(data){this.ZaloTokens=data}})
+    this._ZaloznsService.getPaginaZaloznss(1,100).subscribe()
     this._ZaloznsService.zaloznss$.subscribe((data: any) => {
-      this.FilterLists = this.Lists = data
+      if(data)
+      {
+        console.log(data.data);
+        this.FilterLists = this.Lists = data.data.filter((v:any)=>v.event_name==this.TypeTeamplate)
+      }
+
     })
   }
+  onTemplateChange(event: MatSelectChange) {
+    this._ZaloznsService.getteamplatedetail(event.value,this.ZaloToken).subscribe()
+    this._ZaloznsService.teamplate$.subscribe((data: any) => {
+      if (data) {
+        if(data)
+        {
+          this.Teamplate = data.data
+        }
+      }
+    })
+
+  }
+  onChinhanhChange(event: MatSelectChange) {
+    this._ZaloznsService.getallteamplate(event.value).subscribe()
+    this._ZaloznsService.teamplates$.subscribe((data: any) => {
+      if (data) {
+        this.Teamplates = data.data  
+        this.ZaloToken = data.token      
+      }
+    })
+  }
+  
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     if (value.length > 2) {
@@ -33,6 +76,9 @@ export class ZaloznsComponent implements OnInit {
       }
       )
     }
+  }
+  ChangeTemp(event:MatSelectChange) {
+    this.FilterLists = this.Lists.filter((v)=>v.event_name==event.value)
   }
   openDialog(teamplate: TemplateRef<any>): void {
     const dialogRef = this.dialog.open(teamplate, {
@@ -65,10 +111,13 @@ export class ZaloznsComponent implements OnInit {
       "template_id": item.template_id,
       "template_data": {
         "customer_name": item.Hoten,
-        "schedule_date": "09/12/2023",
+        "schedule_date": moment(new Date()).format("hh:mm:ss DD/MM/YYYY"),
       },
       "tracking_id": item.tracking_id
     }
     this._ZaloznsService.sendZns(data).subscribe((result) => console.log(result))
+  }
+  iframe(item: any) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(item)
   }
 }

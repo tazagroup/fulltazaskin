@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ZaloznsComponent } from './zalozns.component';
+import { KhachhangdichvuComponent } from './khachhangdichvu.component';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { ZaloznsDetailComponent } from './zalozns-detail/zalozns-detail.component';
-import { MaterialModule } from '../../../shared/material.module';
+import { MaterialModule } from 'apps/frontend/src/app/shared/material.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -15,16 +14,12 @@ import { MaterialModule } from '../../../shared/material.module';
     MaterialModule,
     RouterModule.forChild([
       {
-        path: '', component: ZaloznsComponent,
-        children: [{
-          path: ':id', component: ZaloznsDetailComponent
-        }]
-    
+        path: '', component: KhachhangdichvuComponent,    
       }
     ])
   ],
-  declarations: [ZaloznsComponent,ZaloznsDetailComponent]
+  declarations: [KhachhangdichvuComponent]
 })
-export class ZaloznsModule { }
+export class KhachhangdichvuModule { }
 
 

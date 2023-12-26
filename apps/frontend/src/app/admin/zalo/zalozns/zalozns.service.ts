@@ -8,11 +8,19 @@ import { environment } from 'apps/frontend/src/environments/environment';
 export class ZaloznsService {
   private _zaloznss: BehaviorSubject<any[] | null> = new BehaviorSubject<any[] | null>(null);
   private _zalozns: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
+  private _teamplates: BehaviorSubject<any[] | null> = new BehaviorSubject<any[] | null>(null);
+  private _teamplate: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
   get zaloznss$(): Observable<any[] | null> {
     return this._zaloznss.asObservable();
   }
   get zalozns$(): Observable<any | null> {
     return this._zalozns.asObservable();
+  }
+  get teamplates$(): Observable<any[] | null> {
+    return this._teamplates.asObservable();
+  }
+  get teamplate$(): Observable<any | null> {
+    return this._teamplate.asObservable();
   }
   constructor(private http: HttpClient) { }
 
@@ -21,6 +29,21 @@ export class ZaloznsService {
       map((data: any) => { 
         this._zaloznss.next(data);
         return data;
+      })
+    );
+  }
+  getallteamplate(id:any) {
+    return this.http.get(`${environment.APIURL}/zalozns/alltemp/${id}`).pipe(
+      map((data: any) => { 
+        this._teamplates.next(data);
+      })
+    );
+  }
+  getteamplatedetail(id:any,token:any) {
+    const params ={ id: String(id), token: String(token) }
+    return this.http.get(environment.APIURL + `/zalozns/tempdetail`,{ params }).pipe(
+      map((data: any) => { 
+        this._teamplate.next(data);
       })
     );
   }
@@ -56,10 +79,11 @@ export class ZaloznsService {
       })
     );
   }
-  getPaginaZaloznss(page: number, limit: number) {
-    const params ={ page: String(page), limit: String(limit) }
-    return this.http.get(environment.APIURL+'/zalozns/pagina',{ params }).pipe(
+  getPaginaZaloznss(page: number, perPage: number) {
+    const params ={ page: String(page), perPage: String(perPage) }
+    return this.http.get(environment.APIURL+'/zalozns/pagination',{ params }).pipe(
       map((data: any) => {
+        this._zaloznss.next(data);
         return data;
       })
     );

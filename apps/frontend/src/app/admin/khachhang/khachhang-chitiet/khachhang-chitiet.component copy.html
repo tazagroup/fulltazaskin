@@ -4,7 +4,6 @@
     <span class="material-icons p-2 hover:bg-gray-200 rounded-full" [routerLink]="['../']" (click)="CloseDrawer()">
       arrow_back
     </span>
-    <a [routerLink]="['dichvu']" routerLinkActive="text-red-500">Dịch Vụ</a>
     <div class="text-xl font-bold">{{Khachhang.TenKH}} {{Khachhang.SDT}}</div>
     <!-- <div>
       <button mat-raised-button color="primary" (click)="Update(Detail)">Cập Nhật</button>
@@ -12,8 +11,7 @@
   </div>
   <div class="relative h-full w-full overflow-auto flex flex-col space-y-2 justify-between p-2">
     <div class="w-full flex flex-col">
-      <router-outlet></router-outlet>
-      <!-- <div class="flex flex-col overflow-auto w-full rounded bg-white">
+      <div class="flex flex-col overflow-auto w-full rounded bg-white">
         <table class="lg:w-full" mat-table [dataSource]="dataSource" matSort>
           <ng-container matColumnDef="Dichvu">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Dịch Vụ </th>
@@ -47,10 +45,16 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+          <!-- <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr> -->
+          <!-- <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr> -->
         </table>
       </div>
       <div class="flex flex-row w-full border">
         <mat-paginator class="w-full" [pageSizeOptions]="[10,50]"></mat-paginator>
-      </div> -->
+      </div>
     </div>
   </div>

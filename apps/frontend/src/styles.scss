@@ -40,7 +40,7 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   align-items: center;
   letter-spacing: normal;
   outline: 0;
-  justify-content: start;
+  justify-content: flex-start;
   font-weight: bold;
 }
 .mat-tree-node[aria-level="2"] {
@@ -56,3 +56,4 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
 {
   justify-content:end
 }
+

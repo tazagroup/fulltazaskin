@@ -43,13 +43,15 @@ export class MainpageComponent implements OnInit {
   ngOnInit() {
     this._UsersService.getProfile().subscribe()
     this._UsersService.profile$.subscribe((data) => {
-      this.Cuser = data
-      console.log(data);
-      
-      this.Menus =  nest(data.Groups)      
-      this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-      this.dataSource.data = this.Menus;
-      this.treeControl.expandAll()
+      if(data)
+      {
+        this.Cuser = data      
+        this.Menus =  nest(data.Groups)      
+        this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+        this.dataSource.data = this.Menus;
+        this.treeControl.expandAll()
+      }
+
     })
     this.breakpointObserver.observe([Breakpoints.XSmall])
       .subscribe((breakpoints: any) => {

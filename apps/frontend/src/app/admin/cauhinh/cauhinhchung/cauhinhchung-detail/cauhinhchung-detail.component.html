@@ -22,7 +22,7 @@
                 class="w-full" placeholder="Loại" />
             </mat-form-field>
 
-            <ng-container *ngIf="Detail.Slug=='vttechtoken'">           
+          <ng-container *ngIf="Detail.Slug=='vttechtoken'">           
             <mat-form-field appearance="outline">
               <mat-label>Cookie</mat-label>
               <input [(ngModel)]="Detail.Content.Cookie" [ngModelOptions]="{standalone: true}" matInput type="text"
@@ -33,7 +33,9 @@
               <input [(ngModel)]="Detail.Content.XsrfToken" [ngModelOptions]="{standalone: true}" matInput type="text"
                 class="w-full" placeholder="Xsrf-Token" />
             </mat-form-field>
-            </ng-container>
+            <button mat-stroked-button (click)="TestTokenVttech()">Test Token</button>
+            {{TestToken|json}}
+          </ng-container>
 
             <ng-container *ngIf="Detail.Slug=='zalotoken'">           
             <mat-form-field appearance="outline">

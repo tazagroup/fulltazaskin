@@ -51,7 +51,7 @@
           <app-notifications></app-notifications>
           <app-chatrealtime></app-chatrealtime>
             <app-profile></app-profile>
-            <a href="/admin"  *ngIf="Cuser.Role=='admin'">
+            <a href="/admin"  *ngIf="Cuser?.Role=='admin'">
             <button mat-icon-button>
                 <span class="material-symbols-outlined">
                   captive_portal

@@ -18,13 +18,12 @@ export class VttechthanhtoanComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    this._VttechthanhtoanService.getAllAPIVttech().subscribe((data)=>
-    {
-      console.log(data); 
-    })
-    this._VttechthanhtoanService.getAllVttechthanhtoans().subscribe()
+    this._VttechthanhtoanService.getPaginaVttechthanhtoans(1,100).subscribe()
     this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data:any)=>{
-      this.FilterLists = this.Lists = data
+      if(data)
+      {
+        this.FilterLists = this.Lists = data.data
+      }
     })
   }
   applyFilter(event: Event) {

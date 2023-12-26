@@ -1,20 +1,31 @@
 <mat-drawer-container class="example-container w-full h-full" autosize>
-  <mat-drawer #drawer mode="side" class="!flex flex-col flex-auto min-w-0 relative h-full w-2/3" position="end">
+  <mat-drawer #drawer mode="side" class="!flex flex-col flex-auto min-w-0 relative h-full lg:w-2/3 w-full" position="end">
     <div class="relative flex flex-col h-full w-full overflow-auto">
       <router-outlet></router-outlet>
     </div>
   </mat-drawer>
   <mat-drawer-content class="!flex flex-col flex-auto min-w-0 relative bg-white !h-[90vh]">
     <div class="relative border-b flex flex-col">
-      <!-- <div class="flex flex-row space-x-2 justify-between items-center p-2 h-16">
-        <mat-form-field appearance="outline" class="w-full text-xs">
+      <div class="flex flex-row space-x-4 items-center p-2 h-16">
+        <!-- <mat-form-field appearance="outline" class="text-xs">
           <mat-label>Tiêu Đề</mat-label>
           <input matInput (keyup)="applyFilter($event)" class="w-full" placeholder="Mô Tả">
           <span matPrefix class="material-symbols-outlined mr-2">search</span>
-        </mat-form-field>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
+        </mat-form-field> -->
+        <!-- <button mat-icon-button [matMenuTriggerFor]="menu">
           <span class="material-symbols-outlined">more_vert</span>
+        </button> -->
+        <mat-form-field appearance="outline">
+            <mat-label>Danh Mục</mat-label>
+            <mat-select [(ngModel)]="TypeTeamplate" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeTemp($event)">
+              <mat-option [value]="item.key" *ngFor="let item of TypeTeamplates|keyvalue">{{item.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        
+        <button mat-stroked-button (click)="isShowDemo=!isShowDemo">
+         Gửi Tin Nhắn ZNS
         </button>
+
         <mat-menu #menu="matMenu">
           <button mat-menu-item (click)="openDialog(dialogTemplate);Detail = {}">
             <div class="flex flex-row space-x-2 items-center">
@@ -41,39 +52,60 @@
             </div>
           </button>
         </mat-menu>
-      </div> -->
-      <div class="p-4 grid grid-cols-2 gap-4 items-center">
-        <mat-form-field appearance="outline" class="w-full text-xs">
-          <mat-label>Số Điện Thoại</mat-label>
-          <input [(ngModel)]="ZNS.SDT" [ngModelOptions]="{standalone: true}" matInput class="w-full"
-            placeholder="Số Điện Thoại">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="w-full text-xs">
-          <mat-label>Họ Tên</mat-label>
-          <input [(ngModel)]="ZNS.Hoten" [ngModelOptions]="{standalone: true}" matInput class="w-full"
-            placeholder="Họ Tên">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="w-full text-xs">
-          <mat-label>Tracking ID</mat-label>
-          <input [(ngModel)]="ZNS.tracking_id" [ngModelOptions]="{standalone: true}" matInput class="w-full"
-            placeholder="Tracking ID">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="w-full text-xs">
-          <mat-label>Template ID</mat-label>
-          <input [(ngModel)]="ZNS.template_id" [ngModelOptions]="{standalone: true}" matInput class="w-full" disabled
-            placeholder="Template ID">
-        </mat-form-field>
-        <div class="col-span-2">
-          <button mat-stroked-button (click)="SendZns(ZNS)">Gửi ZNS</button>
+      </div>
+      <div class="p-4 grid lg:grid-cols-2 gap-4"  *ngIf="isShowDemo">
+        <div class="flex flex-col space-y-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Chi Nhánh</mat-label>
+            <mat-select [(ngModel)]="ZNS.idCN" [ngModelOptions]="{standalone: true}" (selectionChange)="onChinhanhChange($event)">
+              <mat-option [value]="item.id" *ngFor="let item of ZaloTokens">{{item.Title}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Template ID</mat-label>
+            <mat-select [(ngModel)]="ZNS.template_id" [ngModelOptions]="{standalone: true}" (selectionChange)="onTemplateChange($event)">
+              <mat-option [value]="item.templateId" *ngFor="let item of Teamplates">{{item.templateName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-full text-xs">
+            <mat-label>Tracking ID</mat-label>
+            <input [(ngModel)]="ZNS.tracking_id" [ngModelOptions]="{standalone: true}" matInput class="w-full" disabled
+              placeholder="Tracking ID">
+          </mat-form-field>
+          <!-- <mat-form-field appearance="outline" class="w-full text-xs">
+            <mat-label>Template ID</mat-label>
+            <input [(ngModel)]="ZNS.template_id" [ngModelOptions]="{standalone: true}" matInput class="w-full" disabled
+              placeholder="Template ID">
+          </mat-form-field> -->
+          <mat-form-field appearance="outline" class="w-full text-xs">
+            <mat-label>Số Điện Thoại</mat-label>
+            <input [(ngModel)]="ZNS.SDT" [ngModelOptions]="{standalone: true}" matInput class="w-full"
+              placeholder="Số Điện Thoại">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-full text-xs">
+            <mat-label>Họ Tên</mat-label>
+            <input [(ngModel)]="ZNS.Hoten" [ngModelOptions]="{standalone: true}" matInput class="w-full"
+              placeholder="Họ Tên">
+          </mat-form-field>
+          <div class="col-span-2">
+            <button mat-stroked-button (click)="SendZns(ZNS)">Gửi ZNS</button>
+          </div>
         </div>
+        <div class="flex flex-col space-y-2">
+                <div *ngIf="Teamplate.previewUrl">
+                  <iframe [src]="iframe(Teamplate.previewUrl)" class="w-full h-80"></iframe>
+                  <!-- <iframe [src]="Teamplate?.previewUrl" frameborder="0"></iframe>
+                  {{Teamplate|json}} -->
+                </div>
+        </div>
+       
       </div>
     </div>
     <div class="relative flex flex-col h-full w-full overflow-auto">
       <div class="flex flex-col">
         <div class="flex flex-row justify-between items-center p-4 hover:bg-gray-200 hover:font-bold"
           *ngFor="let item of FilterLists; let i = index">
-          <div class="flex flex-row space-x-2 items-center justify-between w-full" [routerLink]="[item.id]"
-            routerLinkActive="font-bold" (click)="drawer.open()">
+          <div class="flex flex-row space-x-2 items-center justify-between w-full">
             <div class="flex flex-row space-x-4 items-center">
               <img [src]="item.Image.src||'https://tazaskinclinic.com/images/taza-skin-clinic-logo.svg'" class="h-10">
               <ng-container *ngIf="item.ResponWebHook.event_name == 'user_feedback'; else elseTemplate">
@@ -102,12 +134,10 @@
                   <span class="italic text-xs">{{item.CreateAt|date:'hh:ss dd/MM/yyyy'}}</span>
                 </div>
               </ng-template>
-
-
             </div>
-            <button mat-icon-button (click)="openDeleteDialog(dlgDeleteTemplate,item)">
+            <!-- <button mat-icon-button (click)="openDeleteDialog(dlgDeleteTemplate,item)">
               <span class="material-symbols-outlined text-xl text-red-500" matTooltip="Xoá">delete</span>
-            </button>
+            </button> -->
           </div>
         </div>
       </div>

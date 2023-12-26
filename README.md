@@ -29,3 +29,7 @@ npm install angular-cli-ghpages
 
 npm install @angular/pwa --save-dev
 npx nx g @angular/pwa:ng-add --project=frontend
+
+git add .
+git commit -m "update"
+git push

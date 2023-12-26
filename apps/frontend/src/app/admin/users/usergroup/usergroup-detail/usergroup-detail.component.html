@@ -3,22 +3,34 @@
     <span class="material-icons p-3 hover:bg-gray-200 rounded-full" [routerLink]="['../']" (click)="CloseDrawer()">
       arrow_back
     </span>
-    <div class="text-xl">{{Detail.Title}}</div>
-    <span class="material-symbols-outlined" (click)="ResetGroup()">
-      restart_alt
+    <div class="flex flex-row space-x-2 items-center">
+      <div class="text-xl">{{Detail.Title}}</div>
+      <span class="material-symbols-outlined" (click)="ResetGroup()">
+        restart_alt
       </span>
+    </div>
     <div>
       <button mat-raised-button color="primary" (click)="Update(Detail)">Cập Nhật</button>
     </div>
   </div>
   <div class="relative h-full w-full overflow-auto flex flex-col space-y-2 justify-between p-4">
     <div class="flex flex-col space-y-3 p-4">
-        <div class="w-full grid lg:grid-cols-2 grid-cols-1 gap-4 p-3">
-            <div *ngFor="let item of Detail.ListMenu; let i = index">
+      <div class="w-full grid grid-cols-1 gap-4 p-3">
+        <!-- <div *ngFor="let item of Detail.ListMenu; let i = index">
                 <mat-slide-toggle [(ngModel)]="Detail.ListMenu[i].Checked" [ngModelOptions]="{standalone: true}"
                 (change)="onChange($event,i)"> {{item.Title}}</mat-slide-toggle>
-            </div>
+            </div> -->
+        <div class="flex flex-col space-y-3 p-3 border rounded-lg" *ngFor="let item of Detail.ListMenu; let i = index">
+          <mat-slide-toggle [color]="'primary'" (change)="onChange($event,i)" [(ngModel)]="Detail.ListMenu[i].Checked"
+            [ngModelOptions]="{standalone: true}"> {{item.Title}}</mat-slide-toggle>
+
+          <div class="grid grid-cols-3 gap-2 ml-4">
+            <mat-slide-toggle (change)="onChangeChidren($event,i,j)" *ngFor="let item1 of item.children; let j = index"
+              [color]="'primary'" [(ngModel)]="Detail.ListMenu[i].children[j].Checked"
+              [ngModelOptions]="{standalone: true}"> {{item1.Title}}</mat-slide-toggle>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>

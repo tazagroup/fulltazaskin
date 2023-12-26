@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { LichhenService } from './lichhen.service';
 import { KhachhangService } from '../khachhang/khachhang.service';
+import { ListTrangthailichhen, Trangthai_Lichhen } from '../../shared/shared.utils';
 @Component({
   selector: 'app-lichhen',
   templateUrl: './lichhen.component.html',
@@ -12,6 +13,7 @@ export class LichhenComponent implements OnInit {
   Detail: any = {};
   Lists: any[] = []
   FilterLists: any[] = []
+  ListTrangthailichhen: any[] = ListTrangthailichhen
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   constructor(
     private dialog: MatDialog,
@@ -21,28 +23,27 @@ export class LichhenComponent implements OnInit {
   }
   ngOnInit(): void {
     this._KhachhangService.getKhachhangs().subscribe();
-    this._LichhenService.getAllLichhens().subscribe()
-    this._LichhenService.lichhens$.subscribe((lichhens:any)=>{
+    this._LichhenService.getPaginaLichhens(1, 50).subscribe()
+    this._LichhenService.lichhens$.subscribe((lichhens: any) => {
       console.log(lichhens);
-      
-      if(lichhens)
-      {
-      this._KhachhangService.getKhachhangs().subscribe();
-      this._KhachhangService.khachhangs$.subscribe((khachhangs)=>{
-        lichhens.forEach((v:any)=> {
-          v.Khachhang = khachhangs?.find((v1)=>v1.id == v.idKH)
+
+      if (lichhens) {
+        this._KhachhangService.getKhachhangs().subscribe();
+        this._KhachhangService.khachhangs$.subscribe((khachhangs) => {
+          lichhens.data.forEach((v: any) => {
+            v.Khachhang = khachhangs?.find((v1) => v1.id == v.idKH)
+          });
+          this.FilterLists = this.Lists = lichhens.data
         });
-        this.FilterLists = this.Lists = lichhens
-      });
-    } 
+      }
     })
   }
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     if (value.length > 2) {
       this.Lists = this.Lists.filter((v) => {
-     return  v.Hoten.toLowerCase().includes(value)||v.SDT.toLowerCase().includes(value)
-       }
+        return v.Hoten.toLowerCase().includes(value) || v.SDT.toLowerCase().includes(value)
+      }
       )
     }
   }
@@ -50,17 +51,24 @@ export class LichhenComponent implements OnInit {
     const dialogRef = this.dialog.open(teamplate, {
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result="true") {
+      if (result = "true") {
         this._LichhenService.CreateLichhen(this.Detail).subscribe()
       }
     });
   }
-  openDeleteDialog(teamplate: TemplateRef<any>,item:any): void {
+  openDeleteDialog(teamplate: TemplateRef<any>, item: any): void {
     const dialogRef = this.dialog.open(teamplate, {});
     dialogRef.afterClosed().subscribe((result) => {
-      if (result=="true") {
+      if (result == "true") {
         this._LichhenService.DeleteLichhen(item.id).subscribe()
       }
     });
+  }
+  ChangeTrangthai(item: any, item1: any): void {
+    item.State = item1.id
+    this._LichhenService.UpdateLichhen(item).subscribe()
+  }
+  Trangthai_lichhen(item: any) {
+    return Trangthai_Lichhen(item)
   }
 }

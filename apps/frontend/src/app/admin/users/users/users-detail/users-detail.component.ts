@@ -8,6 +8,7 @@ import { Role } from '../../user';
 import { UsergroupService } from '../../usergroup/usergroup.service';
 import { ChinhanhService } from '../../../cauhinh/chinhanh/chinhanh.service';
 import { NotifierService } from 'angular-notifier';
+import { nest } from 'apps/frontend/src/app/shared/shared.utils';
 @Component({
   selector: 'app-users-detail',
   templateUrl: './users-detail.component.html',
@@ -46,9 +47,7 @@ export class UsersDetailComponent implements OnInit {
               if(data)
               {
                 console.log(data);  
-                const ListChinhanh = data.map((v:any)=>({Title:v.Title,id:v.id,Checked:false}))
-                console.log(ListChinhanh);
-                
+                const ListChinhanh = data.map((v:any)=>({Title:v.Title,id:v.id,Checked:false}))                
                 ListChinhanh.forEach((v:any) => {
                   if (!res.EditChinhanhs.find((v1:any)=> v1.id === v.id)) {
                     res.EditChinhanhs.push(v);
@@ -56,6 +55,7 @@ export class UsersDetailComponent implements OnInit {
                 });
               }
             })
+            res.Groups = nest(res.Groups)
             this.Detail = res; 
             console.log(res);    
           }

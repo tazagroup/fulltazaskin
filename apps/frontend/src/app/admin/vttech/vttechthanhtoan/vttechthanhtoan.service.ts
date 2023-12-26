@@ -16,14 +16,14 @@ export class VttechthanhtoanService {
   }
   constructor(private http: HttpClient) { }
 
-  getAllAPIVttech() {
-    return this.http.get(environment.APIURL + '/vttechthanhtoan/apirealtime').pipe(
-      map((data: any) => { 
-        this._vttechthanhtoans.next(data);
-        return data;
-      })
-    );
-  }
+  // getAllAPIVttech() {
+  //   return this.http.get(environment.APIURL + '/vttechthanhtoan/apirealtime').pipe(
+  //     map((data: any) => { 
+  //       this._vttechthanhtoans.next(data);
+  //       return data;
+  //     })
+  //   );
+  // }
   getAllVttechthanhtoans() {
     return this.http.get(environment.APIURL + '/vttechthanhtoan').pipe(
       map((data: any) => { 
@@ -47,10 +47,11 @@ export class VttechthanhtoanService {
       })
     );
   }
-  getPaginaVttechthanhtoans(page: number, limit: number) {
-    const params ={ page: String(page), limit: String(limit) }
-    return this.http.get(environment.APIURL+'/vttechthanhtoan/pagina',{ params }).pipe(
+  getPaginaVttechthanhtoans(page: number, perPage: number) {
+    const params ={ page: String(page), perPage: String(perPage) }
+    return this.http.get(environment.APIURL+'/vttechthanhtoan/pagination',{ params }).pipe(
       map((data: any) => {
+        this._vttechthanhtoans.next(data);
         return data;
       })
     );

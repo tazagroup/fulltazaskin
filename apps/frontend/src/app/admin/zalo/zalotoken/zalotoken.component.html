@@ -53,26 +53,26 @@
          <div class="flex flex-row space-x-2 items-center justify-between w-full" routerLinkActive="font-bold">
             <div class="flex flex-row space-x-4 items-center">
               <img [src]="item.Image.src||'https://tazaskinclinic.com/images/taza-skin-clinic-logo.svg'" class="h-10">
-              <div class="flex flex-col">
+              <div class="flex flex-col space-y-2">
                 <span>{{item.Title}}</span>
                 <span class="italic text-xs">{{item.oa_id}}</span>
+                <ng-container *ngIf="Checktime(Today,item.AuthenEnd)?.status; else elseTemplate">
+                  <div class="flex flex-row {{Checktime(Today,item.AuthenEnd).text}} items-center">
+                    <span class="material-symbols-outlined">
+                      check_circle
+                      </span>
+                    <span class="italic text-xs"> {{Checktime(Today,item.AuthenEnd).message}}</span>
+                  </div>
+                  <div class="flex flex-row items-center">
+                    <span class="material-symbols-outlined text-green-600" (click)="getrefreshToken(item)">
+                      restart_alt
+                      </span>
+                      <span class="text-xs">Cập Nhật Token</span>
+                  </div>
+                </ng-container>
               </div>
-              <ng-container *ngIf="Checktime(Today,item.AuthenEnd)?.status; else elseTemplate">
-                <div class="flex flex-col {{Checktime(Today,item.AuthenEnd).text}} items-center">
-                  <span class="material-symbols-outlined">
-                    check_circle
-                    </span>
-                  <span class="italic text-xs"> {{Checktime(Today,item.AuthenEnd).message}}</span>
-                </div>
-                <div class="flex flex-col items-center">
-                  <span class="material-symbols-outlined text-green-600" (click)="getrefreshToken(item)">
-                    restart_alt
-                    </span>
-                    <span class="text-xs">Cập Nhật Token</span>
-                </div>
-              </ng-container>
               <ng-template #elseTemplate>
-                <div class="flex flex-col space-x-1 {{Checktime(Today,item.AuthenEnd).text}} items-center">
+                <div class="flex flex-row space-x-1 {{Checktime(Today,item.AuthenEnd).text}} items-center">
                   <span class="material-symbols-outlined">
                     cancel
                   </span>

@@ -24,7 +24,7 @@ import { ProfileModule } from '../../shared/common/profile/profile.module';
     ChatrealtimeModule,
     ProfileModule,
     RouterModule.forChild([
-      {path:'',redirectTo:'lichhen',pathMatch:'full'},
+      {path:'',redirectTo:'zalozns',pathMatch:'full'},
       {
         path: '', component: MainpageComponent,
         children: [
@@ -38,6 +38,8 @@ import { ProfileModule } from '../../shared/common/profile/profile.module';
           { path: 'zalotoken', loadChildren: () => import('../zalo/zalotoken/zalotoken.module').then(m => m.ZalotokenModule)},
           { path: 'usergroup', loadChildren: () => import('../users/usergroup/usergroup.module').then(m => m.UsergroupModule)},
           { path: 'users', loadChildren: () => import('../users/users/users.module').then(m => m.UsersModule)},
+          { path: 'vttechthanhtoan', loadChildren: () => import('../vttech/vttechthanhtoan/vttechthanhtoan.module').then(m => m.VttechthanhtoanModule)},
+          { path: 'sms', loadChildren: () => import('../baocao/sms/sms.module').then(m => m.SmsModule)},
       ]
       }
     ])

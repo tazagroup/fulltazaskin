@@ -7,6 +7,7 @@ import { EditorComponent } from '@tinymce/tinymce-angular';
 import { MenuService } from '../../../cauhinh/menu/menu.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { NotifierService } from 'angular-notifier';
+import { flattenData, nest } from 'apps/frontend/src/app/shared/shared.utils';
 @Component({
   selector: 'app-usergroup-detail',
   templateUrl: './usergroup-detail.component.html',
@@ -43,8 +44,10 @@ export class UsergroupDetailComponent implements OnInit {
                   res.ListMenu.push(v);
                 }
               });
-            }) 
+            })             
+            res.ListMenu = nest(res.ListMenu)
             this.Detail = res; 
+            console.log(res);
           }
         });
       }
@@ -92,6 +95,7 @@ export class UsergroupDetailComponent implements OnInit {
   }
   Update(data:any)
   {
+    data.ListMenu =flattenData(data.ListMenu);
     this._UsergroupService.UpdateUsergroup(data).subscribe(()=>
     {
       this._NotifierService.notify("success","Cập Nhật Thành Công")
@@ -100,6 +104,9 @@ export class UsergroupDetailComponent implements OnInit {
   }
   onChange(event: MatSlideToggleChange,index:any) {
     this.Detail.ListMenu[index].Checked =event.checked    
+  }
+  onChangeChidren(event: MatSlideToggleChange,index:any,indexChildren:any) {
+    this.Detail.ListMenu[index].children[indexChildren].Checked =event.checked    
   }
   ResetGroup() {
     this.Detail.ListMenu = []

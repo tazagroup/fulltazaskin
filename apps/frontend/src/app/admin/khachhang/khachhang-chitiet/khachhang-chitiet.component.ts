@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { reduce } from 'rxjs';
+import { KhachhangService } from '../khachhang.service';
 @Component({
   selector: 'app-khachhang-chitiet',
   templateUrl: './khachhang-chitiet.component.html',
@@ -13,7 +14,8 @@ import { reduce } from 'rxjs';
 })
 export class KhachhangChitietComponent implements OnInit {
   Detail: any={}
-  displayedColumns: string[] = ['TenKH','SDT','Dichvu', 'Doanhso','Tonglieutrinh','Dathu', 'Congno'];
+  Khachhang: any={}
+  displayedColumns: string[] = ['Dichvu', 'Doanhso','Tonglieutrinh','Dathu', 'Congno'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -22,14 +24,21 @@ export class KhachhangChitietComponent implements OnInit {
     private router: Router,    
     private _KhachhangComponent: KhachhangComponent,    
     private _KhachhangchitietService: KhachhangchitietService,    
+    private _KhachhangService: KhachhangService,    
   ) {}
   ngOnInit(): void {
     this.route.params.subscribe((paramsId) => {
-      const SDT = paramsId['SDT'];
-      console.log(SDT);
-      
+      const SDT = paramsId['SDT'];      
       if (SDT) {
         this._KhachhangComponent.drawer.open();
+        this._KhachhangService.getKhachhangBySDT(SDT).subscribe()
+        this._KhachhangService.khachhang$.subscribe((data)=>
+        {
+          if(data)
+          {
+            this.Khachhang = data
+          }
+        })
         this._KhachhangchitietService.getKhachhangchitietBySDT(SDT).subscribe();
         this._KhachhangchitietService.khachhangchitiet$.subscribe((res:any) => {
           if (res) {

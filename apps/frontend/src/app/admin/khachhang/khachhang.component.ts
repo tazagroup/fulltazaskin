@@ -73,10 +73,7 @@ export class KhachhangComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log(result);
       if (result=='true') {
-        this._KhachhangService.updateKhachhang(this.Detail).subscribe((data)=>
-        {
-          console.log(data)
-        } )
+        this._KhachhangService.updateKhachhang(this.Detail).subscribe()
       }
     });
   }
@@ -102,9 +99,10 @@ export class KhachhangComponent implements OnInit {
   TimKiem(take:any=10,skip:any=0)
   {
     this.searchParams.Dateranger = this.dateRange
-    console.log(this.searchParams);
+    // this.searchParams.take = take
+    // this.searchParams.take = skip    
     this._KhachhangService.searchKhachhang(this.searchParams).subscribe((data)=>
-    {
+    {      
       this.Khachhangs = data
       this.dataSource = new MatTableDataSource(data.rows);
       this.paginator.length = data.count

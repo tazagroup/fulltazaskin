@@ -39,10 +39,11 @@ export class LichhenService {
       })
     );
   }
-  getPaginaLichhens(page: number, limit: number) {
-    const params ={ page: String(page), limit: String(limit) }
-    return this.http.get(environment.APIURL+'/lichhen/pagina',{ params }).pipe(
+  getPaginaLichhens(page: number, perPage: number) {
+    const params ={ page: String(page), perPage: String(perPage) }
+    return this.http.get(environment.APIURL+'/lichhen/pagination',{ params }).pipe(
       map((data: any) => {
+        this._lichhens.next(data);
         return data;
       })
     );
@@ -71,23 +72,10 @@ export class LichhenService {
     );
   }
   UpdateLichhen(data: any) {
-    return this.lichhens$.pipe(
-      take(1),
-      switchMap((lichhens: any) =>
-        this.http.patch(environment.APIURL + `/lichhen/${data.id}`, data).pipe(
+    return this.http.patch(environment.APIURL + `/lichhen/${data.id}`, data).pipe(
           map((lichhen) => {
-            const index = lichhens.findIndex((item: any) => item.id === data.id);
-            if (index != -1) {
-              lichhens[index] = data;
-              this._lichhens.next(lichhens as any[]);
-            } else {
-              this._lichhens.next([lichhen]);
-
-            }
-            return lichhen;
+              this._lichhen.next(lichhen);
           })
-        )
-      )
     );
   }
   DeleteLichhen(id: string) {

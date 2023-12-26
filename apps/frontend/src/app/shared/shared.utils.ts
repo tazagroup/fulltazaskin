@@ -5,6 +5,36 @@ export interface SearchParams {
   take?: number;
   skip?: number;
 }
+
+export const ListTrangthailichhen: any[] = [
+    {id:0,Title:"Chờ Xác Nhận",Class:"text-yellow-400"},
+    {id:1,Title:"Đã Đặt Lịch",Class:"text-blue-400"},
+    {id:2,Title:"Đã Đến",Class:"text-green-400"},
+    {id:3,Title:"Đang Tham Khám",Class:"text-blue-400"},
+    {id:4,Title:"Đang Tư Vấn",Class:"text-blue-400"},
+    {id:5,Title:"Đang Lên phòng dịch vụ",Class:"text-blue-400"}
+  ]
+  export const TYPE_TEMPLATE: any = {
+      user_received_message: "Sự kiện người dùng nhận thông báo ZNS",
+      change_template_quota: "Thông báo thay đổi quota mẫu ZNS rủi ro",
+      change_template_quality: "Thông báo thay đổi về chất lượng gửi của mẫu tin ZNS",
+      change_oa_template_tags: "Thông báo thay đổi về loại nội dung ZNS có thể gửi",
+      change_oa_daily_quota: "Thông báo về thay đổi hạn mức gửi ZNS",
+      user_feedback: "Sự kiện người dùng phản hồi template đánh giá dịch vụ",
+    }
+
+export function Trangthai_Lichhen(item: any) {
+  const ListType: any[] = [
+    {id:0,Title:"Chờ Xác Nhận",Class:"text-yellow-400"},
+    {id:1,Title:"Đã Đặt Lịch",Class:"text-blue-400"},
+    {id:2,Title:"Đã Đến",Class:"text-green-400"},
+    {id:3,Title:"Đang Tham Khám",Class:"text-blue-400"},
+    {id:4,Title:"Đang Tư Vấn",Class:"text-blue-400"},
+    {id:5,Title:"Đang Lên phòng dịch vụ",Class:"text-blue-400"},
+  ]
+  
+  return ListType.find((v:any)=>v.id==item)
+}
 export function TYPE_ZNS(item: any) {
   const ListType: any = {
     user_received_message: "Sự kiện người dùng nhận thông báo ZNS",
@@ -152,5 +182,16 @@ export function groupByfield(data: any[]) {
     convertedData[nhomId].children.push(transitem);
   });
   return Object.values(convertedData);
+};
+
+export function flattenData(data:any) {
+    const flattenedData:any[] = [];
+    data.forEach((item:any) => {
+      flattenedData.push(item);
+      if (item.children) {
+        flattenedData.push(...flattenData(item.children));
+      }
+    });
+    return flattenedData;
 };
 

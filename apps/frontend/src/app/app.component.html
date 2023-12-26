@@ -1,2 +1,7 @@
 <router-outlet></router-outlet>
 <notifier-container></notifier-container>
+<ul>
+    <li *ngFor="let notification of notifications">
+      {{ notification.message }} ({{ notification.timestamp }})
+    </li>
+  </ul>

@@ -13,6 +13,7 @@ export class CauhinhchungDetailComponent implements OnInit {
   Detail: any={Content:{Cookie:'',XsrfToken:''}}
   List:any[] =[]
   APITINYMCE= environment.APITINYMCE;
+  TestToken:any
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -28,8 +29,7 @@ export class CauhinhchungDetailComponent implements OnInit {
         this._CauhinhchungComponent.drawer.open();
         this._CauhinhchungService.getCauhinhchungById(id).subscribe();
         this._CauhinhchungService.cauhinhchung$.subscribe((res:any) => {
-          if (res) {
-            console.log(res);    
+          if (res) {    
             this.Detail = res;
           }
         });
@@ -80,5 +80,9 @@ export class CauhinhchungDetailComponent implements OnInit {
   {
 
     this._CauhinhchungService.UpdateCauhinhchung(data).subscribe();
+  }
+  TestTokenVttech()
+  {
+    this._CauhinhchungService.TestTokenVttech().subscribe((data)=>this.TestToken = data)
   }
 }

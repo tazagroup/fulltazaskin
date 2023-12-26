@@ -74,7 +74,7 @@ import { environment } from '../environments/environment';
       },
     }),
     RouterModule.forRoot([
-      // {path:'',redirectTo:'admin',pathMatch:"full"},
+      {path:'',redirectTo:'admin',pathMatch:"full"},
       { path: '', 
       canActivate: [AuthGuard],
       loadChildren: () => import('./site/mainpage/mainpage.module').then(m => m.MainpageModule)},
