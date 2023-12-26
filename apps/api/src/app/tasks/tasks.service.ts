@@ -108,16 +108,17 @@ export class TasksService {
               if (zns.status == 'sms') {
                 data.sms = JSON.stringify(zns.data)
                 this._VttechthanhtoanService.update(data.id, data)
+                const result = `<b><u>${zns.Title}</u></b>`;
+                this._TelegramService.SendNoti(result)
               }
               else {
                 data.ThucteZNS = new Date()
                 data.StatusZNS = 1
                 this._VttechthanhtoanService.update(data.id, data)
+                const result = `<b><u>${zns.Title}</u></b>`;
+                this._TelegramService.SendNoti(result)
               }
-              const result = `<b><u>${zns?.Title}</u></b>`;
-              this._TelegramService.SendNoti(result)
             }
-
           })
         } catch (error) {
           console.error(`Error calling Zalozns service: ${error.message}`);
