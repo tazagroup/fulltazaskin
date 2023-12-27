@@ -11,11 +11,12 @@ import * as moment from 'moment';
 })
 export class VttechthanhtoanComponent implements OnInit {
   Detail: any = {};
-  SearchParams: any = {};
+  SearchParams: any = {Batdau:moment().startOf('day').toDate(),Ketthuc: moment().endOf('day').toDate()};
   Lists: any[] = []
   FilterLists: any[] = []
   LIST_CHI_NHANH = LIST_CHI_NHANH
-  Ngay:any={Batdau:moment().startOf('day').toDate(),Ketthuc: moment().endOf('day').toDate()}
+  Status:any={0:'Bill Mới',1:'Đang đợi gửi tin',2:'Thành Công',3:'Chưa Đăng Ký Template'}
+  Style:any={0:'bg-blue-500',1:'bg-yellow-500',2:'bg-green-500',3:'bg-red-500'}
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   constructor(
     private dialog: MatDialog,
@@ -23,7 +24,7 @@ export class VttechthanhtoanComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    this._VttechthanhtoanService.searchVttechthanhtoan(this.Ngay).subscribe()
+    this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
     // this._VttechthanhtoanService.getPaginaVttechthanhtoans(1,100).subscribe()
     this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data:any)=>{
       if(data)
@@ -48,7 +49,7 @@ export class VttechthanhtoanComponent implements OnInit {
   }
   ChoosenDate()
   {
-    this._VttechthanhtoanService.searchVttechthanhtoan(this.Ngay).subscribe()
+    this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
   }
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value;

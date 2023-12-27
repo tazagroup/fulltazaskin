@@ -9,8 +9,8 @@
       <mat-form-field appearance="outline">
         <mat-label>Chọn Khoảng Thời Gian</mat-label>
         <mat-date-range-input [rangePicker]="rangePicker">
-          <input matStartDate placeholder="Từ Ngày" [(ngModel)]="Ngay.Batdau" [ngModelOptions]="{standalone: true}">
-          <input matEndDate placeholder="Đến Ngày" [(ngModel)]="Ngay.Ketthuc" [ngModelOptions]="{standalone: true}">
+          <input matStartDate placeholder="Từ Ngày" [(ngModel)]="SearchParams.Batdau" [ngModelOptions]="{standalone: true}">
+          <input matEndDate placeholder="Đến Ngày" [(ngModel)]="SearchParams.Ketthuc" [ngModelOptions]="{standalone: true}">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
         <mat-date-range-picker #rangePicker>
@@ -58,11 +58,12 @@
       </div> -->
     </div>
     <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
-      <div class="flex flex-col max-w-4xl rounded-lg border">
-        <div class="flex flex-row justify-between items-center p-2 hover:bg-gray-200 border-b"
+      <div class="flex flex-col max-w-4xl space-y-3">
+        <div class="flex flex-row justify-between items-center hover:bg-gray-200 border rounded-lg"
           *ngFor="let item of FilterLists; let i = index">
-          <div class="flex flex-row space-x-2 items-center w-full">
-            <div class="w-full grid grid-cols-2 gap-2">
+          <div class="flex flex-col space-y-2 items-center w-full">
+            <div class="w-full p-2 text-white {{Style[item.Status]}}">{{Status[item.Status]}}</div>
+            <div class="w-full p-2 grid lg:grid-cols-2 grid-cols-1 gap-2">
               <div class="flex flex-row space-x-2">
                 <!-- <img [src]="'https://tazaskinclinic.com/images/taza-skin-clinic-logo.svg'" class="h-10 lg:block hidden"> -->
                 <div class="flex flex-col">
@@ -85,7 +86,7 @@
                   <div class="flex flex-row items-center">
                     <span class="lg:block hidden">Gửi ZNS Dự kiến : </span>
                     <span class="font-bold {{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.DukienZNS|date:'hh:mm:ss dd/MM/yyyy'}}</span>
-                    <button mat-icon-button *ngIf="item.StatusZNS==0" (click)="SendZNS(item)">Gửi</button>
+                    <button mat-icon-button *ngIf="item.Status<2" (click)="SendZNS(item)">Gửi</button>
                   </div>
                   <div class="flex flex-row">
                     <span class="lg:block hidden">Gửi SMS : </span>
