@@ -5,21 +5,29 @@
     </div>
   </mat-drawer>
   <mat-drawer-content class="!flex flex-col flex-auto min-w-0 relative bg-white !h-[90vh]">
-    <div class="relative flex flex-col p-4">
-      <mat-form-field appearance="outline">
-        <mat-label>Chọn Khoảng Thời Gian</mat-label>
-        <mat-date-range-input [rangePicker]="rangePicker">
-          <input matStartDate placeholder="Từ Ngày" [(ngModel)]="SearchParams.Batdau" [ngModelOptions]="{standalone: true}">
-          <input matEndDate placeholder="Đến Ngày" [(ngModel)]="SearchParams.Ketthuc" [ngModelOptions]="{standalone: true}">
-        </mat-date-range-input>
-        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
-        <mat-date-range-picker #rangePicker>
-          <mat-date-range-picker-actions>
-            <button mat-button matDateRangePickerCancel>Huỷ</button>
-            <button mat-raised-button color="primary" matDateRangePickerApply (click)="ChoosenDate()">Đồng ý</button>
-          </mat-date-range-picker-actions>
-        </mat-date-range-picker>
-      </mat-form-field>
+    <div class="flex flex-col p-4 justify-center items-center">
+      <div class="flex flex-row space-x-2">
+        <!-- <mat-form-field appearance="outline" class="text-xs">
+          <mat-label>Tìm Kiếm</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Mô Tả">
+          <span matPrefix class="material-symbols-outlined mr-2">search</span>
+        </mat-form-field> -->
+        <mat-form-field appearance="outline">
+          <mat-label>Chọn Khoảng Thời Gian</mat-label>
+          <mat-date-range-input [rangePicker]="rangePicker">
+            <input matStartDate placeholder="Từ Ngày" [(ngModel)]="SearchParams.Batdau" [ngModelOptions]="{standalone: true}">
+            <input matEndDate placeholder="Đến Ngày" [(ngModel)]="SearchParams.Ketthuc" [ngModelOptions]="{standalone: true}">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+          <mat-date-range-picker #rangePicker>
+            <mat-date-range-picker-actions>
+              <button mat-button matDateRangePickerCancel>Huỷ</button>
+              <button mat-raised-button color="primary" matDateRangePickerApply (click)="ChoosenDate()">Đồng ý</button>
+            </mat-date-range-picker-actions>
+          </mat-date-range-picker>
+        </mat-form-field>
+      </div>
+
       <!-- <div class="flex flex-row space-x-2 justify-between items-center p-2 h-16">
         <mat-form-field appearance="outline" class="w-full text-xs">
           <mat-label>Tiêu Đề</mat-label>
