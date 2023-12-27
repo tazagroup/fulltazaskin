@@ -24,9 +24,9 @@ export class Vttech_khachhangController {
   async findPagination(@Query('page') page: number,@Query('perPage') perPage: number){
        return await this.vttech_khachhangService.findPagination(page,perPage);
     }
-  @Get('findquery')
-    async findQuery(@Query('query') query: string){
-      return await this.vttech_khachhangService.findQuery(query);
+  @Post('search')
+    async findQuery(@Body() SearchParams: any){
+      return await this.vttech_khachhangService.findQuery(SearchParams);
   }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateVttech_khachhangDto: any) {

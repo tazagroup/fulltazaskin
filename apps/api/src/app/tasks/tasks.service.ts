@@ -107,7 +107,7 @@ export class TasksService {
               }
               else {
                 data.ThucteZNS = new Date()
-                data.StatusZNS = 1
+                data.StatusZNS = 2
                 this._VttechthanhtoanService.update(data.id, data)
                 const result = `<b><u>${zns.Title}</u></b>`;
                 this._TelegramService.SendNoti(result)
@@ -126,7 +126,7 @@ export class TasksService {
       this._TelegramService.SendNoti(result)
     }
     else {
-      data.Status = 1
+      data.Status = 3
       this._VttechthanhtoanService.update(data.id, data)
       const result = `Chi nhánh chưa đăng ký ZNS`;
       this._TelegramService.SendLogdev(result)

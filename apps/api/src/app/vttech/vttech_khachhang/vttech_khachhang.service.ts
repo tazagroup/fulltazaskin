@@ -40,10 +40,23 @@ export class Vttech_khachhangService {
       data: vttech_khachhangs,
     };
   }
-  async findQuery(query: string){
-    return await this.Vttech_khachhangRepository.find({
-      where: { Hoten: Like(`%query%`) },
-    });
+  async findQuery(params: any) {
+    console.error(params);
+    const queryBuilder = this.Vttech_khachhangRepository.createQueryBuilder('vttechthanhtoan');
+    if (params.Batdau && params.Ketthuc) {
+      queryBuilder.andWhere('vttechthanhtoan.CreateAt BETWEEN :startDate AND :endDate', {
+        startDate:params.Batdau,
+        endDate:params.Ketthuc,
+      });
+    }
+    if (params.SDT) {
+      queryBuilder.andWhere('vttechthanhtoan.SDT LIKE :SDT', { SDT: `%${params.SDT}%` });
+    }
+    const [items, totalCount] = await queryBuilder
+    .limit(params.pageSize || 10) // Set a default page size if not provided
+    .offset(params.pageNumber * params.pageSize || 0)
+    .getManyAndCount();
+  return { items, totalCount };
   }
   async update(id: string, UpdateVttech_khachhangDto: any) {
     this.Vttech_khachhangRepository.save(UpdateVttech_khachhangDto);
