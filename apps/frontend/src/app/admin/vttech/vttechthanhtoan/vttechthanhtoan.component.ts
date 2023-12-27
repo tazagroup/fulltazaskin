@@ -10,9 +10,11 @@ import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
 })
 export class VttechthanhtoanComponent implements OnInit {
   Detail: any = {};
+  SearchParams: any = {};
   Lists: any[] = []
   FilterLists: any[] = []
   LIST_CHI_NHANH = LIST_CHI_NHANH
+  Ngay:any={Batdau:new Date(),Ketthuc: new Date()}
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   constructor(
     private dialog: MatDialog,
@@ -21,11 +23,15 @@ export class VttechthanhtoanComponent implements OnInit {
   }
   ngOnInit(): void {
     this._VttechthanhtoanService.getPaginaVttechthanhtoans(1,100).subscribe()
+    this._VttechthanhtoanService.getPaginaVttechthanhtoans(1,100).subscribe()
     this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data:any)=>{
       if(data)
       {
         data.data.forEach((v:any) => {
-          v.Dulieu = JSON.parse(v.Dulieu)
+          if (typeof v.Dulieu !== 'object')
+          {
+            v.Dulieu = JSON.parse(v.Dulieu)
+          }
         });
         this.FilterLists = this.Lists = data.data
         console.log(this.FilterLists) 

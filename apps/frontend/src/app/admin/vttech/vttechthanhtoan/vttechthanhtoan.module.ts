@@ -10,6 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { VttechthanhtoanDetailComponent } from './vttechthanhtoan-detail/vttechthanhtoan-detail.component';
+import { MaterialModule } from '../../../shared/material.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -21,6 +22,7 @@ import { VttechthanhtoanDetailComponent } from './vttechthanhtoan-detail/vttecht
     MatMenuModule,
     MatButtonModule,
     MatDialogModule,
+    MaterialModule,
     RouterModule.forChild([
       {
         path: '', component: VttechthanhtoanComponent,

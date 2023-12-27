@@ -32,8 +32,8 @@ export class VttechthanhtoanService {
       })
     );
   }
-  searchVttechthanhtoan(query:any) {
-    return this.http.get(environment.APIURL + `/vttechthanhtoan/search?query=${query}`).pipe(
+  searchVttechthanhtoan(SearchParams:any) {
+    return this.http.post(environment.APIURL + `/vttechthanhtoan/search`,SearchParams).pipe(
       map((data: any) => { 
         return data;
       })
