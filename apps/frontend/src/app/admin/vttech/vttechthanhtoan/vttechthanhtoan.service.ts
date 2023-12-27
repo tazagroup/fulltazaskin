@@ -35,6 +35,7 @@ export class VttechthanhtoanService {
   searchVttechthanhtoan(SearchParams:any) {
     return this.http.post(environment.APIURL + `/vttechthanhtoan/search`,SearchParams).pipe(
       map((data: any) => { 
+        this._vttechthanhtoans.next(data);
         return data;
       })
     );
@@ -63,6 +64,15 @@ export class VttechthanhtoanService {
         return data;
       })
     );
+  }
+  SendZns(data: any) {
+    return this.http.post(environment.APIURL + '/tasks/addcron', data).pipe(
+          map((result) => {
+            console.log(result);
+            
+            return result;
+          })
+        )
   }
   CreateVttechthanhtoan(data: any) {
     return this.vttechthanhtoans$.pipe(

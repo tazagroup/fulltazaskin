@@ -15,8 +15,8 @@
         <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
         <mat-date-range-picker #rangePicker>
           <mat-date-range-picker-actions>
-            <button mat-button matDateRangePickerCancel>Cancel</button>
-            <button mat-raised-button color="primary" matDateRangePickerApply>Apply</button>
+            <button mat-button matDateRangePickerCancel>Huỷ</button>
+            <button mat-raised-button color="primary" matDateRangePickerApply (click)="ChoosenDate()">Đồng ý</button>
           </mat-date-range-picker-actions>
         </mat-date-range-picker>
       </mat-form-field>
@@ -82,9 +82,10 @@
                     <span class="lg:block hidden">Số Điện Thoại : </span>
                     <span>{{item.SDT}}</span>
                   </div>
-                  <div class="flex flex-grow">
+                  <div class="flex flex-row items-center">
                     <span class="lg:block hidden">Gửi ZNS Dự kiến : </span>
-                    <span class="font-bold {{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.TimeZNS|date:'hh:mm:ss dd/MM/yyyy'}}</span>
+                    <span class="font-bold {{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.DukienZNS|date:'hh:mm:ss dd/MM/yyyy'}}</span>
+                    <button mat-icon-button *ngIf="item.StatusZNS==0" (click)="SendZNS(item)">Gửi</button>
                   </div>
                   <div class="flex flex-row">
                     <span class="lg:block hidden">Gửi SMS : </span>

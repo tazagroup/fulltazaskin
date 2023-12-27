@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { VttechthanhtoanService } from './vttechthanhtoan.service';
 import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
+import * as moment from 'moment';
 @Component({
   selector: 'app-vttechthanhtoan',
   templateUrl: './vttechthanhtoan.component.html',
@@ -14,7 +15,7 @@ export class VttechthanhtoanComponent implements OnInit {
   Lists: any[] = []
   FilterLists: any[] = []
   LIST_CHI_NHANH = LIST_CHI_NHANH
-  Ngay:any={Batdau:new Date(),Ketthuc: new Date()}
+  Ngay:any={Batdau:moment().startOf('day').toDate(),Ketthuc: moment().endOf('day').toDate()}
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   constructor(
     private dialog: MatDialog,
@@ -22,21 +23,32 @@ export class VttechthanhtoanComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    this._VttechthanhtoanService.getPaginaVttechthanhtoans(1,100).subscribe()
-    this._VttechthanhtoanService.getPaginaVttechthanhtoans(1,100).subscribe()
+    this._VttechthanhtoanService.searchVttechthanhtoan(this.Ngay).subscribe()
+    // this._VttechthanhtoanService.getPaginaVttechthanhtoans(1,100).subscribe()
     this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data:any)=>{
       if(data)
       {
-        data.data.forEach((v:any) => {
+        data.items.forEach((v:any) => {
           if (typeof v.Dulieu !== 'object')
           {
             v.Dulieu = JSON.parse(v.Dulieu)
           }
         });
-        this.FilterLists = this.Lists = data.data
+        this.FilterLists = this.Lists = data.items
         console.log(this.FilterLists) 
       }
     })
+  }
+  SendZNS(item:any)
+  {
+    console.log(item);
+    item.DukienZNS = moment().add(+1,'minutes').toDate()
+    this._VttechthanhtoanService.SendZns(item).subscribe()
+    
+  }
+  ChoosenDate()
+  {
+    this._VttechthanhtoanService.searchVttechthanhtoan(this.Ngay).subscribe()
   }
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value;
