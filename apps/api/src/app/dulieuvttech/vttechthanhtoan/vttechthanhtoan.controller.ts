@@ -35,8 +35,8 @@ export class VttechthanhtoanController {
   async findPagination(@Query('page') page: number,@Query('perPage') perPage: number){    
        return await this.vttechthanhtoanService.findPagination(page,perPage);
     }
-  @Post('findquery')
-    async findQuery(@Body('SearchParams') SearchParams: string){
+  @Post('search')
+    async findQuery(@Body() SearchParams: any){
       return await this.vttechthanhtoanService.findQuery(SearchParams);
   }
   @Patch(':id')

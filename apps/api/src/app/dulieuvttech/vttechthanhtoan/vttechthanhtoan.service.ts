@@ -188,12 +188,20 @@ export class VttechthanhtoanService {
       data: vttechthanhtoans,
     };
   }
-  async findQuery(SearchParams: string) {
-    console.error(SearchParams);
-    
-    return await this.VttechthanhtoanRepository.find({
-      where: { CustName: Like(`%query%`) },
-    });
+  async findQuery(params: any) {
+    console.error(params);
+    const queryBuilder = this.VttechthanhtoanRepository.createQueryBuilder('vttechthanhtoan');
+    if (params.Batdau && params.Ketthuc) {
+      queryBuilder.andWhere('vttechthanhtoan.Created BETWEEN :startDate AND :endDate', {
+        startDate:params.Batdau,
+        endDate:params.Ketthuc,
+      });
+    }
+    if (params.SDT) {
+      queryBuilder.andWhere('vttechthanhtoan.SDT LIKE :SDT', { SDT: `%${params.SDT}%` });
+    }
+    const [items, totalCount] = await queryBuilder.getManyAndCount();
+    return { items, totalCount };
   }
   async update(id: string, UpdateVttechthanhtoanDto: UpdateVttechthanhtoanDto) {
     this.VttechthanhtoanRepository.save(UpdateVttechthanhtoanDto);

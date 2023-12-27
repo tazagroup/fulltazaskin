@@ -87,7 +87,6 @@ export class TasksService {
   }
   addCron(data: any) {
     console.error('Cron data : ',data);
-    
     let cronExpression: any;
     const targetDate = moment(data.DukienZNS);
     cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
@@ -98,7 +97,7 @@ export class TasksService {
         const result = `ZNS <b><u>${data.id}</u></b> sẽ được gửi lúc ${data.teletime}`;
         this._TelegramService.SendLogdev(result)
         try {
-          this._ZaloznsService.sendtestzns(data, Chinhanh.idtoken, Chinhanh.idtemp).then((zns: any) => {
+          this._ZaloznsService.sendtestzns(data, Chinhanh).then((zns: any) => {
             if (zns) {
               if (zns.status == 'sms') {
                 data.sms = JSON.stringify(zns.data)

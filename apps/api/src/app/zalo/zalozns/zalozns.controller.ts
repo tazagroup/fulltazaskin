@@ -17,11 +17,11 @@ export class ZaloznsController {
   async getwebhook(@Req() req: Request): Promise<any> {
     return this.zaloznsService.createzns(req);
    }
-  @Post('sendtestzns')
-  sendtestzns(@Body() data: any) {   
-    const result =this.zaloznsService.sendtestzns(data,data.idCN,data.idtemp);
-    return result
-  }
+  // @Post('sendtestzns')
+  // sendtestzns(@Body() data: any) {   
+  //   const result =this.zaloznsService.sendtestzns(data,data);
+  //   return result
+  // }
   @Post('auto9')
   Auto9sendZns() {     
     this.ListSDT.forEach(v => {
