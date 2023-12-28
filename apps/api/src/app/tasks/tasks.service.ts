@@ -101,6 +101,7 @@ export class TasksService {
             if (zns) {
               if (zns.status == 'sms') {
                 data.SMS = JSON.stringify(zns.data)
+                data.Status = 4
                 this._VttechthanhtoanService.update(data.id, data)
                 const result = `<b><u>${zns.Title}</u></b>`;
                 this._TelegramService.SendNoti(result)
