@@ -100,7 +100,7 @@ export class TasksService {
           this._ZaloznsService.sendtestzns(data, Chinhanh).then((zns: any) => {
             if (zns) {
               if (zns.status == 'sms') {
-                data.sms = JSON.stringify(zns.data)
+                data.SMS = JSON.stringify(zns.data)
                 this._VttechthanhtoanService.update(data.id, data)
                 const result = `<b><u>${zns.Title}</u></b>`;
                 this._TelegramService.SendNoti(result)
