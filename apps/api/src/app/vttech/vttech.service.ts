@@ -22,8 +22,10 @@ export class VttechService {
     })
   }
   async GetAllKhachhang(data:any) {
+    
     const begin = moment(new Date(data.begin)).format("DD-MM-YYYY")
     const end = moment(new Date(data.end)).format("DD-MM-YYYY")
+    console.error(begin,end);
     let config = {
       method: 'post',
       maxBodyLength: Infinity,

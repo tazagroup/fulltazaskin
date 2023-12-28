@@ -10,7 +10,7 @@ export class SmsService {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://sms.cmctelecom.vn/SMS_CMCTelecom/api/sms/send',
+      url: 'https://sms.cmctelecom.vn/SMS_CMCTelecom/api/sms/sendutf',
       headers: {
         'Content-Type': 'application/json'
       },

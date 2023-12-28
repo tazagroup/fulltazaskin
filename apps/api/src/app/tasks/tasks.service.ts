@@ -108,6 +108,7 @@ export class TasksService {
               else {
                 data.ThucteZNS = new Date()
                 data.StatusZNS = 2
+                data.Status = 2
                 this._VttechthanhtoanService.update(data.id, data)
                 const result = `<b><u>${zns.Title}</u></b>`;
                 this._TelegramService.SendNoti(result)

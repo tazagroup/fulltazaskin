@@ -33,8 +33,6 @@ export class ZaloznsService {
   async sendtestzns(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
     try {
       const token:any = await this._ZalotokenService.findid(Chinhanh.idtoken);
-      console.error(token);
-      console.error(Chinhanh);
       if (!token) {
         this._TelegramService.SendLogdev(JSON.stringify(token))
         throw new Error('Zalo token not found');
@@ -66,11 +64,8 @@ export class ZaloznsService {
   }
   
   constructRequestData(item: any, Chinhanh: any): any {
-    const templateId = Chinhanh.idtemp;
-    console.error(templateId);
-    
+    const templateId = Chinhanh.idtemp;    
     const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
-  
     return {
       phone: convertPhoneNum(item.SDT),
       template_id: templateId,
