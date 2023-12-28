@@ -5,8 +5,8 @@
     </div>
   </mat-drawer>
   <mat-drawer-content class="!flex flex-col flex-auto min-w-0 relative bg-white !h-[90vh]">
-    <div class="flex flex-col p-4 justify-center items-center">
-      <div class="flex flex-row space-x-2">
+    <div class="w-full flex flex-col p-4 justify-center items-center">
+      <div class="grid grid-cols-2 gap-2">
         <!-- <mat-form-field appearance="outline" class="text-xs">
           <mat-label>Tìm Kiếm</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Mô Tả">
@@ -26,6 +26,14 @@
             </mat-date-range-picker-actions>
           </mat-date-range-picker>
         </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Trạng Thái</mat-label>
+            <mat-select [(ngModel)]="FilterStatus" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeStatus($event)">
+              <mat-option [value]="item.key" *ngFor="let item of Status|keyvalue">{{item.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        
       </div>
 
       <!-- <div class="flex flex-row space-x-2 justify-between items-center p-2 h-16">
@@ -66,64 +74,66 @@
       </div> -->
     </div>
     <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
-      <div class="flex flex-col max-w-4xl space-y-3">
+      <div class="w-full flex flex-col lg:max-w-4xl space-y-3">
         <div class="flex flex-row justify-between items-center hover:bg-gray-200 border rounded-lg"
           *ngFor="let item of FilterLists; let i = index">
           <div class="flex flex-col space-y-2 items-center w-full">
-            <div class="w-full p-2 text-white {{Style[item.Status]}}">{{Status[item.Status]}}</div>
+            <div class="w-full flex flex-row justify-between p-2 text-white {{Style[item.Status]}} items-center rounded-t-lg">
+            <span>{{Status[item.Status]}}</span>
+            <button mat-icon-button *ngIf="item.Status<2" (click)="SendZNS(item)">Gửi</button>
+            </div>
             <div class="w-full p-2 grid lg:grid-cols-2 grid-cols-1 gap-2">
-              <div class="flex flex-row space-x-2">
+              <div class="flex flex-col">
                 <!-- <img [src]="'https://tazaskinclinic.com/images/taza-skin-clinic-logo.svg'" class="h-10 lg:block hidden"> -->
                 <div class="flex flex-col">
-                  <div class="flex flex-row">
-                    <span class="lg:block hidden">Khách hàng : </span>
+                  <div class="flex flex-row justify-between">
+                    <span>Khách hàng : </span>
                     <span>{{item.CustName}}</span>
                   </div>
-                  <div class="flex flex-row">
-                    <span class="lg:block hidden">Chi Nhánh : </span>
+                  <div class="flex flex-row justify-between">
+                    <span>Chi Nhánh : </span>
                     <span>{{GetNameChinhanh(item.Dulieu.BranchID)}}</span>
                   </div>
-                  <div class="flex flex-row">
-                    <span class="lg:block hidden">Giới Tính : </span>
+                  <div class="flex flex-row justify-between">
+                    <span>Giới Tính : </span>
                     <span>{{item.Gender}}</span>
                   </div>
-                  <div class="flex flex-row">
-                    <span class="lg:block hidden">Số Điện Thoại : </span>
+                  <div class="flex flex-row justify-between">
+                    <span>Số Điện Thoại : </span>
                     <span>{{item.SDT}}</span>
                   </div>
-                  <div class="flex flex-row items-center">
-                    <span class="lg:block hidden">Gửi ZNS Dự kiến : </span>
+                  <div class="flex flex-row justify-between">
+                    <span>Gửi ZNS Dự kiến : </span>
                     <span class="font-bold {{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.DukienZNS|date:'hh:mm:ss dd/MM/yyyy'}}</span>
-                    <button mat-icon-button *ngIf="item.Status<2" (click)="SendZNS(item)">Gửi</button>
                   </div>
-                  <div class="flex flex-row">
-                    <span class="lg:block hidden">Gửi SMS : </span>
+                  <div class="flex flex-row justify-between">
+                    <span>Gửi SMS : </span>
                     <span></span>
                   </div>
                 </div>
               </div>
               <div class="flex flex-col">
-                <div class="flex flex-row space-x-2  justify-end">
-                  <span class="lg:block hidden">Mã Phiếu:</span>
+                <div class="flex flex-row justify-between">
+                  <span>Mã Phiếu:</span>
                   <span>{{item.InvoiceNum}}</span>
                 </div>
-                <div class="flex flex-row space-x-2 justify-end">
-                  <span class="lg:block hidden">Ngày Tạo Phiếu:</span>
+                <div class="flex flex-row justify-between">
+                  <span>Ngày Tạo Phiếu:</span>
                   <span>{{item.Created|date:'hh:mm:ss dd/MM/yyyy'}}</span>
                 </div>
-                <div class="flex flex-row space-x-2 items-center  justify-end">
+                <div class="flex flex-row justify-between">
                   <span>Tiền Thu</span>
                   <span>{{(item.Amount|number:'1.0-0')}}đ</span>
                 </div>
-                <div class="flex flex-row space-x-2 items-center  justify-end">
+                <div class="flex flex-row justify-between">
                   <span>Phát Sinh</span>
                   <span>{{(item.PriceDiscounted|number:'1.0-0')}}đ</span>
                 </div>
-                <div class="flex flex-row space-x-2 items-center  justify-end">
+                <div class="flex flex-row justify-between">
                   <span>Thanh Toán</span>
                   <span>{{(item.Paid|number:'1.0-0')}}đ</span>
                 </div>
-                <div class="flex flex-row space-x-2 items-center  justify-end">
+                <div class="flex flex-row justify-between">
                   <span>Công Nợ</span>
                   <span>{{(item.Debt|number:'1.0-0')}}đ</span>
                 </div>

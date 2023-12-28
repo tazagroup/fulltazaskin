@@ -4,6 +4,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { VttechthanhtoanService } from './vttechthanhtoan.service';
 import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
 import * as moment from 'moment';
+import { MatSelectChange } from '@angular/material/select';
 @Component({
   selector: 'app-vttechthanhtoan',
   templateUrl: './vttechthanhtoan.component.html',
@@ -15,6 +16,7 @@ export class VttechthanhtoanComponent implements OnInit {
   Lists: any[] = []
   FilterLists: any[] = []
   LIST_CHI_NHANH = LIST_CHI_NHANH
+  FilterStatus:any
   Status:any={0:'Bill Mới',1:'Đang đợi gửi tin',2:'Thành Công',3:'Chưa Đăng Ký Template'}
   Style:any={0:'bg-blue-500',1:'bg-yellow-500',2:'bg-green-500',3:'bg-red-500'}
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
@@ -44,12 +46,17 @@ export class VttechthanhtoanComponent implements OnInit {
   {
     console.log(item);
     item.DukienZNS = moment().add(+1,'minutes').toDate()
-    this._VttechthanhtoanService.SendZns(item).subscribe()
-    
+    this._VttechthanhtoanService.SendZns(item).subscribe()  
   }
   ChoosenDate()
   {
     this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
+  }
+  ChangeStatus(event:MatSelectChange)
+  {
+    console.log(event.value);
+    
+    this.FilterLists = this.Lists.filter((v)=>v.Status==event.value)
   }
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value;
