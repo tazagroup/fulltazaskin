@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { VttechkhachhangService } from './vttechkhachhang.service';
 import * as moment from 'moment';
+import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
+import { MatSelectChange } from '@angular/material/select';
 @Component({
   selector: 'app-vttechkhachhang',
   templateUrl: './vttechkhachhang.component.html',
@@ -12,7 +14,14 @@ export class VttechkhachhangComponent implements OnInit {
   Detail: any = {};
   Lists: any[] = []
   FilterLists: any[] = []
-  SearchParams: any = {Batdau:moment().startOf('day').toDate(),Ketthuc: moment().endOf('day').toDate()};
+  ListChiNhanh:any = LIST_CHI_NHANH
+  PagiLength:any=0
+  SearchParams: any = {
+    Batdau:moment().startOf('day').toDate(),
+    Ketthuc: moment().endOf('day').toDate(),
+    pageSize:10,
+    pageNumber:0
+  };
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   constructor(
     private dialog: MatDialog,
@@ -24,6 +33,14 @@ export class VttechkhachhangComponent implements OnInit {
     this._VttechkhachhangService.vttechkhachhangs$.subscribe((data:any)=>{    
       if(data)
       {
+        console.log(data);
+        data.items.forEach((v:any) => {
+          if (typeof v.Dulieu !== 'object')
+          {
+            v.Dulieu = JSON.parse(v.Dulieu)
+          }
+        });
+        this.PagiLength = (Number(data.totalCount)/Number(this.SearchParams.pageSize)).toFixed()
         this.FilterLists = this.Lists = data.items
       }  
 
@@ -33,14 +50,18 @@ export class VttechkhachhangComponent implements OnInit {
   {
     this._VttechkhachhangService.searchVttechkhachhangs(this.SearchParams).subscribe()
   }
-  applyFilter(event: Event) {
+  applyFilter(event: Event,field:any) {
     const value = (event.target as HTMLInputElement).value;
     if (value.length > 2) {
-      this.Lists = this.Lists.filter((v) => {
-     return  v.Hoten.toLowerCase().includes(value)||v.SDT.toLowerCase().includes(value)
-       }
-      )
+      this.SearchParams[field] = value
+      this._VttechkhachhangService.searchVttechkhachhangs(this.SearchParams).subscribe()
     }
+  }
+  onSelectChange(event: MatSelectChange) {
+    this.SearchParams.idCN = event.value
+    console.log(this.SearchParams);
+    
+    this._VttechkhachhangService.searchVttechkhachhangs(this.SearchParams).subscribe()
   }
   openDialog(teamplate: TemplateRef<any>): void {
     const dialogRef = this.dialog.open(teamplate, {
@@ -58,5 +79,11 @@ export class VttechkhachhangComponent implements OnInit {
         this._VttechkhachhangService.DeleteVttechkhachhang(item.id).subscribe()
       }
     });
+  }
+  onPageChange(event:any)
+  {
+    this.SearchParams.pageSize=event.pageSize
+     this.SearchParams.pageNumber=event.pageIndex
+     this._VttechkhachhangService.searchVttechkhachhangs(this.SearchParams).subscribe()
   }
 }

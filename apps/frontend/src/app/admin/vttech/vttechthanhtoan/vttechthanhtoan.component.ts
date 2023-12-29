@@ -12,14 +12,21 @@ import { MatSelectChange } from '@angular/material/select';
 })
 export class VttechthanhtoanComponent implements OnInit {
   Detail: any = {};
-  SearchParams: any = {Batdau:moment().startOf('day').toDate(),Ketthuc: moment().endOf('day').toDate()};
+  SearchParams: any = {
+    Batdau:moment().startOf('day').toDate(),
+    Ketthuc: moment().endOf('day').toDate(),
+    pageSize:10,
+    pageNumber:0
+  };
   Lists: any[] = []
   FilterLists: any[] = []
   LIST_CHI_NHANH = LIST_CHI_NHANH
   FilterStatus:any
-  Status:any={0:'Bill Mới',1:'Đang đợi gửi tin',2:'Thành Công',3:'Chưa Đăng Ký Template'}
-  Style:any={0:'bg-blue-500',1:'bg-yellow-500',2:'bg-green-500',3:'bg-red-500'}
+  Status:any={0:'Bill Mới',1:'Đang đợi gửi tin',2:'Thành Công',3:'Chưa Đăng Ký Template',4:'Gửi SMS'}
+  Style:any={0:'bg-blue-500',1:'bg-yellow-500',2:'bg-green-500',3:'bg-red-500',4:'bg-purple-500'}
+  isReport:boolean=false
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
+  PagiLength:any=0
   constructor(
     private dialog: MatDialog,
     private _VttechthanhtoanService: VttechthanhtoanService,
@@ -31,16 +38,23 @@ export class VttechthanhtoanComponent implements OnInit {
     this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data:any)=>{
       if(data)
       {
+        console.log(data);
+        
         data.items.forEach((v:any) => {
           if (typeof v.Dulieu !== 'object')
           {
             v.Dulieu = JSON.parse(v.Dulieu)
           }
         });
+        this.PagiLength = (Number(data.totalCount)/Number(this.SearchParams.pageSize)).toFixed()
         this.FilterLists = this.Lists = data.items
         console.log(this.FilterLists) 
       }
     })
+  }
+  Report(items:any,field:any)
+  {
+    return items.filter((v:any)=>v.Status == field).length
   }
   SendZNS(item:any)
   {
@@ -55,8 +69,8 @@ export class VttechthanhtoanComponent implements OnInit {
   ChangeStatus(event:MatSelectChange)
   {
     console.log(event.value);
-    
-    this.FilterLists = this.Lists.filter((v)=>v.Status==event.value)
+    this.SearchParams.Status = event.value
+    this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
   }
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value;
@@ -88,5 +102,11 @@ export class VttechthanhtoanComponent implements OnInit {
   {
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == item) 
     return Chinhanh?.Title
+  }
+  onPageChange(event:any)
+  {
+    this.SearchParams.pageSize=event.pageSize
+     this.SearchParams.pageNumber=event.pageIndex
+     this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
   }
 }

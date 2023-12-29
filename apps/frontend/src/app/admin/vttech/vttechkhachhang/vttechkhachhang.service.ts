@@ -25,7 +25,7 @@ export class VttechkhachhangService {
     );
   }
   searchVttechkhachhangs(SearchParams:any) {
-    return this.http.post(environment.APIURL + `/vttechthanhtoan/search`,SearchParams).pipe(
+    return this.http.post(environment.APIURL + `/vttech_khachhang/search`,SearchParams).pipe(
       map((data: any) => { 
         this._vttechkhachhangs.next(data);
         return data;

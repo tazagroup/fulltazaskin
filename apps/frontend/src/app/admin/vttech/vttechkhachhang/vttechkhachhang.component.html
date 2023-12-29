@@ -6,12 +6,23 @@
   </mat-drawer>
   <mat-drawer-content class="!flex flex-col flex-auto min-w-0 relative bg-white !h-[90vh]">
     <div class="relative border-b flex flex-col">
-      <div class="flex flex-row space-x-2 justify-between items-center p-2 h-16">
-        <mat-form-field appearance="outline" class="w-full text-xs">
-          <mat-label>Tiêu Đề</mat-label>
-          <input matInput (keyup)="applyFilter($event)" class="w-full" placeholder="Mô Tả">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 p-2 items-center">
+        <mat-form-field appearance="outline" class="text-xs">
+          <mat-label>Tìm Tên</mat-label>
+          <input matInput (keyup)="applyFilter($event,'Hoten')" placeholder="Tìm Tên">
           <span matPrefix class="material-symbols-outlined mr-2">search</span>
         </mat-form-field>
+        <mat-form-field appearance="outline" class="text-xs">
+          <mat-label>Tìm Số Điện Thoại</mat-label>
+          <input matInput (keyup)="applyFilter($event,'SDT')" placeholder="Tìm Số Điện Thoại">
+          <span matPrefix class="material-symbols-outlined mr-2">search</span>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Danh Mục</mat-label>
+            <mat-select [(ngModel)]="SearchParams.idCN" [ngModelOptions]="{standalone: true}" (selectionChange)="onSelectChange($event)">
+              <mat-option [value]="item.idVttech" *ngFor="let item of ListChiNhanh">{{item.Title}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Chọn Khoảng Thời Gian</mat-label>
           <mat-date-range-input [rangePicker]="rangePicker">
@@ -26,56 +37,26 @@
             </mat-date-range-picker-actions>
           </mat-date-range-picker>
         </mat-form-field>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-          <span class="material-symbols-outlined">more_vert</span>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="openDialog(dialogTemplate);Detail = {}">
-            <div class="flex flex-row space-x-2 items-center">
-              <span class="material-symbols-outlined text-xl" matTooltip="Tùy Chỉnh">add_circle</span>
-              <span class="text-sm">Thêm Mới</span>
-            </div>
-          </button>
-          <button mat-menu-item>
-            <div class="flex flex-row space-x-2 items-center">
-              <span class="material-symbols-outlined text-xl" matTooltip="Tùy Chỉnh">tune</span>
-              <span class="text-sm">Cấu Hình</span>
-            </div>
-          </button>
-          <button mat-menu-item>
-            <div class="flex flex-row space-x-2 items-center">
-              <span class="material-symbols-outlined text-xl" matTooltip="Lấy Mẫu">file_download</span>
-              <span class="text-sm">Download</span>
-            </div>
-          </button>
-          <button mat-menu-item>
-            <div class="flex flex-row space-x-2 items-center">
-              <span class="material-symbols-outlined text-xl" matTooltip="Upload File">file_upload</span>
-              <span class="text-sm">Upload</span>
-            </div>
-          </button>
-        </mat-menu>
       </div>
     </div>
     <div class="relative flex flex-col h-full w-full overflow-auto">
       <div class="flex flex-col">
         <div class="flex flex-row justify-between items-center p-4 hover:bg-gray-200"
           *ngFor="let item of FilterLists; let i = index">
-         <div class="flex flex-row space-x-2 items-center justify-between w-full" [routerLink]="[item.id]"
-            routerLinkActive="font-bold" (click)="drawer.open()">
+         <div class="flex flex-row space-x-2 items-center justify-between w-full">
             <div class="flex flex-row space-x-4 items-center">
               <!-- <img [src]="item.Image.src||'https://tazaskinclinic.com/images/taza-skin-clinic-logo.svg'" class="h-10"> -->
               <div class="flex flex-col">
-                <span>{{item.Title}}</span>
-                <span class="italic text-xs">{{item.Type}}</span>
+                <span>{{item.Hoten}}</span>
+                <span class="italic text-xs">{{item.SDT}}</span>
               </div>
             </div>
-            <button mat-icon-button (click)="openDeleteDialog(dlgDeleteTemplate,item)">
-              <span class="material-symbols-outlined text-xl text-red-500" matTooltip="Xoá">delete</span>
-            </button>
           </div>
         </div>
       </div>
+    </div>
+    <div class="relative border-t flex flex-col">
+      <mat-paginator (page)="onPageChange($event)" [length]="PagiLength" [pageSize]="10" [pageSizeOptions]="[10,50,PagiLength]"></mat-paginator>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>
