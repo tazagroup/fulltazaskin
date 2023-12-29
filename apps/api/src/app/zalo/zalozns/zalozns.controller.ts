@@ -127,6 +127,7 @@ export class ZaloznsController {
   async findAll() {
     return await this.zaloznsService.findAll();
   }
+
   @Get('findid/:id')
   async findOne(@Param('id') id: string) {
     return await this.zaloznsService.findid(id);
@@ -139,9 +140,9 @@ export class ZaloznsController {
   async findPagination(@Query('page') page: number,@Query('perPage') perPage: number){
        return await this.zaloznsService.findPagination(page,perPage);
     }
-  @Get('findquery')
-    async findQuery(@Query('query') query: string){
-      return await this.zaloznsService.findQuery(query);
+  @Post('search')
+    async findQuery(@Body() SearchParams: any){
+      return await this.zaloznsService.findQuery(SearchParams);
   }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateZaloznsDto: any) {

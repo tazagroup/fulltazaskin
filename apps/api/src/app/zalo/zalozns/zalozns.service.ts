@@ -274,10 +274,26 @@ export class ZaloznsService {
       data: zaloznss,
     };
   }
-  async findQuery(query: string) {
-    return await this.ZaloznsRepository.find({
-      where: { event_name: Like(`%query%`) },
-    });
+  async findQuery(params: any) {
+    console.error(params);
+    const queryBuilder = this.ZaloznsRepository.createQueryBuilder('zalozns');
+    if (params.Batdau && params.Ketthuc) {
+      queryBuilder.andWhere('zalozns.CreateAt BETWEEN :startDate AND :endDate', {
+        startDate:params.Batdau,
+        endDate:params.Ketthuc,
+      });
+    }
+    if (params.event_name) {
+      queryBuilder.andWhere('zalozns.event_name LIKE :event_name', { event_name: `%${params.event_name}%` });
+    }
+    if (params.Status) {
+      queryBuilder.andWhere('zalozns.Status LIKE :Status', { Status: `${params.Status}` });
+    }
+    const [items, totalCount] = await queryBuilder
+    .limit(params.pageSize || 10)
+    .offset(params.pageNumber * params.pageSize || 0)
+    .getManyAndCount();
+  return { items, totalCount };
   }
   async update(id: string, UpdateZaloznsDto: any) {
     this.ZaloznsRepository.save(UpdateZaloznsDto);

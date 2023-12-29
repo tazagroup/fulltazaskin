@@ -200,7 +200,7 @@ export class VttechthanhtoanService {
       queryBuilder.andWhere('vttechthanhtoan.SDT LIKE :SDT', { SDT: `%${params.SDT}%` });
     }
     if (params.Status) {
-      queryBuilder.andWhere('vttechthanhtoan.Status LIKE :Status', { SDT: `%${params.Status}%` });
+      queryBuilder.andWhere('vttechthanhtoan.Status LIKE :Status', { Status: `${params.Status}` });
     }
     const [items, totalCount] = await queryBuilder
     .limit(params.pageSize || 10)
