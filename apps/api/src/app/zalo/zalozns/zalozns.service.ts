@@ -4,7 +4,7 @@ import { Like, Repository } from 'typeorm';
 import { ZaloznsEntity } from './entities/zalozns.entity';
 import { CauhinhchungService } from '../../cauhinh/cauhinhchung/cauhinhchung.service';
 import { ZalotokenService } from '../zalotoken/zalotoken.service';
-import { GenId, convertPhoneNum, formatVND } from '../../shared.utils';
+import { GenId, Phone_To_0, convertPhoneNum, formatVND } from '../../shared.utils';
 import moment = require('moment');
 import axios from 'axios';
 import { SmsService } from '../../sms/sms.service';
@@ -262,6 +262,11 @@ export class ZaloznsService {
       where: { Slug: slug },
     });
   }
+  async findeventname(data: any) {
+    return await this.ZaloznsRepository.find({
+      where: { event_name: data },
+    });
+  }
   async findPagination(page: number, perPage: number) {
     const skip = (page - 1) * perPage;
     const totalItems = await this.ZaloznsRepository.count();
@@ -275,7 +280,8 @@ export class ZaloznsService {
     };
   }
   async findQuery(params: any) {
-    console.error(params);
+    const allData = await this.findeventname('user_received_message')
+    const filter = allData.map((v:any)=>v.ResponWebHook)    
     const queryBuilder = this.ZaloznsRepository.createQueryBuilder('zalozns');
     if (params.Batdau && params.Ketthuc) {
       queryBuilder.andWhere('zalozns.CreateAt BETWEEN :startDate AND :endDate', {
@@ -293,7 +299,10 @@ export class ZaloznsService {
     .limit(params.pageSize || 10)
     .offset(params.pageNumber * params.pageSize || 0)
     .getManyAndCount();
-  return { items, totalCount };
+    items.forEach((v:any)=>{
+     v.SDT =  Phone_To_0(filter.find((v1)=>v1.message.tracking_id==v.ResponWebHook.message.tracking_id).recipient.id)
+    })
+    return { items, totalCount };
   }
   async update(id: string, UpdateZaloznsDto: any) {
     this.ZaloznsRepository.save(UpdateZaloznsDto);

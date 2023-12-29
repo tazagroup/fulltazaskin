@@ -24,7 +24,13 @@ export function convertPhoneNum(phoneNumber:any) {
       throw new Error("Invalid phone number format");
   }
 }
-
+export function Phone_To_0(phoneNumber: any) {
+  if (phoneNumber.startsWith("84")) {
+    return "0" + phoneNumber.slice(2);
+  } else {
+    return phoneNumber;
+  }
+}
 export function formatVND(price:any) {
     const formattedPrice = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add thousands separators
     return `${formattedPrice} đ`; // Append the VND symbol
