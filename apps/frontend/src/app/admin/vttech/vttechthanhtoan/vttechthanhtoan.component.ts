@@ -64,11 +64,13 @@ export class VttechthanhtoanComponent implements OnInit {
   }
   ChoosenDate()
   {
+    console.log(this.SearchParams);
+    
     this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
   }
   ChangeStatus(event:MatSelectChange)
   {
-    console.log(event.value);
+    console.log(this.SearchParams);
     this.SearchParams.Status = event.value
     this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
   }

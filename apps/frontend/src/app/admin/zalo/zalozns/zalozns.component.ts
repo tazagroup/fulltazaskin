@@ -36,12 +36,13 @@ export class ZaloznsComponent implements OnInit {
     this.TypeTeamplate = "user_received_message",
     this._ZalotokenService.getAllZalotokens().subscribe()
     this._ZalotokenService.zalotokens$.subscribe((data)=>{if(data){this.ZaloTokens=data}})
-    this._ZaloznsService.getPaginaZaloznss(1,100).subscribe()
+    this._ZaloznsService.getPaginaZaloznss(1,9999).subscribe()
     this._ZaloznsService.zaloznss$.subscribe((data: any) => {
       if(data)
       {
         console.log(data.data);
-        this.FilterLists = this.Lists = data.data.filter((v:any)=>v.event_name==this.TypeTeamplate)
+        this.Lists = data.data
+        this.FilterLists  = this.Lists.filter((v:any)=>v.event_name==this.TypeTeamplate)
       }
 
     })
@@ -78,6 +79,9 @@ export class ZaloznsComponent implements OnInit {
     }
   }
   ChangeTemp(event:MatSelectChange) {
+    console.log(event);
+    console.log(this.Lists);
+    
     this.FilterLists = this.Lists.filter((v)=>v.event_name==event.value)
   }
   openDialog(teamplate: TemplateRef<any>): void {
