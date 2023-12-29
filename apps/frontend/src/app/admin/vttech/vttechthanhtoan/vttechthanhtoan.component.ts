@@ -5,6 +5,7 @@ import { VttechthanhtoanService } from './vttechthanhtoan.service';
 import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
 import * as moment from 'moment';
 import { MatSelectChange } from '@angular/material/select';
+import { Delete } from '@nestjs/common';
 @Component({
   selector: 'app-vttechthanhtoan',
   templateUrl: './vttechthanhtoan.component.html',
@@ -22,11 +23,13 @@ export class VttechthanhtoanComponent implements OnInit {
   FilterLists: any[] = []
   LIST_CHI_NHANH = LIST_CHI_NHANH
   FilterStatus:any
-  Status:any={0:'Bill Mới',1:'Đang đợi gửi tin',2:'Thành Công',3:'Chưa Đăng Ký Template',4:'Gửi SMS'}
+  Status:any={0:'Mới',1:'Đợi gửi',2:'Thành Công',3:'Chưa Đăng Ký',4:'Gửi SMS'}
   Style:any={0:'bg-blue-500',1:'bg-yellow-500',2:'bg-green-500',3:'bg-red-500',4:'bg-purple-500'}
   isReport:boolean=false
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   PagiLength:any=0
+  StatusActive:any
+  Total:any=0
   constructor(
     private dialog: MatDialog,
     private _VttechthanhtoanService: VttechthanhtoanService,
@@ -34,12 +37,10 @@ export class VttechthanhtoanComponent implements OnInit {
   }
   ngOnInit(): void {
     this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
-    // this._VttechthanhtoanService.getPaginaVttechthanhtoans(1,100).subscribe()
     this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data:any)=>{
       if(data)
-      {
-        console.log(data);
-        
+      {     
+        this.Total = data.totalCount   
         data.items.forEach((v:any) => {
           if (typeof v.Dulieu !== 'object')
           {
@@ -48,9 +49,17 @@ export class VttechthanhtoanComponent implements OnInit {
         });
         this.PagiLength = (Number(data.totalCount)/Number(this.SearchParams.pageSize)).toFixed()
         this.FilterLists = this.Lists = data.items
-        console.log(this.FilterLists) 
       }
     })
+  }
+  Reload()
+  {
+      delete this.SearchParams.Status
+      this.SearchParams.pageSize = 10
+      this.SearchParams.Batdau=moment().startOf('day').toDate(),
+      this.SearchParams.Ketthuc= moment().endOf('day').toDate(),
+      this.SearchParams.pageNumber=0
+      this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
   }
   Report(items:any,field:any)
   {
@@ -65,13 +74,18 @@ export class VttechthanhtoanComponent implements OnInit {
   ChoosenDate()
   {
     console.log(this.SearchParams);
-    
     this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
   }
   ChangeStatus(event:MatSelectChange)
   {
     console.log(this.SearchParams);
     this.SearchParams.Status = event.value
+    this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
+  }
+  ChangeStatusButton(item:any)
+  {
+    this.StatusActive = item
+    this.SearchParams.Status = item
     this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
   }
   applyFilter(event: Event) {
@@ -107,6 +121,8 @@ export class VttechthanhtoanComponent implements OnInit {
   }
   onPageChange(event:any)
   {
+    console.log(event);
+    
     this.SearchParams.pageSize=event.pageSize
      this.SearchParams.pageNumber=event.pageIndex
      this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()

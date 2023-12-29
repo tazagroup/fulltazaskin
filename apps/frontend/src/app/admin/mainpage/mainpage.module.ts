@@ -36,6 +36,7 @@ import { ProfileModule } from '../../shared/common/profile/profile.module';
           { path: 'lichhen', loadChildren: () => import('../lichhen/lichhen.module').then(m => m.LichhenModule)},
           { path: 'zalozns', loadChildren: () => import('../zalo/zalozns/zalozns.module').then(m => m.ZaloznsModule)},
           { path: 'zalotoken', loadChildren: () => import('../zalo/zalotoken/zalotoken.module').then(m => m.ZalotokenModule)},
+          { path: 'zalodanhgia', loadChildren: () => import('../zalo/zalodanhgia/zalodanhgia.module').then(m => m.ZalodanhgiaModule) },
           { path: 'usergroup', loadChildren: () => import('../users/usergroup/usergroup.module').then(m => m.UsergroupModule)},
           { path: 'users', loadChildren: () => import('../users/users/users.module').then(m => m.UsersModule)},
           { path: 'vttechthanhtoan', loadChildren: () => import('../vttech/vttechthanhtoan/vttechthanhtoan.module').then(m => m.VttechthanhtoanModule)},

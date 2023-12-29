@@ -28,6 +28,7 @@ import { ChatrealtimeModule } from '../../shared/common/chatrealtime/chatrealtim
           { path: 'khachhangdanhgia', loadChildren: () => import('../../admin/khachhangdanhgia/khachhangdanhgia.module').then(m => m.KhachhangdanhgiaModule) },
           { path: 'lichhen', loadChildren: () => import('../../admin/lichhen/lichhen.module').then(m => m.LichhenModule) },
           { path: 'zalozns', loadChildren: () => import('../../admin/zalo/zalozns/zalozns.module').then(m => m.ZaloznsModule) },
+    
         ]
       }
     ])

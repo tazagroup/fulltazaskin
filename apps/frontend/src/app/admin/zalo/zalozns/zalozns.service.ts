@@ -57,6 +57,16 @@ export class ZaloznsService {
       })
     );
   }
+  FindSDTByTID(TID:any) {
+    console.log(TID);
+    
+    // return this.http.get(environment.APIURL + `/zalozns/findsdtbytrackingid/${TID}`).pipe(
+    //   map((data: any) => { 
+    //     console.log(data);
+    //      return data;
+    //   })
+    // );
+  }
   sendZns(item:any) {
     return this.http.post(environment.APIURL + '/zalozns/sendZns',item).pipe(
       map((data: any) => { 
@@ -64,9 +74,10 @@ export class ZaloznsService {
       })
     );
   }
-  searchZalozns(query:any) {
-    return this.http.get(environment.APIURL + `/zalozns/search?query=${query}`).pipe(
+  searchZalozns(SearchParams:any) {
+    return this.http.post(environment.APIURL + `/zalozns/search`,SearchParams).pipe(
       map((data: any) => { 
+        this._zaloznss.next(data);
         return data;
       })
     );
