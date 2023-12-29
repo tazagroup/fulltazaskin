@@ -98,7 +98,6 @@ export class VttechthanhtoanService {
         SDT:response.data.Table[0].CustomerPhone,
         InvoiceNum:Hoadon_id?.InvoiceNum,
       }
-      console.error(Updatedata);
       this.update(Updatedata.id,Updatedata)
     } catch (error) {
       console.error(error);
@@ -200,8 +199,14 @@ export class VttechthanhtoanService {
     if (params.SDT) {
       queryBuilder.andWhere('vttechthanhtoan.SDT LIKE :SDT', { SDT: `%${params.SDT}%` });
     }
-    const [items, totalCount] = await queryBuilder.getManyAndCount();
-    return { items, totalCount };
+    if (params.Status) {
+      queryBuilder.andWhere('vttechthanhtoan.Status LIKE :Status', { SDT: `%${params.Status}%` });
+    }
+    const [items, totalCount] = await queryBuilder
+    .limit(params.pageSize || 10)
+    .offset(params.pageNumber * params.pageSize || 0)
+    .getManyAndCount();
+  return { items, totalCount };
   }
   async update(id: string, UpdateVttechthanhtoanDto: UpdateVttechthanhtoanDto) {
     this.VttechthanhtoanRepository.save(UpdateVttechthanhtoanDto);

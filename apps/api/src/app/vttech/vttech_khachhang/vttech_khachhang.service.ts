@@ -2,16 +2,44 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { Vttech_khachhangEntity } from './entities/vttech_khachhang.entity';
+//import { CauhinhchungService } from '../../cauhinh/cauhinhchung/cauhinhchung.service';
 @Injectable()
 export class Vttech_khachhangService {
+  Cookie: any = ''
+  XsrfToken: any = ''
   constructor(
     @InjectRepository(Vttech_khachhangEntity)
-    private Vttech_khachhangRepository: Repository<Vttech_khachhangEntity>
-  ) {}
+    private Vttech_khachhangRepository: Repository<Vttech_khachhangEntity>,
+    // private _CauhinhchungService: CauhinhchungService,
+    )  {
+      // this._CauhinhchungService.findslug('vttechtoken').then((data: any) => {
+      //   this.Cookie = data.Content.Cookie
+      //   this.XsrfToken = data.Content.XsrfToken
+      // })
+    }
 
   async create(CreateVttech_khachhangDto: any) {
     this.Vttech_khachhangRepository.create(CreateVttech_khachhangDto);
     return await this.Vttech_khachhangRepository.save(CreateVttech_khachhangDto);
+  }
+  async GetGeneralInfo(CustomerID: any) {
+    const axios = require('axios');
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `https://tmtaza.vttechsolution.com/Customer/GeneralInfo/?handler=Loadata&CustomerID=${CustomerID}`,
+      headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+    };
+    
+    axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    
   }
 
   async findAll() {
@@ -41,19 +69,24 @@ export class Vttech_khachhangService {
     };
   }
   async findQuery(params: any) {
-    console.error(params);
-    const queryBuilder = this.Vttech_khachhangRepository.createQueryBuilder('vttechthanhtoan');
+    const queryBuilder = this.Vttech_khachhangRepository.createQueryBuilder('vttech_khachhang');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder.andWhere('vttechthanhtoan.CreateAt BETWEEN :startDate AND :endDate', {
+      queryBuilder.andWhere('vttech_khachhang.CreateAt BETWEEN :startDate AND :endDate', {
         startDate:params.Batdau,
         endDate:params.Ketthuc,
       });
     }
     if (params.SDT) {
-      queryBuilder.andWhere('vttechthanhtoan.SDT LIKE :SDT', { SDT: `%${params.SDT}%` });
+      queryBuilder.andWhere('vttech_khachhang.SDT LIKE :SDT', { SDT: `%${params.SDT}%` });
+    }
+    if (params.Hoten) {
+      queryBuilder.andWhere('vttech_khachhang.Hoten LIKE :Hoten', { Hoten: `%${params.Hoten}%` });
+    }
+    if (params.idCN) {
+      queryBuilder.andWhere('vttech_khachhang.idCN LIKE :idCN', { idCN: `${params.idCN}` });
     }
     const [items, totalCount] = await queryBuilder
-    .limit(params.pageSize || 10) // Set a default page size if not provided
+    .limit(params.pageSize || 10)
     .offset(params.pageNumber * params.pageSize || 0)
     .getManyAndCount();
   return { items, totalCount };

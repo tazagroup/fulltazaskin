@@ -29,8 +29,8 @@ export class VttechController {
     return this.vttechService.create(createVttechDto);
   }
   @Get('vttech_khachhang')
-  GetAllKhachhang(@Body() data: any) {
-    return this.vttechService.GetAllKhachhang(data);
+  async GetAllKhachhang(@Body() data: any) {
+    return await this.vttechService.getAllKhachhang(data);
   }
   @Get('findSDT/:SDT')
   GetKHBySDT(@Param('SDT') SDT: string) {
