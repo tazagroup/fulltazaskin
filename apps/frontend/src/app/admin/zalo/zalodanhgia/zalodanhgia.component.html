@@ -44,7 +44,7 @@
           <!-- <span class="material-symbols-outlined {{isReport?'border rounded-lg':''}} p-2" (click)="isReport=!isReport">pie_chart</span> -->
         </div>
       </div>
-      <div class="flex flex-row space-x-3 text-xs items-center">
+      <div class="flex flex-row space-x-3 text-xs items-center cursor-pointer">
         <div class="flex flex-row space-x-2 text-xs items-center">
         <span class="material-symbols-outlined {{SelectStar > index?'text-yellow-500':''}}" (click)="onStarClick(index)"
         *ngFor="let i of CreateStart(5); let index = index"> star </span>
@@ -60,6 +60,7 @@
     </div>
     <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
       <div class="w-full flex flex-col lg:max-w-xl space-y-3">
+        <div #myDiv id="myDiv">This is the target div</div>
         <div class="flex flex-row justify-between items-center hover:bg-gray-200 border rounded-lg"
           *ngFor="let item of FilterLists; let i = index">
           <div class="flex flex-col space-y-2 items-center w-full">
@@ -78,7 +79,7 @@
                     <span class="font-bold">{{GetNameChinhanh(item.ResponWebHook.oa_id,'oa_id')}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
-                    <span>Giới Tính : </span>
+                    <span>Thời Gian : </span>
                     <span class="font-bold">{{item.CreateAt|date:'hh:ss dd/MM/yyyy'}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">

@@ -22,7 +22,7 @@ export class VttechthanhtoanComponent implements OnInit {
   Lists: any[] = []
   FilterLists: any[] = []
   LIST_CHI_NHANH = LIST_CHI_NHANH
-  FilterStatus:any
+  ListStatus:any
   Status:any={0:'Mới',1:'Đợi gửi',2:'Thành Công',3:'Chưa Đăng Ký',4:'Gửi SMS'}
   Style:any={0:'bg-blue-500',1:'bg-yellow-500',2:'bg-green-500',3:'bg-red-500',4:'bg-purple-500'}
   isReport:boolean=false
@@ -41,6 +41,7 @@ export class VttechthanhtoanComponent implements OnInit {
       if(data)
       {     
         this.Total = data.totalCount   
+        this.ListStatus = data.ListStatus   
         data.items.forEach((v:any) => {
           if (typeof v.Dulieu !== 'object')
           {

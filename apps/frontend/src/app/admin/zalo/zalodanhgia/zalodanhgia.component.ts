@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ZalodanhgiaService } from './zalodanhgia.service';
@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { ZaloznsService } from '../zalozns/zalozns.service';
 import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
 import { range } from 'rxjs';
+import { ViewportScroller } from '@angular/common';
 @Component({
   selector: 'app-zalodanhgia',
   templateUrl: './zalodanhgia.component.html',
@@ -25,13 +26,15 @@ export class ZalodanhgiaComponent implements OnInit {
   LIST_CHI_NHANH:any=LIST_CHI_NHANH
   PagiLength:any
   Total:any
-  SelectStar:any=0
+  SelectStar:any=5
   stars = 5; // Number of stars
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
+  @ViewChild('myDiv') myDivRef!: ElementRef;
   constructor(
     private dialog: MatDialog,
     private _ZalodanhgiaService: ZalodanhgiaService,
     private _ZaloznsService: ZaloznsService,
+    private viewportScroller: ViewportScroller
   ) {
   }
   ngOnInit(): void {
@@ -48,7 +51,14 @@ export class ZalodanhgiaComponent implements OnInit {
 
     })
   }
+  ngAfterViewInit() {
+    // Ensure element is rendered before scrolling
+    setTimeout(() => {
+      this.viewportScroller.scrollToAnchor(this.myDivRef.nativeElement);
+    });
+  }
   onStarClick(index: number) {
+    this.myDivRef.nativeElement.scrollTo({ top: 0 });
     this.SelectStar = index + 1;
     console.log(index, this.SelectStar);
     this.FilterLists = this.Lists.filter((v)=>v.ResponWebHook.message.rate<=this.SelectStar)

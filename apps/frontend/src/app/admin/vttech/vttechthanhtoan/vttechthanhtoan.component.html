@@ -42,13 +42,13 @@
       <div class="flex flex-row text-xs">
          <div (click)="ChangeStatusButton(item)" class="flex flex-col lg:space-x-2 lg:flex-row items-center border rounded-lg p-2 text-white {{Style[item]}}" *ngFor="let item of [0,1,2,4,3]">
               <span>{{Status[item]}}</span>
-              <span class="font-bold">{{StatusActive===item?Total:Report(FilterLists,item)}}</span>
+              <span class="font-bold">{{Report(ListStatus,item)}}</span>
          </div> 
       </div>
     </div>
     <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
       <div class="w-full flex flex-col lg:max-w-4xl space-y-3">
-        <div class="flex flex-row justify-between items-center hover:bg-gray-200 border rounded-lg"
+        <div class="flex flex-row justify-between items-center hover:bg-gray-200 hover:bg-opacity-50 border rounded-lg"
           *ngFor="let item of FilterLists; let i = index">
           <div class="flex flex-col space-y-2 items-center w-full">
             <div class="w-full flex flex-row justify-between p-2 text-white {{Style[item.Status]}} items-center rounded-t-lg">
@@ -58,51 +58,51 @@
             <div class="w-full p-2 grid lg:grid-cols-2 grid-cols-1 gap-2">
               <div class="flex flex-col">
                 <!-- <img [src]="'https://tazaskinclinic.com/images/taza-skin-clinic-logo.svg'" class="h-10 lg:block hidden"> -->
-                <div class="flex flex-col">
-                  <div class="flex flex-row justify-between">
+                <div class="flex flex-col space-y-3 border-r p-2">
+                  <div class="flex flex-row justify-between border-b">
                     <span>Khách hàng : </span>
                     <span>{{item.CustName}}</span>
                   </div>
-                  <div class="flex flex-row justify-between">
+                  <div class="flex flex-row justify-between border-b">
                     <span>Chi Nhánh : </span>
                     <span>{{GetNameChinhanh(item.Dulieu.BranchID)}}</span>
                   </div>
-                  <div class="flex flex-row justify-between">
+                  <div class="flex flex-row justify-between border-b">
                     <span>Giới Tính : </span>
                     <span>{{item.Gender}}</span>
                   </div>
-                  <div class="flex flex-row justify-between">
+                  <div class="flex flex-row justify-between border-b">
                     <span>Số Điện Thoại : </span>
                     <span>{{item.SDT}}</span>
                   </div>
-                  <div class="flex flex-row justify-between">
-                    <span>Gửi ZNS Dự kiến : </span>
+                  <div class="flex flex-row justify-between border-b">
+                    <span>Thời Gian Gửi ZNS : </span>
                     <span class="font-bold {{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.DukienZNS|date:'hh:mm:ss dd/MM/yyyy'}}</span>
                   </div>
                   <div class="flex flex-row justify-between">
-                    <span>Gửi SMS : </span>
+                    <span>Thời Gian Gửi SMS : </span>
                     <span></span>
                   </div>
                 </div>
               </div>
-              <div class="flex flex-col">
-                <div class="flex flex-row justify-between">
+              <div class="flex flex-col space-y-3 p-2">
+                <div class="flex flex-row justify-between border-b">
                   <span>Mã Phiếu:</span>
                   <span>{{item.InvoiceNum}}</span>
                 </div>
-                <div class="flex flex-row justify-between">
+                <div class="flex flex-row justify-between border-b">
                   <span>Ngày Tạo Phiếu:</span>
                   <span>{{item.Created|date:'hh:mm:ss dd/MM/yyyy'}}</span>
                 </div>
-                <div class="flex flex-row justify-between">
+                <div class="flex flex-row justify-between border-b">
                   <span>Tiền Thu</span>
                   <span>{{(item.Amount|number:'1.0-0')}}đ</span>
                 </div>
-                <div class="flex flex-row justify-between">
+                <div class="flex flex-row justify-between border-b">
                   <span>Phát Sinh</span>
                   <span>{{(item.PriceDiscounted|number:'1.0-0')}}đ</span>
                 </div>
-                <div class="flex flex-row justify-between">
+                <div class="flex flex-row justify-between border-b">
                   <span>Thanh Toán</span>
                   <span>{{(item.Paid|number:'1.0-0')}}đ</span>
                 </div>
