@@ -51,6 +51,24 @@ export class TasksService {
     }
     else { return {Title:"Không Có Thanh Toán Mới"}}
   }
+
+  async getDanhgiadichvu() {
+    const now = new Date()
+    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0, 0);
+    const Thanhtoanpromise = await this._VttechthanhtoanService.findbetween(Start, End)
+    const [Thanhtoan] = await Promise.all([Thanhtoanpromise])    
+    const result = `Lấy Dữ Liệu Thanh Toán 10 Phút 1 lần. <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Có<b><u>${Thanhtoan.length}</u></b> bill thanh toán`;
+    this._TelegramService.SendNoti(result)
+    if (Thanhtoan.length>0) {
+      Thanhtoan.forEach((v: any) => {
+      this.addCronDanhgia(v)
+      });
+      return Thanhtoan
+    }
+    else { return {Title:"Không Có Thanh Toán Mới"}}
+  }
+
   listTimeouts() {
     const timeouts = this.schedulerRegistry.getTimeouts();
     timeouts.forEach(key => console.log(`Timeout Name: ${key}`))
@@ -115,6 +133,61 @@ export class TasksService {
                 this._TelegramService.SendNoti(result)
               }
             }
+          })
+        } catch (error) {
+          console.error(`Error calling Zalozns service: ${error.message}`);
+        }
+      })
+      this.schedulerRegistry.addCronJob(data.id, job);
+      job.start();
+      data.Status = 1
+      this._VttechthanhtoanService.update(data.id, data)
+      const result = `Zns Thanh Toán Số Hoá Đơn <b><u> ${data.InvoiceNum} </u></b> của khách hàng <b><u> ${data.CustName} </u></b> có số điện thoại <b><u>${data.SDT} </u></b> Thêm Vào Hàng Chờ Lúc <b><u>${targetDate.format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
+      this._TelegramService.SendNoti(result)
+    }
+    else {
+      data.Status = 3
+      this._VttechthanhtoanService.update(data.id, data)
+      const result = `Chi nhánh chưa đăng ký ZNS`;
+      this._TelegramService.SendLogdev(result)
+    }
+  }
+  addCronDanhgia(data: any) {
+    console.error('Cron data : ',data);
+    let cronExpression: any;
+    const targetDate = moment(data.DukienZNS);
+    cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
+    console.error(cronExpression);
+    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == data.BranchID)    
+    if (Chinhanh) {
+      const job = new CronJob(cronExpression, () => {
+        const result = `ZNS <b><u>${data.id}</u></b> sẽ được gửi lúc ${data.teletime}`;
+        this._TelegramService.SendLogdev(result)
+        try {
+          this._ZaloznsService.sendtestzns(data, Chinhanh).then((zns: any) => {
+            data.ThucteZNS = new Date()
+            data.StatusZNS = 2
+            data.Status = 2
+            this._VttechthanhtoanService.update(data.id, data)
+            const result = `<b><u>${zns.Title}</u></b>`;
+            this._TelegramService.SendNoti(result)
+            // if (zns) {
+            //   if (zns.status == 'sms') {
+            //     data.SMS = zns.data
+            //     data.Status = 4
+            //     this._VttechthanhtoanService.update(data.id, data)
+            //     const result = `<b><u>${zns.Title}</u></b>`;
+            //     this._TelegramService.SendNoti(result)
+            //   }
+            //   else {
+            //     data.ThucteZNS = new Date()
+            //     data.StatusZNS = 2
+            //     data.Status = 2
+            //     this._VttechthanhtoanService.update(data.id, data)
+            //     const result = `<b><u>${zns.Title}</u></b>`;
+            //     this._TelegramService.SendNoti(result)
+            //   }
+            // }
           })
         } catch (error) {
           console.error(`Error calling Zalozns service: ${error.message}`);

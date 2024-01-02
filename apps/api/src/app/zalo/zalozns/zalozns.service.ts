@@ -62,6 +62,48 @@ export class ZaloznsService {
       throw error; // Rethrow for proper error propagation
     }
   }
+
+  async TemplateDanhgia(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
+    try {
+      const token:any = await this._ZalotokenService.findid(Chinhanh.idtoken);
+      if (!token) {
+        this._TelegramService.SendLogdev(JSON.stringify(token))
+        throw new Error('Zalo token not found');
+      }
+      const tempDanhgiaid = Chinhanh.idtempdanhgia;    
+      const requestData = {
+        phone: convertPhoneNum(item.SDT),
+        template_id: tempDanhgiaid,
+        template_data: {
+          customer_name: item.Name,
+          schedule_date: moment(item.Created).format('DD/MM/YYYY'),
+        },
+        tracking_id: GenId(12, true),
+      };    
+      const response = await axios.post<ZaloResponse>(
+        'https://business.openapi.zalo.me/message/template',
+        requestData,
+        {
+          headers: {
+            'access_token': token.Token.access_token,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      this._TelegramService.SendLogdev(JSON.stringify(response.data));
+  
+      if (response.data.error === 0) {
+        return { status: 'zns', Title: `ZNS có ID: ${response.data.data.msg_id} Đã Được Gửi` };
+      } else {
+        const smsResponse = await this.sendFallbackSMS(item);
+        return { status: 'sms', Title: 'Lỗi Gửi ZNZ, Đã Gửi SMS', data: JSON.stringify(smsResponse.data) };
+      }
+    } catch (error) {
+      this._TelegramService.SendLogdev(JSON.stringify(error));
+      throw error; // Rethrow for proper error propagation
+    }
+  }
   
   constructRequestData(item: any, Chinhanh: any): any {
     const templateId = Chinhanh.idtemp;    

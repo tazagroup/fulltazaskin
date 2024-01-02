@@ -1,11 +1,11 @@
 export const LIST_CHI_NHANH:any[] = 
 [
-  {id:'268b7a06-d2c5-4c98-af1d-334144ae280f',idtemp:'301891',idtoken:'9e148d63-1716-4aa8-b760-ad3700393d4c',idVttech:3,Title:'Taza Skin Clinic Gò Vấp'}, 
-  {id:'f54de1e1-66bd-4690-8015-ad7315d6f14e',idtemp:'302261',idtoken:'22ddea78-f244-4dea-838a-c4c5d8e40a16',idVttech:1,Title:'Taza Skin Clinic Thủ Đức'}, 
-  {id:'ca725bf4-4810-4ea2-8ef2-520b2a3121cc',idtemp:'302259',idtoken:'e4d7426e-53df-4285-be74-aba10259e188',idVttech:2,Title:'Taza Skin Clinic Quận 10'}, 
-  {id:'e173b1c0-fbdb-4eeb-a00c-b56664068515',idtemp:'303760',idtoken:'d046cec3-ea49-4117-9a1c-f67959406443',idVttech:4,Title:'Taza Skin Clinic Nha Trang'}, 
-  {id:'9887ad61-4b2c-4db1-83e6-570f33cb540a',idtemp:'302281',idtoken:'b3b61395-1760-49ae-b5e7-70c310c1c2fb',idVttech:6,Title:'Taza Skin Clinic Đà Nẵng'}, 
-  {id:'ca725bf4-4810-4ea2-8ef2-520b2a3121cc',idtemp:'302259',idtoken:'e4d7426e-53df-4285-be74-aba10259e188',idVttech:7,Title:'Văn Phòng'}, 
+  {id:'268b7a06-d2c5-4c98-af1d-334144ae280f',idtempdanhgia:'304742',idtemp:'301891',idtoken:'9e148d63-1716-4aa8-b760-ad3700393d4c',idVttech:3,Title:'Taza Skin Clinic Gò Vấp'}, 
+  {id:'f54de1e1-66bd-4690-8015-ad7315d6f14e',idtempdanhgia:'304997',idtemp:'302261',idtoken:'22ddea78-f244-4dea-838a-c4c5d8e40a16',idVttech:1,Title:'Taza Skin Clinic Thủ Đức'}, 
+  {id:'ca725bf4-4810-4ea2-8ef2-520b2a3121cc',idtempdanhgia:'304942',idtemp:'302259',idtoken:'e4d7426e-53df-4285-be74-aba10259e188',idVttech:2,Title:'Taza Skin Clinic Quận 10'}, 
+  {id:'e173b1c0-fbdb-4eeb-a00c-b56664068515',idtempdanhgia:'305001',idtemp:'303760',idtoken:'d046cec3-ea49-4117-9a1c-f67959406443',idVttech:4,Title:'Taza Skin Clinic Nha Trang'}, 
+  {id:'9887ad61-4b2c-4db1-83e6-570f33cb540a',idtempdanhgia:'304998',idtemp:'302281',idtoken:'b3b61395-1760-49ae-b5e7-70c310c1c2fb',idVttech:6,Title:'Taza Skin Clinic Đà Nẵng'}, 
+  {id:'ca725bf4-4810-4ea2-8ef2-520b2a3121cc',idtempdanhgia:'304942',idtemp:'302259',idtoken:'e4d7426e-53df-4285-be74-aba10259e188',idVttech:7,Title:'Văn Phòng'}, 
 ]
 export const ListTrangthailichhen: any[] = [
   {id:0,Title:"Chờ Xác Nhận",Class:"text-yellow-400"},

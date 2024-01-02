@@ -206,8 +206,20 @@ export class VttechthanhtoanService {
     .limit(params.pageSize || 10)
     .offset(params.pageNumber * params.pageSize || 0)
     .getManyAndCount();
-  return { items, totalCount };
+
+    const queryBuilder1 = this.VttechthanhtoanRepository.createQueryBuilder('vttechthanhtoan');
+    if (params.Batdau && params.Ketthuc) {
+      queryBuilder1.andWhere('vttechthanhtoan.Created BETWEEN :startDate AND :endDate', {
+        startDate:params.Batdau,
+        endDate:params.Ketthuc,
+      });
+    }
+    const [result] = await queryBuilder1.getManyAndCount();
+    const ListStatus = result.map((v:any)=>({Status:v.Status}))
+
+  return { items, totalCount,ListStatus };
   }
+
   async update(id: string, UpdateVttechthanhtoanDto: UpdateVttechthanhtoanDto) {
     this.VttechthanhtoanRepository.save(UpdateVttechthanhtoanDto);
     return await this.VttechthanhtoanRepository.findOne({ where: { id: id } });

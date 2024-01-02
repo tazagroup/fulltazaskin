@@ -21,6 +21,10 @@ export class TasksController {
   getThanhtoan() {
     return this.tasksService.getThanhtoan();
   }
+  @Get('danhgiadichvu')
+  getDanhgiadichvu() {
+    return this.tasksService.getDanhgiadichvu();
+  }
 
   @Post('add')
   addTask(@Body() data: any) {
