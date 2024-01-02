@@ -84,25 +84,18 @@ export class VttechthanhtoanService {
         const Date2 = new Date(item.Created)
         return Date1.getTime() == Date2.getTime()
       })
-      const Updatedata =
-      {
-        ...item,
-        //DukienZNS: (this.SetRuleTimeZns(moment(new Date(item.Created)).add(1, 'hours'))).toDate(),
-        StatusZNS: 0,
-        // TimeZNS: (this.SetRuleTimeZns(moment(new Date(item.Created)).add(1, 'hours'))).toDate(),
-        SDT: response.data.Table[0].CustomerPhone,
-        InvoiceNum: Hoadon_id?.InvoiceNum,
-      }
-      this.update(Updatedata.id, Updatedata).then((data) => {
-        if (this.SetRuleTimeZns(moment(new Date(item.Created)))) {
-          const Update = {
-            ...data,
-            DukienZNS: (this.SetRuleTimeZns(moment(new Date(item.Created)))),
-          }
-
-          this.sendZNSThanhtoan(Update)
+      if (this.SetRuleTimeZns(moment(new Date(item.Created)))) {
+        const Updatedata =
+        {
+          ...item,
+          DukienZNS: new Date(),
+          StatusZNS: 0,
+          TimeZNS: new Date(),
+          SDT: response.data.Table[0].CustomerPhone,
+          InvoiceNum: Hoadon_id?.InvoiceNum,
         }
-      })
+        this.sendZNSThanhtoan(Updatedata)
+      }
     } catch (error) {
       console.error(error);
     }
@@ -262,20 +255,14 @@ export class VttechthanhtoanService {
     return { items, totalCount, ListStatus };
   }
 
-  async update(id: string, UpdateVttechthanhtoanDto: UpdateVttechthanhtoanDto) {
-    this.VttechthanhtoanRepository.save(UpdateVttechthanhtoanDto);
+  async update(id: string, data: any) {
+    console.log("dia chi"+id,"dulieu"+data);
+    
+    this.VttechthanhtoanRepository.save(data);
     return await this.VttechthanhtoanRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {
     await this.VttechthanhtoanRepository.delete(id);
     return { deleted: true };
   }
-  // async SendTelegram(data: string): Promise<any> {
-  //   console.error(data);
-  //   const options = {
-  //     url: `https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage?chat_id=${environment.APITelegram_Logdev}&text=${data}&parse_mode=html`,
-  //   };
-  //   const response = await axios.post(options.url);
-  //   return response.data;
-  // }
 }
