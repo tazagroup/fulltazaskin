@@ -61,19 +61,19 @@
                 <div class="flex flex-col space-y-3 border-r p-2">
                   <div class="flex flex-row justify-between border-b">
                     <span>Khách hàng : </span>
-                    <span>{{item.CustName}}</span>
+                    <span class="font-bold">{{item.CustName}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Chi Nhánh : </span>
-                    <span>{{GetNameChinhanh(item.Dulieu.BranchID)}}</span>
+                    <span class="font-bold">{{GetNameChinhanh(item.Dulieu.BranchID)}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Giới Tính : </span>
-                    <span>{{item.Gender}}</span>
+                    <span class="font-bold">{{item.Gender}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Số Điện Thoại : </span>
-                    <span>{{item.SDT}}</span>
+                    <span class="font-bold">{{item.SDT}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Thời Gian Gửi ZNS : </span>
@@ -88,11 +88,11 @@
               <div class="flex flex-col space-y-3 p-2">
                 <div class="flex flex-row justify-between border-b">
                   <span>Mã Phiếu:</span>
-                  <span>{{item.InvoiceNum}}</span>
+                  <span class="font-bold">{{item.InvoiceNum}}</span>
                 </div>
                 <div class="flex flex-row justify-between border-b">
                   <span>Ngày Tạo Phiếu:</span>
-                  <span>{{item.Created|date:'hh:mm:ss dd/MM/yyyy'}}</span>
+                  <span class="font-bold">{{item.Created|date:'hh:mm:ss dd/MM/yyyy'}}</span>
                 </div>
                 <div class="flex flex-row justify-between border-b">
                   <span>Tiền Thu</span>
@@ -100,15 +100,15 @@
                 </div>
                 <div class="flex flex-row justify-between border-b">
                   <span>Phát Sinh</span>
-                  <span>{{(item.PriceDiscounted|number:'1.0-0')}}đ</span>
+                  <span class="font-bold">{{(item.PriceDiscounted|number:'1.0-0')}}đ</span>
                 </div>
                 <div class="flex flex-row justify-between border-b">
                   <span>Thanh Toán</span>
-                  <span>{{(item.Paid|number:'1.0-0')}}đ</span>
+                  <span class="font-bold">{{(item.Paid|number:'1.0-0')}}đ</span>
                 </div>
                 <div class="flex flex-row justify-between">
                   <span>Công Nợ</span>
-                  <span>{{(item.Debt|number:'1.0-0')}}đ</span>
+                  <span class="font-bold">{{(item.Debt|number:'1.0-0')}}đ</span>
                 </div>
               </div>
             </div>
