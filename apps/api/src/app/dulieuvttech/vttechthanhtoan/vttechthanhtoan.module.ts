@@ -6,9 +6,12 @@ import { VttechthanhtoanEntity } from './entities/vttechthanhtoan.entity';
 import { CauhinhchungModule } from '../../cauhinh/cauhinhchung/cauhinhchung.module';
 //import { TasksModule } from '../../tasks/tasks.module';
 import { TelegramService } from '../../shared/telegram.service';
+import { ZaloznsService } from '../../zalo/zalozns/zalozns.service';
+import { ZaloznsModule } from '../../zalo/zalozns/zalozns.module';
 @Module({
   imports: [TypeOrmModule.forFeature([VttechthanhtoanEntity]),
   CauhinhchungModule,
+  ZaloznsModule
  // TasksModule
 ],
   controllers: [VttechthanhtoanController],

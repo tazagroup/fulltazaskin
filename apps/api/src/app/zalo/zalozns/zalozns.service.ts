@@ -47,8 +47,7 @@ export class ZaloznsService {
             'Content-Type': 'application/json',
           },
         }
-      );
-  
+      ); 
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
   
       if (response.data.error === 0) {
@@ -62,7 +61,6 @@ export class ZaloznsService {
       throw error; // Rethrow for proper error propagation
     }
   }
-
   async TemplateDanhgia(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
     try {
       const token:any = await this._ZalotokenService.findid(Chinhanh.idtoken);
