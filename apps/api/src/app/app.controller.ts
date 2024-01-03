@@ -17,15 +17,15 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-  @Sse('notifications')
-  @Get('/notifications')
-  handleNotifications(res:any) {
-    const observable = this.appService.getNotificationStream().pipe(
-      map((notification) => ({ data: JSON.stringify(notification) }))
-    );
+  // @Sse('notifications')
+  // @Get('/notifications')
+  // handleNotifications(res:any) {
+  //   const observable = this.appService.getNotificationStream().pipe(
+  //     map((notification) => ({ data: JSON.stringify(notification) }))
+  //   );
 
-    return observable;
-  }
+  //   return observable;
+  // }
 
 }
 

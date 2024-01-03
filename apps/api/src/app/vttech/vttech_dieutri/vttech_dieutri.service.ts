@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Between, In, Like, Repository } from 'typeorm';
 import { Vttech_dieutriEntity } from './entities/vttech_dieutri.entity';
+import { start } from 'repl';
 @Injectable()
 export class Vttech_dieutriService {
   constructor(
@@ -15,6 +16,17 @@ export class Vttech_dieutriService {
 
   async findAll() {
     return await this.Vttech_dieutriRepository.find();
+  }
+  async find19h() {
+    const now = new Date()
+    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1, 19, 0, 0);
+    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+      return await this.Vttech_dieutriRepository.find({
+        where: {
+          Created: Between(Start, End),
+          Status: In([0, 1]),
+        },
+      }); 
   }
   async findid(id: string) {
     return await this.Vttech_dieutriRepository.findOne({
@@ -43,20 +55,35 @@ export class Vttech_dieutriService {
     console.error(params);
     const queryBuilder = this.Vttech_dieutriRepository.createQueryBuilder('vttech_dieutri');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder.andWhere('vttech_dieutri.CreateAt BETWEEN :startDate AND :endDate', {
-        startDate:params.Batdau,
-        endDate:params.Ketthuc,
+      queryBuilder.andWhere('vttech_dieutri.Created BETWEEN :startDate AND :endDate', {
+        startDate: params.Batdau,
+        endDate: params.Ketthuc,
       });
     }
-    if (params.Title) {
-      queryBuilder.andWhere('vttech_dieutri.Title LIKE :Title', { SDT: `%${params.Title}%` });
+    if (params.SDT) {
+      queryBuilder.andWhere('vttech_dieutri.SDT LIKE :SDT', { SDT: `%${params.SDT}%` });
+    }
+    if (params.Status) {
+      queryBuilder.andWhere('vttech_dieutri.Status LIKE :Status', { Status: `${params.Status}` });
     }
     const [items, totalCount] = await queryBuilder
-    .limit(params.pageSize || 10) // Set a default page size if not provided
-    .offset(params.pageNumber * params.pageSize || 0)
-    .getManyAndCount();
-  return { items, totalCount };
+      .limit(params.pageSize || 10)
+      .offset(params.pageNumber * params.pageSize || 0)
+      .getManyAndCount();
+
+    const queryBuilder1 = this.Vttech_dieutriRepository.createQueryBuilder('vttech_dieutri');
+    if (params.Batdau && params.Ketthuc) {
+      queryBuilder1.andWhere('vttech_dieutri.Created BETWEEN :startDate AND :endDate', {
+        startDate: params.Batdau,
+        endDate: params.Ketthuc,
+      });
+    }
+    const [result] = await queryBuilder1.getManyAndCount();
+    const ListStatus = result.map((v: any) => ({ Status: v.Status }))
+
+    return { items, totalCount, ListStatus };
   }
+
   async update(id: string, UpdateVttech_dieutriDto: any) {
     this.Vttech_dieutriRepository.save(UpdateVttech_dieutriDto);
     return await this.Vttech_dieutriRepository.findOne({ where: { id: id } });

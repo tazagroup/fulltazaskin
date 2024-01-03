@@ -15,6 +15,8 @@ export class Vttech_tinhtrangphongEntity {
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   CustID: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  CustName: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   Mota: string;
   @Column({ default: '' })
   Slug: string;

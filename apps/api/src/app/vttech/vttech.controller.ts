@@ -32,8 +32,8 @@ export class VttechController {
     return await this.vttechService.getAllKhachhang(data);
   }
   @Get('vttech_tinhtrangphong')
-  async getTinhtrangphong(@Body() data: any) {
-    return await this.vttechService.getTinhtrangphong(data);
+  async getTinhtrangphong() {
+    return await this.vttechService.getTinhtrangphong();
   }
   @Get('vttech_dieutri')
   async getDieutri(@Body() data: any) {

@@ -85,7 +85,7 @@ export class VttechthanhtoanService {
         const Date2 = new Date(item.Created)
         return Date1.getTime() == Date2.getTime()
       })
-      if (this.SetRuleTimeZns(moment(new Date(item.Created)))) {
+      if (this.SetRuleTimeZns(item.Created)) {
         const Updatedata =
         {
           ...item,
@@ -104,7 +104,7 @@ export class VttechthanhtoanService {
 
   async GetKhachhang9h() {
       const now = new Date()
-      const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1, 17, 0, 0);
+      const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1, 19, 0, 0);
       const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
       const Thanhtoanpromise = await this.findbetween(Start, End)
       const [Thanhtoan] = await Promise.all([Thanhtoanpromise])   
@@ -183,7 +183,7 @@ export class VttechthanhtoanService {
     const targetDate = moment(time);
     const current = new Date(time)
     const now = new Date();
-    const Homnay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0, 0);
+    const Homnay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
     const Ngaymai = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 9, 0, 0);
     const CronNgaymai = moment(Ngaymai);
     if (current.getTime() <= Homnay.getTime()) {
@@ -297,8 +297,6 @@ export class VttechthanhtoanService {
   }
 
   async update(id: string, data: any) {
-    console.log("dia chi"+id,"dulieu"+data);
-    
     this.VttechthanhtoanRepository.save(data);
     return await this.VttechthanhtoanRepository.findOne({ where: { id: id } });
   }

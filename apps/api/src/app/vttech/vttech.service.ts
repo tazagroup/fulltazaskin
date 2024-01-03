@@ -138,9 +138,13 @@ export class VttechService {
 
   }
 
-  async getTinhtrangphong(data: any) {
-    const formattedBegin = moment(new Date(data.begin)).startOf('day').format("DD-MM-YYYY");
-    const formattedEnd = moment(new Date(data.end)).endOf('day').format("DD-MM-YYYY");
+  async getTinhtrangphong() {
+    const now = new Date()
+    const formattedBegin = moment(new Date(now)).format("DD-MM-YYYY");
+    const formattedEnd = moment(new Date(now)).format("DD-MM-YYYY");
+    console.log(formattedBegin);
+    console.log(formattedEnd);
+
     try {
       const response = await axios.request(
         {
@@ -155,19 +159,20 @@ export class VttechService {
       if (Array.isArray(response.data)) {
         const data1 = response.data;
         const data2 = await this._Vttech_tinhtrangphongService.findAll();
-        const uniqueInData2 = data1.filter((item: { BeginTime: any; }) => !data2.some((data1Item) => this.Getdatetime(data1Item.BeginTime) === this.Getdatetime(item.BeginTime)));
+        const uniqueInData2 = data1.filter((item: { BeginTime: any; }) => !data2.some((data1Item: any) => this.Getdatetime(data1Item.Dulieu.BeginTime) === this.Getdatetime(item.BeginTime)));
         if (uniqueInData2.length > 0) {
           await Promise.all(uniqueInData2.map((v: any) => {
             const item: any = {}
+            item.CustCode = v.CustCode
+            item.CustName = v.CustName
             item.CustID = v.CustID
             item.BeginTime = v.BeginTime
             item.Dulieu = v
-            console.error(item);
             this._Vttech_tinhtrangphongService.create(item)
           }));
           const result = `Trạng Thái Phòng Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
           this._TelegramService.SendLogdev(result);
-          return { status: 201 };
+          return { status: 201, count: uniqueInData2.length, result: uniqueInData2 };
         }
         else {
           const result = `Trạng Thái Phòng Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
@@ -186,9 +191,10 @@ export class VttechService {
       return { status: 400, title: 'Trạng Thái Phòng Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
     }
   }
-
   async getDieutri(data: any) {
-    console.error(data);
+    const now = new Date()
+    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0, 0);
+    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 9, 0, 0);
     try {
       const response = await axios.request(
         {
@@ -201,28 +207,42 @@ export class VttechService {
           },
         });
       if (Array.isArray(response.data.Table)) {
-        const data1 = response.data.Table;
+        const data1 = await response.data.Table.filter((v:any)=>this.Getdatetime(v.Created)>this.Getdatetime(Start)&& this.Getdatetime(v.Created)<this.Getdatetime(End));
         const data2 = await this._Vttech_dieutriService.findAll();
-        const uniqueInData2 = data1.filter((item: { Created: any; }) => !data2.some((data1Item) => this.Getdatetime(data1Item.Created) === this.Getdatetime(item.Created)));
+        const uniqueInData2 = data1.filter((item: any) => !data2.some((data1Item: any) => this.Getdatetime(data1Item.Dulieu.Created) === this.Getdatetime(item.Created)));        
         if (uniqueInData2.length > 0) {
-          await Promise.all(uniqueInData2.map((v: any) => {
-            const item: any = {}
-            item.CustID = v.Customer_ID
-            item.ServiceName = v.ServiceName
-            item.Created = v.Created
-            item.BranchCode = v.BranchCode
-            item.BranchName = v.BranchName
-            item.Dulieu = v
-            console.error(item);
-            this._Vttech_dieutriService.create(item)
+          await Promise.all(uniqueInData2.map(async (v: any) => {
+            const config = {
+              method: 'post',
+              maxBodyLength: Infinity,
+              url: 'https://tmtaza.vttechsolution.com/Searching/Searching/?handler=SearchByOption&data=[{"name":"CUST_CODE","value":"' + data.CustCode + '"}]',
+              headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+            };
+            try {
+              const response1 = await axios.request(config);              
+              if (response1.data.Table[0]) {
+                const item: any = {}
+                item.SDT = response1.data.Table[0].CustomerPhone
+                item.CustID = v.Customer_ID
+                item.ServiceName = v.ServiceName
+                item.Created = v.Created
+                item.BranchCode = v.BranchCode
+                item.BranchName = v.BranchName
+                item.Dulieu = v
+                this._Vttech_dieutriService.create(item)
+              }
+            } catch (error) {
+              console.error(error);
+            }
           }));
-          const result = `Điều trị Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
-          this._TelegramService.SendLogdev(result);
-          return { status: 201 };
+
+          // const result = `Điều trị Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
+          // this._TelegramService.SendLogdev(result);
+           return { status: 201, count: uniqueInData2.length, result: uniqueInData2 };
         }
         else {
-          const result = `Điều trị Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
-          this._TelegramService.SendLogdev(result);
+         // const result = `Điều trị Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
+         // this._TelegramService.SendLogdev(result);
           return { status: 200 };
         }
       }
@@ -237,13 +257,15 @@ export class VttechService {
       return { status: 400, title: 'Điều trị Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
     }
   }
-  async CreateDieutri()
-  {
-    const Dieutris = await this._Vttech_dieutriService.findAll();
-    const Tinhtrangphongs = await this._Vttech_tinhtrangphongService.findAll();
-    Tinhtrangphongs.forEach((v:any) => {
-        this.getDieutri({CustID:v.CustID});
-    });
+  async CreateDieutri() {
+    await this.getTinhtrangphong();
+    setTimeout(async () => {
+      const Tinhtrangphongs = await this._Vttech_tinhtrangphongService.findAll();
+      Tinhtrangphongs.forEach((v: any) => {
+        this.getDieutri(v);
+      });
+    }, 5000);
+
   }
   create(createVttechDto: CreateVttechDto) {
     return 'This action adds a new vttech';

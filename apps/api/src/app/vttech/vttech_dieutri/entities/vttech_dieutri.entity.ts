@@ -11,7 +11,13 @@ export class Vttech_dieutriEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  SDT: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   CustID: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
+  CustCode: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
+  CustName: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   ServiceName: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
