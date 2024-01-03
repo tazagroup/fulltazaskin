@@ -23,8 +23,8 @@ export class VttechthanhtoanComponent implements OnInit {
   FilterLists: any[] = []
   LIST_CHI_NHANH = LIST_CHI_NHANH
   ListStatus:any
-  // Status:any={0:'Mới',1:'Đợi gửi',2:'Thành Công',3:'Chưa Có Temp Zalo OA',4:'Gửi SMS'}
-  Status:any={0:'Mới',2:'Thành Công',3:'Chưa Có Temp Zalo OA',4:'Gửi SMS'}
+  Status:any={0:'Mới',1:'Đợi gửi',2:'Thành Công',3:'Chưa Có Temp Zalo OA',4:'Gửi SMS'}
+  // Status:any={0:'Mới',2:'Thành Công',3:'Chưa Có Temp Zalo OA',4:'Gửi SMS'}
   Style:any={0:'bg-blue-500',1:'bg-yellow-500',2:'bg-green-500',3:'bg-red-500',4:'bg-purple-500'}
   isReport:boolean=false
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
@@ -65,7 +65,13 @@ export class VttechthanhtoanComponent implements OnInit {
   }
   Report(items:any,field:any)
   {
-    return items.filter((v:any)=>v.Status == field).length
+    if(items)
+    {
+      console.log(items); 
+      return items.filter((v:any)=>v.Status == field)?.length
+    }
+    else return 0
+
   }
   SendZNS(item:any)
   {
