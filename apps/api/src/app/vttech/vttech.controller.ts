@@ -7,6 +7,7 @@ import { CauhinhchungService } from '../cauhinh/cauhinhchung/cauhinhchung.servic
 import { TelegramService } from '../shared/telegram.service';
 import moment = require('moment');
 import { Vttech_khachhangService } from './vttech_khachhang/vttech_khachhang.service';
+import { Interval } from '@nestjs/schedule';
 @Controller('vttech')
 export class VttechController {
   Cookie: any = ''
@@ -39,6 +40,7 @@ export class VttechController {
   async getDieutri(@Body() data: any) {
     return await this.vttechService.getDieutri(data);
   }
+  @Interval(7200000)
   @Get('vttech_createdieutri')
   async CreateDieutri() {
     return await this.vttechService.CreateDieutri();

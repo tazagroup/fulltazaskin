@@ -142,9 +142,6 @@ export class VttechService {
     const now = new Date()
     const formattedBegin = moment(new Date(now)).format("DD-MM-YYYY");
     const formattedEnd = moment(new Date(now)).format("DD-MM-YYYY");
-    console.log(formattedBegin);
-    console.log(formattedEnd);
-
     try {
       const response = await axios.request(
         {
@@ -193,8 +190,8 @@ export class VttechService {
   }
   async getDieutri(data: any) {
     const now = new Date()
-    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0, 0);
-    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 9, 0, 0);
+    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
     try {
       const response = await axios.request(
         {
@@ -229,6 +226,7 @@ export class VttechService {
                 item.BranchCode = v.BranchCode
                 item.BranchName = v.BranchName
                 item.Dulieu = v
+                item.TimeZNS = moment(v.Created).add(3,"hours").toDate()
                 this._Vttech_dieutriService.create(item)
               }
             } catch (error) {
@@ -260,7 +258,7 @@ export class VttechService {
   async CreateDieutri() {
     await this.getTinhtrangphong();
     setTimeout(async () => {
-      const Tinhtrangphongs = await this._Vttech_tinhtrangphongService.findAll();
+      const Tinhtrangphongs = await this._Vttech_tinhtrangphongService.fininday();
       Tinhtrangphongs.forEach((v: any) => {
         this.getDieutri(v);
       });

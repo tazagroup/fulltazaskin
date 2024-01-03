@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Between, In, Like, Repository } from 'typeorm';
 import { Vttech_tinhtrangphongEntity } from './entities/vttech_tinhtrangphong.entity';
 @Injectable()
 export class Vttech_tinhtrangphongService {
@@ -15,6 +15,17 @@ export class Vttech_tinhtrangphongService {
 
   async findAll() {
     return await this.Vttech_tinhtrangphongRepository.find();
+  }
+  async fininday() {
+    const now = new Date()
+    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+      return await this.Vttech_tinhtrangphongRepository.find({
+        where: {
+          BeginTime: Between(Start, End),
+          Status: In([0, 1]),
+        },
+      }); 
   }
   async findid(id: string) {
     return await this.Vttech_tinhtrangphongRepository.findOne({
@@ -43,7 +54,7 @@ export class Vttech_tinhtrangphongService {
     console.error(params);
     const queryBuilder = this.Vttech_tinhtrangphongRepository.createQueryBuilder('vttech_tinhtrangphong');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder.andWhere('vttech_tinhtrangphong.CreateAt BETWEEN :startDate AND :endDate', {
+      queryBuilder.andWhere('vttech_tinhtrangphong.BeginTime BETWEEN :startDate AND :endDate', {
         startDate:params.Batdau,
         endDate:params.Ketthuc,
       });

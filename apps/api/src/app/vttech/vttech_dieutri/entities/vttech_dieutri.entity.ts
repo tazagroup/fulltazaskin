@@ -36,6 +36,8 @@ export class Vttech_dieutriEntity {
   Status: number;
   @Column({ nullable: true })
   Created: Date;
+  @Column({ nullable: true })
+  TimeZNS: Date;
   @CreateDateColumn()
   CreateAt: Date;
   @UpdateDateColumn()
