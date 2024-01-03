@@ -9,7 +9,6 @@ import moment = require('moment');
 import { Vttech_khachhangService } from './vttech_khachhang/vttech_khachhang.service';
 @Controller('vttech')
 export class VttechController {
-
   Cookie: any = ''
   XsrfToken: any = ''
   constructor(
@@ -31,6 +30,18 @@ export class VttechController {
   @Get('vttech_khachhang')
   async GetAllKhachhang(@Body() data: any) {
     return await this.vttechService.getAllKhachhang(data);
+  }
+  @Get('vttech_tinhtrangphong')
+  async getTinhtrangphong(@Body() data: any) {
+    return await this.vttechService.getTinhtrangphong(data);
+  }
+  @Get('vttech_dieutri')
+  async getDieutri(@Body() data: any) {
+    return await this.vttechService.getDieutri(data);
+  }
+  @Get('vttech_createdieutri')
+  async CreateDieutri() {
+    return await this.vttechService.CreateDieutri();
   }
   @Get('findSDT/:SDT')
   GetKHBySDT(@Param('SDT') SDT: string) {

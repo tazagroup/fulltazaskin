@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import {VttechthanhtoanService } from './vttechthanhtoan.service';
 import { CreateVttechthanhtoanDto } from './dto/create-vttechthanhtoan.dto';
 import { UpdateVttechthanhtoanDto } from './dto/update-vttechthanhtoan.dto';
-import { Interval, Timeout } from '@nestjs/schedule';
+import { Cron, Interval, Timeout } from '@nestjs/schedule';
 @Controller('vttechthanhtoan')
 export class VttechthanhtoanController {
   constructor(private readonly vttechthanhtoanService:VttechthanhtoanService) {}
@@ -14,6 +14,11 @@ export class VttechthanhtoanController {
   @Get('checkthanhtoan')
   async CheckThanhtoan() {      
     return this.vttechthanhtoanService.Checkthanhtoan();
+  }
+  @Cron('0 0 9 * * 0-6')
+  @Get('khachhang9h')
+  async GetKhachhang9h() {      
+    return this.vttechthanhtoanService.GetKhachhang9h();
   }
   @Post()
   create(@Body() createVttechthanhtoanDto: CreateVttechthanhtoanDto) {

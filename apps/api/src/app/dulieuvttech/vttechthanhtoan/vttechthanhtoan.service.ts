@@ -43,8 +43,9 @@ export class VttechthanhtoanService {
         const uniqueInData2 = data1.filter((item: { Created: any; }) => !data2.some((data1Item) => this.Getdatetime(data1Item.Created) === this.Getdatetime(item.Created)));
         if (uniqueInData2.length > 0) {
           await Promise.all(uniqueInData2.map((v: any) => {
+            v.Dulieu = JSON.stringify(v)
             this.create(v).then((item: any) => {
-              item.Dulieu = JSON.stringify(item)
+              // item.Dulieu = JSON.stringify(item)
               this.GetVttechKhachhang(item)
             })
           }));
@@ -100,6 +101,45 @@ export class VttechthanhtoanService {
       console.error(error);
     }
   }
+
+  async GetKhachhang9h() {
+      const now = new Date()
+      const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1, 17, 0, 0);
+      const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+      const Thanhtoanpromise = await this.findbetween(Start, End)
+      const [Thanhtoan] = await Promise.all([Thanhtoanpromise])   
+      Thanhtoan.forEach(async (item:any) => {
+        const config = {
+          method: 'post',
+          maxBodyLength: Infinity,
+          url: 'https://tmtaza.vttechsolution.com/Searching/Searching/?handler=SearchByOption&data=[{"name":"CUST_CODE","value":"' + item.CustCode + '"}]',
+          headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+        };
+        try {
+          const response = await axios.request(config);
+          const Hoadon = await this.GetHoadon(response.data.Table[0].CustomerID)
+          const Hoadon_id = Hoadon.Table.find((v: any) => {
+            const Date1 = new Date(v.Created)
+            const Date2 = new Date(item.Created)
+            return Date1.getTime() == Date2.getTime()
+          })
+            const Updatedata =
+            {
+              ...item,
+              DukienZNS: new Date(),
+              StatusZNS: 0,
+              TimeZNS: new Date(),
+              SDT: response.data.Table[0].CustomerPhone,
+              InvoiceNum: Hoadon_id?.InvoiceNum,
+            }
+            this.sendZNSThanhtoan(Updatedata)
+        } catch (error) {
+          console.error(error);
+        }
+      });
+  }
+
+
   async sendZNSThanhtoan(data: any) {
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == data.BranchID)
     if (Chinhanh) {
@@ -194,7 +234,7 @@ export class VttechthanhtoanService {
     const endTime = new Date(end)
     return await this.VttechthanhtoanRepository.find({
       where: {
-        DukienZNS: Between(startTime, endTime),
+        CreateAt: Between(startTime, endTime),
         Status: 0
       },
     });

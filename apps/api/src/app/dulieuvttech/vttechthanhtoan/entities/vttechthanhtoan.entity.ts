@@ -66,10 +66,10 @@ export class VttechthanhtoanEntity {
     Gender: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     IsNew: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    Created: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    DateCreated: string;
+    @Column({ nullable: true })
+    Created: Date;
+    @Column({ nullable: true })
+    DateCreated: Date;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     Type: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
