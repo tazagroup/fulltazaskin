@@ -266,7 +266,7 @@ export class VttechthanhtoanService {
     console.error(params);
     const queryBuilder = this.VttechthanhtoanRepository.createQueryBuilder('vttechthanhtoan');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder.andWhere('vttechthanhtoan.Created BETWEEN :startDate AND :endDate', {
+      queryBuilder.andWhere('vttechthanhtoan.CreateAt BETWEEN :startDate AND :endDate', {
         startDate: params.Batdau,
         endDate: params.Ketthuc,
       });
@@ -284,7 +284,7 @@ export class VttechthanhtoanService {
 
     const queryBuilder1 = this.VttechthanhtoanRepository.createQueryBuilder('vttechthanhtoan');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder1.andWhere('vttechthanhtoan.Created BETWEEN :startDate AND :endDate', {
+      queryBuilder1.andWhere('vttechthanhtoan.CreateAt BETWEEN :startDate AND :endDate', {
         startDate: params.Batdau,
         endDate: params.Ketthuc,
       });
