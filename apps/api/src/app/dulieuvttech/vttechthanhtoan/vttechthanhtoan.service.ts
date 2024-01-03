@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Like, Repository } from 'typeorm';
+import { Between, In, Like, Repository } from 'typeorm';
 import { CreateVttechthanhtoanDto } from './dto/create-vttechthanhtoan.dto';
 import { UpdateVttechthanhtoanDto } from './dto/update-vttechthanhtoan.dto';
 import { VttechthanhtoanEntity } from './entities/vttechthanhtoan.entity';
@@ -137,6 +137,7 @@ export class VttechthanhtoanService {
           console.error(error);
         }
       });
+    return Thanhtoan.length
   }
 
 
@@ -235,7 +236,7 @@ export class VttechthanhtoanService {
     return await this.VttechthanhtoanRepository.find({
       where: {
         CreateAt: Between(startTime, endTime),
-        Status: 0
+        Status: In([0, 1]),
       },
     });
   }
