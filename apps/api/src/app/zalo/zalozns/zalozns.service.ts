@@ -63,10 +63,7 @@ export class ZaloznsService {
   }
   async TemplateDanhgia(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
     console.log(item);
-    
     try {
-      if(item.SDT=='0977272967')
-      {
       const token:any = await this._ZalotokenService.findid(Chinhanh.idtoken);
       if (!token) {
         this._TelegramService.SendLogdev(JSON.stringify(token))
@@ -99,7 +96,6 @@ export class ZaloznsService {
         const smsResponse = await this.sendFallbackSMS(item);
         return { status: 'sms', Title: 'Lỗi Gửi ZNZ, Đã Gửi SMS', data: JSON.stringify(smsResponse.data) };
       }
-    }
     } catch (error) {
       this._TelegramService.SendLogdev(JSON.stringify(error));
       throw error; // Rethrow for proper error propagation
