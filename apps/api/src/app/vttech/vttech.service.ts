@@ -283,9 +283,7 @@ export class VttechService {
     const Tinhtrangphongs = await this._Vttech_dieutriService.fininday();
     setTimeout(async () => {      
       Tinhtrangphongs.forEach((v: any) => {
-        console.error(this.Getdatetime(v.TimeZNS)<=this.Getdatetime(End));
-        
-        if(this.Getdatetime(v.TimeZN)<=this.Getdatetime(End))
+        if(this.Getdatetime(v.TimeZNS)<=this.Getdatetime(End))
         {
           this.addCron(v)
         }
