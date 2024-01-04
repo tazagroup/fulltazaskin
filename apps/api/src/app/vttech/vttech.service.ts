@@ -287,6 +287,10 @@ export class VttechService {
     }, 5000);
     return Tinhtrangphongs
   }
+  async SendZnsDieutri(data:any) {
+    data.TimeZNS = moment(data.TimeZNS).add(1,"minute").toDate()
+    this.addCron(data)
+  }
   addCron(data: any) {
     console.error('Cron data : ',data);
     let cronExpression: any;
@@ -335,6 +339,7 @@ export class VttechService {
       const result = `Chi nhánh chưa đăng ký ZNS`;
       this._TelegramService.SendLogdev(result)
     }
+    return data
   }
   create(createVttechDto: CreateVttechDto) {
     return 'This action adds a new vttech';

@@ -54,6 +54,10 @@ export class VttechController {
   // async ZnsDieutri9h() {
   //   return await this.vttechService.ZnsDieutri9h();
   // }
+  @Post('vttech_sendznsdieutri')
+  async SendZnsDieutri(@Body() data: any) {
+    return await this.vttechService.SendZnsDieutri(data);
+  }
   @Get('findSDT/:SDT')
   GetKHBySDT(@Param('SDT') SDT: string) {
     return this.vttechService.GetKHBySDT(SDT);
