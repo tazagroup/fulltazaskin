@@ -85,18 +85,21 @@ export class VttechthanhtoanService {
         const Date2 = new Date(item.Created)
         return Date1.getTime() == Date2.getTime()
       })
-      if (this.SetRuleTimeZns(item.Created)) {
-        const Updatedata =
-        {
-          ...item,
-          DukienZNS: new Date(),
-          StatusZNS: 0,
-          TimeZNS: new Date(),
-          SDT: response.data.Table[0].CustomerPhone,
-          InvoiceNum: Hoadon_id?.InvoiceNum,
+        const hour = moment(item.Created).get("hour");
+        if (hour < 19 && hour>9) {
+          const Updatedata =
+          {
+            ...item,
+            DukienZNS: new Date(),
+            StatusZNS: 0,
+            TimeZNS: new Date(),
+            SDT: response.data.Table[0].CustomerPhone,
+            InvoiceNum: Hoadon_id?.InvoiceNum,
+          }
+          this.sendZNSThanhtoan(Updatedata)
+        } else {
+          // Thời gian hiện tại lớn hơn 19h
         }
-        this.sendZNSThanhtoan(Updatedata)
-      }
     } catch (error) {
       console.error(error);
     }
