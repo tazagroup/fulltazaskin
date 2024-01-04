@@ -6,7 +6,6 @@ import * as moment from 'moment';
 import { ZaloznsService } from '../zalozns/zalozns.service';
 import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
 import { range } from 'rxjs';
-import { ViewportScroller } from '@angular/common';
 @Component({
   selector: 'app-zalodanhgia',
   templateUrl: './zalodanhgia.component.html',
@@ -34,7 +33,6 @@ export class ZalodanhgiaComponent implements OnInit {
     private dialog: MatDialog,
     private _ZalodanhgiaService: ZalodanhgiaService,
     private _ZaloznsService: ZaloznsService,
-    private viewportScroller: ViewportScroller
   ) {
   }
   ngOnInit(): void {
@@ -50,12 +48,6 @@ export class ZalodanhgiaComponent implements OnInit {
       }
 
     })
-  }
-  ngAfterViewInit() {
-    // Ensure element is rendered before scrolling
-    setTimeout(() => {
-      this.viewportScroller.scrollToAnchor(this.myDivRef.nativeElement);
-    });
   }
   onStarClick(index: number) {
     this.myDivRef.nativeElement.scrollTo({ top: 0 });

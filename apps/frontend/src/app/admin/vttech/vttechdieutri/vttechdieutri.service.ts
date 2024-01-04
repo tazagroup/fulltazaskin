@@ -57,10 +57,9 @@ export class VttechdieutriService {
     );
   }
   SendZns(data: any) {
-    return this.http.post(environment.APIURL + '/tasks/addcron', data).pipe(
+    return this.http.post(environment.APIURL + '/vttech/vttech_sendznsdieutri', data).pipe(
           map((result) => {
-            console.log(result);
-            
+            console.log(result); 
             return result;
           })
         )

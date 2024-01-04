@@ -78,7 +78,7 @@ export class VttechdieutriComponent implements OnInit {
   SendZNS(item:any)
   {
     console.log(item);
-    item.DukienZNS = moment().add(+1,'minutes').toDate()
+    item.TimeZNS = moment().add(+1,'minutes').toDate()
     this._VttechdieutriService.SendZns(item).subscribe()  
   }
   ChoosenDate()
