@@ -148,51 +148,55 @@ export class VttechService {
     const now = new Date()
     const formattedBegin = moment(new Date(now)).format("DD-MM-YYYY");
     const formattedEnd = moment(new Date(now)).format("DD-MM-YYYY");
-    try {
-      const response = await axios.request(
-        {
-          method: 'post',
-          maxBodyLength: Infinity,
-          url: `https://tmtaza.vttechsolution.com/Report/Manu/ManuStatusGen/?handler=LoadataDetail&branchID=0&roomID=0&dateFrom=${formattedBegin}&dateTo=${formattedEnd}`,
-          headers: {
-            Cookie: this.Cookie,
-            'Xsrf-Token': this.XsrfToken,
-          },
-        });
-      if (Array.isArray(response.data)) {
-        const data1 = response.data;
-        const data2 = await this._Vttech_tinhtrangphongService.findAll();
-        const uniqueInData2 = data1.filter((item: { BeginTime: any; }) => !data2.some((data1Item: any) => this.Getdatetime(data1Item.Dulieu.BeginTime) === this.Getdatetime(item.BeginTime)));
-        if (uniqueInData2.length > 0) {
-          await Promise.all(uniqueInData2.map((v: any) => {
-            const item: any = {}
-            item.CustCode = v.CustCode
-            item.CustName = v.CustName
-            item.CustID = v.CustID
-            item.BeginTime = v.BeginTime
-            item.Dulieu = v
-            this._Vttech_tinhtrangphongService.create(item)
-          }));
-          const result = `Trạng Thái Phòng Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
-          this._TelegramService.SendLogdev(result);
-          return { status: 201, count: uniqueInData2.length, result: uniqueInData2 };
+
+    LIST_CHI_NHANH.forEach(async (v)=>{
+      try {
+        const response = await axios.request(
+          {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: `https://tmtaza.vttechsolution.com/Report/Manu/ManuStatusGen/?handler=LoadataDetail&branchID=${v.idVttech}&roomID=0&dateFrom=${formattedBegin}&dateTo=${formattedEnd}`,
+            headers: {
+              Cookie: this.Cookie,
+              'Xsrf-Token': this.XsrfToken,
+            },
+          });
+        if (Array.isArray(response.data)) {          
+          const data1 = response.data;
+          const data2 = await this._Vttech_tinhtrangphongService.findAll();
+          const uniqueInData2 = data1.filter((item: { BeginTime: any; }) => !data2.some((data1Item: any) => this.Getdatetime(data1Item.Dulieu.BeginTime) === this.Getdatetime(item.BeginTime)));
+          if (uniqueInData2.length > 0) {
+            await Promise.all(uniqueInData2.map((v: any) => {
+              const item: any = {}
+              item.CustCode = v.CustCode
+              item.CustName = v.CustName
+              item.CustID = v.CustID
+              item.BeginTime = v.BeginTime
+              item.Dulieu = v
+              this._Vttech_tinhtrangphongService.create(item)
+            }));
+            const result = `Trạng Thái Phòng Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
+            this._TelegramService.SendLogdev(result);
+            return { status: 201, count: uniqueInData2.length, result: uniqueInData2 };
+          }
+          else {
+            const result = `Trạng Thái Phòng Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
+            this._TelegramService.SendLogdev(result);
+            return { status: 200 };
+          }
         }
         else {
-          const result = `Trạng Thái Phòng Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
+          const result = "Trạng Thái Phòng Code 403: Lỗi Xác thực"
           this._TelegramService.SendLogdev(result);
-          return { status: 200 };
+          return { status: 404, title: 'Lỗi Data Trả Về' };
         }
-      }
-      else {
-        const result = "Trạng Thái Phòng Code 403: Lỗi Xác thực"
+      } catch (error) {
+        const result = `Trạng Thái Phòng Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
         this._TelegramService.SendLogdev(result);
-        return { status: 404, title: 'Lỗi Data Trả Về' };
+        return { status: 400, title: 'Trạng Thái Phòng Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
       }
-    } catch (error) {
-      const result = `Trạng Thái Phòng Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
-      this._TelegramService.SendLogdev(result);
-      return { status: 400, title: 'Trạng Thái Phòng Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
-    }
+
+    })
   }
   async getDieutri(data: any) {
     const now = new Date()
@@ -288,7 +292,6 @@ export class VttechService {
     return Tinhtrangphongs
   }
   async SendZnsDieutri(data:any) {
-    data.TimeZNS = moment(data.TimeZNS).add(1,"minute").toDate()
     this.addCron(data)
   }
   addCron(data: any) {
