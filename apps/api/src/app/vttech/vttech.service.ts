@@ -281,8 +281,10 @@ export class VttechService {
     const now = new Date()
     const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
     const Tinhtrangphongs = await this._Vttech_dieutriService.fininday();
-    setTimeout(async () => {
+    setTimeout(async () => {      
       Tinhtrangphongs.forEach((v: any) => {
+        console.error(this.Getdatetime(v.TimeZNS)<=this.Getdatetime(End));
+        
         if(this.Getdatetime(v.TimeZN)<=this.Getdatetime(End))
         {
           this.addCron(v)
