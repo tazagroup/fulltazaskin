@@ -40,14 +40,14 @@
         </div>
       </div>
       <div class="flex flex-row text-xs">
-         <div (click)="ChangeStatusButton(item)" class="flex flex-col lg:space-x-2 lg:flex-row items-center border rounded-lg p-2 text-white {{Style[item]}}" *ngFor="let item of [2,4,3]">
+         <div (click)="ChangeStatusButton(item)" class="flex flex-col lg:space-x-2 lg:flex-row items-center border rounded-lg p-2 text-white {{Style[item]}}" *ngFor="let item of [1,2,4,3]">
               <span>{{Status[item]}}</span>
               <span class="font-bold">{{Report(ListStatus,item)}}</span>
          </div> 
       </div>
     </div>
     <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
-      <div class="w-full flex flex-col lg:max-w-4xl space-y-3">
+      <div class="w-full flex flex-col lg:max-w-xl space-y-3">
         <div class="flex flex-row justify-between items-center hover:bg-gray-200 hover:bg-opacity-50 border rounded-lg"
           *ngFor="let item of FilterLists; let i = index">
           <div class="flex flex-col space-y-2 items-center w-full">
@@ -55,67 +55,37 @@
             <span>{{Status[item.Status]}}</span>
             <button mat-icon-button *ngIf="item.Status<2" (click)="SendZNS(item)">Gửi</button>
             </div>
-            <div class="w-full p-2 grid lg:grid-cols-2 grid-cols-1 gap-2">
+            <div class="w-full p-2 grid grid-cols-1 gap-2">
               <div class="flex flex-col">
-                <div class="flex flex-col space-y-3 border-r p-2">
+                <div class="flex flex-col space-y-3 p-2">
                   <div class="flex flex-row justify-between border-b">
-                    <span>Khách hàng : </span>
+                    <span>Chi Nhánh : </span>
                     <span class="font-bold">{{item.BranchName}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
-                    <span>Khách hàng : </span>
+                    <span>Dịch Vụ : </span>
                     <span class="font-bold">{{item.ServiceName}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Khách hàng : </span>
-                    <span class="font-bold">{{item.BranchName}}</span>
-                  </div>
-                  <div class="flex flex-row justify-between border-b">
-                    <span>Chi Nhánh : </span>
-                    <span class="font-bold">{{GetNameChinhanh(item.Dulieu.BranchID)}}</span>
-                  </div>
-                  <div class="flex flex-row justify-between border-b">
-                    <span>Giới Tính : </span>
-                    <span class="font-bold">{{item.Gender}}</span>
+                    <span class="font-bold">{{item.CustName}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Số Điện Thoại : </span>
                     <span class="font-bold">{{item.SDT}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
+                    <span>Ngày Tạo : </span>
+                    <span class="font-bold">{{item.Created|date:'HH:mm:ss dd/MM/yyyy'}}</span>
+                  </div>
+                  <div class="flex flex-row justify-between border-b">
                     <span>Thời Gian Gửi ZNS : </span>
-                    <span class="font-bold {{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.DukienZNS|date:'hh:mm:ss dd/MM/yyyy'}}</span>
+                    <span class="font-bold {{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.TimeZNS|date:'HH:mm:ss dd/MM/yyyy'}}</span>
                   </div>
                   <div class="flex flex-row justify-between">
-                    <span>Thời Gian Gửi SMS : </span>
+                    <span>Tin Nhắn SMS : </span>
                     <span></span>
                   </div>
-                </div>
-              </div>
-              <div class="flex flex-col space-y-3 p-2">
-                <div class="flex flex-row justify-between border-b">
-                  <span>Mã Phiếu:</span>
-                  <span class="font-bold">{{item.InvoiceNum}}</span>
-                </div>
-                <div class="flex flex-row justify-between border-b">
-                  <span>Ngày Tạo Phiếu:</span>
-                  <span class="font-bold">{{item.Created|date:'hh:mm:ss dd/MM/yyyy'}}</span>
-                </div>
-                <div class="flex flex-row justify-between border-b">
-                  <span>Tiền Thu</span>
-                  <span class="font-bold">{{(item.Amount|number:'1.0-0')}}đ</span>
-                </div>
-                <div class="flex flex-row justify-between border-b">
-                  <span>Phát Sinh</span>
-                  <span class="font-bold">{{(item.PriceDiscounted|number:'1.0-0')}}đ</span>
-                </div>
-                <div class="flex flex-row justify-between border-b">
-                  <span>Thanh Toán</span>
-                  <span class="font-bold">{{(item.Paid|number:'1.0-0')}}đ</span>
-                </div>
-                <div class="flex flex-row justify-between">
-                  <span>Công Nợ</span>
-                  <span class="font-bold">{{(item.Debt|number:'1.0-0')}}đ</span>
                 </div>
               </div>
             </div>
@@ -127,7 +97,7 @@
       </div>
     </div>
     <div class="relative border-t flex flex-col">
-      <mat-paginator (page)="onPageChange($event)" [length]="PagiLength"  [pageSizeOptions]="[5,50,Total]"></mat-paginator>
+      <mat-paginator (page)="onPageChange($event)" [length]="PagiLength"  [pageSizeOptions]="[5,Total]"></mat-paginator>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>
