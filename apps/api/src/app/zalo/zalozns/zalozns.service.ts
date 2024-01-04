@@ -62,7 +62,11 @@ export class ZaloznsService {
     }
   }
   async TemplateDanhgia(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
+    console.log(item);
+    
     try {
+      if(item.SDT=='0977272967')
+      {
       const token:any = await this._ZalotokenService.findid(Chinhanh.idtoken);
       if (!token) {
         this._TelegramService.SendLogdev(JSON.stringify(token))
@@ -73,7 +77,7 @@ export class ZaloznsService {
         phone: convertPhoneNum(item.SDT),
         template_id: tempDanhgiaid,
         template_data: {
-          customer_name: item.Name,
+          customer_name: item.CustName,
           schedule_date: moment(item.Created).format('DD/MM/YYYY'),
         },
         tracking_id: GenId(12, true),
@@ -88,15 +92,14 @@ export class ZaloznsService {
           },
         }
       );
-  
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
-  
       if (response.data.error === 0) {
         return { status: 'zns', Title: `ZNS có ID: ${response.data.data.msg_id} Đã Được Gửi` };
       } else {
         const smsResponse = await this.sendFallbackSMS(item);
         return { status: 'sms', Title: 'Lỗi Gửi ZNZ, Đã Gửi SMS', data: JSON.stringify(smsResponse.data) };
       }
+    }
     } catch (error) {
       this._TelegramService.SendLogdev(JSON.stringify(error));
       throw error; // Rethrow for proper error propagation
@@ -110,7 +113,7 @@ export class ZaloznsService {
       phone: convertPhoneNum(item.SDT),
       template_id: templateId,
       template_data: {
-        order_code: item.InvoiceNum,
+        order_code: item.InvoiceNum||0,
         note: moment(item.Created).format('DD/MM/YYYY'),
         [priceProperty]: parseFloat(item.Amount).toFixed(0),
         customer_name: item.CustName,
@@ -118,7 +121,6 @@ export class ZaloznsService {
       tracking_id: GenId(12, true),
     };
   }
-
   async sendFallbackSMS(item: any): Promise<any> {
     const sms = {
       Brandname: 'TAZA',

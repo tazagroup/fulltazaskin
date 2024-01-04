@@ -45,6 +45,15 @@ export class VttechController {
   async CreateDieutri() {
     return await this.vttechService.CreateDieutri();
   }
+  @Interval(9000000)
+  @Get('vttech_znsdieutri')
+  async ZnsDieutri() {
+    return await this.vttechService.ZnsDieutri();
+  }
+  // @Get('vttech_znsdieutri9h')
+  // async ZnsDieutri9h() {
+  //   return await this.vttechService.ZnsDieutri9h();
+  // }
   @Get('findSDT/:SDT')
   GetKHBySDT(@Param('SDT') SDT: string) {
     return this.vttechService.GetKHBySDT(SDT);

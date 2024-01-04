@@ -8,8 +8,9 @@ import { CauhinhchungModule } from '../cauhinh/cauhinhchung/cauhinhchung.module'
 import { Vttech_tinhtrangphongModule } from './vttech_tinhtrangphong/vttech_tinhtrangphong.module';
 import { Vttech_dieutriModule } from './vttech_dieutri/vttech_dieutri.module';
 import { Vttech_tinhtrangphongService } from './vttech_tinhtrangphong/vttech_tinhtrangphong.service';
+import { ZaloznsModule } from '../zalo/zalozns/zalozns.module';
 @Module({
-  imports: [Vttech_khachhangModule,CauhinhchungModule,Vttech_tinhtrangphongModule,Vttech_dieutriModule],
+  imports: [Vttech_khachhangModule,CauhinhchungModule,Vttech_tinhtrangphongModule,Vttech_dieutriModule,ZaloznsModule],
   controllers: [VttechController],
   providers: [VttechService,TelegramService]
 

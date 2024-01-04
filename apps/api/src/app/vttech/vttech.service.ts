@@ -9,6 +9,10 @@ import { Vttech_khachhangService } from './vttech_khachhang/vttech_khachhang.ser
 import moment = require('moment');
 import { Vttech_tinhtrangphongService } from './vttech_tinhtrangphong/vttech_tinhtrangphong.service';
 import { Vttech_dieutriService } from './vttech_dieutri/vttech_dieutri.service';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { LIST_CHI_NHANH } from '../shared.utils';
+import { ZaloznsService } from '../zalo/zalozns/zalozns.service';
+import { CronJob } from '@nestjs/schedule/node_modules/cron/dist/job';
 @Injectable()
 export class VttechService {
   Cookie: any = ''
@@ -19,6 +23,8 @@ export class VttechService {
     private _Vttech_khachhangService: Vttech_khachhangService,
     private _Vttech_tinhtrangphongService: Vttech_tinhtrangphongService,
     private _Vttech_dieutriService: Vttech_dieutriService,
+    private schedulerRegistry: SchedulerRegistry,
+    private _ZaloznsService: ZaloznsService,
   ) {
     this._CauhinhchungService.findslug('vttechtoken').then((data: any) => {
       this.Cookie = data.Content.Cookie
@@ -220,11 +226,13 @@ export class VttechService {
               if (response1.data.Table[0]) {
                 const item: any = {}
                 item.SDT = response1.data.Table[0].CustomerPhone
-                item.CustID = v.Customer_ID
+                item.CustID = data.CustID
                 item.ServiceName = v.ServiceName
                 item.Created = v.Created
                 item.BranchCode = v.BranchCode
                 item.BranchName = v.BranchName
+                item.CustCode = data.CustCode
+                item.CustName = data.CustName
                 item.Dulieu = v
                 item.TimeZNS = moment(v.Created).add(3,"hours").toDate()
                 this._Vttech_dieutriService.create(item)
@@ -257,13 +265,72 @@ export class VttechService {
   }
   async CreateDieutri() {
     await this.getTinhtrangphong();
+    const Tinhtrangphongs = await this._Vttech_tinhtrangphongService.fininday();
     setTimeout(async () => {
-      const Tinhtrangphongs = await this._Vttech_tinhtrangphongService.fininday();
       Tinhtrangphongs.forEach((v: any) => {
         this.getDieutri(v);
       });
     }, 5000);
+    return Tinhtrangphongs
+  }
+  async ZnsDieutri() {
+    const Tinhtrangphongs = await this._Vttech_dieutriService.fininday();
+    setTimeout(async () => {
+      Tinhtrangphongs.forEach((v: any) => {
+        this.addCron(v)
+      });
+    }, 5000);
+    return Tinhtrangphongs
 
+  }
+  addCron(data: any) {
+    console.error('Cron data : ',data);
+    let cronExpression: any;
+    const targetDate = moment(data.TimeZNS);
+    cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
+    console.error(cronExpression);  
+    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)    
+    if (Chinhanh) {
+      const job = new CronJob(cronExpression, () => {
+        const result = `Điều Trị : ${data.id} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
+        this._TelegramService.SendLogdev(result)
+        try {
+          this._ZaloznsService.TemplateDanhgia(data, Chinhanh).then((zns: any) => {
+            if (zns) {
+              // if (zns.status == 'sms') {
+              //   data.SMS = zns.data
+              //   data.Status = 4
+              //   this._Vttech_dieutriService.update(data.id, data)
+              //   // const result = `<b><u>${zns.Title}</u></b>`;
+              //   // this._TelegramService.SendNoti(result)
+              // }
+              // else {
+                data.SendZNSAt = new Date()
+                data.StatusZNS = 2
+                data.Status = 2
+                this._Vttech_dieutriService.update(data.id, data)
+                // const result = `<b><u>${zns.Title}</u></b>`;
+                // this._TelegramService.SendNoti(result)
+              // }
+            }
+          })
+        } catch (error) {
+          console.error(`Error calling Zalozns service: ${error.message}`);
+        }
+      })
+      this.schedulerRegistry.addCronJob(data.id, job);
+      job.start();
+      data.Status = 1
+      this._Vttech_dieutriService.update(data.id, data)
+      const result = `Điều Trị: ${data.CustName} - ${data.SDT} ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
+      this._TelegramService.SendNoti(result)
+    }
+    else {
+      data.Status = 3
+      this._Vttech_dieutriService.update(data.id, data)
+      const result = `Chi nhánh chưa đăng ký ZNS`;
+      this._TelegramService.SendLogdev(result)
+    }
   }
   create(createVttechDto: CreateVttechDto) {
     return 'This action adds a new vttech';

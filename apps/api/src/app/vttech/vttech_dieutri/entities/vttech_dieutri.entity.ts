@@ -38,6 +38,8 @@ export class Vttech_dieutriEntity {
   Created: Date;
   @Column({ nullable: true })
   TimeZNS: Date;
+  @Column({ nullable: true })
+  SendZNSAt: Date;
   @CreateDateColumn()
   CreateAt: Date;
   @UpdateDateColumn()

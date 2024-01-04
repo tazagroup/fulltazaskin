@@ -17,6 +17,17 @@ export class Vttech_dieutriService {
   async findAll() {
     return await this.Vttech_dieutriRepository.find();
   }
+  async fininday() {
+    const now = new Date()
+    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+      return await this.Vttech_dieutriRepository.find({
+        where: {
+          TimeZNS: Between(Start, End),
+          Status: In([0, 1]),
+        },
+      }); 
+  }
   async find19h() {
     const now = new Date()
     const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1, 19, 0, 0);
