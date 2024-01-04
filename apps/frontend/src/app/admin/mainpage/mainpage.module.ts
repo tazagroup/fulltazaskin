@@ -41,6 +41,7 @@ import { ProfileModule } from '../../shared/common/profile/profile.module';
           { path: 'users', loadChildren: () => import('../users/users/users.module').then(m => m.UsersModule)},
           { path: 'vttechthanhtoan', loadChildren: () => import('../vttech/vttechthanhtoan/vttechthanhtoan.module').then(m => m.VttechthanhtoanModule)},
           { path: 'vttechkhachhang', loadChildren: () => import('../vttech/vttechkhachhang/vttechkhachhang.module').then(m => m.VttechkhachhangModule)},
+          { path: 'vttechdieutri', loadChildren: () => import('../vttech/vttechdieutri/vttechdieutri.module').then(m => m.VttechdieutriModule)},
           { path: 'sms', loadChildren: () => import('../baocao/sms/sms.module').then(m => m.SmsModule)},
       ]
       }

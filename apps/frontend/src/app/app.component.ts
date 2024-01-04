@@ -11,13 +11,13 @@ export class AppComponent {
   title = 'frontend';
   notifications: any[] = [];
   ngOnInit() {
-    const eventSource = new EventSource(environment.APIURL+'/notifications');
-    const notificationStream = fromEvent(eventSource, 'message');
+    // const eventSource = new EventSource(environment.APIURL+'/notifications');
+    // const notificationStream = fromEvent(eventSource, 'message');
 
-    notificationStream
-      .pipe(map((event: any) => JSON.parse(event.data)))
-      .subscribe((notification: any) => {
-        this.notifications.push(notification);
-      });
+    // notificationStream
+    //   .pipe(map((event: any) => JSON.parse(event.data)))
+    //   .subscribe((notification: any) => {
+    //     this.notifications.push(notification);
+    //   });
   }
 }
