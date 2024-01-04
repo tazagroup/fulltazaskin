@@ -81,6 +81,12 @@ export class VttechdieutriComponent implements OnInit {
     item.TimeZNS = moment().add(+1,'minutes').toDate()
     this._VttechdieutriService.SendZns(item).subscribe()  
   }
+  SendAllZNS(items:any)
+  {
+    items.forEach((v:any) => {
+    this.SendZNS(v)
+   });
+  }
   ChoosenDate()
   {
     console.log(this.SearchParams);

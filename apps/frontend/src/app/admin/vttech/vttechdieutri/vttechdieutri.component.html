@@ -44,6 +44,7 @@
               <span>{{Status[item]}}</span>
               <span class="font-bold">{{Report(ListStatus,item)}}</span>
          </div> 
+         <button mat-raised-button (click)="SendAllZNS(FilterLists)">Send ({{FilterLists.length}})</button>
       </div>
     </div>
     <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
