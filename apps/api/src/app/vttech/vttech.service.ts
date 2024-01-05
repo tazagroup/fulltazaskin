@@ -200,8 +200,8 @@ export class VttechService {
   }
   async getDieutri(data: any) {
     const now = new Date()
-    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
-    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
+    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
     try {
       const response = await axios.request(
         {
