@@ -36,7 +36,7 @@ export class ZaloznsComponent implements OnInit {
     this.TypeTeamplate = "user_received_message",
     this._ZalotokenService.getAllZalotokens().subscribe()
     this._ZalotokenService.zalotokens$.subscribe((data)=>{if(data){this.ZaloTokens=data}})
-    this._ZaloznsService.getPaginaZaloznss(1,9999).subscribe()
+    this._ZaloznsService.getPaginaZaloznss(1,10).subscribe()
     this._ZaloznsService.zaloznss$.subscribe((data: any) => {
       if(data)
       {
