@@ -43,8 +43,9 @@ export class VttechthanhtoanService {
         const uniqueInData2 = data1.filter((item: { Created: any; }) => !data2.some((data1Item) => this.Getdatetime(data1Item.Created) === this.Getdatetime(item.Created)));
         if (uniqueInData2.length > 0) {
           await Promise.all(uniqueInData2.map((v: any) => {
+            v.Dulieu = JSON.stringify(v)
             this.create(v).then((item: any) => {
-              this.GetVttechKhachhang(item)
+              this.GetKHByCode(item)
             })
           }));
           const result = `Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
@@ -68,7 +69,8 @@ export class VttechthanhtoanService {
       return { status: 400, title: 'Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
     }
   }
-  async GetVttechKhachhang(item: any) {
+
+  async GetKHByCode(item: any) {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -102,6 +104,42 @@ export class VttechthanhtoanService {
       console.error(error);
     }
   }
+
+
+  // async GetVttechKhachhang(item: any) {
+  //   const config = {
+  //     method: 'post',
+  //     maxBodyLength: Infinity,
+  //     url: 'https://tmtaza.vttechsolution.com/Searching/Searching/?handler=SearchByOption&data=[{"name":"CUST_CODE","value":"' + item.CustCode + '"}]',
+  //     headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+  //   };
+  //   try {
+  //     const response = await axios.request(config);
+  //     const Hoadon = await this.GetHoadon(response.data.Table[0].CustomerID)
+  //     const Hoadon_id = Hoadon.Table.find((v: any) => {
+  //       const Date1 = new Date(v.Created)
+  //       const Date2 = new Date(item.Created)
+  //       return Date1.getTime() == Date2.getTime()
+  //     })
+  //       const hour = moment(item.Created).get("hour");
+  //       if (hour < 19 && hour>9) {
+  //         const Updatedata =
+  //         {
+  //           ...item,
+  //           DukienZNS: new Date(),
+  //           StatusZNS: 0,
+  //           TimeZNS: new Date(),
+  //           SDT: response.data.Table[0].CustomerPhone,
+  //           InvoiceNum: Hoadon_id?.InvoiceNum,
+  //         }
+  //         this.sendZNSThanhtoan(Updatedata)
+  //       } else {
+  //         // Thời gian hiện tại lớn hơn 19h
+  //       }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   async GetKhachhang9h() {
       const now = new Date()
