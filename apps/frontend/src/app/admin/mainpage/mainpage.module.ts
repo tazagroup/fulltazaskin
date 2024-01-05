@@ -24,7 +24,7 @@ import { ProfileModule } from '../../shared/common/profile/profile.module';
     ChatrealtimeModule,
     ProfileModule,
     RouterModule.forChild([
-      {path:'',redirectTo:'zalozns',pathMatch:'full'},
+      {path:'',redirectTo:'vttechthanhtoan',pathMatch:'full'},
       {
         path: '', component: MainpageComponent,
         children: [
