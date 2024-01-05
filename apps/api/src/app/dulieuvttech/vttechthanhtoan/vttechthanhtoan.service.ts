@@ -41,11 +41,12 @@ export class VttechthanhtoanService {
       const response = await axios.request(config);
       if (Array.isArray(response.data)) {
         const data1 = response.data;
-        const data2 = await this.findAll();
-        const uniqueInData2 = data1.filter((item: { Created: any; }) => !data2.some((data1Item) => this.Getdatetime(data1Item.Created) === this.Getdatetime(item.Created)));
+        const data2 = await this.findBydate(moment(new Date()).startOf('day').toDate(),moment(new Date()).endOf('day').toDate());        
+        const uniqueInData2 =  data1.filter((item:any) => !data2.some((data1Item:any) => moment(data1Item.Dulieu.Created).isSame(moment(item.Created))));
         if (uniqueInData2.length > 0) {
           await Promise.all(uniqueInData2.map((v: any) => {
             v.Dulieu = JSON.stringify(v)
+            v.Status = 9
             this.create(v).then((item: any) => {
               this.GetKHByCode(item)
             })
@@ -108,46 +109,59 @@ export class VttechthanhtoanService {
     const end = moment(new Date()).endOf('day').toDate()
     const ListKH = await this.findNew(begin,end)
     const Group = ListKH.filter((obj, i) => ListKH.findIndex(o => o.InvoiceNum === obj.InvoiceNum) === i).map(obj => ({
-      ...obj,
-      Amount: ListKH.filter(o => o.InvoiceNum === obj.InvoiceNum).reduce((total, o) => total + o.Amount, 0),
-    }));  
-    Group.forEach((v:any) => {
-      this.createzns(v).then((data:any)=>
-      {
-       this.sendZNSThanhtoan(data)
-      })
+      CustName: obj.CustName,
+      BranchID: obj.BranchID,
+      Gender: obj.Gender,
+      SDT: obj.SDT,
+      TimeZNS: obj.TimeZNS,
+      InvoiceNum: obj.InvoiceNum,
+      Created: obj.Created,
+      Amount: Number(ListKH.filter(o => o.InvoiceNum === obj.InvoiceNum).reduce((total, o) => Number(total) + Number(o.Amount), 0)),
+    }));      
+    Group.forEach((v:any,k:any) => {
+      setTimeout(async () => {
+       const result = await this.createzns(v)
+       this.sendZNSThanhtoan(result)
+      }, k*100);
     });
+    return {count:Group.length,data:Group}
  }
-  async sendZNSThanhtoan(data: any) {
-    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == data.BranchID)
+  async sendZNSThanhtoan(data: any) {    
+    const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
     if (Chinhanh) {
-      try {
-        this._ZaloznsService.sendtestzns(data, Chinhanh).then((zns: any) => {
-          if (zns) {
-            if (zns.status == 'sms') {
-              data.SMS = zns.data
-              data.Status = 4
-              this.updatezns(data.id, data)
-              this.UpdateThanhtoan(data.InvoiceNum,4)
-              const result = `<b><u>${zns.Title}</u></b>`;
-              this._TelegramService.SendNoti(result)
-            }
-            else {
-              data.ThucteZNS = new Date()
-              data.StatusZNS = 2
-              data.Status = 2
-              this.updatezns(data.id, data)
-              this.UpdateThanhtoan(data.InvoiceNum,2)
-              const result = `<b><u>${zns.Title}</u></b>`;
-              this._TelegramService.SendNoti(result)
-            }
-          }
-        })
+      try {        
+        data.ThucteZNS = new Date()
+        data.StatusZNS = 2
+        data.Status = 2
+        this.updatezns(data.id, data)
+        this.UpdateThanhtoan(data.InvoiceNum,2)
+
+        // this._ZaloznsService.sendtestzns(data, Chinhanh).then((zns: any) => {
+        //   if (zns) {
+        //     if (zns.status == 'sms') {
+        //       data.SMS = zns.data
+        //       data.Status = 4
+        //       this.updatezns(data.id, data)
+        //       this.UpdateThanhtoan(data.InvoiceNum,4)
+        //       const result = `<b><u>${zns.Title}</u></b>`;
+        //       this._TelegramService.SendNoti(result)
+        //     }
+        //     else {
+        //       data.ThucteZNS = new Date()
+        //       data.StatusZNS = 2
+        //       data.Status = 2
+        //       this.updatezns(data.id, data)
+        //       this.UpdateThanhtoan(data.InvoiceNum,2)
+        //       const result = `<b><u>${zns.Title}</u></b>`;
+        //       this._TelegramService.SendNoti(result)
+        //     }
+        //   }
+        // })
       } catch (error) {
         console.error(`Error calling Zalozns service: ${error.message}`);
       }
       data.Status = 1
-      this.UpdateThanhtoan(data.InvoiceNum,4)
+      this.UpdateThanhtoan(data.InvoiceNum,1)
       this.updatezns(data.id, data)
       const result = `Thanh Toán : ${data.InvoiceNum} - ${data.CustName} - ${data.SDT} - ${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
       this._TelegramService.SendNoti(result)
@@ -155,6 +169,7 @@ export class VttechthanhtoanService {
     else {
       data.Status = 3
       this.updatezns(data.id, data)
+      this.UpdateThanhtoan(data.InvoiceNum,3)
       const result = `Chi nhánh chưa đăng ký ZNS`;
       this._TelegramService.SendLogdev(result)
     }
@@ -162,11 +177,14 @@ export class VttechthanhtoanService {
   async UpdateThanhtoan(InvoiceNum:any,Status:any)
   {
     const Invoices = await this.findInvoiceNum(InvoiceNum)
+    console.log(Invoices);
+    
     Invoices.forEach((v:any) => {
       v.Status = Status
       this.update(v.id,v)
     });
   }
+
   SetRuleTimeZns(time: any) {
     const targetDate = moment(time);
     const current = new Date(time)
@@ -201,8 +219,7 @@ export class VttechthanhtoanService {
   }
 
   Getdatetime(data: any) {
-    const date1 = new Date(data);
-    return date1.getTime()
+    return new Date(data);
   }
   async create(CreateVttechthanhtoanDto: CreateVttechthanhtoanDto) {
     this.VttechthanhtoanRepository.create(CreateVttechthanhtoanDto);
@@ -233,6 +250,13 @@ export class VttechthanhtoanService {
       where: {
         CreateAt: Between(start, end),
         Status: In([0]),
+      },
+    });
+  }
+  async findBydate(start: any, end: any) {
+    return await this.VttechthanhtoanRepository.find({
+      where: {
+        CreateAt: Between(start, end),
       },
     });
   }
@@ -300,7 +324,7 @@ export class VttechthanhtoanService {
     console.error(params);
     const queryBuilder = this.VttechthanhtoanZNSRepository.createQueryBuilder('vttechthanhtoan_zns');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder.andWhere('vttechthanhtoan_zns.CreateAt BETWEEN :startDate AND :endDate', {
+      queryBuilder.andWhere('vttechthanhtoan_zns.Created BETWEEN :startDate AND :endDate', {
         startDate: params.Batdau,
         endDate: params.Ketthuc,
       });
@@ -308,7 +332,7 @@ export class VttechthanhtoanService {
     if (params.SDT) {
       queryBuilder.andWhere('vttechthanhtoan_zns.SDT LIKE :SDT', { SDT: `%${params.SDT}%` });
     }
-    if (params.Status) {
+    if (params.hasOwnProperty("Status")) {
       queryBuilder.andWhere('vttechthanhtoan_zns.Status LIKE :Status', { Status: `${params.Status}` });
     }
     const [items, totalCount] = await queryBuilder
@@ -318,7 +342,7 @@ export class VttechthanhtoanService {
 
     const queryBuilder1 = this.VttechthanhtoanZNSRepository.createQueryBuilder('vttechthanhtoan_zns');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder1.andWhere('vttechthanhtoan_zns.CreateAt BETWEEN :startDate AND :endDate', {
+      queryBuilder1.andWhere('vttechthanhtoan_zns.Created BETWEEN :startDate AND :endDate', {
         startDate: params.Batdau,
         endDate: params.Ketthuc,
       });

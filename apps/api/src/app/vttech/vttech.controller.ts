@@ -2,10 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { VttechService } from './vttech.service';
 import { CreateVttechDto } from './dto/create-vttech.dto';
 import { UpdateVttechDto } from './dto/update-vttech.dto';
-import axios from 'axios';
 import { CauhinhchungService } from '../cauhinh/cauhinhchung/cauhinhchung.service';
 import { TelegramService } from '../shared/telegram.service';
-import moment = require('moment');
 import { Vttech_khachhangService } from './vttech_khachhang/vttech_khachhang.service';
 import { Interval } from '@nestjs/schedule';
 @Controller('vttech')

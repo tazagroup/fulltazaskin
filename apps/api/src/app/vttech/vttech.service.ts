@@ -245,7 +245,6 @@ export class VttechService {
               console.error(error);
             }
           }));
-
           // const result = `Điều trị Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
           // this._TelegramService.SendLogdev(result);
            return { status: 201, count: uniqueInData2.length, result: uniqueInData2 };
@@ -277,6 +276,7 @@ export class VttechService {
     }, 5000);
     return Tinhtrangphongs
   }
+
   async ZnsDieutri() {
     const now = new Date()
     const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);

@@ -6,7 +6,7 @@ import {
     UpdateDateColumn,
     DeleteDateColumn,
 } from 'typeorm';
-@Entity('vttechthanhtoan_zns', { orderBy: { CreateAt: 'DESC' } })
+@Entity('vttechthanhtoan_zns', { orderBy: { TimeZNS: 'DESC' } })
 export class VttechthanhtoanZNSEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
