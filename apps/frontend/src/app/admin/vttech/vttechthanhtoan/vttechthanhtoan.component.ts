@@ -43,12 +43,12 @@ export class VttechthanhtoanComponent implements OnInit {
       {     
         this.Total = data.totalCount   
         this.ListStatus = data.ListStatus   
-        data.items.forEach((v:any) => {
-          if (typeof v.Dulieu !== 'object')
-          {
-            v.Dulieu = JSON.parse(v.Dulieu)
-          }
-        });
+        // data.items.forEach((v:any) => {
+        //   if (typeof v.Dulieu !== 'object')
+        //   {
+        //     v.Dulieu = JSON.parse(v.Dulieu)
+        //   }
+        // });
         this.PagiLength = (Number(data.totalCount)/Number(this.SearchParams.pageSize)).toFixed()
         this.FilterLists = this.Lists = data.items
       }
@@ -67,7 +67,6 @@ export class VttechthanhtoanComponent implements OnInit {
   {
     if(items)
     {
-      console.log(items); 
       return items.filter((v:any)=>v.Status == field)?.length
     }
     else return 0
@@ -92,6 +91,9 @@ export class VttechthanhtoanComponent implements OnInit {
   }
   ChangeStatusButton(item:any)
   {
+    console.log(item);
+    console.log(this.SearchParams);
+    
     this.StatusActive = item
     this.SearchParams.Status = item
     this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()

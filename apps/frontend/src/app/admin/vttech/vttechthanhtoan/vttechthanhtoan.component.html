@@ -70,7 +70,7 @@
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Chi Nhánh : </span>
-                    <span class="font-bold">{{GetNameChinhanh(item.Dulieu.BranchID)}}</span>
+                    <span class="font-bold">{{GetNameChinhanh(item.BranchID)}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Giới Tính : </span>
@@ -82,7 +82,7 @@
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Thời Gian Gửi ZNS : </span>
-                    <span class="font-bold {{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.DukienZNS|date:'hh:mm:ss dd/MM/yyyy'}}</span>
+                    <span class="font-bold {{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.TimeZNS|date:'hh:mm:ss dd/MM/yyyy'}}</span>
                   </div>
                   <div class="flex flex-row justify-between">
                     <span>Thời Gian Gửi SMS : </span>
@@ -103,7 +103,7 @@
                   <span>Tiền Thu</span>
                   <span class="font-bold">{{(item.Amount|number:'1.0-0')}}đ</span>
                 </div>
-                <div class="flex flex-row justify-between border-b">
+                <!-- <div class="flex flex-row justify-between border-b">
                   <span>Phát Sinh</span>
                   <span class="font-bold">{{(item.PriceDiscounted|number:'1.0-0')}}đ</span>
                 </div>
@@ -114,7 +114,7 @@
                 <div class="flex flex-row justify-between">
                   <span>Công Nợ</span>
                   <span class="font-bold">{{(item.Debt|number:'1.0-0')}}đ</span>
-                </div>
+                </div> -->
               </div>
             </div>
             <!-- <button mat-icon-button (click)="openDeleteDialog(dlgDeleteTemplate,item)">
