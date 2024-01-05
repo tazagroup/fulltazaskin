@@ -27,7 +27,9 @@
           </mat-date-range-picker>
         </mat-form-field>
         <div>
-          <span class="material-symbols-outlined border rounded-full p-2 hover:bg-gray-200" (click)="Reload()">sync</span>
+          <button mat-icon-button>
+            <span class="material-symbols-outlined" (click)="Reload()">sync</span>
+          </button>
         </div>
         <!-- <mat-form-field appearance="outline">
             <mat-label>Trạng Thái</mat-label>
@@ -39,8 +41,8 @@
           <!-- <span class="material-symbols-outlined {{isReport?'border rounded-lg':''}} p-2" (click)="isReport=!isReport">pie_chart</span> -->
         </div>
       </div>
-      <div class="flex flex-row text-xs">
-         <div (click)="ChangeStatusButton(item)" class="flex flex-col lg:space-x-2 lg:flex-row items-center border rounded-lg p-2 text-white {{Style[item]}}" *ngFor="let item of [2,4,3]">
+      <div class="grid grid-cols-3 gap-2">
+         <div (click)="ChangeStatusButton(item)" class="flex space-x-2 flex-row items-center justify-between border rounded-lg p-2 text-white {{Style[item]}}" *ngFor="let item of [2,4,3]">
               <span>{{Status[item]}}</span>
               <span class="font-bold">{{Report(ListStatus,item)}}</span>
          </div> 

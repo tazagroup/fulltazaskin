@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatBadgeModule} from '@angular/material/badge';
 @NgModule({
   imports: [
     CommonModule,
@@ -24,6 +25,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatDialogModule,
     MatPaginatorModule,
     MatDatepickerModule,
+    MatBadgeModule,
     RouterModule.forChild([
       {
         path: '', component: VttechdieutriComponent,    
