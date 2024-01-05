@@ -28,7 +28,7 @@ export class VttechthanhtoanService {
   }
   async getApiRealtime() {
     const begin = moment(new Date()).format("DD-MM-YYYY")
-    const end = moment(new Date()).add(1, 'day').format("DD-MM-YYYY")
+    const end = moment(new Date()).format("DD-MM-YYYY")
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -43,9 +43,7 @@ export class VttechthanhtoanService {
         const uniqueInData2 = data1.filter((item: { Created: any; }) => !data2.some((data1Item) => this.Getdatetime(data1Item.Created) === this.Getdatetime(item.Created)));
         if (uniqueInData2.length > 0) {
           await Promise.all(uniqueInData2.map((v: any) => {
-            v.Dulieu = JSON.stringify(v)
             this.create(v).then((item: any) => {
-              // item.Dulieu = JSON.stringify(item)
               this.GetVttechKhachhang(item)
             })
           }));
