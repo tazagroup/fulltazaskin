@@ -51,12 +51,12 @@ export class VttechthanhtoanService {
               this.GetKHByCode(item)
             })
           }));
-          const result = `Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
+          const result = `Thanh Toán Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
           this._TelegramService.SendLogdev(result);
           return { status: 201 };
         }
         else {
-          const result = `Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
+          const result = `Thanh Toán Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
           this._TelegramService.SendLogdev(result);
           return { status: 200 };
         }
@@ -105,6 +105,8 @@ export class VttechthanhtoanService {
 
 
   async GetVttechKhachhang() {
+    if(this.CheckTime)
+    {
     const begin = moment(new Date()).startOf('day').toDate()
     const end = moment(new Date()).endOf('day').toDate()
     const ListKH = await this.findNew(begin,end)
@@ -125,6 +127,7 @@ export class VttechthanhtoanService {
       }, k*100);
     });
     return {count:Group.length,data:Group}
+  }
  }
   async sendZNSThanhtoan(data: any) {    
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
@@ -368,5 +371,10 @@ export class VttechthanhtoanService {
   async updatezns(id: string, data: any) {
     this.VttechthanhtoanZNSRepository.save(data);
     return await this.VttechthanhtoanZNSRepository.findOne({ where: { id: id } });
+  }
+  CheckTime() {
+    const now = moment();
+    const checkTime = now.hour() >= 9 && now.hour() <= 19;
+    return checkTime
   }
 }

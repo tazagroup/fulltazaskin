@@ -10,7 +10,7 @@ import moment = require('moment');
 import { Vttech_tinhtrangphongService } from './vttech_tinhtrangphong/vttech_tinhtrangphong.service';
 import { Vttech_dieutriService } from './vttech_dieutri/vttech_dieutri.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import { LIST_CHI_NHANH } from '../shared.utils';
+import { LIST_CHI_NHANH, mergeNoDup } from '../shared.utils';
 import { ZaloznsService } from '../zalo/zalozns/zalozns.service';
 import { CronJob } from '@nestjs/schedule/node_modules/cron/dist/job';
 @Injectable()
@@ -149,7 +149,7 @@ export class VttechService {
     const formattedBegin = moment(new Date(now)).format("DD-MM-YYYY");
     const formattedEnd = moment(new Date(now)).format("DD-MM-YYYY");
 
-    LIST_CHI_NHANH.forEach(async (v)=>{
+    LIST_CHI_NHANH.forEach(async (v) => {
       try {
         const response = await axios.request(
           {
@@ -161,7 +161,7 @@ export class VttechService {
               'Xsrf-Token': this.XsrfToken,
             },
           });
-        if (Array.isArray(response.data)) {          
+        if (Array.isArray(response.data)) {
           const data1 = response.data;
           const data2 = await this._Vttech_tinhtrangphongService.findAll();
           const uniqueInData2 = data1.filter((item: { BeginTime: any; }) => !data2.some((data1Item: any) => this.Getdatetime(data1Item.Dulieu.BeginTime) === this.Getdatetime(item.BeginTime)));
@@ -214,9 +214,9 @@ export class VttechService {
           },
         });
       if (Array.isArray(response.data.Table)) {
-        const data1 = await response.data.Table.filter((v:any)=>this.Getdatetime(v.Created)>this.Getdatetime(Start)&& this.Getdatetime(v.Created)<this.Getdatetime(End));
+        const data1 = await response.data.Table.filter((v: any) => this.Getdatetime(v.Created) > this.Getdatetime(Start) && this.Getdatetime(v.Created) < this.Getdatetime(End));
         const data2 = await this._Vttech_dieutriService.findAll();
-        const uniqueInData2 = data1.filter((item: any) => !data2.some((data1Item: any) => this.Getdatetime(data1Item.Dulieu.Created) === this.Getdatetime(item.Created)));        
+        const uniqueInData2 = data1.filter((item: any) => !data2.some((data1Item: any) => this.Getdatetime(data1Item.Dulieu.Created) === this.Getdatetime(item.Created)));
         if (uniqueInData2.length > 0) {
           await Promise.all(uniqueInData2.map(async (v: any) => {
             const config = {
@@ -226,7 +226,7 @@ export class VttechService {
               headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
             };
             try {
-              const response1 = await axios.request(config);              
+              const response1 = await axios.request(config);
               if (response1.data.Table[0]) {
                 const item: any = {}
                 item.SDT = response1.data.Table[0].CustomerPhone
@@ -238,7 +238,7 @@ export class VttechService {
                 item.CustCode = data.CustCode
                 item.CustName = data.CustName
                 item.Dulieu = v
-                item.TimeZNS = moment(v.Created).add(3,"hours").toDate()
+                item.TimeZNS = moment(v.Created).add(3, "hours").toDate()
                 this._Vttech_dieutriService.create(item)
               }
             } catch (error) {
@@ -247,11 +247,11 @@ export class VttechService {
           }));
           // const result = `Điều trị Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
           // this._TelegramService.SendLogdev(result);
-           return { status: 201, count: uniqueInData2.length, result: uniqueInData2 };
+          return { status: 201, count: uniqueInData2.length, result: uniqueInData2 };
         }
         else {
-         // const result = `Điều trị Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
-         // this._TelegramService.SendLogdev(result);
+          // const result = `Điều trị Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
+          // this._TelegramService.SendLogdev(result);
           return { status: 200 };
         }
       }
@@ -267,40 +267,49 @@ export class VttechService {
     }
   }
   async CreateDieutri() {
-    await this.getTinhtrangphong();
-    const Tinhtrangphongs = await this._Vttech_tinhtrangphongService.fininday();
-    setTimeout(async () => {
-      Tinhtrangphongs.forEach((v: any) => {
-        this.getDieutri(v);
-      });
-    }, 5000);
-    return Tinhtrangphongs
+    if (this.CheckTime) {
+      await this.getTinhtrangphong();
+      const Tinhtrangphongs = await this._Vttech_tinhtrangphongService.fininday();
+      setTimeout(async () => {
+        Tinhtrangphongs.forEach((v: any) => {
+          this.getDieutri(v);
+        });
+      }, 5000);
+      return Tinhtrangphongs
+    }
   }
 
   async ZnsDieutri() {
-    const now = new Date()
-    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
-    const Tinhtrangphongs = await this._Vttech_dieutriService.fininday();
-    setTimeout(async () => {      
-      Tinhtrangphongs.forEach((v: any) => {
-        if(this.Getdatetime(v.TimeZNS)<=this.Getdatetime(End))
-        {
-          this.addCron(v)
-        }
-      });
-    }, 5000);
-    return Tinhtrangphongs
+    if (this.CheckTime) {
+      const now = new Date()
+      const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
+      const Tinhtrangphongs = await this._Vttech_dieutriService.fininday();
+      const dataZNS = mergeNoDup(Tinhtrangphongs, Tinhtrangphongs, 'CustCode')
+      setTimeout(async () => {
+        dataZNS.forEach((v: any) => {
+          if (this.Getdatetime(v.TimeZNS) <= this.Getdatetime(End)) {
+            this.addCron(v)
+          }
+        });
+      }, 5000);
+      return { count: dataZNS.length, data: dataZNS }
+    }
   }
-  async SendZnsDieutri(data:any) {
+  CheckTime() {
+    const now = moment();
+    const checkTime = now.hour() >= 9 && now.hour() <= 19;
+    return checkTime
+  }
+  async SendZnsDieutri(data: any) {
     this.addCron(data)
   }
   addCron(data: any) {
-    console.error('Cron data : ',data);
+    console.error('Cron data : ', data);
     let cronExpression: any;
     const targetDate = moment(data.TimeZNS);
     cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
-    console.error(cronExpression);  
-    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)    
+    console.error(cronExpression);
+    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)
     if (Chinhanh) {
       const job = new CronJob(cronExpression, () => {
         const result = `Điều Trị : ${data.id} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
@@ -316,12 +325,12 @@ export class VttechService {
               //   // this._TelegramService.SendNoti(result)
               // }
               // else {
-                data.SendZNSAt = new Date()
-                data.StatusZNS = 2
-                data.Status = 2
-                this._Vttech_dieutriService.update(data.id, data)
-                // const result = `<b><u>${zns.Title}</u></b>`;
-                // this._TelegramService.SendNoti(result)
+              data.SendZNSAt = new Date()
+              data.StatusZNS = 2
+              data.Status = 2
+              this._Vttech_dieutriService.update(data.id, data)
+              // const result = `<b><u>${zns.Title}</u></b>`;
+              // this._TelegramService.SendNoti(result)
               // }
             }
           })
