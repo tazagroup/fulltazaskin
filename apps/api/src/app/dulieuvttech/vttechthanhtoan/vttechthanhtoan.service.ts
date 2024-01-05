@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, In, Like, Repository } from 'typeorm';
 import { CreateVttechthanhtoanDto } from './dto/create-vttechthanhtoan.dto';
-import { UpdateVttechthanhtoanDto } from './dto/update-vttechthanhtoan.dto';
 import { VttechthanhtoanEntity } from './entities/vttechthanhtoan.entity';
 import axios from 'axios';
 import { CauhinhchungService } from '../../cauhinh/cauhinhchung/cauhinhchung.service';
@@ -10,6 +9,7 @@ import * as moment from 'moment';
 import { TelegramService } from '../../shared/telegram.service';
 import { LIST_CHI_NHANH } from '../../shared.utils';
 import { ZaloznsService } from '../../zalo/zalozns/zalozns.service';
+import { VttechthanhtoanZNSEntity } from './entities/vttechthanhtoan-zns.entity';
 @Injectable()
 export class VttechthanhtoanService {
   Cookie: any = ''
@@ -17,6 +17,8 @@ export class VttechthanhtoanService {
   constructor(
     @InjectRepository(VttechthanhtoanEntity)
     private VttechthanhtoanRepository: Repository<VttechthanhtoanEntity>,
+    @InjectRepository(VttechthanhtoanZNSEntity)
+    private VttechthanhtoanZNSRepository: Repository<VttechthanhtoanZNSEntity>,
     private _CauhinhchungService: CauhinhchungService,
     private _TelegramService: TelegramService,
     private _ZaloznsService: ZaloznsService,
@@ -85,9 +87,7 @@ export class VttechthanhtoanService {
         const Date2 = new Date(item.Created)
         return Date1.getTime() == Date2.getTime()
       })
-        const hour = moment(item.Created).get("hour");
-        if (hour < 19 && hour>9) {
-          const Updatedata =
+        const Updatedata =
           {
             ...item,
             DukienZNS: new Date(),
@@ -96,90 +96,28 @@ export class VttechthanhtoanService {
             SDT: response.data.Table[0].CustomerPhone,
             InvoiceNum: Hoadon_id?.InvoiceNum,
           }
-          this.sendZNSThanhtoan(Updatedata)
-        } else {
-          // Thời gian hiện tại lớn hơn 19h
-        }
+          this.update(Updatedata.id, Updatedata)   
     } catch (error) {
       console.error(error);
     }
   }
 
 
-  // async GetVttechKhachhang(item: any) {
-  //   const config = {
-  //     method: 'post',
-  //     maxBodyLength: Infinity,
-  //     url: 'https://tmtaza.vttechsolution.com/Searching/Searching/?handler=SearchByOption&data=[{"name":"CUST_CODE","value":"' + item.CustCode + '"}]',
-  //     headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
-  //   };
-  //   try {
-  //     const response = await axios.request(config);
-  //     const Hoadon = await this.GetHoadon(response.data.Table[0].CustomerID)
-  //     const Hoadon_id = Hoadon.Table.find((v: any) => {
-  //       const Date1 = new Date(v.Created)
-  //       const Date2 = new Date(item.Created)
-  //       return Date1.getTime() == Date2.getTime()
-  //     })
-  //       const hour = moment(item.Created).get("hour");
-  //       if (hour < 19 && hour>9) {
-  //         const Updatedata =
-  //         {
-  //           ...item,
-  //           DukienZNS: new Date(),
-  //           StatusZNS: 0,
-  //           TimeZNS: new Date(),
-  //           SDT: response.data.Table[0].CustomerPhone,
-  //           InvoiceNum: Hoadon_id?.InvoiceNum,
-  //         }
-  //         this.sendZNSThanhtoan(Updatedata)
-  //       } else {
-  //         // Thời gian hiện tại lớn hơn 19h
-  //       }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
-  async GetKhachhang9h() {
-      const now = new Date()
-      const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1, 19, 0, 0);
-      const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
-      const Thanhtoanpromise = await this.findbetween(Start, End)
-      const [Thanhtoan] = await Promise.all([Thanhtoanpromise])   
-      Thanhtoan.forEach(async (item:any) => {
-        const config = {
-          method: 'post',
-          maxBodyLength: Infinity,
-          url: 'https://tmtaza.vttechsolution.com/Searching/Searching/?handler=SearchByOption&data=[{"name":"CUST_CODE","value":"' + item.CustCode + '"}]',
-          headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
-        };
-        try {
-          const response = await axios.request(config);
-          const Hoadon = await this.GetHoadon(response.data.Table[0].CustomerID)
-          const Hoadon_id = Hoadon.Table.find((v: any) => {
-            const Date1 = new Date(v.Created)
-            const Date2 = new Date(item.Created)
-            return Date1.getTime() == Date2.getTime()
-          })
-            const Updatedata =
-            {
-              ...item,
-              DukienZNS: new Date(),
-              StatusZNS: 0,
-              TimeZNS: new Date(),
-              SDT: response.data.Table[0].CustomerPhone,
-              InvoiceNum: Hoadon_id?.InvoiceNum,
-            }
-            this.sendZNSThanhtoan(Updatedata)
-        } catch (error) {
-          console.error(error);
-        }
-      });
-    return Thanhtoan.length
-  }
-
-
+  async GetVttechKhachhang() {
+    const begin = moment(new Date()).startOf('day').toDate()
+    const end = moment(new Date()).endOf('day').toDate()
+    const ListKH = await this.findNew(begin,end)
+    const Group = ListKH.filter((obj, i) => ListKH.findIndex(o => o.InvoiceNum === obj.InvoiceNum) === i).map(obj => ({
+      ...obj,
+      Amount: ListKH.filter(o => o.InvoiceNum === obj.InvoiceNum).reduce((total, o) => total + o.Amount, 0),
+    }));  
+    Group.forEach((v:any) => {
+      this.createzns(v).then((data:any)=>
+      {
+       this.sendZNSThanhtoan(data)
+      })
+    });
+ }
   async sendZNSThanhtoan(data: any) {
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == data.BranchID)
     if (Chinhanh) {
@@ -189,7 +127,8 @@ export class VttechthanhtoanService {
             if (zns.status == 'sms') {
               data.SMS = zns.data
               data.Status = 4
-              this.update(data.id, data)
+              this.updatezns(data.id, data)
+              this.UpdateThanhtoan(data.InvoiceNum,4)
               const result = `<b><u>${zns.Title}</u></b>`;
               this._TelegramService.SendNoti(result)
             }
@@ -197,7 +136,8 @@ export class VttechthanhtoanService {
               data.ThucteZNS = new Date()
               data.StatusZNS = 2
               data.Status = 2
-              this.update(data.id, data)
+              this.updatezns(data.id, data)
+              this.UpdateThanhtoan(data.InvoiceNum,2)
               const result = `<b><u>${zns.Title}</u></b>`;
               this._TelegramService.SendNoti(result)
             }
@@ -207,16 +147,25 @@ export class VttechthanhtoanService {
         console.error(`Error calling Zalozns service: ${error.message}`);
       }
       data.Status = 1
-      this.update(data.id, data)
+      this.UpdateThanhtoan(data.InvoiceNum,4)
+      this.updatezns(data.id, data)
       const result = `Thanh Toán : ${data.InvoiceNum} - ${data.CustName} - ${data.SDT} - ${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
       this._TelegramService.SendNoti(result)
     }
     else {
       data.Status = 3
-      this.update(data.id, data)
+      this.updatezns(data.id, data)
       const result = `Chi nhánh chưa đăng ký ZNS`;
       this._TelegramService.SendLogdev(result)
     }
+  }
+  async UpdateThanhtoan(InvoiceNum:any,Status:any)
+  {
+    const Invoices = await this.findInvoiceNum(InvoiceNum)
+    Invoices.forEach((v:any) => {
+      v.Status = Status
+      this.update(v.id,v)
+    });
   }
   SetRuleTimeZns(time: any) {
     const targetDate = moment(time);
@@ -279,10 +228,23 @@ export class VttechthanhtoanService {
       },
     });
   }
+  async findNew(start: any, end: any) {
+    return await this.VttechthanhtoanRepository.find({
+      where: {
+        CreateAt: Between(start, end),
+        Status: In([0]),
+      },
+    });
+  }
   async findid(id: string) {
     return await this.VttechthanhtoanRepository.findOne({
       where: { id: id },
 
+    });
+  }
+  async findInvoiceNum(InvoiceNum: string) {
+    return await this.VttechthanhtoanRepository.find({
+      where: { InvoiceNum: InvoiceNum },
     });
   }
   async findslug(slug: any) {
@@ -334,6 +296,38 @@ export class VttechthanhtoanService {
 
     return { items, totalCount, ListStatus };
   }
+  async findQueryZNS(params: any) {
+    console.error(params);
+    const queryBuilder = this.VttechthanhtoanZNSRepository.createQueryBuilder('vttechthanhtoan_zns');
+    if (params.Batdau && params.Ketthuc) {
+      queryBuilder.andWhere('vttechthanhtoan_zns.CreateAt BETWEEN :startDate AND :endDate', {
+        startDate: params.Batdau,
+        endDate: params.Ketthuc,
+      });
+    }
+    if (params.SDT) {
+      queryBuilder.andWhere('vttechthanhtoan_zns.SDT LIKE :SDT', { SDT: `%${params.SDT}%` });
+    }
+    if (params.Status) {
+      queryBuilder.andWhere('vttechthanhtoan_zns.Status LIKE :Status', { Status: `${params.Status}` });
+    }
+    const [items, totalCount] = await queryBuilder
+      .limit(params.pageSize || 10)
+      .offset(params.pageNumber * params.pageSize || 0)
+      .getManyAndCount();
+
+    const queryBuilder1 = this.VttechthanhtoanZNSRepository.createQueryBuilder('vttechthanhtoan_zns');
+    if (params.Batdau && params.Ketthuc) {
+      queryBuilder1.andWhere('vttechthanhtoan_zns.CreateAt BETWEEN :startDate AND :endDate', {
+        startDate: params.Batdau,
+        endDate: params.Ketthuc,
+      });
+    }
+    const [result] = await queryBuilder1.getManyAndCount();
+    const ListStatus = result.map((v: any) => ({ Status: v.Status }))
+
+    return { items, totalCount, ListStatus };
+  }
 
   async update(id: string, data: any) {
     this.VttechthanhtoanRepository.save(data);
@@ -342,5 +336,13 @@ export class VttechthanhtoanService {
   async remove(id: string) {
     await this.VttechthanhtoanRepository.delete(id);
     return { deleted: true };
+  }
+  async createzns(data: any) {
+    this.VttechthanhtoanZNSRepository.create(data);
+    return await this.VttechthanhtoanZNSRepository.save(data);
+  }
+  async updatezns(id: string, data: any) {
+    this.VttechthanhtoanZNSRepository.save(data);
+    return await this.VttechthanhtoanZNSRepository.findOne({ where: { id: id } });
   }
 }

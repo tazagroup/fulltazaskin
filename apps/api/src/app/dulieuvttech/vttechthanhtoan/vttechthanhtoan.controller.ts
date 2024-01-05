@@ -6,7 +6,7 @@ import { Cron, Interval, Timeout } from '@nestjs/schedule';
 @Controller('vttechthanhtoan')
 export class VttechthanhtoanController {
   constructor(private readonly vttechthanhtoanService:VttechthanhtoanService) {}
-  //@Interval(1800000)
+  @Interval(1800000)
   @Get('getapi')
   async getApiRealtime() {      
     return this.vttechthanhtoanService.getApiRealtime();
@@ -15,11 +15,15 @@ export class VttechthanhtoanController {
   async CheckThanhtoan() {      
     return this.vttechthanhtoanService.Checkthanhtoan();
   }
-  //@Cron('0 0 9 * * 0-6')
-  @Get('khachhang9h')
-  async GetKhachhang9h() {      
-    return this.vttechthanhtoanService.GetKhachhang9h();
+  @Interval(1900000)
+  @Get('sendznskh')
+  async GetVttechKhachhang() {      
+    return this.vttechthanhtoanService.GetVttechKhachhang();
   }
+  // @Get('khachhang9h')
+  // async GetKhachhang9h() {      
+  //   return this.vttechthanhtoanService.GetKhachhang9h();
+  // }
   @Post()
   create(@Body() createVttechthanhtoanDto: CreateVttechthanhtoanDto) {
     return this.vttechthanhtoanService.create(createVttechthanhtoanDto);
@@ -42,8 +46,12 @@ export class VttechthanhtoanController {
     }
   @Post('search')
     async findQuery(@Body() SearchParams: any){
-      return await this.vttechthanhtoanService.findQuery(SearchParams);
+      return await this.vttechthanhtoanService.findQueryZNS(SearchParams);
   }
+  // @Post('search')
+  //   async findQuery(@Body() SearchParams: any){
+  //     return await this.vttechthanhtoanService.findQuery(SearchParams);
+  // }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateVttechthanhtoanDto: UpdateVttechthanhtoanDto) {
     return this.vttechthanhtoanService.update(id, updateVttechthanhtoanDto);
