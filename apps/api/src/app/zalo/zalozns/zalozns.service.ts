@@ -51,10 +51,10 @@ export class ZaloznsService {
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
   
       if (response.data.error === 0) {
-        return { status: 'zns', Title: `ZNS có ID: ${response.data.data.msg_id} Đã Được Gửi` };
+        return { status: 'zns', Title: `Thanh Toán : ${response.data.data.msg_id} Đã Được Gửi` };
       } else {
         const smsResponse = await this.sendFallbackSMS(item);
-        return { status: 'sms', Title: 'Lỗi Gửi ZNZ, Đã Gửi SMS', data: JSON.stringify(smsResponse.data) };
+        return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
       }
     } catch (error) {
       this._TelegramService.SendLogdev(JSON.stringify(error));
@@ -91,10 +91,10 @@ export class ZaloznsService {
       );
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
       if (response.data.error === 0) {
-        return { status: 'zns', Title: `ZNS có ID: ${response.data.data.msg_id} Đã Được Gửi` };
+        return { status: 'zns', Title: `Điều Trị: ${response.data.data.msg_id} Đã Được Gửi` };
       } else {
         const smsResponse = await this.sendFallbackSMS(item);
-        return { status: 'sms', Title: 'Lỗi Gửi ZNZ, Đã Gửi SMS', data: JSON.stringify(smsResponse.data) };
+        return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.CustName} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
       }
     } catch (error) {
       this._TelegramService.SendLogdev(JSON.stringify(error));

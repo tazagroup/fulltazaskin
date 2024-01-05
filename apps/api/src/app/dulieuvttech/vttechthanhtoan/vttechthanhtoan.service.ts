@@ -172,7 +172,7 @@ export class VttechthanhtoanService {
       }
       data.Status = 1
       this.update(data.id, data)
-      const result = `Zns Thanh Toán Số Hoá Đơn <b><u> ${data.InvoiceNum} </u></b> của khách hàng <b><u> ${data.CustName} </u></b> có số điện thoại <b><u>${data.SDT} </u></b> Thêm Vào Hàng Chờ Lúc <b><u>${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
+      const result = `Thanh Toán : ${data.InvoiceNum} - ${data.CustName} - ${data.SDT} - ${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
       this._TelegramService.SendNoti(result)
     }
     else {

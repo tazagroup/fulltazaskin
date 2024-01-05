@@ -22,42 +22,42 @@ export class ZaloznsController {
   //   const result =this.zaloznsService.sendtestzns(data,data);
   //   return result
   // }
-  @Post('auto9')
-  Auto9sendZns() {     
-    this.ListSDT.forEach(v => {
-      const Test = {
-      // "mode": "development",
-      "phone": convertPhoneNum(v),
-      "template_id": "272889",
-      "template_data": {
-          "customer_name": v,
-          "schedule_date": moment(new Date()).format("DD/MM/YYYY")
-       },
-      "tracking_id":GenId(8,true)
-     }
-      const result =this.zaloznsService.sendZns(Test,'e4d7426e-53df-4285-be74-aba10259e188');
-      console.error(result);
-      console.error(moment(new Date()).format("hh:mm:ss"));
-    });
-  }
-  @Post('auto15')
-  Auto15sendZns() {     
-    this.ListSDT.forEach(v => {
-      const Test = {
-      // "mode": "development",
-      "phone": convertPhoneNum(v),
-      "template_id": "272889",
-      "template_data": {
-          "customer_name": v,
-          "schedule_date": moment(new Date()).format("DD/MM/YYYY")
-       },
-      "tracking_id":GenId(8,true)
-     }
-      const result =this.zaloznsService.sendZns(Test,'e4d7426e-53df-4285-be74-aba10259e188');
-      console.error(result);
-      console.error(moment(new Date()).format("hh:mm:ss"));
-    });
-  }
+  // @Post('auto9')
+  // Auto9sendZns() {     
+  //   this.ListSDT.forEach(v => {
+  //     const Test = {
+  //     // "mode": "development",
+  //     "phone": convertPhoneNum(v),
+  //     "template_id": "272889",
+  //     "template_data": {
+  //         "customer_name": v,
+  //         "schedule_date": moment(new Date()).format("DD/MM/YYYY")
+  //      },
+  //     "tracking_id":GenId(8,true)
+  //    }
+  //     const result =this.zaloznsService.sendZns(Test,'e4d7426e-53df-4285-be74-aba10259e188');
+  //     console.error(result);
+  //     console.error(moment(new Date()).format("hh:mm:ss"));
+  //   });
+  // }
+  // @Post('auto15')
+  // Auto15sendZns() {     
+  //   this.ListSDT.forEach(v => {
+  //     const Test = {
+  //     // "mode": "development",
+  //     "phone": convertPhoneNum(v),
+  //     "template_id": "272889",
+  //     "template_data": {
+  //         "customer_name": v,
+  //         "schedule_date": moment(new Date()).format("DD/MM/YYYY")
+  //      },
+  //     "tracking_id":GenId(8,true)
+  //    }
+  //     const result =this.zaloznsService.sendZns(Test,'e4d7426e-53df-4285-be74-aba10259e188');
+  //     console.error(result);
+  //     console.error(moment(new Date()).format("hh:mm:ss"));
+  //   });
+  // }
   // @Post('auto9')
   // Auto9sendZns() {     
   //   this.ListSDT.forEach(v => {
