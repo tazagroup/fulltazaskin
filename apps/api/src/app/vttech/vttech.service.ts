@@ -329,7 +329,7 @@ export class VttechService {
               data.Status = 2
               this._Vttech_dieutriService.update_zns(data.id, data)
               this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 2)
-              const result = `<b><u>${zns.Title}</u></b>`;
+              const result = `${zns.Title}`;
               this._TelegramService.SendNoti(result)
               // }
             }
@@ -343,8 +343,8 @@ export class VttechService {
       data.Status = 1
       this._Vttech_dieutriService.update_zns(data.id, data)
       this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 1)
-      //const result = `Điều Trị: ${data.CustName} - ${data.SDT} ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
-     // this._TelegramService.SendLogdev(result)
+      const result = `Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
+      this._TelegramService.SendLogdev(result)
     }
     else {
       data.Status = 3
