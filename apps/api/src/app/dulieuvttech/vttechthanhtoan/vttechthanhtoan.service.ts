@@ -166,8 +166,8 @@ export class VttechthanhtoanService {
       data.Status = 1
       this.UpdateThanhtoan(data.InvoiceNum,1)
       this.updatezns(data.id, data)
-      // const result = `Thanh Toán : ${data.InvoiceNum} - ${data.CustName} - ${data.SDT} - ${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
-      // this._TelegramService.SendNoti(result)
+      const result = `Thanh Toán : ${data.InvoiceNum} - ${data.CustName} - ${data.SDT} - ${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
+      this._TelegramService.SendNoti(result)
     }
     else {
       data.Status = 3
