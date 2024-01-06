@@ -26,7 +26,7 @@ export class Vttech_dieutriController {
     }
   @Post('search')
     async findQuery(@Body() SearchParams: any){
-      return await this.vttech_dieutriService.findQuery(SearchParams);
+      return await this.vttech_dieutriService.findQuery_zns(SearchParams);
   }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateVttech_dieutriDto: any) {

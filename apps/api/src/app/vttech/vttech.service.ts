@@ -274,13 +274,12 @@ export class VttechService {
           this.getDieutri(v);
         });
       }, 5000);
-      return Tinhtrangphongs
+      return {count:Tinhtrangphongs.length,data:Tinhtrangphongs}
   }
 
   async ZnsDieutri() {
     if (this.CheckTime) {
       const now = new Date()
-      const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
       const Tinhtrangphongs = await this._Vttech_dieutriService.fininday();
       const dataZNS = mergeNoDup(Tinhtrangphongs, Tinhtrangphongs, 'CustCode')
       setTimeout(async () => {
@@ -288,6 +287,7 @@ export class VttechService {
           const now = moment(v.TimeZNS);
           const checkTime = now.hour() >= 9 && now.hour() <= 19;
           if (checkTime) {
+            this._Vttech_dieutriService.create_zns(v)
             this.addCron(v)
           }
         });
@@ -312,8 +312,8 @@ export class VttechService {
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)
     if (Chinhanh) {
       const job = new CronJob(cronExpression, () => {
-        const result = `Điều Trị : ${data.id} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
-        this._TelegramService.SendLogdev(result)
+        //const result = `Điều Trị : ${data.id} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
+        //this._TelegramService.SendLogdev(result)
         try {
           this._ZaloznsService.TemplateDanhgia(data, Chinhanh).then((zns: any) => {
             if (zns) {
@@ -329,6 +329,7 @@ export class VttechService {
               data.StatusZNS = 2
               data.Status = 2
               this._Vttech_dieutriService.update(data.id, data)
+              this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 2)
               // const result = `<b><u>${zns.Title}</u></b>`;
               // this._TelegramService.SendNoti(result)
               // }
@@ -342,12 +343,14 @@ export class VttechService {
       job.start();
       data.Status = 1
       this._Vttech_dieutriService.update(data.id, data)
-      const result = `Điều Trị: ${data.CustName} - ${data.SDT} ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
-      this._TelegramService.SendNoti(result)
+      this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 1)
+      //const result = `Điều Trị: ${data.CustName} - ${data.SDT} ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
+     // this._TelegramService.SendLogdev(result)
     }
     else {
       data.Status = 3
       this._Vttech_dieutriService.update(data.id, data)
+      this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 3)
       const result = `Chi nhánh chưa đăng ký ZNS`;
       this._TelegramService.SendLogdev(result)
     }

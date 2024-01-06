@@ -48,10 +48,6 @@ export class VttechController {
   async ZnsDieutri() {
     return await this.vttechService.ZnsDieutri();
   }
-  // @Get('vttech_znsdieutri9h')
-  // async ZnsDieutri9h() {
-  //   return await this.vttechService.ZnsDieutri9h();
-  // }
   @Post('vttech_sendznsdieutri')
   async SendZnsDieutri(@Body() data: any) {
     return await this.vttechService.SendZnsDieutri(data);
