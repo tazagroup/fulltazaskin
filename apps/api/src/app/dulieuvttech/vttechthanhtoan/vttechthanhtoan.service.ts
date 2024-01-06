@@ -46,7 +46,6 @@ export class VttechthanhtoanService {
         if (uniqueInData2.length > 0) {
           await Promise.all(uniqueInData2.map((v: any) => {
             v.Dulieu = JSON.stringify(v)
-            v.Status = 9
             this.create(v).then((item: any) => {
               this.GetKHByCode(item)
             })
@@ -126,6 +125,8 @@ export class VttechthanhtoanService {
        this.sendZNSThanhtoan(result)
       }, k*100);
     });
+    console.error(ListKH);
+    
     return {count:Group.length,data:Group}
   }
  }
@@ -133,41 +134,40 @@ export class VttechthanhtoanService {
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
     if (Chinhanh) {
       try {        
-        data.ThucteZNS = new Date()
-        data.StatusZNS = 2
-        data.Status = 2
-        this.updatezns(data.id, data)
-        this.UpdateThanhtoan(data.InvoiceNum,2)
-
-        // this._ZaloznsService.sendtestzns(data, Chinhanh).then((zns: any) => {
-        //   if (zns) {
-        //     if (zns.status == 'sms') {
-        //       data.SMS = zns.data
-        //       data.Status = 4
-        //       this.updatezns(data.id, data)
-        //       this.UpdateThanhtoan(data.InvoiceNum,4)
-        //       const result = `<b><u>${zns.Title}</u></b>`;
-        //       this._TelegramService.SendNoti(result)
-        //     }
-        //     else {
-        //       data.ThucteZNS = new Date()
-        //       data.StatusZNS = 2
-        //       data.Status = 2
-        //       this.updatezns(data.id, data)
-        //       this.UpdateThanhtoan(data.InvoiceNum,2)
-        //       const result = `<b><u>${zns.Title}</u></b>`;
-        //       this._TelegramService.SendNoti(result)
-        //     }
-        //   }
-        // })
+        // data.ThucteZNS = new Date()
+        // data.StatusZNS = 2
+        // data.Status = 2
+        // this.updatezns(data.id, data)
+        // this.UpdateThanhtoan(data.InvoiceNum,2)
+        this._ZaloznsService.sendtestzns(data, Chinhanh).then((zns: any) => {
+          if (zns) {
+            if (zns.status == 'sms') {
+              data.SMS = zns.data
+              data.Status = 4
+              this.updatezns(data.id, data)
+              this.UpdateThanhtoan(data.InvoiceNum,4)
+              const result = `<b><u>${zns.Title}</u></b>`;
+              this._TelegramService.SendNoti(result)
+            }
+            else {
+              data.ThucteZNS = new Date()
+              data.StatusZNS = 2
+              data.Status = 2
+              this.updatezns(data.id, data)
+              this.UpdateThanhtoan(data.InvoiceNum,2)
+              const result = `<b><u>${zns.Title}</u></b>`;
+              this._TelegramService.SendNoti(result)
+            }
+          }
+        })
       } catch (error) {
         console.error(`Error calling Zalozns service: ${error.message}`);
       }
       data.Status = 1
       this.UpdateThanhtoan(data.InvoiceNum,1)
       this.updatezns(data.id, data)
-      const result = `Thanh Toán : ${data.InvoiceNum} - ${data.CustName} - ${data.SDT} - ${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
-      this._TelegramService.SendNoti(result)
+      // const result = `Thanh Toán : ${data.InvoiceNum} - ${data.CustName} - ${data.SDT} - ${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
+      // this._TelegramService.SendNoti(result)
     }
     else {
       data.Status = 3
