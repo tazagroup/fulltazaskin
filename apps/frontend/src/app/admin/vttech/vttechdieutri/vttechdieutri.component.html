@@ -26,11 +26,13 @@
             </mat-date-range-picker-actions>
           </mat-date-range-picker>
         </mat-form-field>
-        <div>
+        <div class="flex flex-row space-x-2">
           <button mat-icon-button  (click)="Reload()">
             <span class="material-symbols-outlined">sync</span>
           </button>
-      
+          <button mat-icon-button  (click)="SendAllZNS(FilterLists)" matTooltip="{{FilterLists.length}}">
+            <span class="material-symbols-outlined">send</span>
+          </button>
         </div>
         <!-- <mat-form-field appearance="outline">
             <mat-label>Trạng Thái</mat-label>
@@ -47,7 +49,6 @@
               <span>{{Status[item]}}</span>
               <span class="font-bold">{{Report(ListStatus,item)}}</span>
          </div> 
-         <!-- <button mat-raised-button (click)="SendAllZNS(FilterLists)">Send ({{FilterLists.length}})</button> -->
       </div>
     </div>
     <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
