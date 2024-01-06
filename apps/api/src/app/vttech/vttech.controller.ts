@@ -38,12 +38,12 @@ export class VttechController {
   async getDieutri(@Body() data: any) {
     return await this.vttechService.getDieutri(data);
   }
- // @Interval(7200000)
+  @Interval(7200000)
   @Get('vttech_createdieutri')
   async CreateDieutri() {
     return await this.vttechService.CreateDieutri();
   }
- // @Interval(9000000)
+ @Interval(9000000)
   @Get('vttech_znsdieutri')
   async ZnsDieutri() {
     return await this.vttechService.ZnsDieutri();

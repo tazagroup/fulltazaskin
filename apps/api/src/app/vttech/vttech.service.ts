@@ -267,7 +267,6 @@ export class VttechService {
     }
   }
   async CreateDieutri() {
-    if (this.CheckTime) {
       await this.getTinhtrangphong();
       const Tinhtrangphongs = await this._Vttech_tinhtrangphongService.fininday();
       setTimeout(async () => {
@@ -276,7 +275,6 @@ export class VttechService {
         });
       }, 5000);
       return Tinhtrangphongs
-    }
   }
 
   async ZnsDieutri() {
@@ -287,7 +285,9 @@ export class VttechService {
       const dataZNS = mergeNoDup(Tinhtrangphongs, Tinhtrangphongs, 'CustCode')
       setTimeout(async () => {
         dataZNS.forEach((v: any) => {
-          if (this.Getdatetime(v.TimeZNS) <= this.Getdatetime(End)) {
+          const now = moment(v.TimeZNS);
+          const checkTime = now.hour() >= 9 && now.hour() <= 19;
+          if (checkTime) {
             this.addCron(v)
           }
         });
