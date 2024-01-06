@@ -50,9 +50,7 @@ export class ZalodanhgiaComponent implements OnInit {
     })
   }
   onStarClick(index: number) {
-    this.myDivRef.nativeElement.scrollTo({ top: 0 });
     this.SelectStar = index + 1;
-    console.log(index, this.SelectStar);
     this.FilterLists = this.Lists.filter((v)=>v.ResponWebHook.message.rate<=this.SelectStar)
   }
   Reload(){}
