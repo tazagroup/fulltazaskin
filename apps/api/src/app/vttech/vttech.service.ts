@@ -312,8 +312,8 @@ export class VttechService {
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)
     if (Chinhanh) {
       const job = new CronJob(cronExpression, () => {
-        //const result = `Điều Trị : ${data.id} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
-        //this._TelegramService.SendLogdev(result)
+        const result = `Điều Trị : ${data.id} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
+        this._TelegramService.SendLogdev(result)
         try {
           this._ZaloznsService.TemplateDanhgia(data, Chinhanh).then((zns: any) => {
             if (zns) {
@@ -328,10 +328,10 @@ export class VttechService {
               data.SendZNSAt = new Date()
               data.StatusZNS = 2
               data.Status = 2
-              this._Vttech_dieutriService.update(data.id, data)
+              this._Vttech_dieutriService.update_zns(data.id, data)
               this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 2)
-              // const result = `<b><u>${zns.Title}</u></b>`;
-              // this._TelegramService.SendNoti(result)
+              const result = `<b><u>${zns.Title}</u></b>`;
+              this._TelegramService.SendNoti(result)
               // }
             }
           })
@@ -342,14 +342,14 @@ export class VttechService {
       this.schedulerRegistry.addCronJob(data.id, job);
       job.start();
       data.Status = 1
-      this._Vttech_dieutriService.update(data.id, data)
+      this._Vttech_dieutriService.update_zns(data.id, data)
       this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 1)
       //const result = `Điều Trị: ${data.CustName} - ${data.SDT} ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
      // this._TelegramService.SendLogdev(result)
     }
     else {
       data.Status = 3
-      this._Vttech_dieutriService.update(data.id, data)
+      this._Vttech_dieutriService.update_zns(data.id, data)
       this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 3)
       const result = `Chi nhánh chưa đăng ký ZNS`;
       this._TelegramService.SendLogdev(result)
