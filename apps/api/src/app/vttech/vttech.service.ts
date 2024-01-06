@@ -308,11 +308,10 @@ export class VttechService {
     let cronExpression: any;
     const targetDate = moment(data.TimeZNS);
     cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
-    console.error(cronExpression);
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)
     if (Chinhanh) {
       const job = new CronJob(cronExpression, () => {
-        const result = `Điều Trị : ${data.id} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
+        const result = `Điều Trị : ${data.id} - ${data.SDT} - ${data.CustName} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
         this._TelegramService.SendLogdev(result)
         try {
           this._ZaloznsService.TemplateDanhgia(data, Chinhanh).then((zns: any) => {
