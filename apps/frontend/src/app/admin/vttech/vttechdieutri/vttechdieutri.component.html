@@ -57,7 +57,7 @@
           <div class="flex flex-col space-y-2 items-center w-full">
             <div class="w-full flex flex-row justify-between p-2 text-white {{Style[item.Status]}} items-center rounded-t-lg">
             <span>{{Status[item.Status]}}</span>
-            <!-- <button mat-icon-button *ngIf="item.Status<2" (click)="SendZNS(item)">Gửi</button> -->
+            <button mat-icon-button *ngIf="item.Status<2" (click)="SendZNS(item)">Gửi</button>
             </div>
             <div class="w-full p-2 grid grid-cols-1 gap-2">
               <div class="flex flex-col">
