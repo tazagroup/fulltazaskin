@@ -43,9 +43,9 @@ export class Vttech_dieutriService {
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
 
-    const queryBuilder1 = this.Vttech_dieutriRepository.createQueryBuilder('vttech_dieutri');
+    const queryBuilder1 = this.Vttech_dieutri_znsRepository.createQueryBuilder('vttech_dieutri_zns');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder1.andWhere('vttech_dieutri.Created BETWEEN :startDate AND :endDate', {
+      queryBuilder1.andWhere('vttech_dieutri_zns.Created BETWEEN :startDate AND :endDate', {
         startDate: params.Batdau,
         endDate: params.Ketthuc,
       });
