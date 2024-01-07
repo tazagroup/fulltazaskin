@@ -296,7 +296,7 @@ export class VttechService {
   }
 
   async CreateZNSDieutri() {
-    if (this.CheckTime) {
+    if (this.CheckTime()) {
       const Tinhtrangphongs = await this._Vttech_dieutriService.fininday();
       const dataZNS = mergeNoDup(Tinhtrangphongs, Tinhtrangphongs, 'CustCode')
       setTimeout(async () => {
@@ -309,7 +309,7 @@ export class VttechService {
     }
   }
   async AddCronZNSDieutri() {
-    if (this.CheckTime) {
+    if (this.CheckTime()) {
       const ZNSDieutri = await this._Vttech_dieutriService.fininday_zns();
       setTimeout(async () => {
         ZNSDieutri.forEach((v: any) => {

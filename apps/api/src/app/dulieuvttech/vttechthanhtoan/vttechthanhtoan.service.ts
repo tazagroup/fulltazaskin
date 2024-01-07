@@ -114,7 +114,7 @@ export class VttechthanhtoanService {
 
 
   async GetVttechKhachhang() {
-    if(this.CheckTime)
+    if(this.CheckTime())
     {
     const begin = moment(new Date()).startOf('day').toDate()
     const end = moment(new Date()).endOf('day').toDate()
@@ -132,7 +132,7 @@ export class VttechthanhtoanService {
     Group.forEach((v:any,k:any) => {
       setTimeout(async () => {
        const result = await this.createzns(v)
-       if(this.CheckTime)
+       if(this.CheckTime())
        {
         this.sendZNSThanhtoan(result)
        }
