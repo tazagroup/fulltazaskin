@@ -122,7 +122,10 @@ export class VttechthanhtoanService {
     Group.forEach((v:any,k:any) => {
       setTimeout(async () => {
        const result = await this.createzns(v)
-       this.sendZNSThanhtoan(result)
+       if(this.CheckTime)
+       {
+        this.sendZNSThanhtoan(result)
+       }
       }, k*100);
     });
     console.error(ListKH);

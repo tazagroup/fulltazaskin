@@ -22,6 +22,7 @@ import { VttechModule } from './vttech/vttech.module';
 import { TasksModule } from './tasks/tasks.module';
 import { SmsModule } from './sms/sms.module';
 import { TelegramService } from './shared/telegram.service';
+import { LoggerModule } from './logger/logger.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -54,6 +55,7 @@ import { TelegramService } from './shared/telegram.service';
     VttechModule,
     TasksModule,
     SmsModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
