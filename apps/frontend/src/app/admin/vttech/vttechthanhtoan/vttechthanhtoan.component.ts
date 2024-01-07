@@ -5,7 +5,6 @@ import { VttechthanhtoanService } from './vttechthanhtoan.service';
 import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
 import * as moment from 'moment';
 import { MatSelectChange } from '@angular/material/select';
-import { Delete } from '@nestjs/common';
 @Component({
   selector: 'app-vttechthanhtoan',
   templateUrl: './vttechthanhtoan.component.html',
