@@ -9,8 +9,9 @@ import { Vttech_tinhtrangphongModule } from './vttech_tinhtrangphong/vttech_tinh
 import { Vttech_dieutriModule } from './vttech_dieutri/vttech_dieutri.module';
 import { Vttech_tinhtrangphongService } from './vttech_tinhtrangphong/vttech_tinhtrangphong.service';
 import { ZaloznsModule } from '../zalo/zalozns/zalozns.module';
+import { LoggerModule } from '../logger/logger.module';
 @Module({
-  imports: [Vttech_khachhangModule,CauhinhchungModule,Vttech_tinhtrangphongModule,Vttech_dieutriModule,ZaloznsModule],
+  imports: [Vttech_khachhangModule,CauhinhchungModule,Vttech_tinhtrangphongModule,Vttech_dieutriModule,ZaloznsModule,LoggerModule],
   controllers: [VttechController],
   providers: [VttechService,TelegramService]
 

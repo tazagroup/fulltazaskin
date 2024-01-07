@@ -10,6 +10,7 @@ import { TelegramService } from '../../shared/telegram.service';
 import { LIST_CHI_NHANH } from '../../shared.utils';
 import { ZaloznsService } from '../../zalo/zalozns/zalozns.service';
 import { VttechthanhtoanZNSEntity } from './entities/vttechthanhtoan-zns.entity';
+import { LoggerService } from '../../logger/logger.service';
 @Injectable()
 export class VttechthanhtoanService {
   Cookie: any = ''
@@ -22,6 +23,7 @@ export class VttechthanhtoanService {
     private _CauhinhchungService: CauhinhchungService,
     private _TelegramService: TelegramService,
     private _ZaloznsService: ZaloznsService,
+    private _LoggerService: LoggerService,
   ) {
     this._CauhinhchungService.findslug('vttechtoken').then((data: any) => {
       this.Cookie = data.Content.Cookie
@@ -50,24 +52,32 @@ export class VttechthanhtoanService {
               this.GetKHByCode(item)
             })
           }));
-          const result = `Thanh Toán Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
-          this._TelegramService.SendLogdev(result);
+          // const result = `Thanh Toán Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
+          // this._TelegramService.SendLogdev(result);
+          const logger ={Title:'Thanhtoanvttech',Mota:`Thanh Toán Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`}
+          this._LoggerService.create(logger)
           return { status: 201 };
         }
         else {
-          const result = `Thanh Toán Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
-          this._TelegramService.SendLogdev(result);
+          // const result = `Thanh Toán Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
+          // this._TelegramService.SendLogdev(result);
+          const logger ={Title:'Thanhtoanvttech',Mota:`Thanh Toán Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`}
+          this._LoggerService.create(logger)
           return { status: 200 };
         }
       }
       else {
-        const result = "Code 403: Lỗi Xác thực"
-        this._TelegramService.SendLogdev(result);
+        // const result = "Code 403: Lỗi Xác thực"
+        // this._TelegramService.SendLogdev(result);
+        const logger ={Title:'Thanhtoanvttech',Mota:`Code 403: Lỗi Xác thực`}
+        this._LoggerService.create(logger)
         return { status: 404, title: 'Lỗi Data Trả Về' };
       }
     } catch (error) {
-      const result = `Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
-      this._TelegramService.SendLogdev(result);
+      // const result = `Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
+      // this._TelegramService.SendLogdev(result);
+      const logger ={Title:'Thanhtoanvttech',Mota:`Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`}
+      this._LoggerService.create(logger)
       return { status: 400, title: 'Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
     }
   }

@@ -20,10 +20,6 @@ export class VttechthanhtoanController {
   async GetVttechKhachhang() {      
     return this.vttechthanhtoanService.GetVttechKhachhang();
   }
-  // @Get('khachhang9h')
-  // async GetKhachhang9h() {      
-  //   return this.vttechthanhtoanService.GetKhachhang9h();
-  // }
   @Post()
   create(@Body() createVttechthanhtoanDto: CreateVttechthanhtoanDto) {
     return this.vttechthanhtoanService.create(createVttechthanhtoanDto);
