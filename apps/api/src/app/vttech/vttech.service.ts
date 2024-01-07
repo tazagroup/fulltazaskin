@@ -177,30 +177,30 @@ export class VttechService {
               item.Dulieu = v
               this._Vttech_tinhtrangphongService.create(item)
             }));          
-            const logger ={Title:'Tình Trạng Phòng',Mota:`Trạng Thái Phòng Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`}
-            this._LoggerService.create(logger)
+            // const logger ={Title:'Tình Trạng Phòng',Mota:`Trạng Thái Phòng Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`}
+            // this._LoggerService.create(logger)
             return { status: 201, count: uniqueInData2.length, result: uniqueInData2 };
           }
           else {
             // const result = `Trạng Thái Phòng Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
             // this._TelegramService.SendLogdev(result);
-            const logger ={Title:'Tình Trạng Phòng',Mota:`Trạng Thái Phòng Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`}
-            this._LoggerService.create(logger)
+            // const logger ={Title:'Tình Trạng Phòng',Mota:`Trạng Thái Phòng Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`}
+            // this._LoggerService.create(logger)
             return { status: 200 };
           }
         }
         else {
           // const result = "Trạng Thái Phòng Code 403: Lỗi Xác thực"
           // this._TelegramService.SendLogdev(result);
-          const logger ={Title:'Tình Trạng Phòng',Mota:`Trạng Thái Phòng Code 403: Lỗi Xác thực`}
-          this._LoggerService.create(logger)
+          // const logger ={Title:'Tình Trạng Phòng',Mota:`Trạng Thái Phòng Code 403: Lỗi Xác thực`}
+          // this._LoggerService.create(logger)
           return { status: 404, title: 'Lỗi Data Trả Về' };
         }
       } catch (error) {
         // const result = `Trạng Thái Phòng Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
         // this._TelegramService.SendLogdev(result);
-        const logger ={Title:'Tình Trạng Phòng',Mota:`Trạng Thái Phòng Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`}
-        this._LoggerService.create(logger)
+        // const logger ={Title:'Tình Trạng Phòng',Mota:`Trạng Thái Phòng Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`}
+        // this._LoggerService.create(logger)
         return { status: 400, title: 'Trạng Thái Phòng Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
       }
 
@@ -255,32 +255,31 @@ export class VttechService {
           }));
           // const result = `Điều trị Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`;
           // this._TelegramService.SendLogdev(result);
-          const logger ={Title:'Điều Trị',Mota:`Điều trị Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`}
-          this._LoggerService.create(logger)
           return { status: 201, count: uniqueInData2.length, result: uniqueInData2 };
         }
         else {
           // const result = `Điều trị Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`;
           // this._TelegramService.SendLogdev(result);
-          const logger ={Title:'Điều Trị',Mota:`Điều trị Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`}
-          this._LoggerService.create(logger)
+          //const logger ={Title:'Điều Trị',Mota:`Điều trị Code 200: Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>0</u></b>`}
+          //this._LoggerService.create(logger)
           return { status: 200 };
         }
       }
       else {
         // const result = "Điều trị Code 403: Lỗi Xác thực"
         // this._TelegramService.SendLogdev(result);
-        const logger ={Title:'Điều Trị',Mota:`Điều trị Code 403: Lỗi Xác thực`}
-        this._LoggerService.create(logger)
+        // const logger ={Title:'Điều Trị',Mota:`Điều trị Code 403: Lỗi Xác thực`}
+        // this._LoggerService.create(logger)
         return { status: 404, title: 'Lỗi Data Trả Về' };
       }
     } catch (error) {
       // const result = `Điều trị Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`;
       // this._TelegramService.SendLogdev(result);
-      const logger ={Title:'Điều Trị',Mota:`Điều trị Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`}
-      this._LoggerService.create(logger)
+      // const logger ={Title:'Điều Trị',Mota:`Điều trị Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>`}
+      // this._LoggerService.create(logger)
       return { status: 400, title: 'Điều trị Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
     }
+    
   }
   async CreateDieutri() {
       await this.getTinhtrangphong();
@@ -291,27 +290,33 @@ export class VttechService {
         });
       }, 5000);
       // this._TelegramService.SendLogdev(`Cập Nhật Điều Trị : Số Lượng ${Tinhtrangphongs.length}`);
-      const logger ={Title:'Điều Trị',Mota:`Cập Nhật Điều Trị : Số Lượng ${Tinhtrangphongs.length}`}
-      this._LoggerService.create(logger)
+      // const logger ={Title:'Điều Trị',Mota:`Cập Nhật Điều Trị : Số Lượng ${Tinhtrangphongs.length}`}
+      // this._LoggerService.create(logger)
       return {count:Tinhtrangphongs.length,data:Tinhtrangphongs}
   }
 
-  async ZnsDieutri() {
+  async CreateZNSDieutri() {
     if (this.CheckTime) {
-      const now = new Date()
       const Tinhtrangphongs = await this._Vttech_dieutriService.fininday();
       const dataZNS = mergeNoDup(Tinhtrangphongs, Tinhtrangphongs, 'CustCode')
       setTimeout(async () => {
         dataZNS.forEach((v: any) => {
-          const now = moment(v.TimeZNS);
-          const checkTime = now.hour() >= 9 && now.hour() <= 19;
-          if (checkTime) {
+            delete v.id
             this._Vttech_dieutriService.create_zns(v)
-            this.addCron(v)
-          }
         });
       }, 5000);
-      return { count: dataZNS.length, data: dataZNS }
+      return { countTTP:Tinhtrangphongs.length,countDataZNS: dataZNS.length, data: dataZNS }
+    }
+  }
+  async AddCronZNSDieutri() {
+    if (this.CheckTime) {
+      const ZNSDieutri = await this._Vttech_dieutriService.fininday_zns();
+      setTimeout(async () => {
+        ZNSDieutri.forEach((v: any) => {
+            this.addCron(v)
+        });
+      }, 5000);
+      return { ZNSDieutri:ZNSDieutri.length, data: ZNSDieutri }
     }
   }
   CheckTime() {
@@ -322,16 +327,15 @@ export class VttechService {
   async SendZnsDieutri(data: any) {
     this.addCron(data)
   }
-  addCron(data: any) {
-    console.error('Cron data : ', data);
+  addCron(data: any) {   
     let cronExpression: any;
     const targetDate = moment(data.TimeZNS);
     cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)
     if (Chinhanh) {
       const job = new CronJob(cronExpression, () => {
-        const result = `Điều Trị : ${data.id} - ${data.SDT} - ${data.CustName} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
-        this._TelegramService.SendLogdev(result)
+       // const result = `Điều Trị : ${data.id} - ${data.SDT} - ${data.CustName} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
+      //  this._TelegramService.SendLogdev(result)
         const logger ={Title:'Điều Trị',Mota:`Điều Trị : ${data.id} - ${data.SDT} - ${data.CustName} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`}
         this._LoggerService.create(logger)
         try {
@@ -350,8 +354,8 @@ export class VttechService {
               data.Status = 2
               this._Vttech_dieutriService.update_zns(data.id, data)
               this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 2)
-              // const result = `${zns.Title}`;
-              // this._TelegramService.SendNoti(result)
+             // const result = `${zns.Title}`;
+             // this._TelegramService.SendNoti(result)
               const logger ={Title:'Điều Trị',Mota:`${zns.Title}`}
               this._LoggerService.create(logger)
               // }
@@ -361,13 +365,13 @@ export class VttechService {
           console.error(`Error calling Zalozns service: ${error.message}`);
         }
       })
-      this.schedulerRegistry.addCronJob(data.id, job);
-      job.start();
+      this.schedulerRegistry.addCronJob(data.id, job);      
+      job.start(); 
       data.Status = 1
       this._Vttech_dieutriService.update_zns(data.id, data)
       this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 1)
-      // const result = `Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
-      // this._TelegramService.SendLogdev(result)
+     // const result = `Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
+     // this._TelegramService.SendLogdev(result)
       const logger ={Title:'Điều Trị',Mota:`Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`}
       this._LoggerService.create(logger)
     }

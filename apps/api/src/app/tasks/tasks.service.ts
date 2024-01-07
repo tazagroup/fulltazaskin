@@ -101,7 +101,7 @@ export class TasksService {
     jobs.forEach((value, key, map) => {
     result.push({key:key,value:value.cronTime.source})
     })
-    return result
+    return jobs
   }
   addCron(data: any) {
     console.error('Cron data : ',data);

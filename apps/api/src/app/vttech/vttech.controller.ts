@@ -44,9 +44,14 @@ export class VttechController {
     return await this.vttechService.CreateDieutri();
   }
  @Interval(4000000)
+  @Get('vttech_createznsdieutri')
+  async CreateZNSDieutri() {
+    return await this.vttechService.CreateZNSDieutri();
+  }
+ @Interval(4200000)
   @Get('vttech_znsdieutri')
-  async ZnsDieutri() {
-    return await this.vttechService.ZnsDieutri();
+  async AddCronZNSDieutri() {
+    return await this.vttechService.AddCronZNSDieutri();
   }
   @Post('vttech_sendznsdieutri')
   async SendZnsDieutri(@Body() data: any) {

@@ -66,7 +66,7 @@ export class Vttech_dieutriService {
       return await this.Vttech_dieutriRepository.find({
         where: {
           TimeZNS: Between(Start, End),
-          Status: In([0, 1]),
+          Status: In([0]),
         },
       }); 
   }
@@ -77,7 +77,7 @@ export class Vttech_dieutriService {
       return await this.Vttech_dieutri_znsRepository.find({
         where: {
           TimeZNS: Between(Start, End),
-          Status: In([0, 1]),
+          Status: In([0]),
         },
       }); 
   }
