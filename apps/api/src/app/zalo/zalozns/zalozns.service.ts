@@ -338,7 +338,12 @@ export class ZaloznsService {
     .offset(params.pageNumber * params.pageSize || 0)
     .getManyAndCount();
     items.forEach((v:any)=>{
-     v.SDT =  Phone_To_0(filter.find((v1)=>v1.message.tracking_id==v.ResponWebHook.message.tracking_id).recipient.id)
+      const GetPhone = filter.find((v1)=>v1.message.tracking_id==v.ResponWebHook.message.tracking_id)
+      if(GetPhone)
+      {
+        v.SDT =  Phone_To_0(GetPhone.recipient.id)
+      }
+  
     })
     return { items, totalCount };
   }
