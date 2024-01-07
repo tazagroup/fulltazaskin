@@ -6,7 +6,7 @@ import { Cron, Interval, Timeout } from '@nestjs/schedule';
 @Controller('vttechthanhtoan')
 export class VttechthanhtoanController {
   constructor(private readonly vttechthanhtoanService:VttechthanhtoanService) {}
-  @Interval(1800000)
+  //@Interval(1800000)
   @Get('getapi')
   async getApiRealtime() {      
     return this.vttechthanhtoanService.getApiRealtime();
@@ -15,7 +15,7 @@ export class VttechthanhtoanController {
   async CheckThanhtoan() {      
     return this.vttechthanhtoanService.Checkthanhtoan();
   }
-  @Interval(1900000)
+  //@Interval(1900000)
   @Get('sendznskh')
   async GetVttechKhachhang() {      
     return this.vttechthanhtoanService.GetVttechKhachhang();
