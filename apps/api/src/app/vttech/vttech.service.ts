@@ -297,15 +297,19 @@ export class VttechService {
 
   async CreateZNSDieutri() {
     if (this.CheckTime()) {
-      const Tinhtrangphongs = await this._Vttech_dieutriService.fininday();
-      const dataZNS = mergeNoDup(Tinhtrangphongs, Tinhtrangphongs, 'CustCode')
+      const Dieutris = await this._Vttech_dieutriService.fininday();
+      const dataZNS = mergeNoDup(Dieutris, Dieutris, 'CustCode')
       setTimeout(async () => {
         dataZNS.forEach((v: any) => {
             delete v.id
             this._Vttech_dieutriService.create_zns(v)
         });
       }, 5000);
-      return { countTTP:Tinhtrangphongs.length,countDataZNS: dataZNS.length, data: dataZNS }
+      Dieutris.forEach(v => {
+          v.Status = 1
+          this._Vttech_dieutriService.update(v.id,v)
+        });
+      return { countTTP:Dieutris.length,countDataZNS: dataZNS.length, data: dataZNS }
     }
   }
   async AddCronZNSDieutri() {
