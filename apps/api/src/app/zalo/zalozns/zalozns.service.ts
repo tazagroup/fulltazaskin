@@ -92,10 +92,11 @@ export class ZaloznsService {
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
       if (response.data.error === 0) {
         return { status: 'zns', Title: `Điều Trị: ${response.data.data.msg_id} - ${item.id} - ${item.SDT} - ${item.CustName} Đã Được Gửi` };
-      } else {
-        const smsResponse = await this.sendFallbackSMS(item);
-        return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.CustName} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
-      }
+      } 
+      // else {
+      //   const smsResponse = await this.sendFallbackSMS(item);
+      //   return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.CustName} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
+      // }
     } catch (error) {
       this._TelegramService.SendLogdev(JSON.stringify(error));
       throw error; // Rethrow for proper error propagation
