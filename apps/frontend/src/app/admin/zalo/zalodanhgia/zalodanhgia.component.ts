@@ -24,6 +24,7 @@ export class ZalodanhgiaComponent implements OnInit {
   };
   LIST_CHI_NHANH:any=LIST_CHI_NHANH
   PagiLength:any
+  pageSizeOptions:any[]=[5]
   Total:any
   SelectStar:any=5
   stars = 5; // Number of stars
@@ -42,12 +43,19 @@ export class ZalodanhgiaComponent implements OnInit {
       {
         console.log(data);
         this.Total = data.totalCount
+        this.SetPageSizeOptions(this.Total,this.SearchParams.pageSize)
         this.PagiLength = (Number(data.totalCount)/Number(this.SearchParams.pageSize)).toFixed()        
         this.FilterLists = this.Lists = data.items
         console.log(this.Lists);
       }
 
     })
+  }
+  SetPageSizeOptions(total:any,pageSize:any)
+  {
+    const count = Math.floor(total / pageSize) 
+    const numbers = Array.from({ length: count }, (_, i) => i + 1);
+    this.pageSizeOptions =numbers.map((v)=>v*pageSize)
   }
   onStarClick(index: number) {
     this.SelectStar = index + 1;
@@ -98,9 +106,10 @@ export class ZalodanhgiaComponent implements OnInit {
   onPageChange(event:any)
   {
     console.log(event);
-    
     this.SearchParams.pageSize=event.pageSize
      this.SearchParams.pageNumber=event.pageIndex
+     console.log(this.SearchParams);
+     
      this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
 }

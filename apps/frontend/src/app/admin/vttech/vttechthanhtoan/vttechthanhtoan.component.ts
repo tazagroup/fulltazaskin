@@ -53,6 +53,10 @@ export class VttechthanhtoanComponent implements OnInit {
       }
     })
   }
+  LoadServer()
+  {
+      this._VttechthanhtoanService.LoadServer().subscribe()
+  }
   Reload()
   {
       delete this.SearchParams.Status

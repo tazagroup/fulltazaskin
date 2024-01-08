@@ -49,7 +49,7 @@
         <span class="material-symbols-outlined {{SelectStar > index?'text-yellow-500':''}}" (click)="onStarClick(index)"
         *ngFor="let i of CreateStart(5); let index = index"> star </span>
       </div>
-       <span class="font-bold" *ngIf="SelectStar>0"> Số Lượng ({{FilterLists.length}})</span>
+       <span class="font-bold" *ngIf="SelectStar>0"> Số Lượng ({{FilterLists.length}}/{{Total}})</span>
       </div>
       <!-- <div class="flex flex-row text-xs">
          <div (click)="ChangeStatusButton(item)" class="flex flex-col lg:space-x-2 lg:flex-row items-center border rounded-lg p-2 text-white {{Style[item]}}" *ngFor="let item of [0,1,2,4,3]">
@@ -79,7 +79,7 @@
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Thời Gian : </span>
-                    <span class="font-bold">{{item.CreateAt|date:'hh:ss dd/MM/yyyy'}}</span>
+                    <span class="font-bold">{{item.CreateAt|date:'HH:mm:ss dd/MM/yyyy'}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Đánh Giá ({{item.ResponWebHook.message.rate}}) : </span>
@@ -111,8 +111,8 @@
       </div>
     </div>
     <div class="relative border-t flex flex-col">
-      <mat-paginator (page)="onPageChange($event)" [length]="PagiLength"
-        [pageSizeOptions]="[5,50,Total]"></mat-paginator>
+      <mat-paginator (page)="onPageChange($event)" [length]="Total" [pageSize]="PagiLength"
+        [pageSizeOptions]="pageSizeOptions"></mat-paginator>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>

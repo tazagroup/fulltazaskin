@@ -24,6 +24,14 @@ export class VttechthanhtoanService {
   //     })
   //   );
   // }
+  LoadServer() {
+    return this.http.get(environment.APIURL + '/vttechthanhtoan/getapi').pipe(
+      map((data: any) => { 
+        console.log(data);
+        
+      })
+    );
+  }
   getAllVttechthanhtoans() {
     return this.http.get(environment.APIURL + '/vttechthanhtoan').pipe(
       map((data: any) => { 
