@@ -387,7 +387,7 @@ export class VttechthanhtoanService {
   }
   CheckTime() {
     const now = moment();
-    const checkTime = now.hour() >= 9 && now.hour() <= 19;
+    const checkTime = now.hour() >= 8 && now.hour() <= 19;
     return checkTime
   }
 }
