@@ -373,6 +373,22 @@ export class VttechService {
               this._LoggerService.create(logger)
               // }
             }
+            else
+            {
+              data.SendZNSAt = new Date()
+              data.StatusZNS = 5
+              data.Status = 5
+              this._Vttech_dieutriService.update_zns(data.id, data)
+              this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 5)
+             // const result = `${zns.Title}`;
+             // this._TelegramService.SendNoti(result)
+              const logger ={
+                Title:'Điều Trị',
+                Slug:'dieutri',
+                Action:'khac',
+                Mota:`${JSON.stringify(zns)}`}
+              this._LoggerService.create(logger)
+            }
           })
         } catch (error) {
           console.error(`Error calling Zalozns service: ${error.message}`);
