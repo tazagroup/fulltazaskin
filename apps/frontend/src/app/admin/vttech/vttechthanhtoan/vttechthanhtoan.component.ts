@@ -55,7 +55,8 @@ export class VttechthanhtoanComponent implements OnInit {
   }
   LoadServer()
   {
-      this._VttechthanhtoanService.LoadServer().subscribe()
+      const data = {begin:this.SearchParams.Batdau,end:this.SearchParams.Ketthuc}
+      this._VttechthanhtoanService.LoadServer(data).subscribe()
   }
   Reload()
   {

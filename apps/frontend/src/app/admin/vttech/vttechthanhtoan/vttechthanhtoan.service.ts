@@ -24,11 +24,10 @@ export class VttechthanhtoanService {
   //     })
   //   );
   // }
-  LoadServer() {
-    return this.http.get(environment.APIURL + '/vttechthanhtoan/getapi').pipe(
+  LoadServer(data:any) {
+    return this.http.post(environment.APIURL + '/vttechthanhtoan/getapi',data).pipe(
       map((data: any) => { 
-        console.log(data);
-        
+        console.log(data);   
       })
     );
   }
@@ -43,6 +42,8 @@ export class VttechthanhtoanService {
   searchVttechthanhtoan(SearchParams:any) {
     return this.http.post(environment.APIURL + `/vttechthanhtoan/search`,SearchParams).pipe(
       map((data: any) => { 
+        console.log(data);
+        
         this._vttechthanhtoans.next(data);
         return data;
       })

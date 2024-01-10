@@ -6,6 +6,7 @@ import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
 import * as moment from 'moment';
 import { MatSelectChange } from '@angular/material/select';
 import { Delete } from '@nestjs/common';
+import { NotifierService } from 'angular-notifier';
 @Component({
   selector: 'app-vttechdieutri',
   templateUrl: './vttechdieutri.component.html',
@@ -15,93 +16,87 @@ export class VttechdieutriComponent implements OnInit {
 
   Detail: any = {};
   SearchParams: any = {
-    Batdau:moment().startOf('day').toDate(),
+    Batdau: moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
     // Batdau:moment().startOf('day').toDate(),
     // Ketthuc: moment().endOf('day').toDate(),
-    pageSize:10,
-    pageNumber:0
+    pageSize: 20,
+    pageNumber: 0
   };
   Lists: any[] = []
   FilterLists: any[] = []
   LIST_CHI_NHANH = LIST_CHI_NHANH
-  ListStatus:any
-  Status:any={0:'Mới',1:'Đợi gửi',2:'Thành Công',3:'Chưa Có Temp Zalo OA',4:'Gửi SMS'}
+  ListStatus: any
+  Status: any = { 0: 'Mới', 1: 'Đợi gửi', 2: 'Thành Công', 3: 'Chưa Có Temp Zalo OA', 4: 'Gửi SMS' }
   // Status:any={0:'Mới',2:'Thành Công',3:'Chưa Có Temp Zalo OA',4:'Gửi SMS'}
-  Style:any={0:'bg-blue-500',1:'bg-yellow-500',2:'bg-green-500',3:'bg-red-500',4:'bg-purple-500'}
-  isReport:boolean=false
+  Style: any = { 0: 'bg-blue-500', 1: 'bg-yellow-500', 2: 'bg-green-500', 3: 'bg-red-500', 4: 'bg-purple-500' }
+  isReport: boolean = false
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
-  PagiLength:any=0
-  StatusActive:any
-  Total:any=0
+  PagiLength: any = 0
+  StatusActive: any
+  Total: any = 0
   constructor(
     private dialog: MatDialog,
     private _VttechdieutriService: VttechdieutriService,
+    private _NotifierService: NotifierService,
   ) {
   }
   ngOnInit(): void {
     this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
-    this._VttechdieutriService.vttechdieutris$.subscribe((data:any)=>{
-      if(data)
-      {     
+    this._VttechdieutriService.vttechdieutris$.subscribe((data: any) => {
+      if (data) {
         console.log(data);
-        this.Total = data.totalCount   
-        this.ListStatus = data.ListStatus   
-        data.items.forEach((v:any) => {
-          if (typeof v.Dulieu !== 'object')
-          {
+        this.Total = data.totalCount
+        this.ListStatus = data.ListStatus
+        data.items.forEach((v: any) => {
+          if (typeof v.Dulieu !== 'object') {
             v.Dulieu = JSON.parse(v.Dulieu)
           }
         });
-        this.PagiLength = (Number(data.totalCount)/Number(this.SearchParams.pageSize)).toFixed()
+        this.PagiLength = (Number(data.totalCount) / Number(this.SearchParams.pageSize)).toFixed()
         this.FilterLists = this.Lists = data.items
       }
     })
   }
-  Reload()
-  {
-      delete this.SearchParams.Status
-      this.SearchParams.pageSize = 10
-      this.SearchParams.Batdau=moment().startOf('day').toDate(),
-      this.SearchParams.Ketthuc= moment().endOf('day').toDate(),
-      this.SearchParams.pageNumber=0
-      this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
+  Reload() {
+    delete this.SearchParams.Status
+    this.SearchParams.pageSize = 10
+    this.SearchParams.Batdau = moment().startOf('day').toDate(),
+      this.SearchParams.Ketthuc = moment().endOf('day').toDate(),
+      this.SearchParams.pageNumber = 0
+    this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
   }
-  Report(items:any,field:any)
-  {
-    if(items)
-    {
-      console.log(items); 
-      return items.filter((v:any)=>v.Status == field)?.length
+  Report(items: any, field: any) {
+    if (items) {
+      console.log(items);
+      return items.filter((v: any) => v.Status == field)?.length
     }
     else return 0
 
   }
-  SendZNS(item:any)
-  {
+  SendZNS(item: any,time:any=1) {
     console.log(item);
-    item.TimeZNS = moment().add(+1,'minutes').toDate()
-    this._VttechdieutriService.SendZns(item).subscribe()  
+    item.TimeZNS = moment().add(time, 'minutes').toDate()
+    this._VttechdieutriService.SendZns(item).subscribe()
   }
-  SendAllZNS(items:any)
-  {
-    items.forEach((v:any) => {
-    this.SendZNS(v)
-   });
+  async SendAllZNS(items: any) {
+    await items.forEach((v: any,k:any) => {
+      setTimeout(() => {
+        this.SendZNS(v,k+1)
+      }, k*100);
+    });
+    this._NotifierService.notify("success", `Đang gửi ${items.length} Tin Nhắn`)
   }
-  ChoosenDate()
-  {
+  ChoosenDate() {
     console.log(this.SearchParams);
     this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
   }
-  ChangeStatus(event:MatSelectChange)
-  {
+  ChangeStatus(event: MatSelectChange) {
     console.log(this.SearchParams);
     this.SearchParams.Status = event.value
     this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
   }
-  ChangeStatusButton(item:any)
-  {
+  ChangeStatusButton(item: any) {
     this.StatusActive = item
     this.SearchParams.Status = item
     this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
@@ -110,8 +105,8 @@ export class VttechdieutriComponent implements OnInit {
     const value = (event.target as HTMLInputElement).value;
     if (value.length > 2) {
       this.Lists = this.Lists.filter((v) => {
-     return  v.Hoten.toLowerCase().includes(value)||v.SDT.toLowerCase().includes(value)
-       }
+        return v.Hoten.toLowerCase().includes(value) || v.SDT.toLowerCase().includes(value)
+      }
       )
     }
   }
@@ -119,30 +114,28 @@ export class VttechdieutriComponent implements OnInit {
     const dialogRef = this.dialog.open(teamplate, {
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result="true") {
+      if (result = "true") {
         this._VttechdieutriService.CreateVttechdieutri(this.Detail).subscribe()
       }
     });
   }
-  openDeleteDialog(teamplate: TemplateRef<any>,item:any): void {
+  openDeleteDialog(teamplate: TemplateRef<any>, item: any): void {
     const dialogRef = this.dialog.open(teamplate, {});
     dialogRef.afterClosed().subscribe((result) => {
-      if (result=="true") {
+      if (result == "true") {
         this._VttechdieutriService.DeleteVttechdieutri(item.id).subscribe()
       }
     });
   }
-  GetNameChinhanh(item:any)
-  {
-    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == item) 
+  GetNameChinhanh(item: any) {
+    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == item)
     return Chinhanh?.Title
   }
-  onPageChange(event:any)
-  {
+  onPageChange(event: any) {
     console.log(event);
-    
-    this.SearchParams.pageSize=event.pageSize
-     this.SearchParams.pageNumber=event.pageIndex
-     this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
+
+    this.SearchParams.pageSize = event.pageSize
+    this.SearchParams.pageNumber = event.pageIndex
+    this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
   }
 }
