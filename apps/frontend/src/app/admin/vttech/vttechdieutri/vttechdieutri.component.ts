@@ -76,13 +76,13 @@ export class VttechdieutriComponent implements OnInit {
   }
   SendZNS(item: any,time:any=1) {
     console.log(item);
-    item.TimeZNS = moment().add(time, 'minutes').toDate()
+    item.TimeZNS = moment().add(time, 'seconds').toDate()
     this._VttechdieutriService.SendZns(item).subscribe()
   }
   async SendAllZNS(items: any) {
     await items.forEach((v: any,k:any) => {
       setTimeout(() => {
-        this.SendZNS(v,k+1)
+        this.SendZNS(v,(k+1)*10)
       }, k*100);
     });
     this._NotifierService.notify("success", `Đang gửi ${items.length} Tin Nhắn`)
