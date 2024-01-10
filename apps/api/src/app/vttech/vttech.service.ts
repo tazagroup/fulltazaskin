@@ -340,7 +340,12 @@ export class VttechService {
       const job = new CronJob(cronExpression, () => {
        // const result = `Điều Trị : ${data.id} - ${data.SDT} - ${data.CustName} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
       //  this._TelegramService.SendLogdev(result)
-        const logger ={Title:'Điều Trị',Mota:`Điều Trị : ${data.id} - ${data.SDT} - ${data.CustName} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`}
+        const logger ={
+          Title:'Điều Trị',
+          Slug:'dieutri',
+          Action:'done',
+          Mota:`Điều Trị : ${data.id} - ${data.SDT} - ${data.CustName} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`,    
+        }
         this._LoggerService.create(logger)
         try {
           this._ZaloznsService.TemplateDanhgia(data, Chinhanh).then((zns: any) => {
@@ -360,7 +365,11 @@ export class VttechService {
               this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 2)
              // const result = `${zns.Title}`;
              // this._TelegramService.SendNoti(result)
-              const logger ={Title:'Điều Trị',Mota:`${zns.Title}`}
+              const logger ={
+                Title:'Điều Trị',
+                Slug:'dieutri',
+                Action:'done',
+                Mota:`${zns.Title}`}
               this._LoggerService.create(logger)
               // }
             }
@@ -376,7 +385,11 @@ export class VttechService {
       this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 1)
      // const result = `Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
      // this._TelegramService.SendLogdev(result)
-      const logger ={Title:'Điều Trị',Mota:`Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`}
+      const logger ={
+        Title:'Điều Trị',
+        Slug:'dieutri',
+        Action:'waiting',
+        Mota:`Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`}
       this._LoggerService.create(logger)
     }
     else {
@@ -385,7 +398,11 @@ export class VttechService {
       this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 3)
       // const result = `Chi nhánh chưa đăng ký ZNS`;
       // this._TelegramService.SendLogdev(result)
-      const logger ={Title:'Điều Trị',Mota:`Chi nhánh chưa đăng ký ZNS`}
+      const logger ={
+        Title:'Điều Trị',
+        Slug:'dieutri',
+        Action:'error',
+        Mota:`Chi nhánh chưa đăng ký ZNS`}
       this._LoggerService.create(logger)
     }
     return data

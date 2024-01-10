@@ -13,7 +13,11 @@ export class LoggerEntity {
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Title: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  Slug: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   Mota: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
+  Action: string;
   @Column({ default: '' })
   Type: string;
   @Column({ default: 1 })

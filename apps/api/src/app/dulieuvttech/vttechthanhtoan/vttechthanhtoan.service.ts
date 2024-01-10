@@ -30,9 +30,9 @@ export class VttechthanhtoanService {
       this.XsrfToken = data.Content.XsrfToken
     })
   }
-  async getApiRealtime() {
-    const begin = moment(new Date()).format("DD-MM-YYYY")
-    const end = moment(new Date()).format("DD-MM-YYYY")
+  async getApiRealtime(data:any) {
+    const begin = moment(new Date(data.begin)).format("DD-MM-YYYY")
+    const end = moment(new Date(data.end)).format("DD-MM-YYYY")
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -243,7 +243,12 @@ export class VttechthanhtoanService {
   }
 
   async findAll() {
-    return await this.VttechthanhtoanRepository.find();
+    const result = await this.VttechthanhtoanRepository.find();
+    result.forEach((v)=>
+    {
+
+    })
+    return result
   }
   async Checkthanhtoan() {
     const now = new Date()
@@ -340,7 +345,7 @@ export class VttechthanhtoanService {
     console.error(params);
     const queryBuilder = this.VttechthanhtoanZNSRepository.createQueryBuilder('vttechthanhtoan_zns');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder.andWhere('vttechthanhtoan_zns.Created BETWEEN :startDate AND :endDate', {
+      queryBuilder.andWhere('vttechthanhtoan_zns.CreateAt BETWEEN :startDate AND :endDate', {
         startDate: params.Batdau,
         endDate: params.Ketthuc,
       });
@@ -358,7 +363,7 @@ export class VttechthanhtoanService {
 
     const queryBuilder1 = this.VttechthanhtoanZNSRepository.createQueryBuilder('vttechthanhtoan_zns');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder1.andWhere('vttechthanhtoan_zns.Created BETWEEN :startDate AND :endDate', {
+      queryBuilder1.andWhere('vttechthanhtoan_zns.CreateAt BETWEEN :startDate AND :endDate', {
         startDate: params.Batdau,
         endDate: params.Ketthuc,
       });
