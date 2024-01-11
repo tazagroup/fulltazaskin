@@ -137,9 +137,16 @@ export class ZaloznsService {
     const result: any = {}
     result.event_name = req.body.event_name
     result.ResponWebHook = req.body
+    if(req.body.event_name=='user_feedback')
+    {
+      result.star = req.body.message.star
+    }
     this.ZaloznsRepository.create(result);
     return await this.ZaloznsRepository.save(result);
   }
+
+
+  
   // async sendtestzns(item: any,Chinhanh:any) {
   //   return await this._ZalotokenService.findid(Chinhanh.idCN).then((data: any) => {
   //    let item1:any={}
@@ -288,6 +295,13 @@ export class ZaloznsService {
 
   async findAll() {
     const List = await this.ZaloznsRepository.find();
+    // List.forEach((v:any) => {
+    //   if(v.ResponWebHook.event_name=='user_feedback')
+    //   {
+    //     v.star = v.ResponWebHook?.message?.rate
+    //     this.update(v.id,v)
+    //   }
+    // });
     return List
   }
   async findid(id: string) {
@@ -331,22 +345,25 @@ export class ZaloznsService {
     if (params.event_name) {
       queryBuilder.andWhere('zalozns.event_name LIKE :event_name', { event_name: `%${params.event_name}%` });
     }
-    if (params.Status) {
+    if (params.hasOwnProperty('Status')) {
       queryBuilder.andWhere('zalozns.Status LIKE :Status', { Status: `${params.Status}` });
     }
-    const [items, totalCount] = await queryBuilder
-    .limit(params.pageSize || 10)
-    .offset(params.pageNumber * params.pageSize || 0)
-    .getManyAndCount();
-    items.forEach((v:any)=>{
-      const GetPhone = filter.find((v1)=>v1.message.tracking_id==v.ResponWebHook.message.tracking_id)
-      if(GetPhone)
-      {
-        v.SDT =  Phone_To_0(GetPhone.recipient.id)
-      }
-  
-    })
-    return { items, totalCount };
+    if (params.hasOwnProperty('star')) {
+      queryBuilder.andWhere('zalozns.star <= :star', { star: `${params.star}` });
+    }
+      const [items, totalCount] = await queryBuilder
+      .limit(params.pageSize || 10)
+      .offset(params.pageNumber * params.pageSize || 0)
+      .getManyAndCount();
+      items.forEach((v:any)=>{
+        const GetPhone = filter.find((v1)=>v1.message.tracking_id==v.ResponWebHook.message.tracking_id)
+        if(GetPhone)
+        {
+          v.SDT =  Phone_To_0(GetPhone.recipient.id)
+        }
+    
+      })   
+      return { items, totalCount };
   }
   async update(id: string, UpdateZaloznsDto: any) {
     this.ZaloznsRepository.save(UpdateZaloznsDto);

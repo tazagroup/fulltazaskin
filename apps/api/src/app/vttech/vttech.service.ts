@@ -316,7 +316,9 @@ export class VttechService {
     if (this.CheckTime()) {
       const ZNSDieutri = await this._Vttech_dieutriService.fininday_zns();
       setTimeout(async () => {
-        ZNSDieutri.forEach((v: any) => {
+        ZNSDieutri.forEach((v: any,k) => {
+          v.TimeZNS = moment().add((k+1)*10, 'seconds').toDate()
+          this._Vttech_dieutriService.update_zns(v.id,v)
             this.addCron(v)
         });
       }, 5000);

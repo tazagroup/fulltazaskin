@@ -12,6 +12,8 @@ export class ZaloznsEntity {
   id: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   event_name: string;
+  @Column({default:null})
+  star: number;
   @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
   ResponWebHook: string;
   @Column({ default: '' })
