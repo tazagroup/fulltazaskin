@@ -29,11 +29,22 @@
             </mat-date-range-picker-actions>
           </mat-date-range-picker>
         </mat-form-field>
-        <div>
-          
-          <span mat-button class="material-symbols-outlined border rounded-full p-2 hover:bg-gray-200"
-            (click)="Reload()">sync</span>
-        </div>
+        <!-- <div class="flex flex-row space-x-2 items-center">
+          <mat-chip-list>
+            <mat-chip  (click)="Reload()">
+              <span class="material-symbols-outlined">sync</span>
+              <span class="text-xs">Làm Mới</span>
+            </mat-chip>
+            <mat-chip>
+              <span class="material-symbols-outlined">filter_alt</span>
+              <span class="text-xs">Bộ Lọc</span>
+            </mat-chip>
+            <mat-chip (click)="LoadServer()">
+              <span class="material-symbols-outlined">cloud_download</span>
+              <span class="text-xs">Cập Nhật</span>
+            </mat-chip>
+          </mat-chip-list>
+        </div> -->
         <!-- <mat-form-field appearance="outline">
             <mat-label>Trạng Thái</mat-label>
             <mat-select [(ngModel)]="FilterStatus" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeStatus($event)">
@@ -46,10 +57,10 @@
       </div>
       <div class="flex flex-row space-x-3 text-xs items-center cursor-pointer">
         <div class="flex flex-row space-x-2 text-xs items-center">
-        <span class="material-symbols-outlined {{SelectStar > index?'text-yellow-500':''}}" (click)="onStarClick(index)"
+        <span class="material-symbols-outlined {{SearchParams.star > index?'text-yellow-500':''}}" (click)="onStarClick(index)"
         *ngFor="let i of CreateStart(5); let index = index"> star </span>
       </div>
-       <span class="font-bold" *ngIf="SelectStar>0"> Số Lượng ({{FilterLists.length}}/{{Total}})</span>
+       <span class="font-bold" *ngIf="SearchParams.star>0"> Số Lượng ({{Total}})</span>
       </div>
       <!-- <div class="flex flex-row text-xs">
          <div (click)="ChangeStatusButton(item)" class="flex flex-col lg:space-x-2 lg:flex-row items-center border rounded-lg p-2 text-white {{Style[item]}}" *ngFor="let item of [0,1,2,4,3]">
@@ -111,8 +122,14 @@
       </div>
     </div>
     <div class="relative border-t flex flex-col">
-      <mat-paginator (page)="onPageChange($event)" [length]="Total" [pageSize]="PagiLength"
-        [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+      <!-- <mat-paginator (page)="onPageChange($event)" [length]="Total" [pageSize]="5"
+        [pageSizeOptions]="pageSizeOptions"></mat-paginator> -->
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+        [pageSize]="SearchParams.pageSize"
+        [length]="Total"
+        [pageIndex]="SearchParams.pageNumber"
+        (page)="onPageChange($event)">
+</mat-paginator>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>

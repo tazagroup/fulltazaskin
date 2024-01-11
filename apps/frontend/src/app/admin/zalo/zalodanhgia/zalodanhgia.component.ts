@@ -19,6 +19,7 @@ export class ZalodanhgiaComponent implements OnInit {
     Batdau:moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
     event_name:'user_feedback',
+    star:5,
     pageSize:10,
     pageNumber:0
   };
@@ -28,6 +29,7 @@ export class ZalodanhgiaComponent implements OnInit {
   Total:any
   SelectStar:any=5
   stars = 5; // Number of stars
+  totalDanhgia = 0;
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   @ViewChild('myDiv') myDivRef!: ElementRef;
   constructor(
@@ -42,24 +44,21 @@ export class ZalodanhgiaComponent implements OnInit {
       if(data)
       {
         console.log(data);
-        this.Total = data.totalCount
-        this.SetPageSizeOptions(this.Total,this.SearchParams.pageSize)
-        this.PagiLength = (Number(data.totalCount)/Number(this.SearchParams.pageSize)).toFixed()        
+        this.Total = data.totalCount  
+        data.items.forEach((v:any) => {
+          v.star = v.ResponWebHook.message.rate
+        });
+        data.items.sort((a:any,b:any)=>b.star-a.star)   
         this.FilterLists = this.Lists = data.items
-        console.log(this.Lists);
       }
 
     })
   }
-  SetPageSizeOptions(total:any,pageSize:any)
-  {
-    const count = Math.floor(total / pageSize) 
-    const numbers = Array.from({ length: count }, (_, i) => i + 1);
-    this.pageSizeOptions =numbers.map((v)=>v*pageSize)
-  }
   onStarClick(index: number) {
-    this.SelectStar = index + 1;
-    this.FilterLists = this.Lists.filter((v)=>v.ResponWebHook.message.rate<=this.SelectStar)
+   // this.SelectStar = index + 1;
+    this.SearchParams.star = index + 1
+    this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
+   // this.FilterLists = this.Lists.filter((v)=>v.ResponWebHook.message.rate<=this.SearchParams.star)
   }
   Reload(){}
   
@@ -107,9 +106,8 @@ export class ZalodanhgiaComponent implements OnInit {
   {
     console.log(event);
     this.SearchParams.pageSize=event.pageSize
-     this.SearchParams.pageNumber=event.pageIndex
+    this.SearchParams.pageNumber=event.pageIndex
      console.log(this.SearchParams);
-     
-     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
+    this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
 }
