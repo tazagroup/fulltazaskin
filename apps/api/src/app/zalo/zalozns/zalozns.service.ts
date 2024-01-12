@@ -349,7 +349,7 @@ export class ZaloznsService {
       queryBuilder.andWhere('zalozns.Status LIKE :Status', { Status: `${params.Status}` });
     }
     if (params.hasOwnProperty('star')) {
-      queryBuilder.andWhere('zalozns.star <= :star', { star: `${params.star}` });
+      queryBuilder.andWhere('zalozns.star = :star', { star: `${params.star}` });
     }
       const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10)
