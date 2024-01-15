@@ -9,6 +9,10 @@ import moment = require('moment');
 import axios from 'axios';
 import { SmsService } from '../../sms/sms.service';
 import { TelegramService } from '../../shared/telegram.service';
+import { ZalodanhgiaService } from '../zalodanhgia/zalodanhgia.service';
+import Zalodanhgia from '../zalodanhgia/zalodanhgia';
+import { ZaloznstrackingService } from '../zaloznstracking/zaloznstracking.service';
+import Zaloznstracking from '../zaloznstracking/zaloznstracking';
 interface ZaloResponse {
   error: number;
   data?: { msg_id: string };
@@ -23,6 +27,8 @@ export class ZaloznsService {
     private _ZalotokenService: ZalotokenService,
     private _SmsService: SmsService,
     private _TelegramService: TelegramService,
+    private _ZalodanhgiaService: ZalodanhgiaService,
+    private _ZaloznstrackingService: ZaloznstrackingService,
   ) {
     this._CauhinhchungService.findslug('zalotoken').then((data: any) => {
       this.Accesstoken = data.Content.Accesstoken
@@ -51,6 +57,13 @@ export class ZaloznsService {
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
   
       if (response.data.error === 0) {
+        let dulieu:Zaloznstracking;
+        dulieu.SDT = item.SDT
+        dulieu.Hoten = item.CustName
+        dulieu.tracking_id = requestData.tracking_id
+        dulieu.msg_id = response.data.data.msg_id
+        dulieu.template_id = requestData.tempDanhgiaid
+        this._ZaloznstrackingService.create(dulieu)
         return { status: 'zns', Title: `Thanh Toán : ${response.data.data.msg_id} Đã Được Gửi` };
       } else {
         const smsResponse = await this.sendFallbackSMS(item);
@@ -89,8 +102,16 @@ export class ZaloznsService {
           },
         }
       );
+
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
       if (response.data.error === 0) {
+        let dulieu:Zaloznstracking;
+        dulieu.SDT = item.SDT
+        dulieu.Hoten = item.CustName
+        dulieu.tracking_id = requestData.tracking_id
+        dulieu.msg_id = response.data.data.msg_id
+        dulieu.template_id = tempDanhgiaid
+        this._ZaloznstrackingService.create(dulieu)
         return { status: 'zns', Title: `Điều Trị: ${response.data.data.msg_id} - ${item.id} - ${item.SDT} - ${item.CustName} Đã Được Gửi` };
       } 
       // else {
@@ -140,84 +161,19 @@ export class ZaloznsService {
     if(req.body.event_name=='user_feedback')
     {
       result.star = req.body.message.star
+      let item:Zalodanhgia;
+      item.note = req.body.message.note
+      item.rate = req.body.message.rate
+      item.submitDate = req.body.message.submit_time
+      item.feedbacks = req.body.message.feedbacks
+      item.trackingId = req.body.message.tracking_id
+      item.oaId = req.body.oa_id
+      this._ZalodanhgiaService.create(item)
     }
     this.ZaloznsRepository.create(result);
     return await this.ZaloznsRepository.save(result);
   }
 
-
-  
-  // async sendtestzns(item: any,Chinhanh:any) {
-  //   return await this._ZalotokenService.findid(Chinhanh.idCN).then((data: any) => {
-  //    let item1:any={}
-  //     if(Chinhanh.idtemp=='301891'||Chinhanh.idtemp=='302259')
-  //     {
-  //       item1 = {
-  //         "phone": convertPhoneNum(item.SDT),
-  //         "template_id": Chinhanh.idtemp,
-  //         "template_data": {
-  //           "order_code": item.InvoiceNum,
-  //           "note": moment(item.Created).format('DD/MM/YYYY'),
-  //           "price": parseFloat(item.Amount).toFixed(0),
-  //           "customer_name": item.CustName
-  //         },
-  //         "tracking_id": GenId(12, true)
-  //       }
-  //     }
-  //     else{
-  //       item1 = {
-  //         "phone": convertPhoneNum(item.SDT),
-  //         "template_id": Chinhanh.idtemp,
-  //         "template_data": {
-  //           "order_code": item.InvoiceNum,
-  //           "note": moment(item.Created).format('DD/MM/YYYY'),
-  //           "code": parseFloat(item.Amount).toFixed(0),
-  //           "customer_name": item.CustName
-  //         },
-  //         "tracking_id": GenId(12, true)
-  //       }
-  //     }
- 
-  //     if (data) {
-  //       let config = {
-  //         method: 'post',
-  //         maxBodyLength: Infinity,
-  //         url: 'https://business.openapi.zalo.me/message/template',
-  //         headers: {
-  //           'access_token': data.Token.access_token,
-  //           'Content-Type': 'application/json'
-  //         },
-  //         data: item1
-  //       };
-  //       return axios.request(config)
-  //         .then(async (response: any) => {
-  //           console.error(response.data);
-  //           this._TelegramService.SendLogdev(JSON.stringify(response.data))
-  //           if (response.data.error != 0) {
-  //             const sms = {
-  //               "Brandname": "TAZA",
-  //               "Message": `${item.CustName} da thanh toan so tien ${parseFloat(item.Amount).toFixed(0)} co ma hoa don la ${item.InvoiceNum}. Taza cam on quy khach`,
-  //               "Phonenumber": convertPhoneNum(item.SDT),
-  //               "user": "ctytaza2",
-  //               "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
-  //               "messageId": GenId(8,true)
-  //             }
-  //            const SMSPromise = await this._SmsService.sendsms(sms)
-  //             this._TelegramService.SendLogdev(JSON.stringify(SMSPromise.data))
-  //             return {status:'sms',Title:'Lỗi Gửi ZNZ, Đã Gửi SMS',data:JSON.stringify(SMSPromise.data)}
-  //           }
-  //           else {
-  //             this._TelegramService.SendLogdev(JSON.stringify(response.data))
-  //             return {status:'zns',Title:`ZNS có ID : ${response.data?.data?.msg_id} Đã Được Gửi`}
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           this._TelegramService.SendLogdev(JSON.stringify(error))
-  //           return error
-  //         });
-  //     }
-  //   });
-  // }
   async sendZns(item: any, idCN: any) {
     await this._ZalotokenService.findid(idCN).then((data: any) => {
       if (data) {

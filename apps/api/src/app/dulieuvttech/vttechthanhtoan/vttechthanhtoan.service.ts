@@ -30,7 +30,7 @@ export class VttechthanhtoanService {
       this.XsrfToken = data.Content.XsrfToken
     })
   }
-  async getApiRealtime(data:any) {
+  async getApiRealtime(data:any) {    
     const begin = moment(new Date(data.begin)).format("DD-MM-YYYY")
     const end = moment(new Date(data.end)).format("DD-MM-YYYY")
     const config = {

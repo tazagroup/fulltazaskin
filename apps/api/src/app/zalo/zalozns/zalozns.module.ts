@@ -8,8 +8,17 @@ import { ZalotokenModule } from '../zalotoken/zalotoken.module';
 import { HttpModule } from '@nestjs/axios';
 import { SmsModule } from '../../sms/sms.module';
 import { TelegramService } from '../../shared/telegram.service';
+import { ZalodanhgiaModule } from '../zalodanhgia/zalodanhgia.module';
+import { ZaloznstrackingModule } from '../zaloznstracking/zaloznstracking.module';
 @Module({
-  imports: [TypeOrmModule.forFeature([ZaloznsEntity]),CauhinhchungModule,ZalotokenModule,HttpModule,SmsModule],
+  imports: [TypeOrmModule.forFeature([ZaloznsEntity]),
+  CauhinhchungModule,
+  ZalotokenModule,
+  HttpModule,
+  SmsModule,
+  ZalodanhgiaModule,
+  ZaloznstrackingModule
+],
   controllers: [ZaloznsController],
   providers: [ZaloznsService,TelegramService],
   exports: [ZaloznsService]
