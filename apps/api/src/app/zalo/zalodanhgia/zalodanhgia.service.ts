@@ -64,10 +64,10 @@ export class ZalodanhgiaService {
       });
     }
     if (params.hasOwnProperty('Status')) {
-      queryBuilder.andWhere('zalozns.Status LIKE :Status', { Status: `${params.Status}` });
+      queryBuilder.andWhere('zalodanhgia.Status LIKE :Status', { Status: `${params.Status}` });
     }
     if (params.hasOwnProperty('star')) {
-      queryBuilder.andWhere('zalozns.star = :star', { star: `${params.star}` });
+      queryBuilder.andWhere('zalodanhgia.rate = :rate', { rate: `${params.star}` });
     }
       const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10)
@@ -75,7 +75,7 @@ export class ZalodanhgiaService {
       .getManyAndCount();
       items.forEach(async (v:any)=>{
       const ZNS = await this._ZaloznstrackingService.findtrackingid(v.trackingId)
-        if(ZNS.SDT){
+        if(ZNS?.SDT){
           v.SDT = Phone_To_0(ZNS.SDT)
         }
       })   
