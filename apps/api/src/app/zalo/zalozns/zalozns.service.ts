@@ -75,7 +75,6 @@ export class ZaloznsService {
     }
   }
   async TemplateDanhgia(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
-    console.log(item);
     try {
       const token:any = await this._ZalotokenService.findid(Chinhanh.idtoken);
       if (!token) {
@@ -106,7 +105,7 @@ export class ZaloznsService {
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
       if (response.data.error === 0) {
         let dulieu:Zaloznstracking;
-        dulieu.SDT = item.SDT
+        dulieu.SDT = requestData.phone
         dulieu.Hoten = item.CustName
         dulieu.tracking_id = requestData.tracking_id
         dulieu.msg_id = response.data.data.msg_id
