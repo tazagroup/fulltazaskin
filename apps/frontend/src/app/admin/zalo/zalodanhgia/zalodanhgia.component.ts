@@ -52,6 +52,7 @@ export class ZalodanhgiaComponent implements OnInit {
   }
   onStarClick(index: number) {
     this.SearchParams.star = index + 1
+    this.SearchParams.pageNumber = 0
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
   Reload(){}
@@ -68,6 +69,7 @@ export class ZalodanhgiaComponent implements OnInit {
   }
   ChoosenDate()
   {
+    this.SearchParams.pageNumber = 0
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
   applyFilter(event: Event) {
