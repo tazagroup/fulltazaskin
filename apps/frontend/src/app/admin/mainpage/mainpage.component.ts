@@ -49,7 +49,7 @@ export class MainpageComponent implements OnInit {
       this.Menus = nest(data?.Groups)      
       this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
       this.dataSource.data = this.Menus;
-      // this.treeControl.expandAll()
+      this.treeControl.expandAll()
       
     }
     )
