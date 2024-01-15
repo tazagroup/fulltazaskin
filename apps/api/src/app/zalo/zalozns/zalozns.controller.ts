@@ -23,6 +23,12 @@ export class ZaloznsController {
     return result
   }
 
+  @Get('updatetracking')
+  updatetracking() {
+    const result =this.zaloznsService.updatetracking();
+    return result
+  }
+
   @Get('alltemp/:id')
   async getallteamplate(@Param('id') id: string) {
     const ZaloTokenPromise = await this._ZalotokenService.findid(id)

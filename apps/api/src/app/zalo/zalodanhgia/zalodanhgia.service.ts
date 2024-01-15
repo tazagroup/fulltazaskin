@@ -56,11 +56,14 @@ export class ZalodanhgiaService {
   }
   async findQuery(params: any) {
     console.error(params);
+    const Begin = new Date(params.Batdau).getTime()
+    const End = new Date(params.Ketthuc).getTime()
+
     const queryBuilder = this.ZalodanhgiaRepository.createQueryBuilder('zalodanhgia');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder.andWhere('zalodanhgia.CreateAt BETWEEN :startDate AND :endDate', {
-        startDate:params.Batdau,
-        endDate:params.Ketthuc,
+      queryBuilder.andWhere('zalodanhgia.submitDate BETWEEN :startDate AND :endDate', {
+        startDate:Begin,
+        endDate:End,
       });
     }
     if (params.hasOwnProperty('Status')) {
@@ -69,16 +72,20 @@ export class ZalodanhgiaService {
     if (params.hasOwnProperty('star')) {
       queryBuilder.andWhere('zalodanhgia.rate = :rate', { rate: `${params.star}` });
     }
-      const [items, totalCount] = await queryBuilder
+      let [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10)
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
-      items.forEach(async (v:any)=>{
-      const ZNS = await this._ZaloznstrackingService.findtrackingid(v.trackingId)
-        if(ZNS?.SDT){
-          v.SDT = Phone_To_0(ZNS.SDT)
-        }
-      })   
+      await Promise.all(
+        items.map(async (v) => {
+          const ZNS = await this._ZaloznstrackingService.findtrackingid(v.trackingId);
+          if (ZNS) {
+            v.SDT = Phone_To_0(ZNS.SDT);
+          }
+        })
+      );
+
+      
       return { items, totalCount };
   }
   async update(id: string, UpdateZalodanhgiaDto: UpdateZalodanhgiaDto) {

@@ -35,10 +35,10 @@ export class ZaloznsService {
       // console.error(this.Accesstoken); 
     })
   }
-  
+
   async sendtestzns(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
     try {
-      const token:any = await this._ZalotokenService.findid(Chinhanh.idtoken);
+      const token: any = await this._ZalotokenService.findid(Chinhanh.idtoken);
       if (!token) {
         this._TelegramService.SendLogdev(JSON.stringify(token))
         throw new Error('Zalo token not found');
@@ -53,11 +53,11 @@ export class ZaloznsService {
             'Content-Type': 'application/json',
           },
         }
-      ); 
+      );
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
-  
+
       if (response.data.error === 0) {
-        let dulieu:Zaloznstracking;
+        let dulieu: Zaloznstracking;
         dulieu.SDT = item.SDT
         dulieu.Hoten = item.CustName
         dulieu.tracking_id = requestData.tracking_id
@@ -76,12 +76,12 @@ export class ZaloznsService {
   }
   async TemplateDanhgia(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
     try {
-      const token:any = await this._ZalotokenService.findid(Chinhanh.idtoken);
+      const token: any = await this._ZalotokenService.findid(Chinhanh.idtoken);
       if (!token) {
         this._TelegramService.SendLogdev(JSON.stringify(token))
         throw new Error('Zalo token not found');
       }
-      const tempDanhgiaid = Chinhanh.idtempdanhgia;    
+      const tempDanhgiaid = Chinhanh.idtempdanhgia;
       const requestData = {
         phone: convertPhoneNum(item.SDT),
         template_id: tempDanhgiaid,
@@ -90,7 +90,7 @@ export class ZaloznsService {
           schedule_date: moment(item.Created).format('DD/MM/YYYY'),
         },
         tracking_id: GenId(12, true),
-      };    
+      };
       const response = await axios.post<ZaloResponse>(
         'https://business.openapi.zalo.me/message/template',
         requestData,
@@ -104,7 +104,7 @@ export class ZaloznsService {
 
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
       if (response.data.error === 0) {
-        let dulieu:Zaloznstracking;
+        let dulieu: Zaloznstracking;
         dulieu.SDT = requestData.phone
         dulieu.Hoten = item.CustName
         dulieu.tracking_id = requestData.tracking_id
@@ -112,7 +112,7 @@ export class ZaloznsService {
         dulieu.template_id = tempDanhgiaid
         this._ZaloznstrackingService.create(dulieu)
         return { status: 'zns', Title: `Điều Trị: ${response.data.data.msg_id} - ${item.id} - ${item.SDT} - ${item.CustName} Đã Được Gửi` };
-      } 
+      }
       // else {
       //   const smsResponse = await this.sendFallbackSMS(item);
       //   return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.CustName} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
@@ -122,15 +122,15 @@ export class ZaloznsService {
       throw error; // Rethrow for proper error propagation
     }
   }
-  
+
   constructRequestData(item: any, Chinhanh: any): any {
-    const templateId = Chinhanh.idtemp;    
+    const templateId = Chinhanh.idtemp;
     const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
     return {
       phone: convertPhoneNum(item.SDT),
       template_id: templateId,
       template_data: {
-        order_code: item.InvoiceNum||0,
+        order_code: item.InvoiceNum || 0,
         note: moment(item.Created).format('DD/MM/YYYY'),
         [priceProperty]: parseFloat(item.Amount).toFixed(0),
         customer_name: item.CustName,
@@ -147,7 +147,7 @@ export class ZaloznsService {
       pass: '$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S',
       messageId: GenId(8, true),
     };
-  
+
     const response = await this._SmsService.sendsms(sms);
     this._TelegramService.SendLogdev(JSON.stringify(response.data));
     return response;
@@ -157,10 +157,9 @@ export class ZaloznsService {
     const result: any = {}
     result.event_name = req.body.event_name
     result.ResponWebHook = req.body
-    if(req.body.event_name=='user_feedback')
-    {
+    if (req.body.event_name == 'user_feedback') {
       result.star = req.body.message.star
-      let item:Zalodanhgia;
+      let item: Zalodanhgia;
       item.note = req.body.message.note
       item.rate = req.body.message.rate
       item.submitDate = req.body.message.submit_time
@@ -289,12 +288,12 @@ export class ZaloznsService {
   }
   async findQuery(params: any) {
     const allData = await this.findeventname('user_received_message')
-    const filter = allData.map((v:any)=>v.ResponWebHook)    
+    const filter = allData.map((v: any) => v.ResponWebHook)
     const queryBuilder = this.ZaloznsRepository.createQueryBuilder('zalozns');
     if (params.Batdau && params.Ketthuc) {
       queryBuilder.andWhere('zalozns.CreateAt BETWEEN :startDate AND :endDate', {
-        startDate:params.Batdau,
-        endDate:params.Ketthuc,
+        startDate: params.Batdau,
+        endDate: params.Ketthuc,
       });
     }
     if (params.event_name) {
@@ -306,19 +305,18 @@ export class ZaloznsService {
     if (params.hasOwnProperty('star')) {
       queryBuilder.andWhere('zalozns.star = :star', { star: `${params.star}` });
     }
-      const [items, totalCount] = await queryBuilder
+    const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10)
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
-      items.forEach((v:any)=>{
-        const GetPhone = filter.find((v1)=>v1.message.tracking_id==v.ResponWebHook.message.tracking_id)
-        if(GetPhone)
-        {
-          v.SDT =  Phone_To_0(GetPhone.recipient.id)
-        }
-    
-      })   
-      return { items, totalCount };
+    items.forEach((v: any) => {
+      const GetPhone = filter.find((v1) => v1.message.tracking_id == v.ResponWebHook.message.tracking_id)
+      if (GetPhone) {
+        v.SDT = Phone_To_0(GetPhone.recipient.id)
+      }
+
+    })
+    return { items, totalCount };
   }
   async update(id: string, UpdateZaloznsDto: any) {
     this.ZaloznsRepository.save(UpdateZaloznsDto);
@@ -329,4 +327,21 @@ export class ZaloznsService {
     await this.ZaloznsRepository.delete(id);
     return { deleted: true };
   }
+  async updatetracking() {
+    const wh = await this.findAll()
+    wh.forEach((v:any,k:any) => {
+      setTimeout(() => {
+        let item:any={}
+        if(v.event_name=="user_received_message")
+        {
+          item.msg_id = v?.ResponWebHook?.message?.msg_id
+          item.tracking_id = v?.ResponWebHook?.message?.tracking_id
+          item.SDT = v?.ResponWebHook?.recipient?.id
+          this._ZaloznstrackingService.create(item)
+        }
+      }, k+Math.floor(Math.random() * 1000));
+    });
+    return wh.filter((v)=>v.event_name=="user_received_message").length
+  }
+
 }
