@@ -13,7 +13,7 @@ import { MatSelectChange } from '@angular/material/select';
 export class VttechthanhtoanComponent implements OnInit {
   Detail: any = {};
   SearchParams: any = {
-    Batdau:moment().startOf('day').toDate(),
+    Batdau:moment().startOf('day').add(-1,'day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
     pageSize:10,
     pageNumber:0

@@ -16,7 +16,7 @@ export class VttechdieutriComponent implements OnInit {
 
   Detail: any = {};
   SearchParams: any = {
-    Batdau: moment().startOf('day').toDate(),
+    Batdau:moment().startOf('day').add(-1,'day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
     // Batdau:moment().startOf('day').toDate(),
     // Ketthuc: moment().endOf('day').toDate(),

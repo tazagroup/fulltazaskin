@@ -16,7 +16,7 @@ export class ZalodanhgiaComponent implements OnInit {
   Lists: any[] = []
   FilterLists: any[] = []
   SearchParams: any = {
-    Batdau:moment().startOf('day').toDate(),
+    Batdau:moment().startOf('day').add(-1,'day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
     event_name:'user_feedback',
     star:5,
