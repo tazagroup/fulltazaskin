@@ -18,7 +18,6 @@ export class ZalodanhgiaComponent implements OnInit {
   SearchParams: any = {
     Batdau:moment().startOf('day').add(-1,'day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
-    event_name:'user_feedback',
     star:5,
     pageSize:10,
     pageNumber:0
@@ -45,9 +44,6 @@ export class ZalodanhgiaComponent implements OnInit {
       {
         console.log(data);
         this.Total = data.totalCount  
-        data.items.forEach((v:any) => {
-          v.star = v.ResponWebHook.message.rate
-        });
         data.items.sort((a:any,b:any)=>b.star-a.star)   
         this.FilterLists = this.Lists = data.items
       }
@@ -55,10 +51,8 @@ export class ZalodanhgiaComponent implements OnInit {
     })
   }
   onStarClick(index: number) {
-   // this.SelectStar = index + 1;
     this.SearchParams.star = index + 1
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
-   // this.FilterLists = this.Lists.filter((v)=>v.ResponWebHook.message.rate<=this.SearchParams.star)
   }
   Reload(){}
   

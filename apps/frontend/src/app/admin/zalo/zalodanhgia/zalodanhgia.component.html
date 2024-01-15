@@ -74,8 +74,8 @@
         <div class="flex flex-row justify-between items-center hover:bg-gray-200 border rounded-lg"
           *ngFor="let item of FilterLists; let i = index">
           <div class="flex flex-col space-y-2 items-center w-full">
-            <div class="w-full text-white rounded-t-lg {{item.ResponWebHook.message.rate<=3?'bg-red-500':'bg-blue-500'}} p-2">
-                 {{item.ResponWebHook.message.rate<=3?'Cần Xử Lý':'Tốt'}}
+            <div class="w-full text-white rounded-t-lg {{item.rate<=3?'bg-red-500':'bg-blue-500'}} p-2">
+                 {{item.rate<=3?'Cần Xử Lý':'Tốt'}}
             </div>
             <div class="w-full flex felx-col space-y-2 p-4">
               <div class="w-full flex flex-col">
@@ -86,30 +86,30 @@
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Chi Nhánh : </span>
-                    <span class="font-bold">{{GetNameChinhanh(item.ResponWebHook.oa_id,'oa_id')}}</span>
+                    <span class="font-bold">{{GetNameChinhanh(item.oa_id,'oa_id')}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Thời Gian : </span>
                     <span class="font-bold">{{item.CreateAt|date:'HH:mm:ss dd/MM/yyyy'}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
-                    <span>Đánh Giá ({{item.ResponWebHook.message.rate}}) : </span>
+                    <span>Đánh Giá ({{item.rate}}) : </span>
                     <div class="font-bold">
                       <span class="material-symbols-outlined text-yellow-500"
-                        *ngFor="let i of CreateStart(item.ResponWebHook.message.rate)"> star </span>
+                        *ngFor="let i of CreateStart(item.rate)"> star </span>
                     </div>
-                    <!-- <span>{{item.ResponWebHook.message.rate}} Sao</span> -->
+                    <!-- <span>{{item.rate}} Sao</span> -->
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Feedbacks : </span>
                     <div class="flex flex-col space-y-2 font-bold">
-                      <span *ngFor="let item of item.ResponWebHook.message.feedbacks">
+                      <span *ngFor="let item of item.feedbacks">
                         {{item}}</span>
                     </div>
                   </div>
                   <div class="flex flex-row justify-between">
                     <span>Ghi Chú : </span>
-                    <span class="font-bold">{{item.ResponWebHook.message.note}}</span>
+                    <span class="font-bold">{{item.note}}</span>
                   </div>
                 </div>
               </div>
