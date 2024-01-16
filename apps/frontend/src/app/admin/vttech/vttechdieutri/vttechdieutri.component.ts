@@ -68,7 +68,6 @@ export class VttechdieutriComponent implements OnInit {
   }
   Report(items: any, field: any) {
     if (items) {
-      console.log(items);
       return items.filter((v: any) => v.Status == field)?.length
     }
     else return 0
@@ -83,7 +82,7 @@ export class VttechdieutriComponent implements OnInit {
     await items.forEach((v: any,k:any) => {
       setTimeout(() => {
         this.SendZNS(v,(k+1)*10)
-      }, k*100);
+      }, Math.random()*1000 + k*100);
     });
     this._NotifierService.notify("success", `Đang gửi ${items.length} Tin Nhắn`)
   }
