@@ -104,7 +104,7 @@ export class ZaloznsService {
 
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
       if (response.data.error === 0) {
-        let dulieu: Zaloznstracking;
+        let dulieu: any={};
         dulieu.SDT = requestData.phone
         dulieu.Hoten = item.CustName
         dulieu.tracking_id = requestData.tracking_id
