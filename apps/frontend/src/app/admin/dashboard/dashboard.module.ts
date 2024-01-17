@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ZalodanhgiaDashboardComponent } from '../zalo/zalodanhgia/zalodanhgia-dashboard/zalodanhgia-dashboard.component';
+import { DashboardZalodanhgiaComponent } from './dashboard-zalodanhgia/dashboard-zalodanhgia.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -21,7 +21,7 @@ import { ZalodanhgiaDashboardComponent } from '../zalo/zalodanhgia/zalodanhgia-d
     MatMenuModule,
     MatButtonModule,
     MatDialogModule,
-    ZalodanhgiaDashboardComponent,
+    DashboardZalodanhgiaComponent,
     RouterModule.forChild([
       {
         path: '', component: DashboardComponent,    

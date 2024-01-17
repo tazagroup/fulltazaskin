@@ -106,4 +106,8 @@ export class ZalodanhgiaComponent implements OnInit {
      console.log(this.SearchParams);
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
+  Capnhatdanhgia()
+  {
+    
+  }
 }

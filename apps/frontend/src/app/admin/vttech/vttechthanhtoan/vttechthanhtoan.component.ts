@@ -22,9 +22,9 @@ export class VttechthanhtoanComponent implements OnInit {
   FilterLists: any[] = []
   LIST_CHI_NHANH = LIST_CHI_NHANH
   ListStatus:any
-  Status:any={0:'Mới',1:'Đợi gửi',2:'Thành Công',3:'Chưa Có Temp Zalo OA',4:'Gửi SMS'}
+  Status:any={0:'Mới',1:'Đợi gửi',2:'Thành Công',3:'Chưa Có Temp OA',4:'Gửi SMS'}
   // Status:any={0:'Mới',2:'Thành Công',3:'Chưa Có Temp Zalo OA',4:'Gửi SMS'}
-  Style:any={0:'bg-blue-500',1:'bg-yellow-500',2:'bg-green-500',3:'bg-red-500',4:'bg-purple-500'}
+  Style:any={0:'!bg-blue-500',1:'!bg-yellow-500',2:'!bg-green-500',3:'!bg-red-500',4:'!bg-purple-500'}
   isReport:boolean=false
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   PagiLength:any=0
@@ -42,12 +42,6 @@ export class VttechthanhtoanComponent implements OnInit {
       {     
         this.Total = data.totalCount   
         this.ListStatus = data.ListStatus   
-        // data.items.forEach((v:any) => {
-        //   if (typeof v.Dulieu !== 'object')
-        //   {
-        //     v.Dulieu = JSON.parse(v.Dulieu)
-        //   }
-        // });
         this.PagiLength = (Number(data.totalCount)/Number(this.SearchParams.pageSize)).toFixed()
         this.FilterLists = this.Lists = data.items
       }
@@ -87,6 +81,11 @@ export class VttechthanhtoanComponent implements OnInit {
     console.log(this.SearchParams);
     this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
   }
+  onChangeCN(event:MatSelectChange)
+  {
+    this.SearchParams.BranchID=event.value
+    this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
+  }
   ChangeStatus(event:MatSelectChange)
   {
     console.log(this.SearchParams);
@@ -104,11 +103,16 @@ export class VttechthanhtoanComponent implements OnInit {
   }
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value;
+    console.log(value);
+    
     if (value.length > 2) {
-      this.Lists = this.Lists.filter((v) => {
-     return  v.Hoten.toLowerCase().includes(value)||v.SDT.toLowerCase().includes(value)
+      this.FilterLists = this.Lists.filter((v) => {
+     return  v.CustName.toLowerCase().includes(value)||v.SDT.toLowerCase().includes(value)
        }
       )
+    }
+    else {
+      this.FilterLists = this.Lists
     }
   }
   openDialog(teamplate: TemplateRef<any>): void {
