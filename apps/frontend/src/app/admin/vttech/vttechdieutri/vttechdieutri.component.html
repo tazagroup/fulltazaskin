@@ -36,7 +36,7 @@
       </div>
       <div class="flex flex-row">
           <mat-chip-list class="flex space-x-2 flex-row items-center justify-between">
-            <mat-chip class="flex flex-row !text-white {{Style[item]}}" (click)="ChangeStatusButton(item)" *ngFor="let item of [2,3]">
+            <mat-chip class="flex flex-row !text-white {{Style[item]}}" (click)="ChangeStatusButton(item)" *ngFor="let item of [1,2,3]">
               <span class="text-xs">{{Status[item]}} ({{Report(ListStatus,item)}})</span>
             </mat-chip>
           </mat-chip-list>
