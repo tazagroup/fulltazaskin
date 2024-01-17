@@ -7,6 +7,7 @@ import { ZalodanhgiaEntity } from './entities/zalodanhgia.entity';
 import axios from 'axios';
 import { LIST_CHI_NHANH, Phone_To_0 } from '../../shared.utils';
 import { ZaloznstrackingService } from '../zaloznstracking/zaloznstracking.service';
+import { error } from 'console';
 @Injectable()
 export class ZalodanhgiaService {
   constructor(
@@ -29,7 +30,13 @@ export class ZalodanhgiaService {
   }
 
   async findAll() {
-    return await this.ZalodanhgiaRepository.find();
+    const result =  await this.ZalodanhgiaRepository.find();
+    // result.forEach(v => {
+    //     v.BranchID = LIST_CHI_NHANH.find((v1)=>v1.id==v.idCN)?.idVttech
+    //     this.update(v.id,v)
+    //     console.log(v.BranchID);
+        
+    // });
   }
   async findid(id: string) {
     return await this.ZalodanhgiaRepository.findOne({
@@ -55,16 +62,23 @@ export class ZalodanhgiaService {
     };
   }
   async findQuery(params: any) {
-    console.error(params);
     const Begin = new Date(params.Batdau).getTime()
-    const End = new Date(params.Ketthuc).getTime()
-
+    const End = new Date(params.Ketthuc).getTime()    
     const queryBuilder = this.ZalodanhgiaRepository.createQueryBuilder('zalodanhgia');
+    const queryBuilder1 = this.ZalodanhgiaRepository.createQueryBuilder('zalodanhgia');
     if (params.Batdau && params.Ketthuc) {
       queryBuilder.andWhere('zalodanhgia.submitDate BETWEEN :startDate AND :endDate', {
         startDate:Begin,
         endDate:End,
       });
+      queryBuilder1.andWhere('zalodanhgia.submitDate BETWEEN :startDate AND :endDate', {
+        startDate:Begin,
+        endDate:End,
+      });
+    }
+    if (params.hasOwnProperty("idCN")&&params.idCN!=0) {
+      queryBuilder.andWhere('zalodanhgia.idCN = :idCN', { idCN: `${params.idCN}` });
+      queryBuilder1.andWhere('zalodanhgia.idCN = :idCN', { idCN: `${params.idCN}` });
     }
     if (params.hasOwnProperty('Status')) {
       queryBuilder.andWhere('zalodanhgia.Status LIKE :Status', { Status: `${params.Status}` });
@@ -72,7 +86,7 @@ export class ZalodanhgiaService {
     if (params.hasOwnProperty('star')) {
       queryBuilder.andWhere('zalodanhgia.rate = :rate', { rate: `${params.star}` });
     }
-      let [items, totalCount] = await queryBuilder
+    let [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10)
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
@@ -83,11 +97,14 @@ export class ZalodanhgiaService {
             v.SDT = Phone_To_0(ZNS.SDT);
           }
         })
-      );
-
-      
-      return { items, totalCount };
+      );      
+    const [result] = await queryBuilder1.getManyAndCount();
+    const ListStatus = result.map((v: any) => ({ rate: v.rate }))
+    return { items, totalCount, ListStatus };
   }
+
+
+
   async update(id: string, UpdateZalodanhgiaDto: UpdateZalodanhgiaDto) {
     this.ZalodanhgiaRepository.save(UpdateZalodanhgiaDto);
     return await this.ZalodanhgiaRepository.findOne({ where: { id: id } });
@@ -114,6 +131,7 @@ export class ZalodanhgiaService {
         response.data.data.data.forEach((v:any) => {
           let item:any = {}
           item.idCN = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id)?.id
+          item.BrandId = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id)?.idVttech
           item.Chinhanh = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id)?.Title
           item.trackingId = v.trackingId
           item.oaId = v.oaId

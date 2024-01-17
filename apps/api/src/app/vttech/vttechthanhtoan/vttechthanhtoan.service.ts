@@ -148,11 +148,6 @@ export class VttechthanhtoanService {
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
     if (Chinhanh) {
       try {        
-        // data.ThucteZNS = new Date()
-        // data.StatusZNS = 2
-        // data.Status = 2
-        // this.updatezns(data.id, data)
-        // this.UpdateThanhtoan(data.InvoiceNum,2)
         this._ZaloznsService.sendtestzns(data, Chinhanh).then((zns: any) => {
           if (zns) {
             if (zns.status == 'sms') {
@@ -341,11 +336,11 @@ export class VttechthanhtoanService {
     const queryBuilder = this.VttechthanhtoanZNSRepository.createQueryBuilder('vttechthanhtoan_zns');
     const queryBuilder1 = this.VttechthanhtoanZNSRepository.createQueryBuilder('vttechthanhtoan_zns');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder.andWhere('vttechthanhtoan_zns.CreateAt BETWEEN :startDate AND :endDate', {
+      queryBuilder.andWhere('vttechthanhtoan_zns.Created BETWEEN :startDate AND :endDate', {
         startDate: params.Batdau,
         endDate: params.Ketthuc,
-      });
-            queryBuilder1.andWhere('vttechthanhtoan_zns.CreateAt BETWEEN :startDate AND :endDate', {
+      }); 
+     queryBuilder1.andWhere('vttechthanhtoan_zns.Created BETWEEN :startDate AND :endDate', {
         startDate: params.Batdau,
         endDate: params.Ketthuc,
       });

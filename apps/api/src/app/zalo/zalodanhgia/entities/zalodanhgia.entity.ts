@@ -13,6 +13,8 @@ export class ZalodanhgiaEntity {
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   idCN: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  BranchID: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   Chinhanh: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   SDT: string;

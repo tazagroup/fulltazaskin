@@ -316,9 +316,12 @@ export class VttechService {
       const ZNSDieutri = await this._Vttech_dieutriService.fininday_zns();
       setTimeout(async () => {
         ZNSDieutri.forEach((v: any,k) => {
-          v.TimeZNS = moment().add((k+1)*10, 'seconds').toDate()
-          this._Vttech_dieutriService.update_zns(v.id,v)
-            this.addCron(v)
+          setTimeout(() => {
+            v.TimeZNS = moment().toDate()
+            this._Vttech_dieutriService.update_zns(v.id,v)
+              this.SendCamon(v)
+          }, Math.random()*5000 + k*1000);
+
         });
       }, 5000);
       return { ZNSDieutri:ZNSDieutri.length, data: ZNSDieutri }
@@ -486,6 +489,67 @@ export class VttechService {
     }
     return data
   }
+  SendCamon(data: any) {   
+    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)
+    if (Chinhanh) {
+        try {
+          this._ZaloznsService.TemplateDanhgia(data, Chinhanh).then((zns: any) => {
+            if (zns) {
+              data.SendZNSAt = new Date()
+              data.StatusZNS = 2
+              data.Status = 2
+              this._Vttech_dieutriService.update_zns(data.id, data)
+              this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 2)
+              const logger ={
+                Title:'Điều Trị',
+                Slug:'dieutri',
+                Action:'done',
+                Mota:`${zns.Title}`}
+              this._LoggerService.create(logger)
+            }
+            else
+            {
+              data.SendZNSAt = new Date()
+              data.StatusZNS = 5
+              data.Status = 5
+              this._Vttech_dieutriService.update_zns(data.id, data)
+              this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 5)
+              const logger ={
+                Title:'Điều Trị',
+                Slug:'dieutri',
+                Action:'khac',
+                Mota:`${JSON.stringify(zns)}`}
+              this._LoggerService.create(logger)
+            }
+          })
+        } catch (error) {
+          console.error(`Error calling Zalozns service: ${error.message}`);
+        }
+      data.Status = 1
+      this._Vttech_dieutriService.update_zns(data.id, data)
+      this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 1)
+      const logger ={
+        Title:'Điều Trị',
+        Slug:'dieutri',
+        Action:'waiting',
+        Mota:`Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${data.format("HH:mm:ss DD/MM/YYYY")}`}
+      this._LoggerService.create(logger)
+    }
+    else {
+      data.Status = 3
+      this._Vttech_dieutriService.update_zns(data.id, data)
+      this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 3)
+      const logger ={
+        Title:'Điều Trị',
+        Slug:'dieutri',
+        Action:'error',
+        Mota:`Chi nhánh chưa đăng ký ZNS`}
+      this._LoggerService.create(logger)
+    }
+    return data
+  }
+
+
   create(createVttechDto: CreateVttechDto) {
     return 'This action adds a new vttech';
   }
