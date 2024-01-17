@@ -11,14 +11,14 @@ export class VttechthanhtoanController {
   async getApiRealtime(@Body() data:any) {      
     return this.vttechthanhtoanService.getApiRealtime(data);
   }
-  @Get('checkthanhtoan')
-  async CheckThanhtoan() {      
-    return this.vttechthanhtoanService.Checkthanhtoan();
-  }
   @Interval(1900000)
   @Get('sendznskh')
   async GetVttechKhachhang() {      
     return this.vttechthanhtoanService.GetVttechKhachhang();
+  }
+  @Post('send1zns')
+  async Send1zns(@Body() data:any) {      
+    return this.vttechthanhtoanService.sendZNSThanhtoan(data);
   }
   @Post()
   create(@Body() createVttechthanhtoanDto: CreateVttechthanhtoanDto) {

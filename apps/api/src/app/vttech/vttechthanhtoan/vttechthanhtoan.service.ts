@@ -11,6 +11,7 @@ import { LIST_CHI_NHANH } from '../../shared.utils';
 import { ZaloznsService } from '../../zalo/zalozns/zalozns.service';
 import { VttechthanhtoanZNSEntity } from './entities/vttechthanhtoan-zns.entity';
 import { LoggerService } from '../../logger/logger.service';
+import * as getDeepValue from 'typeorm';
 @Injectable()
 export class VttechthanhtoanService {
   Cookie: any = ''
@@ -136,14 +137,14 @@ export class VttechthanhtoanService {
        {
         this.sendZNSThanhtoan(result)
        }
-      }, k*100);
+      },Math.random()*1000+ k*1000);
     });
     console.error(ListKH);
     
     return {count:Group.length,data:Group}
   }
  }
-  async sendZNSThanhtoan(data: any) {    
+ async sendZNSThanhtoan(data: any) {    
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
     if (Chinhanh) {
       try {        
@@ -250,12 +251,6 @@ export class VttechthanhtoanService {
     })
     return result
   }
-  async Checkthanhtoan() {
-    const now = new Date()
-    // return await this.VttechthanhtoanRepository.findOne({
-    //   where: { id: id },
-    // });
-  }
   async findbetween(start: any, end: any) {
     const startTime = new Date(start)
     const endTime = new Date(end)
@@ -344,30 +339,30 @@ export class VttechthanhtoanService {
   async findQueryZNS(params: any) {
     console.error(params);
     const queryBuilder = this.VttechthanhtoanZNSRepository.createQueryBuilder('vttechthanhtoan_zns');
+    const queryBuilder1 = this.VttechthanhtoanZNSRepository.createQueryBuilder('vttechthanhtoan_zns');
     if (params.Batdau && params.Ketthuc) {
       queryBuilder.andWhere('vttechthanhtoan_zns.CreateAt BETWEEN :startDate AND :endDate', {
         startDate: params.Batdau,
         endDate: params.Ketthuc,
       });
-    }
-    if (params.SDT) {
-      queryBuilder.andWhere('vttechthanhtoan_zns.SDT LIKE :SDT', { SDT: `%${params.SDT}%` });
+            queryBuilder1.andWhere('vttechthanhtoan_zns.CreateAt BETWEEN :startDate AND :endDate', {
+        startDate: params.Batdau,
+        endDate: params.Ketthuc,
+      });
     }
     if (params.hasOwnProperty("Status")) {
       queryBuilder.andWhere('vttechthanhtoan_zns.Status LIKE :Status', { Status: `${params.Status}` });
+    }
+    if (params.hasOwnProperty("BranchID")&&params.BranchID!=0) {
+      queryBuilder.andWhere('vttechthanhtoan_zns.BranchID = :BranchID', { BranchID: `${params.BranchID}` });
+      queryBuilder1.andWhere('vttechthanhtoan_zns.BranchID = :BranchID', { BranchID: `${params.BranchID}` });
     }
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10)
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
 
-    const queryBuilder1 = this.VttechthanhtoanZNSRepository.createQueryBuilder('vttechthanhtoan_zns');
-    if (params.Batdau && params.Ketthuc) {
-      queryBuilder1.andWhere('vttechthanhtoan_zns.CreateAt BETWEEN :startDate AND :endDate', {
-        startDate: params.Batdau,
-        endDate: params.Ketthuc,
-      });
-    }
+
     const [result] = await queryBuilder1.getManyAndCount();
     const ListStatus = result.map((v: any) => ({ Status: v.Status }))
 

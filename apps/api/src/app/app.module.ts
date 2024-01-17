@@ -12,7 +12,6 @@ import { DanhgiaModule } from './cauhinh/danhgia/danhgia.module';
 import { KhachhangdanhgiaModule } from './khachhangdanhgia/khachhangdanhgia.module';
 import { LichhenModule } from './lichhen/lichhen.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { VttechthanhtoanModule } from './dulieuvttech/vttechthanhtoan/vttechthanhtoan.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { KhachhangsModule } from './khachhang/khachhang/khachhang.module';
@@ -23,6 +22,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { SmsModule } from './sms/sms.module';
 import { TelegramService } from './shared/telegram.service';
 import { LoggerModule } from './logger/logger.module';
+import { VttechthanhtoanModule } from './vttech/vttechthanhtoan/vttechthanhtoan.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),

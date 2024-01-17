@@ -289,7 +289,6 @@ export class VttechService {
           this.getDieutri(v);
         });
       }, 5000);
-      // this._TelegramService.SendLogdev(`Cập Nhật Điều Trị : Số Lượng ${Tinhtrangphongs.length}`);
       // const logger ={Title:'Điều Trị',Mota:`Cập Nhật Điều Trị : Số Lượng ${Tinhtrangphongs.length}`}
       // this._LoggerService.create(logger)
       return {count:Tinhtrangphongs.length,data:Tinhtrangphongs}

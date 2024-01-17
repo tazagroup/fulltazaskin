@@ -10,7 +10,7 @@ import { LIST_CHI_NHANH } from '../shared.utils';
 import { environment } from '../../environments/environment';
 import axios from 'axios';
 import { TelegramService } from '../shared/telegram.service';
-import { VttechthanhtoanService } from '../dulieuvttech/vttechthanhtoan/vttechthanhtoan.service';
+import { VttechthanhtoanService } from '../vttech/vttechthanhtoan/vttechthanhtoan.service';
 @Injectable()
 export class TasksService {
   constructor(
