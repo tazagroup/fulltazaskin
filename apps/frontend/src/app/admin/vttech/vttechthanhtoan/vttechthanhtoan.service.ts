@@ -75,10 +75,9 @@ export class VttechthanhtoanService {
     );
   }
   SendZns(data: any) {
-    return this.http.post(environment.APIURL + '/tasks/addcron', data).pipe(
+    return this.http.post(environment.APIURL + '/vttechthanhtoan/send1zns', data).pipe(
           map((result) => {
-            console.log(result);
-            
+            console.log(result); 
             return result;
           })
         )
