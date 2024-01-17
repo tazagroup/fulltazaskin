@@ -13,6 +13,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatSelectModule } from '@angular/material/select';
 @NgModule({
   imports: [
     CommonModule,
@@ -28,6 +30,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatDatepickerModule,
     MatBadgeModule,
     MatTooltipModule,
+    MatChipsModule,
+    MatSelectModule,
     RouterModule.forChild([
       {
         path: '', component: VttechdieutriComponent,    

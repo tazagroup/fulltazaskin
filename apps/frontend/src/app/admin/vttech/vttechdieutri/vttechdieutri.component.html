@@ -6,13 +6,13 @@
   </mat-drawer>
   <mat-drawer-content class="!flex flex-col flex-auto min-w-0 relative bg-white !h-[90vh]">
     <div class="w-full flex flex-col p-4 justify-center items-center space-y-2">
-      <div class="flex flex-row space-x-2 items-center">
-        <!-- <mat-form-field appearance="outline" class="text-xs">
+      <div class="grid lg:grid-cols-3 grid-cols-2 gap-2">
+        <mat-form-field appearance="outline" class="lg:text-sm text-xs lg:col-span-1 col-span-2">
           <mat-label>Tìm Kiếm</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Mô Tả">
           <span matPrefix class="material-symbols-outlined mr-2">search</span>
-        </mat-form-field> -->
-        <mat-form-field appearance="outline">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="lg:text-sm text-xs">
           <mat-label>Chọn Khoảng Thời Gian</mat-label>
           <mat-date-range-input [rangePicker]="rangePicker">
             <input matStartDate placeholder="Từ Ngày" [(ngModel)]="SearchParams.Batdau" [ngModelOptions]="{standalone: true}">
@@ -26,29 +26,24 @@
             </mat-date-range-picker-actions>
           </mat-date-range-picker>
         </mat-form-field>
-        <div class="flex flex-row space-x-2">
-          <button mat-icon-button  (click)="Reload()">
-            <span class="material-symbols-outlined">sync</span>
-          </button>
-          <button mat-icon-button  (click)="SendAllZNS(FilterLists)" matTooltip="{{FilterLists.length}}">
-            <span class="material-symbols-outlined">send</span>
-          </button>
-        </div>
-        <!-- <mat-form-field appearance="outline">
-            <mat-label>Trạng Thái</mat-label>
-            <mat-select [(ngModel)]="FilterStatus" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeStatus($event)">
-              <mat-option [value]="item.key" *ngFor="let item of Status|keyvalue">{{item.value}}</mat-option>
-            </mat-select>
-          </mat-form-field> -->
-          <div> 
-          <!-- <span class="material-symbols-outlined {{isReport?'border rounded-lg':''}} p-2" (click)="isReport=!isReport">pie_chart</span> -->
-        </div>
+        <mat-form-field appearance="outline" class="lg:text-sm text-xs">
+          <mat-label>Chi Nhánh</mat-label>
+          <mat-select [(ngModel)]="SearchParams.BranchID" [ngModelOptions]="{standalone: true}" (selectionChange)="onChangeCN($event)">
+            <mat-option [value]="0">Tất Cả</mat-option>
+            <mat-option [value]="item.idVttech" *ngFor="let item of LIST_CHI_NHANH">{{item.Title}}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
-      <div class="grid lg:grid-cols-4 grid-cols-2 gap-2">
-         <div (click)="ChangeStatusButton(item)" class="flex flex-row justify-between items-center border rounded-lg p-2 text-white {{Style[item]}}" *ngFor="let item of [0,1,2,3]">
+      <div class="flex flex-row">
+          <mat-chip-list class="flex space-x-2 flex-row items-center justify-between">
+            <mat-chip class="flex flex-row !text-white {{Style[item]}}" (click)="ChangeStatusButton(item)" *ngFor="let item of [2,3]">
+              <span class="text-xs">{{Status[item]}} ({{Report(ListStatus,item)}})</span>
+            </mat-chip>
+          </mat-chip-list>
+         <!-- <div (click)="ChangeStatusButton(item)" class="flex flex-row justify-between items-center border rounded-lg p-2 text-white {{Style[item]}}" *ngFor="let item of [0,1,2,3]">
               <span>{{Status[item]}}</span>
               <span class="font-bold">{{Report(ListStatus,item)}}</span>
-         </div> 
+         </div>  -->
       </div>
     </div>
     <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">

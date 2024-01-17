@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { ZaloznsService } from '../zalozns/zalozns.service';
 import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
 import { range } from 'rxjs';
+import { MatSelectChange } from '@angular/material/select';
 @Component({
   selector: 'app-zalodanhgia',
   templateUrl: './zalodanhgia.component.html',
@@ -70,34 +71,29 @@ export class ZalodanhgiaComponent implements OnInit {
   ChoosenDate()
   {
     this.SearchParams.pageNumber = 0
+    this.SearchParams.Batdau=moment(this.SearchParams.Batdau).startOf('day').toDate(),
+    this.SearchParams.Ketthuc= moment(this.SearchParams.Ketthuc).endOf('day').toDate(),
+    console.log(this.SearchParams);
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value;
+    console.log(value);
     if (value.length > 2) {
-      this.Lists = this.Lists.filter((v) => {
-     return  v.Hoten.toLowerCase().includes(value)||v.SDT.toLowerCase().includes(value)
+      this.FilterLists = this.Lists.filter((v) => {
+     return v.SDT.toLowerCase().includes(value)
        }
       )
     }
+    else {
+      this.FilterLists = this.Lists
+    }
   }
-  openDialog(teamplate: TemplateRef<any>): void {
-    // const dialogRef = this.dialog.open(teamplate, {
-    // });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result=="true") {
-    //     this._ZaloznsService.CreateZalodanhgia(this.Detail).subscribe()
-    //   }
-    // });
+  onChangeCN(event:MatSelectChange)
+  {
+    this.SearchParams.BranchID=event.value
+    this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
-  openDeleteDialog(teamplate: TemplateRef<any>,item:any): void {
-  //   const dialogRef = this.dialog.open(teamplate, {});
-  //   dialogRef.afterClosed().subscribe((result) => {
-  //     if (result=="true") {
-  //       this._ZaloznsService.DeleteZalodanhgia(item.id).subscribe()
-  //     }
-  //   });
-   }
   onPageChange(event:any)
   {
     console.log(event);

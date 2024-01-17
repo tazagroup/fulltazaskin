@@ -29,7 +29,7 @@ export class VttechdieutriComponent implements OnInit {
   ListStatus: any
   Status: any = { 0: 'Mới', 1: 'Đợi gửi', 2: 'Thành Công', 3: 'Chưa Có Temp Zalo OA', 4: 'Gửi SMS' }
   // Status:any={0:'Mới',2:'Thành Công',3:'Chưa Có Temp Zalo OA',4:'Gửi SMS'}
-  Style: any = { 0: 'bg-blue-500', 1: 'bg-yellow-500', 2: 'bg-green-500', 3: 'bg-red-500', 4: 'bg-purple-500' }
+  Style: any = { 0: '!bg-blue-500', 1: '!bg-yellow-500', 2: '!bg-green-500', 3: '!bg-red-500', 4: '!bg-purple-500' }
   isReport: boolean = false
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   PagiLength: any = 0
@@ -88,6 +88,11 @@ export class VttechdieutriComponent implements OnInit {
   }
   ChoosenDate() {
     console.log(this.SearchParams);
+    this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
+  }
+  onChangeCN(event:MatSelectChange)
+  {
+    this.SearchParams.BranchID=event.value
     this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
   }
   ChangeStatus(event: MatSelectChange) {

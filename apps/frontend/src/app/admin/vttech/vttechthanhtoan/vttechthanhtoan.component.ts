@@ -78,6 +78,8 @@ export class VttechthanhtoanComponent implements OnInit {
   }
   ChoosenDate()
   {
+    this.SearchParams.Batdau=moment(this.SearchParams.Batdau).startOf('day').toDate(),
+    this.SearchParams.Ketthuc= moment(this.SearchParams.Ketthuc).endOf('day').toDate(),
     console.log(this.SearchParams);
     this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
   }
