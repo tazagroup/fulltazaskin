@@ -439,7 +439,7 @@ export class VttechService {
         Title:'Điều Trị',
         Slug:'dieutri',
         Action:'waiting',
-        Mota:`Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${data.format("HH:mm:ss DD/MM/YYYY")}`}
+        Mota:`Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
       this._LoggerService.create(logger)
     }
     else {
