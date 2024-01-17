@@ -333,9 +333,6 @@ export class VttechService {
     return checkTime
   }
   async SendZnsDieutri(data: any) {
-    let cronExpression: any;
-    const targetDate = moment(data.TimeZNS);
-    cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)
     if (Chinhanh) {
         try {
@@ -378,108 +375,13 @@ export class VttechService {
         Title:'Điều Trị',
         Slug:'dieutri',
         Action:'waiting',
-        Mota:`Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`}
+        Mota:`Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${data.format("HH:mm:ss DD/MM/YYYY")}`}
       this._LoggerService.create(logger)
     }
     else {
       data.Status = 3
       this._Vttech_dieutriService.update_zns(data.id, data)
       this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 3)
-      const logger ={
-        Title:'Điều Trị',
-        Slug:'dieutri',
-        Action:'error',
-        Mota:`Chi nhánh chưa đăng ký ZNS`}
-      this._LoggerService.create(logger)
-    }
-    return data
-  }
-  // async SendZnsDieutri(data: any) {
-  //   this.addCron(data)
-  // }
-  addCron(data: any) {   
-    let cronExpression: any;
-    const targetDate = moment(data.TimeZNS);
-    cronExpression = `0 ${targetDate.minute()} ${targetDate.hour()} ${targetDate.date()} ${targetDate.month() + 1} ${targetDate.isoWeekday()}`;
-    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)
-    if (Chinhanh) {
-      const job = new CronJob(cronExpression, () => {
-       // const result = `Điều Trị : ${data.id} - ${data.SDT} - ${data.CustName} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
-      //  this._TelegramService.SendLogdev(result)
-        const logger ={
-          Title:'Điều Trị',
-          Slug:'dieutri',
-          Action:'done',
-          Mota:`Điều Trị : ${data.id} - ${data.SDT} - ${data.CustName} sẽ được gửi lúc ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`,    
-        }
-        this._LoggerService.create(logger)
-        try {
-          this._ZaloznsService.TemplateDanhgia(data, Chinhanh).then((zns: any) => {
-            if (zns) {
-              // if (zns.status == 'sms') {
-              //   data.SMS = zns.data
-              //   data.Status = 4
-              //   this._Vttech_dieutriService.update(data.id, data)
-              //   // const result = `<b><u>${zns.Title}</u></b>`;
-              //   // this._TelegramService.SendNoti(result)
-              // }
-              // else {
-              data.SendZNSAt = new Date()
-              data.StatusZNS = 2
-              data.Status = 2
-              this._Vttech_dieutriService.update_zns(data.id, data)
-              this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 2)
-             // const result = `${zns.Title}`;
-             // this._TelegramService.SendNoti(result)
-              const logger ={
-                Title:'Điều Trị',
-                Slug:'dieutri',
-                Action:'done',
-                Mota:`${zns.Title}`}
-              this._LoggerService.create(logger)
-              // }
-            }
-            else
-            {
-              data.SendZNSAt = new Date()
-              data.StatusZNS = 5
-              data.Status = 5
-              this._Vttech_dieutriService.update_zns(data.id, data)
-              this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 5)
-             // const result = `${zns.Title}`;
-             // this._TelegramService.SendNoti(result)
-              const logger ={
-                Title:'Điều Trị',
-                Slug:'dieutri',
-                Action:'khac',
-                Mota:`${JSON.stringify(zns)}`}
-              this._LoggerService.create(logger)
-            }
-          })
-        } catch (error) {
-          console.error(`Error calling Zalozns service: ${error.message}`);
-        }
-      })
-      this.schedulerRegistry.addCronJob(data.id, job);      
-      job.start(); 
-      data.Status = 1
-      this._Vttech_dieutriService.update_zns(data.id, data)
-      this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 1)
-     // const result = `Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`;
-     // this._TelegramService.SendLogdev(result)
-      const logger ={
-        Title:'Điều Trị',
-        Slug:'dieutri',
-        Action:'waiting',
-        Mota:`Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${targetDate.format("HH:mm:ss DD/MM/YYYY")}`}
-      this._LoggerService.create(logger)
-    }
-    else {
-      data.Status = 3
-      this._Vttech_dieutriService.update_zns(data.id, data)
-      this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 3)
-      // const result = `Chi nhánh chưa đăng ký ZNS`;
-      // this._TelegramService.SendLogdev(result)
       const logger ={
         Title:'Điều Trị',
         Slug:'dieutri',
@@ -490,7 +392,6 @@ export class VttechService {
     return data
   }
   SendCamon(data: any) {   
-    data.Created
     const now = moment();
     const compareTime = moment(data.Created).add(3, 'hours');
     now.isAfter(compareTime)
