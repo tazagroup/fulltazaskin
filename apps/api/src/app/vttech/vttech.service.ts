@@ -490,6 +490,12 @@ export class VttechService {
     return data
   }
   SendCamon(data: any) {   
+    data.Created
+    const now = moment();
+    const compareTime = moment(data.Created).add(3, 'hours');
+    now.isAfter(compareTime)
+    if(now.isAfter(compareTime))
+    {
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)
     if (Chinhanh) {
         try {
@@ -547,6 +553,7 @@ export class VttechService {
       this._LoggerService.create(logger)
     }
     return data
+    }
   }
 
 
