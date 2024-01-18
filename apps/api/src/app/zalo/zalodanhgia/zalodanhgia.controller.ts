@@ -5,10 +5,10 @@ import { UpdateZalodanhgiaDto } from './dto/update-zalodanhgia.dto';
 @Controller('zalodanhgia')
 export class ZalodanhgiaController {
   constructor(private readonly zalodanhgiaService:ZalodanhgiaService) {}
-
   @Post('getdanhgia')
-  getDanhgia(@Body() data: any) {
-    return this.zalodanhgiaService.getDanhgia(data);
+  async getDanhgia(@Body() data: any) {
+    const result = await this.zalodanhgiaService.getDanhgia(data);
+    return result
   }
   @Post()
   create(@Body() createZalodanhgiaDto: CreateZalodanhgiaDto) {
