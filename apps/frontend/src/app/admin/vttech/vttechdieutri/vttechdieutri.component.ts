@@ -74,8 +74,6 @@ export class VttechdieutriComponent implements OnInit {
 
   }
   SendZNS(item: any,time:any=1) {
-    console.log(item);
-    item.TimeZNS = moment().add(time, 'seconds').toDate()
     this._VttechdieutriService.SendZns(item).subscribe()
   }
   async SendAllZNS(items: any) {

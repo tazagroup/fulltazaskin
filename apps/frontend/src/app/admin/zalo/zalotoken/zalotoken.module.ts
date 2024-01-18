@@ -10,6 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ZalotokenDetailComponent } from './zalotoken-detail/zalotoken-detail.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 @NgModule({
   imports: [
     CommonModule,
@@ -21,6 +22,7 @@ import { ZalotokenDetailComponent } from './zalotoken-detail/zalotoken-detail.co
     MatMenuModule,
     MatButtonModule,
     MatDialogModule,
+    MatDatepickerModule,
     RouterModule.forChild([
       {
         path: '', component: ZalotokenComponent,

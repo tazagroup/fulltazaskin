@@ -16,6 +16,13 @@ export class ZalodanhgiaService {
   }
   constructor(private http: HttpClient) { }
 
+  GetFromZalo(data:any) {    
+    return this.http.post(environment.APIURL + '/zalodanhgia/getdanhgia',data).pipe(
+      map((data: any) => { 
+           console.log(data);
+      })
+    );
+  }
   getAllZalodanhgias() {
     return this.http.get(environment.APIURL + '/zalodanhgia').pipe(
       map((data: any) => { 
