@@ -48,6 +48,9 @@
     </div>
     <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
       <div class="w-full flex flex-col lg:max-w-xl space-y-3">
+        <div *ngIf="SearchParams.Status==1">
+          <button mat-raised-button (click)="SendAllZNS(FilterLists)">Gửi Tất Cả</button>
+        </div>
         <div class="flex flex-row justify-between items-center hover:bg-gray-200 hover:bg-opacity-50 border rounded-lg"
           *ngFor="let item of FilterLists; let i = index">
           <div class="flex flex-col space-y-2 items-center w-full">
