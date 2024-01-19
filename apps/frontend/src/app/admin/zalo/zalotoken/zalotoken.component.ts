@@ -90,7 +90,7 @@ export class ZalotokenComponent implements OnInit {
     });
   }
   Xacthuc() {
-    window.location.href = "https://oauth.zaloapp.com/v4/oa/permission?app_id=1416835846626859002&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fadmin%2Fzalotoken"
+    window.location.href = "https://oauth.zaloapp.com/v4/oa/permission?app_id=1416835846626859002&redirect_uri=https://zalo.tazaskinclinic.com/admin/zalotoken"
   }
   Checktime(timein: Date, timeout: Date) {
     let result = { message: 'Chưa Xác Thực', status: false, text: 'text-red-500' }
