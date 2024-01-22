@@ -34,41 +34,43 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="flex flex-row">
-          <mat-chip-list class="flex space-x-2 flex-row items-center justify-between">
-            <mat-chip class="flex flex-row !text-white {{Style[item]}}" (click)="ChangeStatusButton(item)" *ngFor="let item of [1,2,3]">
+         <mat-chip-list class="flex space-x-2 flex-nowrap items-center justify-between">
+            <mat-chip class="flex flex-row !text-white {{Style[item]}}" (click)="ChangeStatusButton(item)" *ngFor="let item of [0,1,2,3]">
               <span class="text-xs">{{Status[item]}} ({{Report(ListStatus,item)}})</span>
             </mat-chip>
+            <mat-chip (click)="writeExcelFile(FilterLists)">
+                <span class="material-symbols-outlined">
+                  sim_card_download
+                  </span>
+                  Xuất
+                </mat-chip>
+            <mat-chip (click)="SendAllZNS(FilterLists)" *ngIf="SearchParams.Status==0||SearchParams.Status==1">
+                <span class="material-symbols-outlined">
+                  send
+                  </span>
+                  Gửi Tất Cả
+                </mat-chip>
           </mat-chip-list>
-         <!-- <div (click)="ChangeStatusButton(item)" class="flex flex-row justify-between items-center border rounded-lg p-2 text-white {{Style[item]}}" *ngFor="let item of [0,1,2,3]">
-              <span>{{Status[item]}}</span>
-              <span class="font-bold">{{Report(ListStatus,item)}}</span>
-         </div>  -->
-      </div>
     </div>
     <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
       <div class="w-full flex flex-col lg:max-w-xl space-y-3">
-        <div *ngIf="SearchParams.Status==1">
-          <button mat-raised-button (click)="SendAllZNS(FilterLists)">Gửi Tất Cả</button>
-        </div>
         <div class="flex flex-row justify-between items-center hover:bg-gray-200 hover:bg-opacity-50 border rounded-lg"
           *ngFor="let item of FilterLists; let i = index">
           <div class="flex flex-col space-y-2 items-center w-full">
             <div class="w-full flex flex-row justify-between p-2 text-white {{Style[item.Status]}} items-center rounded-t-lg">
             <span>{{Status[item.Status]}}</span>
-            <button mat-icon-button *ngIf="item.Status<2" (click)="SendZNS(item)">Gửi</button>
             </div>
             <div class="w-full p-2 grid grid-cols-1 gap-2">
               <div class="flex flex-col">
                 <div class="flex flex-col space-y-3 p-2">
                   <div class="flex flex-row justify-between border-b">
                     <span>Chi Nhánh : </span>
-                    <span class="font-bold">{{item.BranchName}}</span>
+                    <span class="font-bold">{{GetNameChinhanh(item.idVttech)}}</span>
                   </div>
-                  <div class="flex flex-row justify-between border-b">
+                  <!-- <div class="flex flex-row justify-between border-b">
                     <span>Dịch Vụ : </span>
                     <span class="font-bold">{{item.ServiceName}}</span>
-                  </div>
+                  </div> -->
                   <div class="flex flex-row justify-between border-b">
                     <span>Khách hàng : </span>
                     <span class="font-bold">{{item.CustName}}</span>
@@ -79,16 +81,16 @@
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Ngày Tạo : </span>
-                    <span class="font-bold">{{item.Created|date:'HH:mm:ss dd/MM/yyyy'}}</span>
+                    <span class="font-bold">{{item.NgayVttech|date:'dd/MM/yyyy'}}</span>
                   </div>
                   <div class="flex flex-row justify-between border-b">
                     <span>Thời Gian Gửi ZNS : </span>
-                    <span class="font-bold {{item.StatusZNS==0?'text-red-500':'text-blue-500'}}">{{item.TimeZNS|date:'HH:mm:ss dd/MM/yyyy'}}</span>
+                    <span class="font-bold {{item.SendZNSAt==0?'text-red-500':'text-blue-500'}}">{{item.TimeZNS|date:'HH:mm:ss dd/MM/yyyy'}}</span>
                   </div>
-                  <div class="flex flex-row justify-between">
+                  <!-- <div class="flex flex-row justify-between">
                     <span>Tin Nhắn SMS : </span>
                     <span></span>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -100,7 +102,7 @@
       </div>
     </div>
     <div class="relative border-t flex flex-col">
-      <mat-paginator (page)="onPageChange($event)" [length]="PagiLength"  [pageSizeOptions]="[5,Total]"></mat-paginator>
+      <mat-paginator (page)="onPageChange($event)" [length]="Total"  [pageSizeOptions]="pageSizeOptions"></mat-paginator>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>

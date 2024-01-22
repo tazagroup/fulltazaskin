@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { MatSelectChange } from '@angular/material/select';
 import { Delete } from '@nestjs/common';
 import { NotifierService } from 'angular-notifier';
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-vttechdieutri',
   templateUrl: './vttechdieutri.component.html',
@@ -16,10 +17,8 @@ export class VttechdieutriComponent implements OnInit {
 
   Detail: any = {};
   SearchParams: any = {
-    Batdau:moment().startOf('day').add(-1,'day').toDate(),
+    Batdau:moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
-    // Batdau:moment().startOf('day').toDate(),
-    // Ketthuc: moment().endOf('day').toDate(),
     pageSize: 20,
     pageNumber: 0
   };
@@ -27,6 +26,7 @@ export class VttechdieutriComponent implements OnInit {
   FilterLists: any[] = []
   LIST_CHI_NHANH = LIST_CHI_NHANH
   ListStatus: any
+  pageSizeOptions:any
   Status: any = { 0: 'Mới', 1: 'Đợi gửi', 2: 'Thành Công', 3: 'Chưa Có Temp OA', 4: 'Gửi SMS' }
   // Status:any={0:'Mới',2:'Thành Công',3:'Chưa Có Temp Zalo OA',4:'Gửi SMS'}
   Style: any = { 0: '!bg-blue-500', 1: '!bg-yellow-500', 2: '!bg-green-500', 3: '!bg-red-500', 4: '!bg-purple-500' }
@@ -47,20 +47,15 @@ export class VttechdieutriComponent implements OnInit {
       if (data) {
         console.log(data);
         this.Total = data.totalCount
+        this.pageSizeOptions = [10, 20, data.totalCount].filter(v => v <= data.totalCount);
         this.ListStatus = data.ListStatus
-        data.items.forEach((v: any) => {
-          if (typeof v.Dulieu !== 'object') {
-            v.Dulieu = JSON.parse(v.Dulieu)
-          }
-        });
-        this.PagiLength = (Number(data.totalCount) / Number(this.SearchParams.pageSize)).toFixed()
         this.FilterLists = this.Lists = data.items
       }
     })
   }
   Reload() {
     delete this.SearchParams.Status
-    this.SearchParams.pageSize = 10
+    this.SearchParams.pageSize = 20
     this.SearchParams.Batdau = moment().startOf('day').toDate(),
       this.SearchParams.Ketthuc = moment().endOf('day').toDate(),
       this.SearchParams.pageNumber = 0
@@ -73,13 +68,13 @@ export class VttechdieutriComponent implements OnInit {
     else return 0
 
   }
-  SendZNS(item: any,time:any=1) {
+  SendZNS(item: any) {
     this._VttechdieutriService.SendZns(item).subscribe()
   }
   async SendAllZNS(items: any) {
     await items.forEach((v: any,k:any) => {
       setTimeout(() => {
-        this.SendZNS(v,(k+1)*10)
+        this.SendZNS(v)
       }, Math.random()*1000 + k*100);
     });
     this._NotifierService.notify("success", `Đang gửi ${items.length} Tin Nhắn`)
@@ -135,9 +130,44 @@ export class VttechdieutriComponent implements OnInit {
   }
   onPageChange(event: any) {
     console.log(event);
-
     this.SearchParams.pageSize = event.pageSize
     this.SearchParams.pageNumber = event.pageIndex
     this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
   }
+  readExcelFile(event: any) {
+      const file = event.target.files[0];
+      const fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        const data = new Uint8Array((e.target as any).result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+        console.log(jsonData);
+      };
+      fileReader.readAsArrayBuffer(file);
+    }
+    writeExcelFile(data:any) {
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+        data.map((v:any,k:any)=>({
+        'STT':k+1,
+        'Số Điện Thoại':v.SDT,
+        'Họ Tên':v.CustName,
+        'Ngày Tạo':v.NgayVttech,
+        'Thời Gian Gửi ZNS':v.SendZNSAt,
+      })));
+      const workbook: XLSX.WorkBook = { Sheets: { 'Sheet1': worksheet }, SheetNames: ['Sheet1'] };
+      const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      this.saveAsExcelFile(excelBuffer, `ZNZ_cam_on_${moment().format('DD_MM_YYYY')}`);
+    }
+    saveAsExcelFile(buffer: any, fileName: string) {
+      const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+      const url: string = window.URL.createObjectURL(data);
+      const link: HTMLAnchorElement = document.createElement('a');
+      link.href = url;
+      link.download = `${fileName}.xlsx`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }
 }

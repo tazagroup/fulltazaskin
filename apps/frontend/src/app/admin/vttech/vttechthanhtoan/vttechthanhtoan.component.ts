@@ -5,6 +5,8 @@ import { VttechthanhtoanService } from './vttechthanhtoan.service';
 import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
 import * as moment from 'moment';
 import { MatSelectChange } from '@angular/material/select';
+import * as XLSX from 'xlsx';
+import { NotifierService } from 'angular-notifier';
 @Component({
   selector: 'app-vttechthanhtoan',
   templateUrl: './vttechthanhtoan.component.html',
@@ -13,7 +15,7 @@ import { MatSelectChange } from '@angular/material/select';
 export class VttechthanhtoanComponent implements OnInit {
   Detail: any = {};
   SearchParams: any = {
-    Batdau:moment().startOf('day').add(-1,'day').toDate(),
+    Batdau:moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
     pageSize:10,
     pageNumber:0
@@ -33,6 +35,7 @@ export class VttechthanhtoanComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private _VttechthanhtoanService: VttechthanhtoanService,
+    private _NotifierService: NotifierService,
   ) {
   }
   ngOnInit(): void {
@@ -70,11 +73,17 @@ export class VttechthanhtoanComponent implements OnInit {
     else return 0
 
   }
-  SendZNS(item:any)
-  {
-    console.log(item);
-    item.DukienZNS = moment().add(+1,'minutes').toDate()
-    this._VttechthanhtoanService.SendZns(item).subscribe()  
+
+  SendZNS(item: any) {
+    this._VttechthanhtoanService.SendZns(item).subscribe()
+  }
+  async SendAllZNS(items: any) {
+    await items.forEach((v: any,k:any) => {
+      setTimeout(() => {
+        this.SendZNS(v)
+      }, Math.random()*1000 + k*100);
+    });
+    this._NotifierService.notify("success", `Đang gửi ${items.length} Tin Nhắn`)
   }
   ChoosenDate()
   {
@@ -146,5 +155,36 @@ export class VttechthanhtoanComponent implements OnInit {
     this.SearchParams.pageSize=event.pageSize
      this.SearchParams.pageNumber=event.pageIndex
      this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
+  }
+  writeExcelFile(data:any) {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+      data.map((v:any,k:any)=>({
+      'STT':k+1,
+      'Số Điện Thoại':v.SDT,
+      'Họ Tên':v.CustName,
+      'Chi Nhánh':this.GetNameChinhanh(v.BranchID),
+      'Số Hoá Đơn':v.InvoiceNum,
+      'Số Tiền':v.Amount,
+      'Trạng Thái':this.Status[v.Status],
+      'Ngày Tạo':moment(v.Created).format('HH:mm:ss DD/MM/YYYY'),
+      'Thời Gian Gửi ZNS':moment(v.SendZNSAt).format('HH:mm:ss DD/MM/YYYY'),
+    })));
+    const workbook: XLSX.WorkBook = { Sheets: { 'Sheet1': worksheet }, SheetNames: ['Sheet1'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.saveAsExcelFile(excelBuffer, `ZNZ_Thanh_Toan_${moment().format('DD_MM_YYYY')}`);
+
+
+
+    
+  }
+  saveAsExcelFile(buffer: any, fileName: string) {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const url: string = window.URL.createObjectURL(data);
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = url;
+    link.download = `${fileName}.xlsx`;
+    link.click();
+    window.URL.revokeObjectURL(url);
+    link.remove();
   }
 }
