@@ -24,6 +24,8 @@ export class Vttech_dieutriEntity {
   CustID: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   idVttech: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
+  checkTime: string;
   @Column({ default: '' })
   Type: string;
   @Column({ default: 1 })

@@ -12,6 +12,16 @@ export class Vttech_dieutriController {
       return this.vttech_dieutriService.GetDieutriVttech(v.idVttech,data);
     })
   }
+  @Post("sendcamon")
+  async SendCamon(@Body() data: any) {
+    console.log(data);  
+    return await this.vttech_dieutriService.SendCamon(data);
+  }
+  @Interval(4000000)
+  @Get("sendauto")
+  SendZNSAuto() {
+      return this.vttech_dieutriService.SendZNSAuto();
+  }
   @Post()
   create(@Body() createVttech_dieutriDto: any) {
     return this.vttech_dieutriService.create(createVttech_dieutriDto);
@@ -20,12 +30,7 @@ export class Vttech_dieutriController {
   async findAll() {
     return await this.vttech_dieutriService.findAll();
   }
-  @Post("sendcamon")
-  async SendCamon(@Body() data: any) {
-    console.log(data);
-    
-    return await this.vttech_dieutriService.SendCamon(data);
-  }
+
   @Get('findid/:id')
   async findOne(@Param('id') id: string) {
     return await this.vttech_dieutriService.findid(id);

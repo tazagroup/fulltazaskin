@@ -29,17 +29,17 @@ export class Vttech_dieutriService {
     let begin: any
     let end: any
     if (Object.entries(data).length > 0) {
-      begin = moment(new Date(data.begin)).format('DD-MM-YYYY')
-      end = moment(new Date(data.end)).format('DD-MM-YYYY')
+      begin = moment(new Date(data.begin))
+      end = moment(new Date(data.end))
     }
     else {
-      begin = moment().format('DD-MM-YYYY')
-      end = moment().format('DD-MM-YYYY')
+      begin = moment()
+      end = moment()
     }
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `https://tmtaza.vttechsolution.com/Report/Treatment/DRTreatmentGen/?handler=LoadataDetailCust&branchID=${idVttech}&dateFrom=${begin}&dateTo=${end}`,
+      url: `https://tmtaza.vttechsolution.com/Report/Treatment/DRTreatmentGen/?handler=LoadataDetailCust&branchID=${idVttech}&dateFrom=${begin.format('DD-MM-YYYY')}&dateTo=${end.format('DD-MM-YYYY')}`,
       headers: {
         'Cookie': this.Cookie,
         'Xsrf-Token': this.XsrfToken
@@ -52,25 +52,37 @@ export class Vttech_dieutriService {
           let item: any = {}
           item.CustName = v.CustName
           item.CustCode = v.CustCode
-          item.NgayVttech = data.Begin
+          item.checkTime = (new Date(begin)).getTime()
+          item.NgayVttech = begin.format('YYYY-MM-DD')
           item.SDT = result.Table[0].CustomerPhone
           item.SDT2 = result.Table[0].CustomerPhone2
           item.idVttech = idVttech
-         const Ketqua = await this.create(item)
-         const logger = {
+          const Ketqua = await this.create(item)
+           const logger = {
           Title: 'Điều Trị',
           Slug: 'dieutri',
           Action: 'addnew',
           Mota: `Thêm Mới Điều Trị Từ Vttech ${JSON.stringify(Ketqua)}`
         }
         this._LoggerService.create(logger)
-
         });
       })
       .catch((error: any) => {
         console.log(error);
       });
 
+  }
+  async SendZNSAuto()
+  {
+    const ListDieutri = await this.fininday()
+
+    ListDieutri.forEach((v)=>
+    {
+      if(this.CheckTime())
+      {
+        this.SendCamon(v)
+      }
+    })
   }
   async GetKhachhangbyCode(code: any) {
     let config = {
@@ -108,24 +120,12 @@ export class Vttech_dieutriService {
     return await this.Vttech_dieutriRepository.find();
   }
   async fininday() {
-    const now = new Date()
-    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-    return await this.Vttech_dieutriRepository.find({
-      // where: {
-      //   TimeZNS: Between(Start, End),
-      //   Status: In([0]),
-      // },
-    });
-  }
-  async find19h() {
-    const now = new Date()
-    const Start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 19, 0, 0);
-    const End = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+    const Start = moment().startOf('date').toDate()
+    const End = moment().endOf('date').toDate()
     return await this.Vttech_dieutriRepository.find({
       where: {
-        Created: Between(Start, End),
-        Status: In([0, 1]),
+        CreateAt: Between(Start, End),
+        Status:0,
       },
     });
   }
@@ -171,13 +171,13 @@ export class Vttech_dieutriService {
     const queryBuilder = this.Vttech_dieutriRepository.createQueryBuilder('vttech_dieutri');
     const queryBuilder1 = this.Vttech_dieutriRepository.createQueryBuilder('vttech_dieutri');
     if (params.Batdau && params.Ketthuc) {
-      queryBuilder.andWhere('vttech_dieutri.NgayVttech BETWEEN :startDate AND :endDate', {
-        startDate: params.Batdau,
-        endDate: params.Ketthuc,
+      queryBuilder.andWhere('vttech_dieutri.checkTime BETWEEN :startDate AND :endDate', {
+        startDate: (new Date(params.Batdau)).getTime(),
+        endDate: (new Date(params.Ketthuc)).getTime(),
       });
-      queryBuilder1.andWhere('vttech_dieutri.NgayVttech BETWEEN :startDate AND :endDate', {
-        startDate: params.Batdau,
-        endDate: params.Ketthuc,
+      queryBuilder1.andWhere('vttech_dieutri.checkTime BETWEEN :startDate AND :endDate', {
+        startDate: (new Date(params.Batdau)).getTime(),
+        endDate: (new Date(params.Ketthuc)).getTime(),
       });
     }
     if (params.SDT) {
@@ -202,13 +202,10 @@ export class Vttech_dieutriService {
   }
 
   async SendCamon(data: any) {
-    const CheckData = await this.findid(data.id)
-    console.log(CheckData);
-    
+    const CheckData = await this.findid(data.id)    
     if (CheckData.Status == 0 ||CheckData.Status == 1) {
       const now = moment();
       const compareTime = moment(data.CreateAt).add(3, 'hours');
-      console.log(now.isAfter(compareTime)); 
       if (now.isAfter(compareTime)) {
         const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == data.idVttech)
         if (Chinhanh) {
@@ -270,7 +267,11 @@ export class Vttech_dieutriService {
 
 
 
-
+  CheckTime() {
+    const now = moment();
+    const checkTime = now.hour() >= 8 && now.hour() <= 19;
+    return checkTime
+  }
   async update(id: string, UpdateVttech_dieutriDto: any) {
     this.Vttech_dieutriRepository.save(UpdateVttech_dieutriDto);
     return await this.Vttech_dieutriRepository.findOne({ where: { id: id } });
