@@ -42,8 +42,6 @@ export class VttechthanhtoanService {
   searchVttechthanhtoan(SearchParams:any) {
     return this.http.post(environment.APIURL + `/vttech_thanhtoan/search`,SearchParams).pipe(
       map((data: any) => { 
-        console.log(data);
-        
         this._vttechthanhtoans.next(data);
         return data;
       })

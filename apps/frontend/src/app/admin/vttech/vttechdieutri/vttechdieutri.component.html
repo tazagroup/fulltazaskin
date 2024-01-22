@@ -35,7 +35,7 @@
         </mat-form-field>
       </div>
          <mat-chip-list class="flex space-x-2 flex-nowrap items-center justify-between">
-            <mat-chip class="flex flex-row !text-white {{Style[item]}}" (click)="ChangeStatusButton(item)" *ngFor="let item of [0,1,2,3]">
+            <mat-chip class="flex flex-row !text-white {{Style[item]}}" (click)="ChangeStatusButton(item)" *ngFor="let item of [0,2,3]">
               <span class="text-xs">{{Status[item]}} ({{Report(ListStatus,item)}})</span>
             </mat-chip>
             <mat-chip (click)="writeExcelFile(FilterLists)">
