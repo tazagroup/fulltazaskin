@@ -57,7 +57,7 @@ export class VttechdieutriService {
     );
   }
   SendZns(data: any) {
-    return this.http.post(environment.APIURL + '/vttech/vttech_sendznsdieutri', data).pipe(
+    return this.http.post(environment.APIURL + '/vttech_dieutri/sendcamon', data).pipe(
           map((result) => {
             console.log(result); 
             return result;

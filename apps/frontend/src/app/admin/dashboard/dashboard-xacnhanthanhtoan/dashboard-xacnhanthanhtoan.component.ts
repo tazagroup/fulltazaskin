@@ -16,7 +16,7 @@ export type ChartOptions = {
   fill: ApexFill;
 };
 @Component({
-  selector: 'app-dashboard-zalodanhgia',
+  selector: 'app-dashboard-xacnhanthanhtoan',
   standalone:true,
   imports:[
     NgApexchartsModule,
@@ -26,10 +26,10 @@ export type ChartOptions = {
     FormsModule,
     MatButtonModule
   ],
-  templateUrl: './dashboard-zalodanhgia.component.html',
-  styleUrls: ['./dashboard-zalodanhgia.component.css']
+  templateUrl: './dashboard-xacnhanthanhtoan.component.html',
+  styleUrls: ['./dashboard-xacnhanthanhtoan.component.css']
 })
-export class DashboardZalodanhgiaComponent implements OnInit {
+export class DashboardXacnhanthanhtoanComponent implements OnInit {
   SearchParams: any = {
     Batdau:moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),

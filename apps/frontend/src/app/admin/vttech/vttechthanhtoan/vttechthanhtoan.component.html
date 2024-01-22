@@ -38,19 +38,19 @@
             <mat-chip class="flex flex-row !text-white {{Style[item]}}" (click)="ChangeStatusButton(item)" *ngFor="let item of [0,2,4,3]">
               <span class="text-xs">{{Status[item]}} ({{Report(ListStatus,item)}})</span>
             </mat-chip>
+            <mat-chip (click)="writeExcelFile(FilterLists)">
+              <span class="material-symbols-outlined">
+                sim_card_download
+                </span>
+                Xuất
+              </mat-chip>
+            <mat-chip (click)="SendAllZNS(FilterLists)" *ngIf="StatusActive==0">
+              <span class="material-symbols-outlined">
+                sim_card_download
+                </span>
+                Gửi Tất Cả
+              </mat-chip>
           </mat-chip-list>
-          <mat-chip (click)="writeExcelFile(FilterLists)">
-            <span class="material-symbols-outlined">
-              sim_card_download
-              </span>
-              Xuất
-            </mat-chip>
-          <mat-chip (click)="SendAllZNS(FilterLists)" *ngIf="StatusActive==0">
-            <span class="material-symbols-outlined">
-              sim_card_download
-              </span>
-              Gửi Tất Cả
-            </mat-chip>
         </div>
           <div> 
           <!-- <span class="material-symbols-outlined {{isReport?'border rounded-lg':''}} p-2" (click)="isReport=!isReport">pie_chart</span> -->

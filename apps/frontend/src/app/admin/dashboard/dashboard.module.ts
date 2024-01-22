@@ -10,6 +10,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DashboardZalodanhgiaComponent } from './dashboard-zalodanhgia/dashboard-zalodanhgia.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { DashboardThucamonComponent } from './dashboard-thucamon/dashboard-thucamon.component';
+import { DashboardXacnhanthanhtoanComponent } from './dashboard-xacnhanthanhtoan/dashboard-xacnhanthanhtoan.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -22,6 +25,9 @@ import { DashboardZalodanhgiaComponent } from './dashboard-zalodanhgia/dashboard
     MatButtonModule,
     MatDialogModule,
     DashboardZalodanhgiaComponent,
+    DashboardThucamonComponent,
+    DashboardXacnhanthanhtoanComponent,
+    NgApexchartsModule,
     RouterModule.forChild([
       {
         path: '', component: DashboardComponent,    

@@ -16,7 +16,7 @@ export type ChartOptions = {
   fill: ApexFill;
 };
 @Component({
-  selector: 'app-dashboard-zalodanhgia',
+  selector: 'app-dashboard-thucamon',
   standalone:true,
   imports:[
     NgApexchartsModule,
@@ -26,10 +26,10 @@ export type ChartOptions = {
     FormsModule,
     MatButtonModule
   ],
-  templateUrl: './dashboard-zalodanhgia.component.html',
-  styleUrls: ['./dashboard-zalodanhgia.component.css']
+  templateUrl: './dashboard-thucamon.component.html',
+  styleUrls: ['./dashboard-thucamon.component.css']
 })
-export class DashboardZalodanhgiaComponent implements OnInit {
+export class DashboardThucamonComponent implements OnInit {
   SearchParams: any = {
     Batdau:moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
@@ -42,9 +42,7 @@ export class DashboardZalodanhgiaComponent implements OnInit {
   {}
   @ViewChild("chart") chart!: ChartComponent;
   public chartOptions: any;
-
   constructor() {
-
     this.chartOptions = {
       series: [
         {
