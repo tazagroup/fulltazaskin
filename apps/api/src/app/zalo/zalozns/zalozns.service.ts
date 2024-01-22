@@ -66,8 +66,11 @@ export class ZaloznsService {
         this._ZaloznstrackingService.create(dulieu)
         return { status: 'zns', Title: `Thanh Toán : ${response.data.data.msg_id} Đã Được Gửi` };
       } else {
+        if(this.CheckTime)
+        {
         const smsResponse = await this.sendFallbackSMS(item);
         return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
+        }
       }
     } catch (error) {
       this._TelegramService.SendLogdev(JSON.stringify(error));
@@ -341,6 +344,11 @@ export class ZaloznsService {
       }, k+Math.floor(Math.random() * 1000));
     });
     return wh.filter((v)=>v.event_name=="user_received_message").length
+  }
+  CheckTime() {
+    const now = moment();
+    const checkTime = now.hour() >= 8 && now.hour() <= 19;
+    return checkTime
   }
 
 }

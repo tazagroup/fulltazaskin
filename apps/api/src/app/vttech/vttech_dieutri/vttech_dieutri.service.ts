@@ -25,13 +25,21 @@ export class Vttech_dieutriService {
     })
   }
 
-  async GetDieutriVttech(idVttech: any, data: any = { Begin: new Date(), End: new Date() }) {
-    const Begin = moment(new Date(data.Begin)).format('DD-MM-YYYY')
-    const End = moment(new Date(data.End)).format('DD-MM-YYYY')
+  async GetDieutriVttech(idVttech: any, data: any = {}) {
+    let begin: any
+    let end: any
+    if (Object.entries(data).length > 0) {
+      begin = moment(new Date(data.begin)).format('DD-MM-YYYY')
+      end = moment(new Date(data.end)).format('DD-MM-YYYY')
+    }
+    else {
+      begin = moment().format('DD-MM-YYYY')
+      end = moment().format('DD-MM-YYYY')
+    }
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `https://tmtaza.vttechsolution.com/Report/Treatment/DRTreatmentGen/?handler=LoadataDetailCust&branchID=${idVttech}&dateFrom=${Begin}&dateTo=${End}`,
+      url: `https://tmtaza.vttechsolution.com/Report/Treatment/DRTreatmentGen/?handler=LoadataDetailCust&branchID=${idVttech}&dateFrom=${begin}&dateTo=${end}`,
       headers: {
         'Cookie': this.Cookie,
         'Xsrf-Token': this.XsrfToken
@@ -48,7 +56,15 @@ export class Vttech_dieutriService {
           item.SDT = result.Table[0].CustomerPhone
           item.SDT2 = result.Table[0].CustomerPhone2
           item.idVttech = idVttech
-          this.create(item)
+         const Ketqua = await this.create(item)
+         const logger = {
+          Title: 'Điều Trị',
+          Slug: 'dieutri',
+          Action: 'addnew',
+          Mota: `Thêm Mới Điều Trị Từ Vttech ${JSON.stringify(Ketqua)}`
+        }
+        this._LoggerService.create(logger)
+
         });
       })
       .catch((error: any) => {
@@ -187,10 +203,12 @@ export class Vttech_dieutriService {
 
   async SendCamon(data: any) {
     const CheckData = await this.findid(data.id)
-    if (CheckData.Status == 0) {
+    console.log(CheckData);
+    
+    if (CheckData.Status == 0 ||CheckData.Status == 1) {
       const now = moment();
-      const compareTime = moment(data.Created).add(3, 'hours');
-      now.isAfter(compareTime)
+      const compareTime = moment(data.CreateAt).add(3, 'hours');
+      console.log(now.isAfter(compareTime)); 
       if (now.isAfter(compareTime)) {
         const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == data.idVttech)
         if (Chinhanh) {
@@ -198,9 +216,8 @@ export class Vttech_dieutriService {
             this._ZaloznsService.TemplateDanhgia(data, Chinhanh).then((zns: any) => {
               if (zns) {
                 data.SendZNSAt = new Date()
-                data.StatusZNS = 2
                 data.Status = 2
-                this.update(data.id, 2)
+                this.update(data.id, data)
                 const logger = {
                   Title: 'Điều Trị',
                   Slug: 'dieutri',
@@ -211,9 +228,8 @@ export class Vttech_dieutriService {
               }
               else {
                 data.SendZNSAt = new Date()
-                data.StatusZNS = 5
                 data.Status = 5
-                this.update(data.id, 5)
+                this.update(data.id, data)
                 const logger = {
                   Title: 'Điều Trị',
                   Slug: 'dieutri',
@@ -238,7 +254,7 @@ export class Vttech_dieutriService {
         }
         else {
           data.Status = 3
-          this.update(data.id, 3)
+          this.update(data.id, data)
           const logger = {
             Title: 'Điều Trị',
             Slug: 'dieutri',

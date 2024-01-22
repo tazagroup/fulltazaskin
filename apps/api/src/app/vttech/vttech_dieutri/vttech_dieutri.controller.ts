@@ -20,6 +20,12 @@ export class Vttech_dieutriController {
   async findAll() {
     return await this.vttech_dieutriService.findAll();
   }
+  @Post("sendcamon")
+  async SendCamon(@Body() data: any) {
+    console.log(data);
+    
+    return await this.vttech_dieutriService.SendCamon(data);
+  }
   @Get('findid/:id')
   async findOne(@Param('id') id: string) {
     return await this.vttech_dieutriService.findid(id);
