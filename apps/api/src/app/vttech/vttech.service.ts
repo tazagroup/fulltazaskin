@@ -294,168 +294,109 @@ export class VttechService {
       return {count:Tinhtrangphongs.length,data:Tinhtrangphongs}
   }
 
-  async CreateZNSDieutri() {
-    if (this.CheckTime()) {
-      const Dieutris = await this._Vttech_dieutriService.fininday();
-      const dataZNS = mergeNoDup(Dieutris, Dieutris, 'CustCode')
-      setTimeout(async () => {
-        dataZNS.forEach((v: any) => {
-            delete v.id
-            this._Vttech_dieutriService.create_zns(v)
-        });
-      }, 5000);
-      Dieutris.forEach(v => {
-          v.Status = 1
-          this._Vttech_dieutriService.update(v.id,v)
-        });
-      return { countTTP:Dieutris.length,countDataZNS: dataZNS.length, data: dataZNS }
-    }
-  }
-  async AddCronZNSDieutri() {
-    if (this.CheckTime()) {
-      const ZNSDieutri = await this._Vttech_dieutriService.fininday_zns();
-      setTimeout(async () => {
-        ZNSDieutri.forEach((v: any,k) => {
-          setTimeout(() => {
-            v.TimeZNS = moment().toDate()
-            this._Vttech_dieutriService.update_zns(v.id,v)
-              this.SendCamon(v)
-          }, Math.random()*5000 + k*1000);
+  // async CreateZNSDieutri() {
+  //   if (this.CheckTime()) {
+  //     const Dieutris = await this._Vttech_dieutriService.fininday();
+  //     const dataZNS = mergeNoDup(Dieutris, Dieutris, 'CustCode')
+  //     setTimeout(async () => {
+  //       dataZNS.forEach((v: any) => {
+  //           delete v.id
+  //           this._Vttech_dieutriService.create_zns(v)
+  //       });
+  //     }, 5000);
+  //     Dieutris.forEach(v => {
+  //         v.Status = 1
+  //         this._Vttech_dieutriService.update(v.id,v)
+  //       });
+  //     return { countTTP:Dieutris.length,countDataZNS: dataZNS.length, data: dataZNS }
+  //   }
+  // }
+  // async AddCronZNSDieutri() {
+  //   if (this.CheckTime()) {
+  //     const ZNSDieutri = await this._Vttech_dieutriService.fininday_zns();
+  //     setTimeout(async () => {
+  //       ZNSDieutri.forEach((v: any,k) => {
+  //         setTimeout(() => {
+  //           v.TimeZNS = moment().toDate()
+  //           this._Vttech_dieutriService.update_zns(v.id,v)
+  //             this.SendCamon(v)
+  //         }, Math.random()*5000 + k*1000);
 
-        });
-      }, 5000);
-      return { ZNSDieutri:ZNSDieutri.length, data: ZNSDieutri }
-    }
-  }
+  //       });
+  //     }, 5000);
+  //     return { ZNSDieutri:ZNSDieutri.length, data: ZNSDieutri }
+  //   }
+  // }
   CheckTime() {
     const now = moment();
     const checkTime = now.hour() >= 8 && now.hour() <= 19;
     return checkTime
   }
-  async SendZnsDieutri(data: any) {
-    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)
-    if (Chinhanh) {
-        try {
-          this._ZaloznsService.TemplateDanhgia(data, Chinhanh).then((zns: any) => {
-            if (zns) {
-              data.SendZNSAt = new Date()
-              data.StatusZNS = 2
-              data.Status = 2
-              this._Vttech_dieutriService.update_zns(data.id, data)
-              this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 2)
-              const logger ={
-                Title:'Điều Trị',
-                Slug:'dieutri',
-                Action:'done',
-                Mota:`${zns.Title}`}
-              this._LoggerService.create(logger)
-            }
-            else
-            {
-              data.SendZNSAt = new Date()
-              data.StatusZNS = 5
-              data.Status = 5
-              this._Vttech_dieutriService.update_zns(data.id, data)
-              this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 5)
-              const logger ={
-                Title:'Điều Trị',
-                Slug:'dieutri',
-                Action:'khac',
-                Mota:`${JSON.stringify(zns)}`}
-              this._LoggerService.create(logger)
-            }
-          })
-        } catch (error) {
-          console.error(`Error calling Zalozns service: ${error.message}`);
-        }
-      data.Status = 1
-      this._Vttech_dieutriService.update_zns(data.id, data)
-      this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 1)
-      const logger ={
-        Title:'Điều Trị',
-        Slug:'dieutri',
-        Action:'waiting',
-        Mota:`Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
-      this._LoggerService.create(logger)
-    }
-    else {
-      data.Status = 3
-      this._Vttech_dieutriService.update_zns(data.id, data)
-      this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 3)
-      const logger ={
-        Title:'Điều Trị',
-        Slug:'dieutri',
-        Action:'error',
-        Mota:`Chi nhánh chưa đăng ký ZNS`}
-      this._LoggerService.create(logger)
-    }
-    return data
-  }
-  SendCamon(data: any) {   
-    const now = moment();
-    const compareTime = moment(data.Created).add(3, 'hours');
-    now.isAfter(compareTime)
-    if(now.isAfter(compareTime))
-    {
-    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)
-    if (Chinhanh) {
-        try {
-          this._ZaloznsService.TemplateDanhgia(data, Chinhanh).then((zns: any) => {
-            if (zns) {
-              data.SendZNSAt = new Date()
-              data.StatusZNS = 2
-              data.Status = 2
-              this._Vttech_dieutriService.update_zns(data.id, data)
-              this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 2)
-              const logger ={
-                Title:'Điều Trị',
-                Slug:'dieutri',
-                Action:'done',
-                Mota:`${zns.Title}`}
-              this._LoggerService.create(logger)
-            }
-            else
-            {
-              data.SendZNSAt = new Date()
-              data.StatusZNS = 5
-              data.Status = 5
-              this._Vttech_dieutriService.update_zns(data.id, data)
-              this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 5)
-              const logger ={
-                Title:'Điều Trị',
-                Slug:'dieutri',
-                Action:'khac',
-                Mota:`${JSON.stringify(zns)}`}
-              this._LoggerService.create(logger)
-            }
-          })
-        } catch (error) {
-          console.error(`Error calling Zalozns service: ${error.message}`);
-        }
-      data.Status = 1
-      this._Vttech_dieutriService.update_zns(data.id, data)
-      this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 1)
-      const logger ={
-        Title:'Điều Trị',
-        Slug:'dieutri',
-        Action:'waiting',
-        Mota:`Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
-      this._LoggerService.create(logger)
-    }
-    else {
-      data.Status = 3
-      this._Vttech_dieutriService.update_zns(data.id, data)
-      this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 3)
-      const logger ={
-        Title:'Điều Trị',
-        Slug:'dieutri',
-        Action:'error',
-        Mota:`Chi nhánh chưa đăng ký ZNS`}
-      this._LoggerService.create(logger)
-    }
-    return data
-    }
-  }
+  // SendCamon(data: any) {   
+  //   const now = moment();
+  //   const compareTime = moment(data.Created).add(3, 'hours');
+  //   now.isAfter(compareTime)
+  //   if(now.isAfter(compareTime))
+  //   {
+  //   const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.BranchCode == data.BranchCode)
+  //   if (Chinhanh) {
+  //       try {
+  //         this._ZaloznsService.TemplateDanhgia(data, Chinhanh).then((zns: any) => {
+  //           if (zns) {
+  //             data.SendZNSAt = new Date()
+  //             data.StatusZNS = 2
+  //             data.Status = 2
+  //             this._Vttech_dieutriService.update_zns(data.id, data)
+  //             this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 2)
+  //             const logger ={
+  //               Title:'Điều Trị',
+  //               Slug:'dieutri',
+  //               Action:'done',
+  //               Mota:`${zns.Title}`}
+  //             this._LoggerService.create(logger)
+  //           }
+  //           else
+  //           {
+  //             data.SendZNSAt = new Date()
+  //             data.StatusZNS = 5
+  //             data.Status = 5
+  //             this._Vttech_dieutriService.update_zns(data.id, data)
+  //             this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 5)
+  //             const logger ={
+  //               Title:'Điều Trị',
+  //               Slug:'dieutri',
+  //               Action:'khac',
+  //               Mota:`${JSON.stringify(zns)}`}
+  //             this._LoggerService.create(logger)
+  //           }
+  //         })
+  //       } catch (error) {
+  //         console.error(`Error calling Zalozns service: ${error.message}`);
+  //       }
+  //     data.Status = 1
+  //     this._Vttech_dieutriService.update_zns(data.id, data)
+  //     this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 1)
+  //     const logger ={
+  //       Title:'Điều Trị',
+  //       Slug:'dieutri',
+  //       Action:'waiting',
+  //       Mota:`Điều Trị: ${data.CustName} - ${data.SDT} - ${data.ServiceName} - ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
+  //     this._LoggerService.create(logger)
+  //   }
+  //   else {
+  //     data.Status = 3
+  //     this._Vttech_dieutriService.update_zns(data.id, data)
+  //     this._Vttech_dieutriService.UpdateDieutri(data.Custcode, 3)
+  //     const logger ={
+  //       Title:'Điều Trị',
+  //       Slug:'dieutri',
+  //       Action:'error',
+  //       Mota:`Chi nhánh chưa đăng ký ZNS`}
+  //     this._LoggerService.create(logger)
+  //   }
+  //   return data
+  //   }
+  // }
 
   create(createVttechDto: CreateVttechDto) {
     return 'This action adds a new vttech';

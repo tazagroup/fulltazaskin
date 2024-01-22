@@ -101,7 +101,6 @@ export class ZaloznsService {
           },
         }
       );
-
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
       if (response.data.error === 0) {
         let dulieu: any={};

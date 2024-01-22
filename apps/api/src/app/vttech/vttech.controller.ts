@@ -34,29 +34,29 @@ export class VttechController {
   async getTinhtrangphong() {
     return await this.vttechService.getTinhtrangphong();
   }
-  @Get('vttech_dieutri')
-  async getDieutri(@Body() data: any) {
-    return await this.vttechService.getDieutri(data);
-  }
-  @Interval(3600000)
-  @Get('vttech_createdieutri')
-  async CreateDieutri() {
-    return await this.vttechService.CreateDieutri();
-  }
-  @Interval(4000000)
-  @Get('vttech_createznsdieutri')
-  async CreateZNSDieutri() {
-    return await this.vttechService.CreateZNSDieutri();
-  }
-  @Interval(4200000)
-  @Get('vttech_znsdieutri')
-  async AddCronZNSDieutri() {
-    return await this.vttechService.AddCronZNSDieutri();
-  }
-  @Post('vttech_sendznsdieutri')
-  async SendZnsDieutri(@Body() data: any) {
-    return await this.vttechService.SendZnsDieutri(data);
-  }
+  // @Get('vttech_dieutri')
+  // async getDieutri(@Body() data: any) {
+  //   return await this.vttechService.getDieutri(data);
+  // }
+  // @Interval(3600000)
+  // @Get('vttech_createdieutri')
+  // async CreateDieutri() {
+  //   return await this.vttechService.CreateDieutri();
+  // }
+  // @Interval(4000000)
+  // @Get('vttech_createznsdieutri')
+  // async CreateZNSDieutri() {
+  //   return await this.vttechService.CreateZNSDieutri();
+  // }
+  // @Interval(4200000)
+  // @Get('vttech_znsdieutri')
+  // async AddCronZNSDieutri() {
+  //   return await this.vttechService.AddCronZNSDieutri();
+  // }
+  // @Post('vttech_sendznsdieutri')
+  // async SendZnsDieutri(@Body() data: any) {
+  //   return await this.vttechService.SendZnsDieutri(data);
+  // }
   @Get('findSDT/:SDT')
   GetKHBySDT(@Param('SDT') SDT: string) {
     return this.vttechService.GetKHBySDT(SDT);
