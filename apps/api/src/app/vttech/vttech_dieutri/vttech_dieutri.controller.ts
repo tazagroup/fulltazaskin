@@ -1,9 +1,17 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import {Vttech_dieutriService } from './vttech_dieutri.service';
+import { LIST_CHI_NHANH } from '../../shared.utils';
+import { Interval } from '@nestjs/schedule';
 @Controller('vttech_dieutri')
 export class Vttech_dieutriController {
   constructor(private readonly vttech_dieutriService:Vttech_dieutriService) {}
-
+  @Interval(3600000)
+  @Post("getvttech")
+  GetDieutriVttech(@Body() data: any) {
+    LIST_CHI_NHANH.forEach((v)=>{
+      return this.vttech_dieutriService.GetDieutriVttech(v.idVttech,data);
+    })
+  }
   @Post()
   create(@Body() createVttech_dieutriDto: any) {
     return this.vttech_dieutriService.create(createVttech_dieutriDto);
@@ -26,7 +34,7 @@ export class Vttech_dieutriController {
     }
   @Post('search')
     async findQuery(@Body() SearchParams: any){
-      return await this.vttech_dieutriService.findQuery_zns(SearchParams);
+      return await this.vttech_dieutriService.findQuery(SearchParams);
   }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateVttech_dieutriDto: any) {

@@ -31,9 +31,12 @@ export class VttechthanhtoanService {
       this.XsrfToken = data.Content.XsrfToken
     })
   }
-  async getApiRealtime(data:any) {    
-    const begin = moment(new Date(data.begin)).format("DD-MM-YYYY")
-    const end = moment(new Date(data.end)).format("DD-MM-YYYY")
+  async getApiRealtime() {    
+    const begin = moment().format("DD-MM-YYYY")
+    const end = moment().format("DD-MM-YYYY")
+    // const begin = moment(new Date(data.begin)).format("DD-MM-YYYY")
+    // const end = moment(new Date(data.end)).format("DD-MM-YYYY")
+    console.log(begin,end);
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -140,7 +143,6 @@ export class VttechthanhtoanService {
       },Math.random()*1000+ k*1000);
     });
     console.error(ListKH);
-    
     return {count:Group.length,data:Group}
   }
  }

@@ -457,7 +457,6 @@ export class VttechService {
     }
   }
 
-
   create(createVttechDto: CreateVttechDto) {
     return 'This action adds a new vttech';
   }
