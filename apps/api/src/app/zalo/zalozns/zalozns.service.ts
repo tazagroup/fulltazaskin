@@ -36,7 +36,7 @@ export class ZaloznsService {
     })
   }
 
-  async sendtestzns(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
+  async sendThanhtoanZns(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
     try {
       const token: any = await this._ZalotokenService.findid(Chinhanh.idtoken);
       if (!token) {
@@ -66,7 +66,7 @@ export class ZaloznsService {
         this._ZaloznstrackingService.create(dulieu)
         return { status: 'zns', Title: `Thanh Toán : ${response.data.data.msg_id} Đã Được Gửi` };
       } else {
-        if(this.CheckTime)
+        if(this.CheckTime())
         {
         const smsResponse = await this.sendFallbackSMS(item);
         return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, data: JSON.stringify(smsResponse.data) };

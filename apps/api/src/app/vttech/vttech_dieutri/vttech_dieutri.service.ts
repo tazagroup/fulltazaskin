@@ -49,22 +49,24 @@ export class Vttech_dieutriService {
       .then((response: any) => {
         response.data.forEach(async (v: any) => {
           const result = await this.GetKhachhangbyCode(v.CustCode)
-          let item: any = {}
-          item.CustName = v.CustName
-          item.CustCode = v.CustCode
-          item.checkTime = (new Date(begin)).getTime()
-          item.NgayVttech = begin.format('YYYY-MM-DD')
-          item.SDT = result.Table[0].CustomerPhone
-          item.SDT2 = result.Table[0].CustomerPhone2
-          item.idVttech = idVttech
-          const Ketqua = await this.create(item)
-           const logger = {
-          Title: 'Điều Trị',
-          Slug: 'dieutri',
-          Action: 'addnew',
-          Mota: `Thêm Mới Điều Trị Từ Vttech ${JSON.stringify(Ketqua)}`
-        }
-        this._LoggerService.create(logger)
+          if (result) {
+            let item: any = {}
+            item.CustName = v.CustName
+            item.CustCode = v.CustCode
+            item.checkTime = (new Date(begin)).getTime()
+            item.NgayVttech = begin.format('YYYY-MM-DD')
+            item.SDT = result.Table[0]?.CustomerPhone
+            item.SDT2 = result.Table[0]?.CustomerPhone2
+            item.idVttech = idVttech
+            const Ketqua = await this.create(item)
+            const logger = {
+              Title: 'Điều Trị',
+              Slug: 'dieutri',
+              Action: 'addnew',
+              Mota: `Thêm Mới Điều Trị Từ Vttech ${JSON.stringify(Ketqua)}`
+            }
+            this._LoggerService.create(logger)
+          }
         });
       })
       .catch((error: any) => {
@@ -72,14 +74,11 @@ export class Vttech_dieutriService {
       });
 
   }
-  async SendZNSAuto()
-  {
+  async SendZNSAuto() {
     const ListDieutri = await this.fininday()
 
-    ListDieutri.forEach((v)=>
-    {
-      if(this.CheckTime())
-      {
+    ListDieutri.forEach((v) => {
+      if (this.CheckTime()) {
         this.SendCamon(v)
       }
     })
@@ -125,14 +124,13 @@ export class Vttech_dieutriService {
     return await this.Vttech_dieutriRepository.find({
       where: {
         CreateAt: Between(Start, End),
-        Status:0,
+        Status: 0,
       },
     });
   }
   async findid(id: string) {
     return await this.Vttech_dieutriRepository.findOne({
       where: { id: id },
-
     });
   }
   async findbyCustCode(data: any) {
@@ -202,8 +200,8 @@ export class Vttech_dieutriService {
   }
 
   async SendCamon(data: any) {
-    const CheckData = await this.findid(data.id)    
-    if (CheckData.Status == 0 ||CheckData.Status == 1) {
+    const CheckData = await this.findid(data.id)
+    if (CheckData.Status == 0 || CheckData.Status == 1) {
       const now = moment();
       const compareTime = moment(data.CreateAt).add(3, 'hours');
       if (now.isAfter(compareTime)) {

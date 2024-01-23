@@ -8,25 +8,24 @@ import { LIST_CHI_NHANH } from '../../shared.utils';
 export class Vttech_thanhtoanController {
   constructor(private readonly vttech_thanhtoanService:Vttech_thanhtoanService) {}
   @Interval(1800000)
-  //@Interval(60000)
   @Post('getapi')
   async getApiRealtime(@Body() data: any) {      
     LIST_CHI_NHANH.forEach((v)=>{
       return this.vttech_thanhtoanService.getApiRealtime(v.idVttech,data);
     })
   }
-  // @Interval(1900000)
-  @Get('sendznskh')
-  async GetVttechKhachhang() {      
-    return this.vttech_thanhtoanService.GetVttechKhachhang();
+  @Interval(1900000)
+  @Get('sendauto')
+  async SendXNTTauto() {      
+    return this.vttech_thanhtoanService.SendXNTTauto();
   }
-  @Post('send1zns')
+  @Post('sendzns')
   async Send1zns(@Body() data:any) {      
     return this.vttech_thanhtoanService.sendZNSThanhtoan(data);
   }
   @Post()
-  create(@Body() createVttech_thanhtoanDto: CreateVttech_thanhtoanDto) {
-    return this.vttech_thanhtoanService.create(createVttech_thanhtoanDto);
+  create(@Body() data: any) {
+    return this.vttech_thanhtoanService.create(data);
   }
   @Get()
   async findAll() {
