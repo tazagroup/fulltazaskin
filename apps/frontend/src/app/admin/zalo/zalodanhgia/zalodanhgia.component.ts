@@ -17,7 +17,7 @@ export class ZalodanhgiaComponent implements OnInit {
   Lists: any[] = []
   FilterLists: any[] = []
   SearchParams: any = {
-    Batdau:moment().startOf('day').add(-1,'day').toDate(),
+    Batdau:moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
     star:5,
     pageSize:10,
@@ -46,6 +46,9 @@ export class ZalodanhgiaComponent implements OnInit {
         console.log(data);
         this.Total = data.totalCount  
         data.items.sort((a:any,b:any)=>b.star-a.star)   
+        data.items.forEach((v:any) => {
+         v.Ngaygui = moment(Number(v.submitDate)).format('HH:mm:ss DD/MM/YYYY');
+        });((a:any,b:any)=>b.star-a.star)   
         this.FilterLists = this.Lists = data.items
       }
 
@@ -65,7 +68,7 @@ export class ZalodanhgiaComponent implements OnInit {
   }
   GetNameChinhanh(item:any,field:any)
   {
-    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v[field] == item) 
+    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v[field] == item)  
     return Chinhanh?.Title
   }
   ChoosenDate()

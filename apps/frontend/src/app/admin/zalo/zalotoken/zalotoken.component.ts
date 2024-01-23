@@ -131,7 +131,6 @@ export class ZalotokenComponent implements OnInit {
   }
   GetFromZalo(data:any)
   {
-
     const item:any =
     {
       "access_token":data.Token.access_token,

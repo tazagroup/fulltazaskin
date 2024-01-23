@@ -38,14 +38,17 @@ export class DashboardZalodanhgiaComponent implements OnInit {
     pageNumber: 0
   };
   Status:any={0:'Mới',1:'Đợi gửi',2:'Thành Công',3:'Chưa Có Temp OA',4:'Gửi SMS'}
+  Sosao:any={1:'1 Sao',2:'2 Sao',3:'3 Sao',4:'4 Sao',5:'5 Sao'}
   Style:any={0:'!bg-blue-500',1:'!bg-yellow-500',2:'!bg-green-500',3:'!bg-red-500',4:'!bg-purple-500'}
   List:any[]=[]
   ngOnInit() {
     this._ZalodanhgiaService.searchVttechthanhtoan(this.SearchParams).subscribe()
     this._ZalodanhgiaService.zalodanhgias$.subscribe((data:any) => {
       if (data) {
-        this.List = data.items.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))
+        this.List = data.items.map((v:any)=>({rate:v.rate,Created:moment(v.Created).format("DD/MM/YYYY")}))
         this.LoadData()
+        console.log( data.items);
+        
       }
     })
   }
@@ -101,11 +104,13 @@ export class DashboardZalodanhgiaComponent implements OnInit {
       categories.push(moment(this.SearchParams.Batdau).add(v, 'days').format("DD/MM/YYYY"))
     })
     let series:any=[]
-    const Status = Array.from({ length: Object.entries(this.Status).length}, (_, k) => (k));
-    series = Status.map((v: any) => ({
-      name: this.Status[v],
+    const Sosao = Array.from({ length: Object.entries(this.Sosao).length}, (_, k) => (k+1));
+    console.log(Sosao);
+    
+    series = Sosao.map((v: any) => ({
+      name: this.Sosao[v],
       data: categories.map((v1: any) =>
-        this.List.filter((v2: any) => v2.Created === v1 && v2.Status === v).length
+        this.List.filter((v2: any) => v2.Created === v1 && v2.rate === v).length
       ),
     }));
     // this.chartOptions.xaxis.categories = categories
