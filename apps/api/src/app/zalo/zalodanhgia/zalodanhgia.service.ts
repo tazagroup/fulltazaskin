@@ -8,12 +8,14 @@ import axios from 'axios';
 import { LIST_CHI_NHANH, Phone_To_0 } from '../../shared.utils';
 import { ZaloznstrackingService } from '../zaloznstracking/zaloznstracking.service';
 import { error } from 'console';
+import { LoggerService } from '../../logger/logger.service';
 @Injectable()
 export class ZalodanhgiaService {
   constructor(
     @InjectRepository(ZalodanhgiaEntity)
     private ZalodanhgiaRepository: Repository<ZalodanhgiaEntity>,
-    private _ZaloznstrackingService: ZaloznstrackingService
+    private _ZaloznstrackingService: ZaloznstrackingService,
+    private _LoggerService: LoggerService
   ) {}
   async create(data: any) {
     const checkdup = await this.findslug(data.msgId)
@@ -128,7 +130,7 @@ export class ZalodanhgiaService {
       if(response.data.error==0)
       {
         
-        response.data.data.data.forEach((v:any) => {
+        response.data.data.data.forEach(async (v:any) => {
           let item:any = {}
           item.idCN = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id)?.id
           item.BrandId = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id)?.idVttech
@@ -142,7 +144,14 @@ export class ZalodanhgiaService {
           item.note = v.note
           item.template_id = data.template_id
           item.Dulieu = v
-          this.create(item)
+          const result = await this.create(item)
+          const logger = {
+            Title: 'Đánh Giá Từ Khách hàng',
+            Slug: 'danhgiazalo',
+            Action: 'addnew',
+            Mota: `Thêm mới Zalo Đánh Giá ${JSON.stringify(result)}`
+          }
+          this._LoggerService.create(logger)
         });
       }
       return response.data
