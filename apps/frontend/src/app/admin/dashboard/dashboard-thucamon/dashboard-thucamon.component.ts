@@ -45,9 +45,9 @@ export class DashboardThucamonComponent implements OnInit {
     this._VttechdieutriService.vttechdieutris$.subscribe((data:any) => {
       if (data) {
         this.List = data.items.map((v:any)=>({Status:v.Status,Created:moment(v.CreateAt).format("DD/MM/YYYY")}))
+        this.LoadData()
       }
     })
-    this.LoadData()
   }
   ChoosenDate() { }
   _VttechdieutriService: VttechdieutriService = inject(VttechdieutriService)
@@ -94,7 +94,6 @@ export class DashboardThucamonComponent implements OnInit {
     };
   }
   LoadData() {
-    this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
     const daysBetween = moment(this.SearchParams.Ketthuc).diff(moment(this.SearchParams.Batdau), "days");
     const Days = Array.from({ length: daysBetween + 1 }, (_, k) => (k));
     const categories: any = []
@@ -102,16 +101,54 @@ export class DashboardThucamonComponent implements OnInit {
       categories.push(moment(this.SearchParams.Batdau).add(v, 'days').format("DD/MM/YYYY"))
     })
     let series:any=[]
-    const Status = Array.from({ length: Object.entries(this.Status).length + 1 }, (_, k) => (k));
+    const Status = Array.from({ length: Object.entries(this.Status).length}, (_, k) => (k));
     series = Status.map((v: any) => ({
-      name: v,
+      name: this.Status[v],
       data: categories.map((v1: any) =>
         this.List.filter((v2: any) => v2.Created === v1 && v2.Status === v).length
       ),
-    }));
-    console.log(series);
-    
-    this.chartOptions.xaxis.categories = categories
-    this.chartOptions.series = series
+    }));    
+    // this.chartOptions.xaxis.categories = categories
+    // this.chartOptions.series = series
+    this.chartOptions = {
+      series: series,
+    chart: {
+      type: "bar",
+      height: 350,
+      stacked: true,
+      toolbar: {
+        show: true
+      },
+      zoom: {
+        enabled: true
+      }
+    },  
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: "bottom",
+              offsetX: -10,
+              offsetY: 0
+            }
+          }
+        }
+      ],
+      xaxis: {
+        categories: categories
+      },
+      fill: {
+        opacity: 1
+      },
+      legend: {
+        position: "right",
+        offsetX: 0,
+        offsetY: 50
+      }
+    };
+  }
+  ChanggeData() {
+    this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
   }
 }

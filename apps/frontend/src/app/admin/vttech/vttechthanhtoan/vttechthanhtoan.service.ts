@@ -47,6 +47,13 @@ export class VttechthanhtoanService {
       })
     );
   }
+  searchOld(SearchParams:any) {
+    return this.http.post(environment.APIURL + `/vttechthanhtoan/search`,SearchParams).pipe(
+      map((data: any) => { 
+        return data;
+      })
+    );
+  }
   getVttechthanhtoanBySlug(slug: string) {
     return this.http.get(environment.APIURL + `/vttech_thanhtoan/findslug/${slug}`).pipe(
       map((data: any) => {
