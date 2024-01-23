@@ -45,7 +45,7 @@ export class DashboardZalodanhgiaComponent implements OnInit {
     this._ZalodanhgiaService.searchVttechthanhtoan(this.SearchParams).subscribe()
     this._ZalodanhgiaService.zalodanhgias$.subscribe((data:any) => {
       if (data) {
-        this.List = data.items.map((v:any)=>({rate:v.rate,Created:moment(v.Created).format("DD/MM/YYYY")}))
+        this.List = data.items.map((v:any)=>({rate:v.rate,Created:moment(Number(v.submitDate)).format("DD/MM/YYYY")}))
         this.LoadData()
         console.log( data.items);
         
