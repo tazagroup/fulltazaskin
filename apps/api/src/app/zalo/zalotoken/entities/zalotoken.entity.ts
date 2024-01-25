@@ -14,6 +14,8 @@ export class ZalotokenEntity {
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   oa_id: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  idCN: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   Title: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Mota: string;

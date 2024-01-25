@@ -117,77 +117,77 @@ export class VttechthanhtoanService {
   }
 
 
-  async GetVttechKhachhang() {
-    if(this.CheckTime())
-    {
-    const begin = moment(new Date()).startOf('day').toDate()
-    const end = moment(new Date()).endOf('day').toDate()
-    const ListKH = await this.findNew(begin,end)
-    const Group = ListKH.filter((obj, i) => ListKH.findIndex(o => o.InvoiceNum === obj.InvoiceNum) === i).map(obj => ({
-      CustName: obj.CustName,
-      BranchID: obj.BranchID,
-      Gender: obj.Gender,
-      SDT: obj.SDT,
-      TimeZNS: obj.TimeZNS,
-      InvoiceNum: obj.InvoiceNum,
-      Created: obj.Created,
-      Amount: Number(ListKH.filter(o => o.InvoiceNum === obj.InvoiceNum).reduce((total, o) => Number(total) + Number(o.Amount), 0)),
-    }));      
-    Group.forEach((v:any,k:any) => {
-      setTimeout(async () => {
-       const result = await this.createzns(v)
-       if(this.CheckTime())
-       {
-        this.sendZNSThanhtoan(result)
-       }
-      },Math.random()*1000+ k*1000);
-    });
-    console.error(ListKH);
-    return {count:Group.length,data:Group}
-  }
- }
- async sendZNSThanhtoan(data: any) {    
-    const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
-    if (Chinhanh) {
-      try {        
-        this._ZaloznsService.sendtestzns(data, Chinhanh).then((zns: any) => {
-          if (zns) {
-            if (zns.status == 'sms') {
-              data.SMS = zns.data
-              data.Status = 4
-              this.updatezns(data.id, data)
-              this.UpdateThanhtoan(data.InvoiceNum,4)
-              const result = `<b><u>${zns.Title}</u></b>`;
-              this._TelegramService.SendNoti(result)
-            }
-            else {
-              data.ThucteZNS = new Date()
-              data.StatusZNS = 2
-              data.Status = 2
-              this.updatezns(data.id, data)
-              this.UpdateThanhtoan(data.InvoiceNum,2)
-              const result = `<b><u>${zns.Title}</u></b>`;
-              this._TelegramService.SendNoti(result)
-            }
-          }
-        })
-      } catch (error) {
-        console.error(`Error calling Zalozns service: ${error.message}`);
-      }
-      data.Status = 1
-      this.UpdateThanhtoan(data.InvoiceNum,1)
-      this.updatezns(data.id, data)
-      const result = `Thanh Toán : ${data.InvoiceNum} - ${data.CustName} - ${data.SDT} - ${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
-      this._TelegramService.SendNoti(result)
-    }
-    else {
-      data.Status = 3
-      this.updatezns(data.id, data)
-      this.UpdateThanhtoan(data.InvoiceNum,3)
-      const result = `Chi nhánh chưa đăng ký ZNS`;
-      this._TelegramService.SendLogdev(result)
-    }
-  }
+//   async GetVttechKhachhang() {
+//     if(this.CheckTime())
+//     {
+//     const begin = moment(new Date()).startOf('day').toDate()
+//     const end = moment(new Date()).endOf('day').toDate()
+//     const ListKH = await this.findNew(begin,end)
+//     const Group = ListKH.filter((obj, i) => ListKH.findIndex(o => o.InvoiceNum === obj.InvoiceNum) === i).map(obj => ({
+//       CustName: obj.CustName,
+//       BranchID: obj.BranchID,
+//       Gender: obj.Gender,
+//       SDT: obj.SDT,
+//       TimeZNS: obj.TimeZNS,
+//       InvoiceNum: obj.InvoiceNum,
+//       Created: obj.Created,
+//       Amount: Number(ListKH.filter(o => o.InvoiceNum === obj.InvoiceNum).reduce((total, o) => Number(total) + Number(o.Amount), 0)),
+//     }));      
+//     Group.forEach((v:any,k:any) => {
+//       setTimeout(async () => {
+//        const result = await this.createzns(v)
+//        if(this.CheckTime())
+//        {
+//         this.sendZNSThanhtoan(result)
+//        }
+//       },Math.random()*1000+ k*1000);
+//     });
+//     console.error(ListKH);
+//     return {count:Group.length,data:Group}
+//   }
+//  }
+//  async sendZNSThanhtoan(data: any) {    
+//     const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
+//     if (Chinhanh) {
+//       try {        
+//         this._ZaloznsService.sendtestzns(data, Chinhanh).then((zns: any) => {
+//           if (zns) {
+//             if (zns.status == 'sms') {
+//               data.SMS = zns.data
+//               data.Status = 4
+//               this.updatezns(data.id, data)
+//               this.UpdateThanhtoan(data.InvoiceNum,4)
+//               const result = `<b><u>${zns.Title}</u></b>`;
+//               this._TelegramService.SendNoti(result)
+//             }
+//             else {
+//               data.ThucteZNS = new Date()
+//               data.StatusZNS = 2
+//               data.Status = 2
+//               this.updatezns(data.id, data)
+//               this.UpdateThanhtoan(data.InvoiceNum,2)
+//               const result = `<b><u>${zns.Title}</u></b>`;
+//               this._TelegramService.SendNoti(result)
+//             }
+//           }
+//         })
+//       } catch (error) {
+//         console.error(`Error calling Zalozns service: ${error.message}`);
+//       }
+//       data.Status = 1
+//       this.UpdateThanhtoan(data.InvoiceNum,1)
+//       this.updatezns(data.id, data)
+//       const result = `Thanh Toán : ${data.InvoiceNum} - ${data.CustName} - ${data.SDT} - ${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
+//       this._TelegramService.SendNoti(result)
+//     }
+//     else {
+//       data.Status = 3
+//       this.updatezns(data.id, data)
+//       this.UpdateThanhtoan(data.InvoiceNum,3)
+//       const result = `Chi nhánh chưa đăng ký ZNS`;
+//       this._TelegramService.SendLogdev(result)
+//     }
+//   }
   async UpdateThanhtoan(InvoiceNum:any,Status:any)
   {
     const Invoices = await this.findInvoiceNum(InvoiceNum)
@@ -384,7 +384,7 @@ export class VttechthanhtoanService {
   }
   CheckTime() {
     const now = moment();
-    const checkTime = now.hour() >= 8 && now.hour() <= 19;
+    const checkTime = now.hour() >= 8 && now.hour() <= 21;
     return checkTime
   }
 }

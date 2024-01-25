@@ -4,7 +4,7 @@ import { UpdateVttechDto } from './dto/update-vttech.dto';
 import axios from 'axios';
 import { CauhinhchungService } from '../cauhinh/cauhinhchung/cauhinhchung.service';
 import { TelegramService } from '../shared/telegram.service';
-import { TasksService } from '../tasks/tasks.service';
+// import { TasksService } from '../tasks/tasks.service';
 import { Vttech_khachhangService } from './vttech_khachhang/vttech_khachhang.service';
 import moment = require('moment');
 import { Vttech_tinhtrangphongService } from './vttech_tinhtrangphong/vttech_tinhtrangphong.service';
@@ -329,7 +329,7 @@ export class VttechService {
   // }
   CheckTime() {
     const now = moment();
-    const checkTime = now.hour() >= 8 && now.hour() <= 19;
+    const checkTime = now.hour() >= 8 && now.hour() <= 21;
     return checkTime
   }
   // SendCamon(data: any) {   

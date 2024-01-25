@@ -7,13 +7,13 @@ export const LIST_CHI_NHANH:any[] =
   {id:'9887ad61-4b2c-4db1-83e6-570f33cb540a',BranchCode: 'H_V',idtempdanhgia:'304998',idtemp:'302281',idtoken:'b3b61395-1760-49ae-b5e7-70c310c1c2fb',idVttech:6,Title:'Taza Skin Clinic Đà Nẵng'}, 
   {id:'ca725bf4-4810-4ea2-8ef2-520b2a3121cc',BranchCode: 'VPC',idtempdanhgia:'304942',idtemp:'302259',idtoken:'e4d7426e-53df-4285-be74-aba10259e188',idVttech:7,Title:'Văn Phòng'}, 
   {id:'',idtemp:'',idtoken:'',idVttech:14,Title:'Timona Academy Quận 10'}, 
-  {id:'',idtemp:'',idtoken:'',idVttech:15,Title:'Timona Academy Thủ Đức'}, 
+  {id:'c4a68bd5-c120-4bf0-a4d1-447e4921eb76',idtemp:'',idtoken:'',idVttech:15,Title:'Timona Academy Thủ Đức'}, 
   {id:'',idtemp:'',idtoken:'',idVttech:16,Title:'Timona Academy Gò Vấp'}, 
-  {id:'',idtemp:'',idtoken:'',idVttech:17,Title:'Timona Academy Nha Trang'}, 
-  {id:'',idtemp:'',idtoken:'',idVttech:18,Title:'Timona Academy Đà Nẵng'}, 
+  {id:'9a5cdc4d-fbbf-41c2-9222-9c01d5433148',idtemp:'',idtoken:'',idVttech:17,Title:'Timona Academy Nha Trang'}, 
+  {id:'7c152522-3858-4669-b745-a1fd2d25ad9a',idtemp:'',idtoken:'',idVttech:18,Title:'Timona Academy Đà Nẵng'}, 
   {id:'',idtemp:'',idtoken:'',idVttech:19,Title:'HR Tazagroup'}, 
   {id:'',idtemp:'',idtoken:'',idVttech:20,Title:'Timona Academy Hà Nội'}, 
-  {id:'',idtemp:'',idtoken:'',idVttech:21,Title:'Building Timona CMT8'},  
+  {id:'3b9e91d5-21ac-44b2-ba01-e87ee310fdcd',idtemp:'',idtoken:'',idVttech:21,Title:'Building Timona CMT8'},  
 ]
 export const ListTrangthailichhen: any[] = [
   {id:0,Title:"Chờ Xác Nhận",Class:"text-yellow-400"},

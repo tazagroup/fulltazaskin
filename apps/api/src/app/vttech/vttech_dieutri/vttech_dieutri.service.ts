@@ -267,7 +267,7 @@ export class Vttech_dieutriService {
 
   CheckTime() {
     const now = moment();
-    const checkTime = now.hour() >= 8 && now.hour() <= 19;
+    const checkTime = now.hour() >= 8 && now.hour() <= 21;
     return checkTime
   }
   async update(id: string, UpdateVttech_dieutriDto: any) {

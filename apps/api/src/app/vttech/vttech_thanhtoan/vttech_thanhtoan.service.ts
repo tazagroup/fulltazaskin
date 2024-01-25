@@ -125,10 +125,18 @@ export class Vttech_thanhtoanService {
               if (zns) {
                 if (zns.status == 'sms') {
                   data.SMS = zns.data
+                  data.ThucteZNS = new Date()
                   data.Status = 4
                   this.update(data.id,data)
                   const result = `<b><u>${zns.Title}</u></b>`;
                   this._TelegramService.SendNoti(result)
+                  const logger = {
+                    Title: 'Thanh Toán',
+                    Slug: 'thanhtoan',
+                    Action: 'sms',
+                    Mota: `${zns.Title}`
+                  }
+                  this._LoggerService.create(logger)
                 }
                 else {
                   data.ThucteZNS = new Date()
@@ -137,6 +145,13 @@ export class Vttech_thanhtoanService {
                   this.update(data.id,data)
                   const result = `<b><u>${zns.Title}</u></b>`;
                   this._TelegramService.SendNoti(result)
+                  const logger = {
+                    Title: 'Thanh Toán',
+                    Slug: 'thanhtoan',
+                    Action: 'done',
+                    Mota: `${zns.Title}`
+                  }
+                  this._LoggerService.create(logger)
                 }
               }
             })
@@ -150,9 +165,17 @@ export class Vttech_thanhtoanService {
         }
         else {
           data.Status = 3
+          data.ThucteZNS = new Date()
           this.update(data.id,data)
           const result = `Chi nhánh chưa đăng ký ZNS`;
           this._TelegramService.SendLogdev(result)
+          const logger = {
+            Title: 'Thanh Toán',
+            Slug: 'thanhtoan',
+            Action: 'chuadangkycn',
+            Mota: `${result}`
+          }
+          this._LoggerService.create(logger)
         }
     }
   }
@@ -308,7 +331,7 @@ export class Vttech_thanhtoanService {
   }
   CheckTime() {
     const now = moment();
-    const checkTime = now.hour() >= 8 && now.hour() <= 19;
+    const checkTime = now.hour() >= 8 && now.hour() <= 21;
     return checkTime
   }
 }

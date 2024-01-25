@@ -12,14 +12,14 @@ export class VttechthanhtoanController {
     return this.vttechthanhtoanService.getApiRealtime();
   }
   // @Interval(1900000)
-  @Get('sendznskh')
-  async GetVttechKhachhang() {      
-    return this.vttechthanhtoanService.GetVttechKhachhang();
-  }
-  @Post('send1zns')
-  async Send1zns(@Body() data:any) {      
-    return this.vttechthanhtoanService.sendZNSThanhtoan(data);
-  }
+  // @Get('sendznskh')
+  // async GetVttechKhachhang() {      
+  //   return this.vttechthanhtoanService.GetVttechKhachhang();
+  // }
+  // @Post('send1zns')
+  // async Send1zns(@Body() data:any) {      
+  //   return this.vttechthanhtoanService.sendZNSThanhtoan(data);
+  // }
   @Post()
   create(@Body() createVttechthanhtoanDto: CreateVttechthanhtoanDto) {
     return this.vttechthanhtoanService.create(createVttechthanhtoanDto);

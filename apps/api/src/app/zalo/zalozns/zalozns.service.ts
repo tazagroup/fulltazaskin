@@ -347,7 +347,7 @@ export class ZaloznsService {
   }
   CheckTime() {
     const now = moment();
-    const checkTime = now.hour() >= 8 && now.hour() <= 19;
+    const checkTime = now.hour() >= 8 && now.hour() <= 21;
     return checkTime
   }
 
