@@ -47,6 +47,13 @@ export class Vttech_dieutriService {
     };
     return axios.request(config)
       .then((response: any) => {
+        const logger = {
+          Title: 'Điều Trị',
+          Slug: 'dieutri',
+          Action: 'getvttech',
+          Mota: `Lấy dữ liệu từ Vttech ${JSON.stringify(response.data)}`
+        }
+        this._LoggerService.create(logger)
         response.data.forEach(async (v: any) => {
           const result = await this.GetKhachhangbyCode(v.CustCode)
           if (result) {
