@@ -18,7 +18,7 @@ import { KhachhangsModule } from './khachhang/khachhang/khachhang.module';
 import { ChitietModule } from './khachhang/chitiet/chitiet.module';
 import { KhachhangdichvuModule } from './khachhang/khachhangdichvu/khachhangdichvu.module';
 import { VttechModule } from './vttech/vttech.module';
-import { TasksModule } from './tasks/tasks.module';
+// import { TasksModule } from './tasks/tasks.module';
 import { SmsModule } from './sms/sms.module';
 import { TelegramService } from './shared/telegram.service';
 import { LoggerModule } from './logger/logger.module';
@@ -53,7 +53,7 @@ import { VttechthanhtoanModule } from './vttech/vttechthanhtoan/vttechthanhtoan.
     UsersModule,
     KhachhangdichvuModule,
     VttechModule,
-    TasksModule,
+    // TasksModule,
     SmsModule,
     LoggerModule,
   ],
