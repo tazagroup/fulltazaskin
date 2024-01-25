@@ -119,7 +119,7 @@ export class Vttech_dieutriService {
     return await this.Vttech_dieutriRepository.find();
   }
   async fininday() {
-    const Start = moment().startOf('date').toDate()
+    const Start = moment().add(-1,'days').startOf('date').toDate()
     const End = moment().endOf('date').toDate()
     return await this.Vttech_dieutriRepository.find({
       where: {

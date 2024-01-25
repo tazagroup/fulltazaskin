@@ -74,7 +74,7 @@ export class Vttech_thanhtoanService {
     const ListThanhtoan = await this.fininday()
     ListThanhtoan.forEach((v)=>
     {
-      if(this.CheckTime()&&v.SDT=='0977272967')
+      if(this.CheckTime())
       {
         this.sendZNSThanhtoan(v)
       }
@@ -220,7 +220,7 @@ export class Vttech_thanhtoanService {
     });
   }
   async fininday() {
-    const Start = moment().startOf('date').toDate()
+    const Start = moment().add(-1,'days').startOf('date').toDate()
     const End = moment().endOf('date').toDate()
     return await this.Vttech_thanhtoanRepository.find({
       where: {
