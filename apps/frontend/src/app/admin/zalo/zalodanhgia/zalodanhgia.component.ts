@@ -43,7 +43,6 @@ export class ZalodanhgiaComponent implements OnInit {
     this._ZaloznsService.zaloznss$.subscribe((data:any)=>{
       if(data)
       {
-        console.log(data);
         this.Total = data.totalCount  
         this.pageSizeOptions = [10, 20, data.totalCount].filter(v => v <= data.totalCount);
         data.items.sort((a:any,b:any)=>b.star-a.star)   
@@ -77,12 +76,10 @@ export class ZalodanhgiaComponent implements OnInit {
     this.SearchParams.pageNumber = 0
     this.SearchParams.Batdau=moment(this.SearchParams.Batdau).startOf('day').toDate(),
     this.SearchParams.Ketthuc= moment(this.SearchParams.Ketthuc).endOf('day').toDate(),
-    console.log(this.SearchParams);
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value;
-    console.log(value);
     if (value.length > 2) {
       this.FilterLists = this.Lists.filter((v) => {
      return v.SDT.toLowerCase().includes(value)
@@ -100,10 +97,8 @@ export class ZalodanhgiaComponent implements OnInit {
   }
   onPageChange(event:any)
   {
-    console.log(event);
     this.SearchParams.pageSize=event.pageSize
     this.SearchParams.pageNumber=event.pageIndex
-     console.log(this.SearchParams);
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
   Capnhatdanhgia()
@@ -118,7 +113,7 @@ export class ZalodanhgiaComponent implements OnInit {
       'Chi Nhánh':v.Chinhanh,
       'Số Điện Thoại':v.SDT,
       'Số Sao':v.rate,
-      'Đánh Giá':JSON.stringify(v.feedbacks)
+      'Đánh Giá':v.feedbacks?.join(",")
     })));
     const workbook: XLSX.WorkBook = { Sheets: { 'Sheet1': worksheet }, SheetNames: ['Sheet1'] };
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
