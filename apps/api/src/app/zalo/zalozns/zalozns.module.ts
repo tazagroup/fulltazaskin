@@ -10,6 +10,7 @@ import { SmsModule } from '../../sms/sms.module';
 import { TelegramService } from '../../shared/telegram.service';
 import { ZalodanhgiaModule } from '../zalodanhgia/zalodanhgia.module';
 import { ZaloznstrackingModule } from '../zaloznstracking/zaloznstracking.module';
+import { LoggerModule } from '../../logger/logger.module';
 @Module({
   imports: [TypeOrmModule.forFeature([ZaloznsEntity]),
   CauhinhchungModule,
@@ -17,7 +18,8 @@ import { ZaloznstrackingModule } from '../zaloznstracking/zaloznstracking.module
   HttpModule,
   SmsModule,
   ZalodanhgiaModule,
-  ZaloznstrackingModule
+  ZaloznstrackingModule,
+  LoggerModule
 ],
   controllers: [ZaloznsController],
   providers: [ZaloznsService,TelegramService],

@@ -6,7 +6,6 @@ import { Vttech_thanhtoanEntity } from './entities/vttech_thanhtoan.entity';
 import axios from 'axios';
 import { CauhinhchungService } from '../../cauhinh/cauhinhchung/cauhinhchung.service';
 import * as moment from 'moment';
-import { TelegramService } from '../../shared/telegram.service';
 import { LIST_CHI_NHANH } from '../../shared.utils';
 import { ZaloznsService } from '../../zalo/zalozns/zalozns.service';
 import { LoggerService } from '../../logger/logger.service';
@@ -18,7 +17,6 @@ export class Vttech_thanhtoanService {
     @InjectRepository(Vttech_thanhtoanEntity)
     private Vttech_thanhtoanRepository: Repository<Vttech_thanhtoanEntity>,
     private _CauhinhchungService: CauhinhchungService,
-    private _TelegramService: TelegramService,
     private _ZaloznsService: ZaloznsService,
     private _LoggerService: LoggerService,
   ) {
@@ -53,16 +51,14 @@ export class Vttech_thanhtoanService {
           item.checkTime = (new Date(v.Created)).getTime()
           item.Dulieu = JSON.stringify(v)
           const result = await this.GetKHByCode(item)
-          const checkInvoiceNum = this.findInvoiceNum(result.InvoiceNum)
-          if(checkInvoiceNum)
-          {
+          const checkInvoiceNum = await this.findInvoiceNum(result.InvoiceNum)
+          if (checkInvoiceNum) {
             this.create(result)
             const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${response.data.length} Thanh Toán Từ Vttech` }
             this._LoggerService.create(logger)
             return { status: 201, title: `Lấy ${response.data.length} Thanh Toán Từ Vttech` };
           }
-          else
-          {
+          else {
             const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${result.InvoiceNum}` }
             this._LoggerService.create(logger)
             return { status: 1001, title: `Trùng Hoá Đơn ${result.InvoiceNum}` };
@@ -82,7 +78,7 @@ export class Vttech_thanhtoanService {
   }
   async SendXNTTauto() {
     const ListThanhtoan = await this.fininday()
-    ListThanhtoan.forEach((v) => {
+    ListThanhtoan.forEach((v: any) => {
       if (this.CheckTime()) {
         this.sendZNSThanhtoan(v)
       }
@@ -123,44 +119,55 @@ export class Vttech_thanhtoanService {
   async sendZNSThanhtoan(data: any) {
     if (data.SDT != '0909300146') {
       const CheckData = await this.findid(data.id)
-      if (CheckData.Status == 0 || CheckData.Status == 1) {
+      if (CheckData.Status == 0) {
         const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
         if (Chinhanh) {
           try {
-            this._ZaloznsService.sendThanhtoanTaza(data, Chinhanh).then((zns: any) => {
-              if (zns) {
-                if (zns.status == 'sms') {
-                  data.SMS = zns.data
+            const SendNZS = await this._ZaloznsService.sendThanhtoanTaza(data, Chinhanh)
+            switch (SendNZS.status) {
+              case 'sms':
+                {
+                  data.SMS = SendNZS.data
                   data.ThucteZNS = new Date()
                   data.Status = 4
                   this.update(data.id, data)
-                  const result = `<b><u>${zns.Title}</u></b>`;
-                  this._TelegramService.SendNoti(result)
                   const logger = {
                     Title: 'Thanh Toán',
                     Slug: 'thanhtoan',
                     Action: 'sms',
-                    Mota: `${zns.Title} -  SDT: ${data.SDT}`
+                    Mota: `${SendNZS.Title} -  SDT: ${data.SDT}`
                   }
                   this._LoggerService.create(logger)
                 }
-                else {
+                break;
+              case 'zns':
+                {
                   data.ThucteZNS = new Date()
                   data.StatusZNS = 2
                   data.Status = 2
                   this.update(data.id, data)
-                  const result = `<b><u>${zns.Title}  -  SDT: ${data.SDT}</u></b>`;
-                  this._TelegramService.SendNoti(result)
                   const logger = {
                     Title: 'Thanh Toán',
                     Slug: 'thanhtoan',
                     Action: 'done',
-                    Mota: `${zns.Title} - SDT: ${data.SDT}`
+                    Mota: `${SendNZS.Title} - SDT: ${data.SDT}`
                   }
                   this._LoggerService.create(logger)
                 }
+                break;
+              default: {
+                data.Status = 6
+                this.update(data.id, data)
+                const logger = {
+                  Title: 'Thanh Toán',
+                  Slug: 'thanhtoan',
+                  Action: 'loitoken',
+                  Mota: `${SendNZS.Title} - SDT: ${data.SDT}`
+                }
+                this._LoggerService.create(logger)
               }
-            })
+                break;
+            }
           } catch (error) {
             console.error(`Error calling Zalozns service: ${error.message}`);
           }
@@ -169,13 +176,11 @@ export class Vttech_thanhtoanService {
           data.Status = 3
           data.ThucteZNS = new Date()
           this.update(data.id, data)
-          const result = `Chi nhánh chưa đăng ký ZNS`;
-          this._TelegramService.SendLogdev(result)
           const logger = {
             Title: 'Thanh Toán',
             Slug: 'thanhtoan',
             Action: 'chuadangkycn',
-            Mota: `${result}  - SDT: ${data.SDT}`
+            Mota: `Chi nhánh chưa đăng ký ZNS  - SDT: ${data.SDT}`
           }
           this._LoggerService.create(logger)
         }

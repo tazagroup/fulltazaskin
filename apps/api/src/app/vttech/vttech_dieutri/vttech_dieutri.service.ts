@@ -55,7 +55,7 @@ export class Vttech_dieutriService {
         }
         this._LoggerService.create(logger)
         response.data.forEach(async (v: any) => {
-          const result = await this.GetKhachhangbyCode(v.CustCode)
+          const result = await this.GetKhachhangbyCode(v.CustCode)          
           if (result) {
             let item: any = {}
             item.CustName = v.CustName
@@ -65,7 +65,7 @@ export class Vttech_dieutriService {
             item.SDT = result.Table[0]?.CustomerPhone
             item.SDT2 = result.Table[0]?.CustomerPhone2
             item.idVttech = idVttech
-            const Ketqua = await this.create(item)
+            const Ketqua = await this.create(item)            
             const logger = {
               Title: 'Điều Trị',
               Slug: 'dieutri',
@@ -74,7 +74,8 @@ export class Vttech_dieutriService {
             }
             this._LoggerService.create(logger)
           }
-        });
+        });        
+        return response.data
       })
       .catch((error: any) => {
         console.log(error);
@@ -83,7 +84,6 @@ export class Vttech_dieutriService {
   }
   async SendZNSAuto() {
     const ListDieutri = await this.fininday()
-
     ListDieutri.forEach((v) => {
       if (this.CheckTime()) {
         this.SendCamon(v)
@@ -126,7 +126,7 @@ export class Vttech_dieutriService {
     return await this.Vttech_dieutriRepository.find();
   }
   async fininday() {
-    const Start = moment().add(-1,'days').startOf('date').toDate()
+    const Start = moment().add(-1, 'days').startOf('date').toDate()
     const End = moment().endOf('date').toDate()
     return await this.Vttech_dieutriRepository.find({
       where: {
@@ -206,53 +206,64 @@ export class Vttech_dieutriService {
     return { items, totalCount, ListStatus };
   }
 
-  async SendCamon(data: any) {
+  async SendCamon(data: any) {   
     const CheckData = await this.findid(data.id)
-    if (CheckData.Status == 0 || CheckData.Status == 1) {
+    if (CheckData.Status == 0) {
       const now = moment();
-      const compareTime = moment(data.CreateAt).add(3, 'hours');
+      // const compareTime = moment(data.CreateAt).add(3, 'hours');
+      const compareTime = moment(data.CreateAt);     
       if (now.isAfter(compareTime)) {
-        const Chinhanh = LIST_CHI_NHANH.find((v: any) => v.idVttech == data.idVttech)
+        const Chinhanh = LIST_CHI_NHANH.find((v: any) =>v.idVttech == data.idVttech)    
+        console.log(Chinhanh);
+               
         if (Chinhanh) {
           try {
-            this._ZaloznsService.TemplateDanhgia(data, Chinhanh).then((zns: any) => {
-              if (zns) {
-                data.SendZNSAt = new Date()
-                data.Status = 2
+            let SendZNS:any={}
+            const TAZA_BRANCH_IDS = [1, 2, 3, 4, 6, 7];
+            const TIMONA_BRANCH_IDS = [7,14, 15, 16, 17, 18, 21];  
+            const isTazaBranch = TAZA_BRANCH_IDS.includes(Number(Chinhanh.idVttech));
+            const isTimonaBranch = TIMONA_BRANCH_IDS.includes(Number(Chinhanh.idVttech));    
+            console.log(isTazaBranch);
+            console.log(isTimonaBranch);
+                   
+            if (isTazaBranch) {
+              SendZNS = await this._ZaloznsService.TemplateDanhgiaTaza(data, Chinhanh);
+            } else if (isTimonaBranch) {
+              SendZNS = await this._ZaloznsService.TemplateDanhgiaTimona(data, Chinhanh);
+            }  
+            console.log(SendZNS);        
+            switch (SendZNS.status) {
+              case 'zns':
+                {
+                  data.SendZNSAt = new Date()
+                  data.StatusZNS = 2
+                  data.Status = 2
+                  this.update(data.id, data)
+                  const logger = {
+                    Title: 'Điều Trị',
+                    Slug: 'dieutri',
+                    Action: 'done',
+                    Mota: `${SendZNS.Title} - SDT: ${data.SDT}`
+                  }
+                  this._LoggerService.create(logger)
+                }
+                break;
+              default: {
+                data.Status = 6
                 this.update(data.id, data)
                 const logger = {
                   Title: 'Điều Trị',
                   Slug: 'dieutri',
-                  Action: 'done',
-                  Mota: `${zns.Title}`
+                  Action: 'loitoken',
+                  Mota: `${SendZNS.Title} - SDT: ${data.SDT}`
                 }
                 this._LoggerService.create(logger)
               }
-              else {
-                data.SendZNSAt = new Date()
-                data.Status = 5
-                this.update(data.id, data)
-                const logger = {
-                  Title: 'Điều Trị',
-                  Slug: 'dieutri',
-                  Action: 'khac',
-                  Mota: `${JSON.stringify(zns)}`
-                }
-                this._LoggerService.create(logger)
-              }
-            })
+                break;
+            }
           } catch (error) {
             console.error(`Error calling Zalozns service: ${error.message}`);
           }
-          // data.Status = 1
-          // this.update(data.id, 1)
-          // const logger = {
-          //   Title: 'Điều Trị',
-          //   Slug: 'dieutri',
-          //   Action: 'waiting',
-          //   Mota: `Điều Trị: ${data.CustName} - ${data.SDT} - ${moment().format("HH:mm:ss DD/MM/YYYY")}`
-          // }
-          // this._LoggerService.create(logger)
         }
         else {
           data.Status = 3
@@ -269,9 +280,6 @@ export class Vttech_dieutriService {
       }
     }
   }
-
-
-
   CheckTime() {
     const now = moment();
     const checkTime = now.hour() >= 8 && now.hour() <= 21;

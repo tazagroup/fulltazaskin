@@ -12,7 +12,7 @@ import { TelegramService } from '../../shared/telegram.service';
 import { ZalodanhgiaService } from '../zalodanhgia/zalodanhgia.service';
 import Zalodanhgia from '../zalodanhgia/zalodanhgia';
 import { ZaloznstrackingService } from '../zaloznstracking/zaloznstracking.service';
-import Zaloznstracking from '../zaloznstracking/zaloznstracking';
+import { LoggerService } from '../../logger/logger.service';
 interface ZaloResponse {
   error: number;
   data?: { msg_id: string };
@@ -29,6 +29,7 @@ export class ZaloznsService {
     private _TelegramService: TelegramService,
     private _ZalodanhgiaService: ZalodanhgiaService,
     private _ZaloznstrackingService: ZaloznstrackingService,
+    private _LoggerService: LoggerService,
   ) {
     this._CauhinhchungService.findslug('zalotoken').then((data: any) => {
       this.Accesstoken = data.Content.Accesstoken
@@ -36,25 +37,28 @@ export class ZaloznsService {
     })
   }
 
-  async sendThanhtoanTaza(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
+  async sendThanhtoanTaza(item: any, Chinhanh: any) {
     try {
       const token: any = await this._ZalotokenService.findid(Chinhanh.idtoken);
       if (!token) {
-        this._TelegramService.SendLogdev(JSON.stringify(token))
-        throw new Error('Zalo token not found');
+        const logger = { Title: 'Gửi ZNS', Mota: `Lỗi Xác Thực ${JSON.stringify(Chinhanh)}` }
+        this._LoggerService.create(logger)
+        return { status: false, Title: `Lỗi Xác Thực ${JSON.stringify(Chinhanh)}` };
       }
+      else
+      {
       const requestData = this.xacnhanthanhtoantaza(item, Chinhanh);
-      const response = await axios.post<ZaloResponse>(
-        'https://business.openapi.zalo.me/message/template',
-        requestData,
-        {
-          headers: {
-            'access_token': token.Token.access_token,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      this._TelegramService.SendLogdev(JSON.stringify(response.data));
+      const config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `https://business.openapi.zalo.me/message/template`,
+        headers: {
+          'access_token': token.Token.access_token,
+          'Content-Type': 'application/json',
+        },
+        data:requestData
+      };
+      const response = await axios.request(config)
       if (response.data.error === 0) {
         let dulieu: any={};
         dulieu.SDT = item.SDT
@@ -68,59 +72,99 @@ export class ZaloznsService {
         if(this.CheckTime())
         {
         const smsResponse = await this.sendFallbackSMS(item);
-        return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
+         return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
         }
       }
+    }
     } catch (error) {
-      this._TelegramService.SendLogdev(JSON.stringify(error));
       throw error; // Rethrow for proper error propagation
     }
   }
 
-  async TemplateDanhgia(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
+  async TemplateDanhgiaTaza(item: any, Chinhanh: any){
     try {
       const token: any = await this._ZalotokenService.findid(Chinhanh.idtoken);
       if (!token) {
-        this._TelegramService.SendLogdev(JSON.stringify(token))
-        throw new Error('Zalo token not found');
+        const logger = { Title: 'Gửi ZNS', Mota: `Lỗi Xác Thực ${JSON.stringify(Chinhanh)}` }
+        this._LoggerService.create(logger)
+        return { status: false, Title: `Lỗi Xác Thực ${JSON.stringify(Chinhanh)}` };
       }
-      const tempDanhgiaid = Chinhanh.idtempdanhgia;
-      const requestData = {
-        phone: convertPhoneNum(item.SDT),
-        template_id: tempDanhgiaid,
-        template_data: {
-          customer_name: item.CustName,
-          schedule_date: moment(item.Created).format('DD/MM/YYYY'),
+      else
+      {
+      const requestData = this.danhgiadichvutaza(item, Chinhanh);
+      const config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `https://business.openapi.zalo.me/message/template`,
+        headers: {
+          'access_token': token.Token.access_token,
+          'Content-Type': 'application/json',
         },
-        tracking_id: GenId(12, true),
+        data:requestData
       };
-      const response = await axios.post<ZaloResponse>(
-        'https://business.openapi.zalo.me/message/template',
-        requestData,
-        {
-          headers: {
-            'access_token': token.Token.access_token,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      this._TelegramService.SendLogdev(JSON.stringify(response.data));
+      const response = await axios.request(config)
       if (response.data.error === 0) {
         let dulieu: any={};
         dulieu.SDT = requestData.phone
         dulieu.Hoten = item.CustName
         dulieu.tracking_id = requestData.tracking_id
         dulieu.msg_id = response.data.data.msg_id
-        dulieu.template_id = tempDanhgiaid
+        dulieu.template_id = response.data.tempDanhgiaid
         this._ZaloznstrackingService.create(dulieu)
-        return { status: 'zns', Title: `Điều Trị: ${response.data.data.msg_id} - ${item.id} - ${item.SDT} - ${item.CustName} Đã Được Gửi` };
+        return { status: 'zns', Title: `Đánh Giá : ${response.data.data.msg_id} - ${item.id} - ${item.SDT} - ${item.CustName} Đã Được Gửi` };
       }
-      // else {
-      //   const smsResponse = await this.sendFallbackSMS(item);
-      //   return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.CustName} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
-      // }
+      else
+      {
+        return { status: false, Title: `Lỗi data trả về` };
+      }
+    }
     } catch (error) {
-      this._TelegramService.SendLogdev(JSON.stringify(error));
+      throw error; // Rethrow for proper error propagation
+    }
+  }
+
+
+  async TemplateDanhgiaTimona(item: any, Chinhanh: any){
+    console.log(Chinhanh);
+    try {
+      const token: any = await this._ZalotokenService.findid(Chinhanh.idtoken);
+      if (!token) {
+        const logger = { Title: 'Gửi ZNS', Mota: `Lỗi Xác Thực ${JSON.stringify(Chinhanh)}` }
+        this._LoggerService.create(logger)
+        return { status: false, Title: `Lỗi Xác Thực ${JSON.stringify(Chinhanh)}` };
+      }
+      else
+      {
+      const requestData = this.danhgiadichvutimona(item, Chinhanh);
+      console.log(requestData);  
+      const config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `https://business.openapi.zalo.me/message/template`,
+        headers: {
+          'access_token': token.Token.access_token,
+          'Content-Type': 'application/json',
+        },
+        data:requestData
+      };
+      const response = await axios.request(config)
+      if (response.data.error === 0) {
+        let dulieu: any={};
+        dulieu.SDT = requestData.phone
+        dulieu.Hoten = item.CustName
+        dulieu.tracking_id = requestData.tracking_id
+        dulieu.msg_id = response.data.data.msg_id
+        dulieu.template_id = response.data.tempDanhgiaid
+        this._ZaloznstrackingService.create(dulieu)
+        return { status: 'zns', Title: `Đánh Giá : ${response.data.data.msg_id} - ${item.id} - ${item.SDT} - ${item.CustName} Đã Được Gửi` };
+      }
+      else
+      {
+        return { status: false, Title: `Lỗi data trả về` };
+      }
+    }
+    } catch (error) {
+      console.error(`Error calling Zalozns service: ${error.message}`);
       throw error; // Rethrow for proper error propagation
     }
   }
@@ -151,7 +195,8 @@ export class ZaloznsService {
       messageId: GenId(8, true),
     };
     const response = await this._SmsService.sendsms(sms);
-    this._TelegramService.SendLogdev(JSON.stringify(response.data));
+    const logger = { Title: 'Gửi Sms', Mota: `Lỗi Xác Thực ${JSON.stringify(response)}` }
+    this._LoggerService.create(logger)
     return response;
   }
 
@@ -332,16 +377,14 @@ export class ZaloznsService {
 
 //Template
     danhgiadichvutimona(item: any, Chinhanh: any): any {
-      const templateId = Chinhanh.idtemp;
-      const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+      const tempDanhgiaid = Chinhanh.iddanhgiatimona;
       return {
         phone: convertPhoneNum(item.SDT),
-        template_id: templateId,
+        template_id: tempDanhgiaid,
         template_data: {
-          order_code: item.InvoiceNum || 0,
-          note: moment(item.Created).format('DD/MM/YYYY'),
-          [priceProperty]: parseFloat(item.Amount).toFixed(0),
-          customer_name: item.CustName,
+            Ten_Hoc_Vien: item.CustName,
+            Ma_hoa_don: Chinhanh.Title,
+            Ngay_Su_Dung: moment(new Date(Number(item.checkTime))).format('DD/MM/YYYY')
         },
         tracking_id: GenId(12, true),
       };
