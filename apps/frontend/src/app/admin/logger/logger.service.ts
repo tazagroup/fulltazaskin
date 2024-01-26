@@ -24,7 +24,7 @@ export class LoggerService {
       })
     );
   }
-  searchVttechthanhtoan(SearchParams:any) {
+  searchLogger(SearchParams:any) {
     return this.http.post(environment.APIURL + `/logger/search`,SearchParams).pipe(
       map((data: any) => { 
         this._loggers.next(data);

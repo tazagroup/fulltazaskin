@@ -57,9 +57,7 @@ export class ZalotokenComponent implements OnInit {
       }
     });
     this._ZalotokenService.getAllZalotokens().subscribe()
-    this._ZalotokenService.zalotokens$.subscribe((data: any) => {
-      console.log(data);
-      
+    this._ZalotokenService.zalotokens$.subscribe((data: any) => {      
       this.FilterLists = this.Lists = data
     })
   }

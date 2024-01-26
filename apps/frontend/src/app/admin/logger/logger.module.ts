@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MaterialModule } from '../../shared/material.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -20,6 +21,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatMenuModule,
     MatButtonModule,
     MatDialogModule,
+    MaterialModule,
     RouterModule.forChild([
       {
         path: '', component: LoggerComponent,    

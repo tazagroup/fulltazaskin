@@ -9,13 +9,13 @@
         <div class="relative flex flex-col h-full p-4 w-full overflow-auto">
           <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
             <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-              <div
+              <a
                 class="cursor-pointer flex flex-row space-x-2 justify-between p-3 w-full rounded-lg hover:bg-gray-100 hover:font-bold"
                 [routerLink]="[node.Slug]" routerLinkActive="bg-gray-100 font-bold" (click)="ChoosenMenu()">
                 <span>
                   {{node.Title}}
                 </span>
-              </div>
+              </a>
             </mat-tree-node>
             <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding class="pl-2">
               <div
