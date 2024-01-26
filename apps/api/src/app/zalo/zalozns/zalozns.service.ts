@@ -63,7 +63,7 @@ export class ZaloznsService {
         dulieu.msg_id = response.data.data.msg_id
         dulieu.template_id = requestData.tempDanhgiaid
         this._ZaloznstrackingService.create(dulieu)
-        return { status: 'zns', Title: `Thanh Toán : ${response.data.data.msg_id} Đã Được Gửi` };
+        return { status: 'zns', Title: `Thanh Toán : ${response.data.data.msg_id} - SDT: ${item.SDT} Đã Được Gửi` };
       } else {
         if(this.CheckTime())
         {
