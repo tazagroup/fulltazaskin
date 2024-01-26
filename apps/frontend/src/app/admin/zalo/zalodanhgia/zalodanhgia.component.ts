@@ -17,17 +17,17 @@ export class ZalodanhgiaComponent implements OnInit {
   Lists: any[] = []
   FilterLists: any[] = []
   SearchParams: any = {
-    Batdau:moment().startOf('day').toDate(),
+    Batdau: moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
-    star:5,
-    pageSize:10,
-    pageNumber:0
+    star: 5,
+    pageSize: 10,
+    pageNumber: 0
   };
-  LIST_CHI_NHANH:any=LIST_CHI_NHANH
-  PagiLength:any
-  pageSizeOptions:any[]=[5]
-  Total:any
-  SelectStar:any=5
+  LIST_CHI_NHANH: any = LIST_CHI_NHANH
+  PagiLength: any
+  pageSizeOptions: any[] = [5]
+  Total: any
+  SelectStar: any = 5
   stars = 5; // Number of stars
   totalDanhgia = 0;
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
@@ -40,15 +40,14 @@ export class ZalodanhgiaComponent implements OnInit {
   }
   ngOnInit(): void {
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
-    this._ZaloznsService.zaloznss$.subscribe((data:any)=>{
-      if(data)
-      {
-        this.Total = data.totalCount  
+    this._ZaloznsService.zaloznss$.subscribe((data: any) => {
+      if (data) {
+        this.Total = data.totalCount
         this.pageSizeOptions = [10, 20, data.totalCount].filter(v => v <= data.totalCount);
-        data.items.sort((a:any,b:any)=>b.star-a.star)   
-        data.items.forEach((v:any) => {
-         v.Ngaygui = moment(Number(v.submitDate)).format('HH:mm:ss DD/MM/YYYY');
-        });((a:any,b:any)=>b.star-a.star)   
+        data.items.sort((a: any, b: any) => b.star - a.star)
+        data.items.forEach((v: any) => {
+          v.Ngaygui = moment(Number(v.submitDate)).format('HH:mm:ss DD/MM/YYYY');
+        }); ((a: any, b: any) => b.star - a.star)
         this.FilterLists = this.Lists = data.items
       }
 
@@ -59,78 +58,64 @@ export class ZalodanhgiaComponent implements OnInit {
     this.SearchParams.pageNumber = 0
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
-  Reload(){}
-  Allstar()
-  {
+  Reload() { }
+  Allstar() {
     delete this.SearchParams.star
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
-  
-  CreateStart(item:any)
-  {
+
+  CreateStart(item: any) {
     const result = Array.from({ length: item }, (_, i) => i + 1);
     return result
   }
-  GetNameChinhanh(item:any,field:any)
-  {
-    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v[field] == item)  
+  GetNameChinhanh(item: any, field: any) {
+    const Chinhanh = LIST_CHI_NHANH.find((v: any) => v[field] == item)
     return Chinhanh?.Title
   }
-  ChoosenDate()
-  {
+  ChoosenDate() {
     this.SearchParams.pageNumber = 0
-    this.SearchParams.Batdau=moment(this.SearchParams.Batdau).startOf('day').toDate(),
-    this.SearchParams.Ketthuc= moment(this.SearchParams.Ketthuc).endOf('day').toDate(),
-    this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
+    this.SearchParams.Batdau = moment(this.SearchParams.Batdau).startOf('day').toDate(),
+      this.SearchParams.Ketthuc = moment(this.SearchParams.Ketthuc).endOf('day').toDate(),
+      this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     if (value.length > 2) {
       this.FilterLists = this.Lists.filter((v) => {
-     return v.SDT.toLowerCase().includes(value)
-       }
+        return v.SDT.toLowerCase().includes(value)
+      }
       )
     }
     else {
       this.FilterLists = this.Lists
     }
   }
-  onChangeCN(event:MatSelectChange)
-  {
-    this.SearchParams.BranchID=event.value
+  onChangeCN(event: MatSelectChange) {
+    this.SearchParams.BranchID = event.value
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
-  onPageChange(event:any)
-  {
-    this.SearchParams.pageSize=event.pageSize
-    this.SearchParams.pageNumber=event.pageIndex
+  onPageChange(event: any) {
+    this.SearchParams.pageSize = event.pageSize
+    this.SearchParams.pageNumber = event.pageIndex
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
-  Capnhatdanhgia()
-  {
-    
-  }
-  writeExcelFile(data:any) {
+  Capnhatdanhgia() {
 
-    this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
-    this._ZaloznsService.zaloznss$.subscribe((data:any)=>{
-      if(data)
-      {     
-          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
-          data.items.map((v:any,k:any)=>({
-          'STT':k+1,
-          'Ngày Đánh Giá':v.Ngaygui,
-          'Chi Nhánh':v.Chinhanh,
-          'Số Điện Thoại':v.SDT,
-          'Số Sao':v.rate,
-          'Đánh Giá':v.feedbacks?.join(","),
-          'Ghi Chú':v.note
-        })));
-        const workbook: XLSX.WorkBook = { Sheets: { 'Sheet1': worksheet }, SheetNames: ['Sheet1'] };
-        const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        this.saveAsExcelFile(excelBuffer, `ZNZ_Danh_Gia_${moment().format('DD_MM_YYYY')}`);
-      }
-    })
+  }
+  writeExcelFile(data: any) {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+      data.map((v: any, k: any) => ({
+        'STT': k + 1,
+        'Ngày Đánh Giá': v.Ngaygui,
+        'Chi Nhánh': v.Chinhanh,
+        'Số Điện Thoại': v.SDT,
+        'Số Sao': v.rate,
+        'Đánh Giá': v.feedbacks?.join(","),
+        'Ghi Chú': v.note
+      })));
+    const workbook: XLSX.WorkBook = { Sheets: { 'Sheet1': worksheet }, SheetNames: ['Sheet1'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.saveAsExcelFile(excelBuffer, `ZNZ_Danh_Gia_${moment().format('DD_MM_YYYY')}`);
   }
   saveAsExcelFile(buffer: any, fileName: string) {
     const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
