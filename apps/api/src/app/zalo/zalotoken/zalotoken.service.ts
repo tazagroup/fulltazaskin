@@ -26,7 +26,7 @@ export class ZalotokenService {
       },
     };
     return axios(options)
-      .then((response) => {
+      .then((response:any) => {
         console.error(response.data);
         if (response.data.error == '-14019') {
           return { status: 400, note: "Autho Code Hết Hạn" }

@@ -55,27 +55,25 @@ export class Vttech_thanhtoanService {
           const result = await this.create(v)
           this.GetKHByCode(result)
         });
-        const logger = { Title: 'Thanhtoanvttech', Mota: `Lấy ${response.data.length} Thanh Toán Từ Vttech` }
+        const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${response.data.length} Thanh Toán Từ Vttech` }
         this._LoggerService.create(logger)
         return { status: 201, title: `Lấy ${response.data.length} Thanh Toán Từ Vttech` };
       }
       else {
-        const logger = { Title: 'Thanhtoanvttech', Mota: `Code 403: Lỗi Xác thực` }
+        const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` }
         this._LoggerService.create(logger)
         return { status: 404, title: 'Lỗi Data Trả Về' };
       }
     } catch (error) {
-      const logger = { Title: 'Thanhtoanvttech', Mota: `Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>` }
+      const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>` }
       this._LoggerService.create(logger)
       return { status: 400, title: 'Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
     }
   }
   async SendXNTTauto() {
     const ListThanhtoan = await this.fininday()
-    ListThanhtoan.forEach((v)=>
-    {
-      if(this.CheckTime())
-      {
+    ListThanhtoan.forEach((v) => {
+      if (this.CheckTime()) {
         this.sendZNSThanhtoan(v)
       }
     })
@@ -114,20 +112,21 @@ export class Vttech_thanhtoanService {
   }
 
 
-  async GetVttechKhachhang() {}
+  async GetVttechKhachhang() { }
   async sendZNSThanhtoan(data: any) {
-    const CheckData = await this.findid(data.id)
-    if (CheckData.Status == 0 || CheckData.Status == 1) {
+    if (data.SDT != '0909300146') {
+      const CheckData = await this.findid(data.id)
+      if (CheckData.Status == 0 || CheckData.Status == 1) {
         const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
         if (Chinhanh) {
           try {
-            this._ZaloznsService.sendThanhtoanZns(data, Chinhanh).then((zns: any) => {
+            this._ZaloznsService.sendThanhtoanTaza(data, Chinhanh).then((zns: any) => {
               if (zns) {
                 if (zns.status == 'sms') {
                   data.SMS = zns.data
                   data.ThucteZNS = new Date()
                   data.Status = 4
-                  this.update(data.id,data)
+                  this.update(data.id, data)
                   const result = `<b><u>${zns.Title}</u></b>`;
                   this._TelegramService.SendNoti(result)
                   const logger = {
@@ -142,7 +141,7 @@ export class Vttech_thanhtoanService {
                   data.ThucteZNS = new Date()
                   data.StatusZNS = 2
                   data.Status = 2
-                  this.update(data.id,data)
+                  this.update(data.id, data)
                   const result = `<b><u>${zns.Title}</u></b>`;
                   this._TelegramService.SendNoti(result)
                   const logger = {
@@ -166,7 +165,7 @@ export class Vttech_thanhtoanService {
         else {
           data.Status = 3
           data.ThucteZNS = new Date()
-          this.update(data.id,data)
+          this.update(data.id, data)
           const result = `Chi nhánh chưa đăng ký ZNS`;
           this._TelegramService.SendLogdev(result)
           const logger = {
@@ -177,6 +176,7 @@ export class Vttech_thanhtoanService {
           }
           this._LoggerService.create(logger)
         }
+      }
     }
   }
   async UpdateThanhtoan(InvoiceNum: any, Status: any) {
@@ -243,7 +243,7 @@ export class Vttech_thanhtoanService {
     });
   }
   async fininday() {
-    const Start = moment().add(-1,'days').startOf('date').toDate()
+    const Start = moment().add(-1, 'days').startOf('date').toDate()
     const End = moment().endOf('date').toDate()
     return await this.Vttech_thanhtoanRepository.find({
       where: {

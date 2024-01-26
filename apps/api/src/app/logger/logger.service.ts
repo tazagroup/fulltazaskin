@@ -45,14 +45,14 @@ export class LoggerService {
         endDate:params.Ketthuc,
       });
     }
-    if (params.Title) {
-      queryBuilder.andWhere('logger.Title LIKE :Title', { SDT: `%${params.Title}%` });
+    if (params.hasOwnProperty('Title')) {
+      queryBuilder.andWhere('logger.Title LIKE :Title', { Title: `%${params.Title}%` });
     }
-    if (params.Mota) {
+    if (params.hasOwnProperty('Mota')) {
       queryBuilder.andWhere('logger.Mota LIKE :Mota', { Mota: `%${params.Mota}%` });
     }
     const [items, totalCount] = await queryBuilder
-    .limit(params.pageSize || 10) // Set a default page size if not provided
+    .limit(params.pageSize || 10)
     .offset(params.pageNumber * params.pageSize || 0)
     .getManyAndCount();
   return { items, totalCount };

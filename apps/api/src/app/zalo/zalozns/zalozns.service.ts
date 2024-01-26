@@ -36,14 +36,14 @@ export class ZaloznsService {
     })
   }
 
-  async sendThanhtoanZns(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
+  async sendThanhtoanTaza(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
     try {
       const token: any = await this._ZalotokenService.findid(Chinhanh.idtoken);
       if (!token) {
         this._TelegramService.SendLogdev(JSON.stringify(token))
         throw new Error('Zalo token not found');
       }
-      const requestData = this.constructRequestData(item, Chinhanh);
+      const requestData = this.xacnhanthanhtoantaza(item, Chinhanh);
       const response = await axios.post<ZaloResponse>(
         'https://business.openapi.zalo.me/message/template',
         requestData,
@@ -55,7 +55,6 @@ export class ZaloznsService {
         }
       );
       this._TelegramService.SendLogdev(JSON.stringify(response.data));
-
       if (response.data.error === 0) {
         let dulieu: any={};
         dulieu.SDT = item.SDT
@@ -77,6 +76,7 @@ export class ZaloznsService {
       throw error; // Rethrow for proper error propagation
     }
   }
+
   async TemplateDanhgia(item: any, Chinhanh: any): Promise<{ status: string; Title: string; data?: string }> {
     try {
       const token: any = await this._ZalotokenService.findid(Chinhanh.idtoken);
@@ -124,7 +124,7 @@ export class ZaloznsService {
       throw error; // Rethrow for proper error propagation
     }
   }
-
+  
   constructRequestData(item: any, Chinhanh: any): any {
     const templateId = Chinhanh.idtemp;
     const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
@@ -140,6 +140,7 @@ export class ZaloznsService {
       tracking_id: GenId(12, true),
     };
   }
+
   async sendFallbackSMS(item: any): Promise<any> {
     const sms = {
       Brandname: 'TAZA',
@@ -149,7 +150,6 @@ export class ZaloznsService {
       pass: '$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S',
       messageId: GenId(8, true),
     };
-
     const response = await this._SmsService.sendsms(sms);
     this._TelegramService.SendLogdev(JSON.stringify(response.data));
     return response;
@@ -198,27 +198,6 @@ export class ZaloznsService {
           });
       }
     });
-    //   access_token = this.Accesstoken
-    //   let data = item;
-    //   let config = {
-    //     method: 'post',
-    //     maxBodyLength: Infinity,
-    //     url: 'https://business.openapi.zalo.me/message/template',
-    //     headers: { 
-    //       'access_token': this.Accesstoken, 
-    //       'Content-Type': 'application/json'
-    //     },
-    //     data : data
-    //   };
-    //  return axios.request(config)
-    //   .then((response) => {
-    //     //console.error(response.data);
-
-    //     return response.data
-    //   })
-    //   .catch((error) => {
-    //     return error
-    //   });
   }
   async getRating(msgid: any) {
     let config = {
@@ -350,5 +329,82 @@ export class ZaloznsService {
     const checkTime = now.hour() >= 8 && now.hour() <= 21;
     return checkTime
   }
+
+//Template
+    danhgiadichvutimona(item: any, Chinhanh: any): any {
+      const templateId = Chinhanh.idtemp;
+      const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+      return {
+        phone: convertPhoneNum(item.SDT),
+        template_id: templateId,
+        template_data: {
+          order_code: item.InvoiceNum || 0,
+          note: moment(item.Created).format('DD/MM/YYYY'),
+          [priceProperty]: parseFloat(item.Amount).toFixed(0),
+          customer_name: item.CustName,
+        },
+        tracking_id: GenId(12, true),
+      };
+    }
+    xacnhanthanhtoantimona(item: any, Chinhanh: any): any {
+      const templateId = Chinhanh.idtemp;
+      const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+      return {
+        phone: convertPhoneNum(item.SDT),
+        template_id: templateId,
+        template_data: {
+          order_code: item.InvoiceNum || 0,
+          note: moment(item.Created).format('DD/MM/YYYY'),
+          [priceProperty]: parseFloat(item.Amount).toFixed(0),
+          customer_name: item.CustName,
+        },
+        tracking_id: GenId(12, true),
+      };
+    }
+    xacnhanthanhtoanhocphitimona(item: any, Chinhanh: any): any {
+      const templateId = Chinhanh.idtemp;
+      const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+      return {
+        phone: convertPhoneNum(item.SDT),
+        template_id: templateId,
+        template_data: {
+          order_code: item.InvoiceNum || 0,
+          note: moment(item.Created).format('DD/MM/YYYY'),
+          [priceProperty]: parseFloat(item.Amount).toFixed(0),
+          customer_name: item.CustName,
+        },
+        tracking_id: GenId(12, true),
+      };
+    }
+    danhgiadichvutaza(item: any, Chinhanh: any): any {
+      const templateId = Chinhanh.idtemp;
+      const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+      return {
+        phone: convertPhoneNum(item.SDT),
+        template_id: templateId,
+        template_data: {
+          order_code: item.InvoiceNum || 0,
+          note: moment(item.Created).format('DD/MM/YYYY'),
+          [priceProperty]: parseFloat(item.Amount).toFixed(0),
+          customer_name: item.CustName,
+        },
+        tracking_id: GenId(12, true),
+      };
+    }
+    xacnhanthanhtoantaza(item: any, Chinhanh: any): any {
+      const templateId = Chinhanh.idtemp;
+      const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+      return {
+        phone: convertPhoneNum(item.SDT),
+        template_id: templateId,
+        template_data: {
+          order_code: item.InvoiceNum || 0,
+          note: moment(item.Created).format('DD/MM/YYYY'),
+          [priceProperty]: parseFloat(item.Amount).toFixed(0),
+          customer_name: item.CustName,
+        },
+        tracking_id: GenId(12, true),
+      };
+    }
 
 }
