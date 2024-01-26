@@ -113,7 +113,8 @@ export class ZalodanhgiaComponent implements OnInit {
       'Chi Nhánh':v.Chinhanh,
       'Số Điện Thoại':v.SDT,
       'Số Sao':v.rate,
-      'Đánh Giá':v.feedbacks?.join(",")
+      'Đánh Giá':v.feedbacks?.join(","),
+      'Ghi Chú':v.note
     })));
     const workbook: XLSX.WorkBook = { Sheets: { 'Sheet1': worksheet }, SheetNames: ['Sheet1'] };
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
