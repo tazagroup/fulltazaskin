@@ -80,7 +80,7 @@ export class VttechthanhtoanService {
     );
   }
   SendZns(data: any) {
-    return this.http.post(environment.APIURL + '/vttech_thanhtoan/send1zns', data).pipe(
+    return this.http.post(environment.APIURL + '/vttech_thanhtoan/sendzns', data).pipe(
           map((result) => {
             console.log(result); 
             return result;
