@@ -52,12 +52,22 @@ export class Vttech_thanhtoanService {
           item = v
           item.checkTime = (new Date(v.Created)).getTime()
           item.Dulieu = JSON.stringify(v)
-          const result = await this.create(v)
-          this.GetKHByCode(result)
+          const result = await this.GetKHByCode(item)
+          const checkInvoiceNum = this.findInvoiceNum(result.InvoiceNum)
+          if(checkInvoiceNum)
+          {
+            this.create(result)
+            const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${response.data.length} Thanh Toán Từ Vttech` }
+            this._LoggerService.create(logger)
+            return { status: 201, title: `Lấy ${response.data.length} Thanh Toán Từ Vttech` };
+          }
+          else
+          {
+            const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${result.InvoiceNum}` }
+            this._LoggerService.create(logger)
+            return { status: 1001, title: `Trùng Hoá Đơn ${result.InvoiceNum}` };
+          }
         });
-        const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${response.data.length} Thanh Toán Từ Vttech` }
-        this._LoggerService.create(logger)
-        return { status: 201, title: `Lấy ${response.data.length} Thanh Toán Từ Vttech` };
       }
       else {
         const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` }
@@ -100,12 +110,11 @@ export class Vttech_thanhtoanService {
       {
         ...item,
         DukienZNS: new Date(),
-        StatusZNS: 0,
-        TimeZNS: new Date(),
         SDT: response.data.Table[0].CustomerPhone,
         InvoiceNum: Hoadon_id?.InvoiceNum,
       }
-      this.update(Updatedata.id, Updatedata)
+      return Updatedata
+      //this.update(Updatedata.id, Updatedata)
     } catch (error) {
       console.error(error);
     }
@@ -157,10 +166,6 @@ export class Vttech_thanhtoanService {
           } catch (error) {
             console.error(`Error calling Zalozns service: ${error.message}`);
           }
-          // data.Status = 1
-          // this.UpdateThanhtoan(data.InvoiceNum, 1)
-          // const result = `Thanh Toán : ${data.InvoiceNum} - ${data.CustName} - ${data.SDT} - ${moment(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
-          // this._TelegramService.SendNoti(result)
         }
         else {
           data.Status = 3
@@ -178,14 +183,6 @@ export class Vttech_thanhtoanService {
         }
       }
     }
-  }
-  async UpdateThanhtoan(InvoiceNum: any, Status: any) {
-    const Invoices = await this.findInvoiceNum(InvoiceNum)
-    console.log(Invoices);
-    Invoices.forEach((v: any) => {
-      v.Status = Status
-      this.update(v.id, v)
-    });
   }
   async GetHoadon(CustomerID: any) {
     let config = {
@@ -278,7 +275,7 @@ export class Vttech_thanhtoanService {
     });
   }
   async findInvoiceNum(InvoiceNum: string) {
-    return await this.Vttech_thanhtoanRepository.find({
+    return await this.Vttech_thanhtoanRepository.findOne({
       where: { InvoiceNum: InvoiceNum },
     });
   }
