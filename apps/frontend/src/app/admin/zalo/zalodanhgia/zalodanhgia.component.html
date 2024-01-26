@@ -44,6 +44,9 @@
       </div>
        <span class="font-bold" *ngIf="SearchParams.star>0"> Số Lượng ({{Total}})</span>
        <mat-chip-list class="flex space-x-2 flex-row items-center justify-between">
+       <mat-chip (click)="Allstar()">
+          Tất Cả Sao
+        </mat-chip>
        <mat-chip (click)="writeExcelFile(FilterLists)">
         <span class="material-symbols-outlined">
           sim_card_download

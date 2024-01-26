@@ -60,6 +60,11 @@ export class ZalodanhgiaComponent implements OnInit {
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
   Reload(){}
+  Allstar()
+  {
+    delete this.SearchParams.star
+    this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
+  }
   
   CreateStart(item:any)
   {
@@ -106,23 +111,26 @@ export class ZalodanhgiaComponent implements OnInit {
     
   }
   writeExcelFile(data:any) {
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
-      data.map((v:any,k:any)=>({
-      'STT':k+1,
-      'Ngày Đánh Giá':v.Ngaygui,
-      'Chi Nhánh':v.Chinhanh,
-      'Số Điện Thoại':v.SDT,
-      'Số Sao':v.rate,
-      'Đánh Giá':v.feedbacks?.join(","),
-      'Ghi Chú':v.note
-    })));
-    const workbook: XLSX.WorkBook = { Sheets: { 'Sheet1': worksheet }, SheetNames: ['Sheet1'] };
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    this.saveAsExcelFile(excelBuffer, `ZNZ_Danh_Gia_${moment().format('DD_MM_YYYY')}`);
 
-
-
-    
+    this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
+    this._ZaloznsService.zaloznss$.subscribe((data:any)=>{
+      if(data)
+      {     
+          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+          data.items.map((v:any,k:any)=>({
+          'STT':k+1,
+          'Ngày Đánh Giá':v.Ngaygui,
+          'Chi Nhánh':v.Chinhanh,
+          'Số Điện Thoại':v.SDT,
+          'Số Sao':v.rate,
+          'Đánh Giá':v.feedbacks?.join(","),
+          'Ghi Chú':v.note
+        })));
+        const workbook: XLSX.WorkBook = { Sheets: { 'Sheet1': worksheet }, SheetNames: ['Sheet1'] };
+        const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        this.saveAsExcelFile(excelBuffer, `ZNZ_Danh_Gia_${moment().format('DD_MM_YYYY')}`);
+      }
+    })
   }
   saveAsExcelFile(buffer: any, fileName: string) {
     const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
