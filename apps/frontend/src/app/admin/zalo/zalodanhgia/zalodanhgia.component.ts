@@ -5,8 +5,8 @@ import { ZalodanhgiaService } from './zalodanhgia.service';
 import * as moment from 'moment';
 import { ZaloznsService } from '../zalozns/zalozns.service';
 import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
-import { range } from 'rxjs';
 import { MatSelectChange } from '@angular/material/select';
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-zalodanhgia',
   templateUrl: './zalodanhgia.component.html',
@@ -45,6 +45,7 @@ export class ZalodanhgiaComponent implements OnInit {
       {
         console.log(data);
         this.Total = data.totalCount  
+        this.pageSizeOptions = [10, 20, data.totalCount].filter(v => v <= data.totalCount);
         data.items.sort((a:any,b:any)=>b.star-a.star)   
         data.items.forEach((v:any) => {
          v.Ngaygui = moment(Number(v.submitDate)).format('HH:mm:ss DD/MM/YYYY');
@@ -108,5 +109,33 @@ export class ZalodanhgiaComponent implements OnInit {
   Capnhatdanhgia()
   {
     
+  }
+  writeExcelFile(data:any) {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+      data.map((v:any,k:any)=>({
+      'STT':k+1,
+      'Ngày Đánh Giá':v.Ngaygui,
+      'Chi Nhánh':v.Chinhanh,
+      'Số Điện Thoại':v.SDT,
+      'Số Sao':v.rate,
+      'Đánh Giá':JSON.stringify(v.feedbacks)
+    })));
+    const workbook: XLSX.WorkBook = { Sheets: { 'Sheet1': worksheet }, SheetNames: ['Sheet1'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.saveAsExcelFile(excelBuffer, `ZNZ_Danh_Gia_${moment().format('DD_MM_YYYY')}`);
+
+
+
+    
+  }
+  saveAsExcelFile(buffer: any, fileName: string) {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const url: string = window.URL.createObjectURL(data);
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = url;
+    link.download = `${fileName}.xlsx`;
+    link.click();
+    window.URL.revokeObjectURL(url);
+    link.remove();
   }
 }

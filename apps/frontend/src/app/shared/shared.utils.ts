@@ -23,8 +23,6 @@ export const LIST_CHI_NHANH:any[] =
   {id:'',idtemp:'',idtoken:'',idVttech:21,Title:'Building Timona CMT8'},  
 ]
 
-
-
 export const ListTrangthailichhen: any[] = [
     {id:0,Title:"Chờ Xác Nhận",Class:"text-yellow-400"},
     {id:1,Title:"Đã Đặt Lịch",Class:"text-blue-400"},
@@ -33,6 +31,13 @@ export const ListTrangthailichhen: any[] = [
     {id:4,Title:"Đang Tư Vấn",Class:"text-blue-400"},
     {id:5,Title:"Đang Lên phòng dịch vụ",Class:"text-blue-400"}
   ]
+
+export const ListNotifyType: any ={
+  success:'check_circle',
+  danger:'dangerous',
+  warning:'warning',
+  info:'info'
+}
   export const TYPE_TEMPLATE: any = {
       user_received_message: "Sự kiện người dùng nhận thông báo ZNS",
       change_template_quota: "Thông báo thay đổi quota mẫu ZNS rủi ro",

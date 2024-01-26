@@ -12,7 +12,8 @@
       ],
       "options": {
         "allowedCommonJsDependencies": [
-          "moment"
+          "moment",
+          "apexcharts"
         ],
         "outputPath": "dist/apps/frontend",
         "index": "apps/frontend/src/index.html",

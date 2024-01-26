@@ -43,6 +43,14 @@
         *ngFor="let i of CreateStart(5); let index = index"> star </span>
       </div>
        <span class="font-bold" *ngIf="SearchParams.star>0"> Số Lượng ({{Total}})</span>
+       <mat-chip-list class="flex space-x-2 flex-row items-center justify-between">
+       <mat-chip (click)="writeExcelFile(FilterLists)">
+        <span class="material-symbols-outlined">
+          sim_card_download
+          </span>
+          Xuất
+        </mat-chip>
+        </mat-chip-list>
       </div>
       <!-- <div class="flex flex-row text-xs">
          <div (click)="ChangeStatusButton(item)" class="flex flex-col lg:space-x-2 lg:flex-row items-center border rounded-lg p-2 text-white {{Style[item]}}" *ngFor="let item of [0,1,2,4,3]">
@@ -106,7 +114,7 @@
     <div class="relative border-t flex flex-col">
       <!-- <mat-paginator (page)="onPageChange($event)" [length]="Total" [pageSize]="5"
         [pageSizeOptions]="pageSizeOptions"></mat-paginator> -->
-        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+        <mat-paginator [pageSizeOptions]="pageSizeOptions"
         [pageSize]="SearchParams.pageSize"
         [length]="Total"
         [pageIndex]="SearchParams.pageNumber"
