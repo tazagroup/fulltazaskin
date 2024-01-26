@@ -50,9 +50,9 @@ export class ZalotokenComponent implements OnInit {
           else {
             this._NotifierService.notify("error", res.note)
           }
-          // setTimeout(() => {
-          //   window.location.href = window.location.pathname
-          // }, 1000);
+          setTimeout(() => {
+            window.location.href = window.location.pathname
+          }, 1000);
         }
         )
       }
@@ -98,9 +98,6 @@ export class ZalotokenComponent implements OnInit {
     let result = { message: 'Chưa Xác Thực', status: false, text: 'text-red-500' }
     if (timein && timeout) {
       const milliseconds = timein.getTime() - (new Date(timeout)).getTime()
-      // const seconds = Math.round(milliseconds / 1000);
-      // console.log(seconds);
-
       if (milliseconds > 0)
         result = { message: 'Hết Hạn', status: true, text: 'text-red-500' }
       else {
