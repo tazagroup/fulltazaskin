@@ -18,6 +18,7 @@ export class ZalotokenComponent implements OnInit {
   Lists: any[] = []
   FilterLists: any[] = []
   Today: any = new Date()
+  ListChiNhanh:any=LIST_CHI_NHANH
   SearchParams: any = {
     Batdau:moment().startOf('day').add(-1,'day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
@@ -32,14 +33,14 @@ export class ZalotokenComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    moment.locale('vi');
+    // moment.locale('vi');
     this.activatedRoute.queryParams.subscribe((params: any) => {
       if (params.oa_id) {
-        const data = {
+        const data:any = {
           oa_id: params.oa_id,
           code: params.code,
-          app_id: environment.app_id,
-          secret_key: environment.secret_key
+          app_id: this.ListChiNhanh.find((v:any)=>v.oa_id==params.oa_id)?.app_id,
+          secret_key: this.ListChiNhanh.find((v:any)=>v.oa_id==params.oa_id)?.secret_key
         }
         this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
           console.log(res)
@@ -49,9 +50,9 @@ export class ZalotokenComponent implements OnInit {
           else {
             this._NotifierService.notify("error", res.note)
           }
-          setTimeout(() => {
-            window.location.href = window.location.pathname
-          }, 1000);
+          // setTimeout(() => {
+          //   window.location.href = window.location.pathname
+          // }, 1000);
         }
         )
       }
@@ -59,6 +60,8 @@ export class ZalotokenComponent implements OnInit {
     this._ZalotokenService.getAllZalotokens().subscribe()
     this._ZalotokenService.zalotokens$.subscribe((data: any) => {      
       this.FilterLists = this.Lists = data
+      console.log(data);
+      
     })
   }
   applyFilter(event: Event) {
@@ -87,8 +90,9 @@ export class ZalotokenComponent implements OnInit {
       }
     });
   }
-  Xacthuc() {
-    window.location.href = "https://oauth.zaloapp.com/v4/oa/permission?app_id=1416835846626859002&redirect_uri=https://zalo.tazaskinclinic.com/admin/zalotoken"
+  Xacthuc(data:any) {
+    const app_id =  this.ListChiNhanh.find((v:any)=>v.oa_id==data.oa_id)?.app_id
+    window.location.href = `https://oauth.zaloapp.com/v4/oa/permission?app_id=${app_id}&redirect_uri=https://zalo.tazaskinclinic.com/admin/zalotoken`
   }
   Checktime(timein: Date, timeout: Date) {
     let result = { message: 'Chưa Xác Thực', status: false, text: 'text-red-500' }

@@ -5,59 +5,59 @@ export interface SearchParams {
   take?: number;
   skip?: number;
 }
-export const LIST_CHI_NHANH:any[] = 
-[
-  {id:'268b7a06-d2c5-4c98-af1d-334144ae280f',BranchCode: 'Q_T',idtempdanhgia:'304742',idtemp:'301891',idtoken:'9e148d63-1716-4aa8-b760-ad3700393d4c',idVttech:3,Title:'Taza Skin Clinic Gò Vấp'}, 
-  {id:'f54de1e1-66bd-4690-8015-ad7315d6f14e',BranchCode: 'PVD',idtempdanhgia:'304997',idtemp:'302261',idtoken:'22ddea78-f244-4dea-838a-c4c5d8e40a16',idVttech:1,Title:'Taza Skin Clinic Thủ Đức'}, 
-  {id:'ca725bf4-4810-4ea2-8ef2-520b2a3121cc',BranchCode: 'C_T',idtempdanhgia:'304942',idtemp:'302259',idtoken:'e4d7426e-53df-4285-be74-aba10259e188',idVttech:2,Title:'Taza Skin Clinic Quận 10'}, 
-  {id:'e173b1c0-fbdb-4eeb-a00c-b56664068515',BranchCode: 'NHH',idtempdanhgia:'305001',idtemp:'303760',idtoken:'d046cec3-ea49-4117-9a1c-f67959406443',idVttech:4,Title:'Taza Skin Clinic Nha Trang'}, 
-  {id:'9887ad61-4b2c-4db1-83e6-570f33cb540a',BranchCode: 'H_V',idtempdanhgia:'304998',idtemp:'302281',idtoken:'b3b61395-1760-49ae-b5e7-70c310c1c2fb',idVttech:6,Title:'Taza Skin Clinic Đà Nẵng'}, 
-  {id:'ca725bf4-4810-4ea2-8ef2-520b2a3121cc',BranchCode: 'VPC',idtempdanhgia:'304942',idtemp:'302259',idtoken:'e4d7426e-53df-4285-be74-aba10259e188',idVttech:7,Title:'Văn Phòng'}, 
-  {id:'',idtemp:'',idtoken:'',idVttech:14,Title:'Timona Academy Quận 10'}, 
-  {id:'',idtemp:'',idtoken:'',idVttech:15,Title:'Timona Academy Thủ Đức'}, 
-  {id:'',idtemp:'',idtoken:'',idVttech:16,Title:'Timona Academy Gò Vấp'}, 
-  {id:'',idtemp:'',idtoken:'',idVttech:17,Title:'Timona Academy Nha Trang'}, 
-  {id:'',idtemp:'',idtoken:'',idVttech:18,Title:'Timona Academy Đà Nẵng'}, 
-  {id:'',idtemp:'',idtoken:'',idVttech:19,Title:'HR Tazagroup'}, 
-  {id:'',idtemp:'',idtoken:'',idVttech:20,Title:'Timona Academy Hà Nội'}, 
-  {id:'',idtemp:'',idtoken:'',idVttech:21,Title:'Building Timona CMT8'},  
-]
-
-export const ListTrangthailichhen: any[] = [
-    {id:0,Title:"Chờ Xác Nhận",Class:"text-yellow-400"},
-    {id:1,Title:"Đã Đặt Lịch",Class:"text-blue-400"},
-    {id:2,Title:"Đã Đến",Class:"text-green-400"},
-    {id:3,Title:"Đang Tham Khám",Class:"text-blue-400"},
-    {id:4,Title:"Đang Tư Vấn",Class:"text-blue-400"},
-    {id:5,Title:"Đang Lên phòng dịch vụ",Class:"text-blue-400"}
+export const LIST_CHI_NHANH: any[] =
+  [
+    { "id": "268b7a06-d2c5-4c98-af1d-334144ae280f", "BranchCode": "Q_T", "Title": "Taza Skin Clinic Gò Vấp", "iddanhgiatimona": "", "idxacnhantimona": "", "iddonghocphi": "", "idtempdanhgia": "304742", "idtemp": "301891", "idtoken": "9e148d63-1716-4aa8-b760-ad3700393d4c", "idVttech": "3", "app_id": "1416835846626859002", "secret_key": "HLBWj23hToA9fuiQvQY4", "oa_id": "4353626177205058888" }, 
+    { "id": "f54de1e1-66bd-4690-8015-ad7315d6f14e", "BranchCode": "PVD", "Title": "Taza Skin Clinic Thủ Đức", "iddanhgiatimona": "", "idxacnhantimona": "", "iddonghocphi": "", "idtempdanhgia": "304997", "idtemp": "302261", "idtoken": "22ddea78-f244-4dea-838a-c4c5d8e40a16", "idVttech": "1", "app_id": "1416835846626859002", "secret_key": "HLBWj23hToA9fuiQvQY4", "oa_id": "1997742617199931560" }, 
+    { "id": "ca725bf4-4810-4ea2-8ef2-520b2a3121cc", "BranchCode": "C_T", "Title": "Taza Skin Clinic Quận 10", "iddanhgiatimona": "", "idxacnhantimona": "", "iddonghocphi": "", "idtempdanhgia": "304942", "idtemp": "302259", "idtoken": "e4d7426e-53df-4285-be74-aba10259e188", "idVttech": "2", "app_id": "1416835846626859002", "secret_key": "HLBWj23hToA9fuiQvQY4", "oa_id": "3605866963832105989" }, 
+    { "id": "e173b1c0-fbdb-4eeb-a00c-b56664068515", "BranchCode": "NHH", "Title": "Taza Skin Clinic Nha Trang", "iddanhgiatimona": "", "idxacnhantimona": "", "iddonghocphi": "", "idtempdanhgia": "305001", "idtemp": "303760", "idtoken": "d046cec3-ea49-4117-9a1c-f67959406443", "idVttech": "4", "app_id": "1416835846626859002", "secret_key": "HLBWj23hToA9fuiQvQY4", "oa_id": "4053676037625786330" }, 
+    { "id": "9887ad61-4b2c-4db1-83e6-570f33cb540a", "BranchCode": "H_V", "Title": "Taza Skin Clinic Đà Nẵng", "iddanhgiatimona": "", "idxacnhantimona": "", "iddonghocphi": "", "idtempdanhgia": "304998", "idtemp": "302281", "idtoken": "b3b61395-1760-49ae-b5e7-70c310c1c2fb", "idVttech": "6", "app_id": "1416835846626859002", "secret_key": "HLBWj23hToA9fuiQvQY4", "oa_id": "2511212339323893428" }, 
+    { "id": "ca725bf4-4810-4ea2-8ef2-520b2a3121cc", "BranchCode": "VPC", "Title": "Văn Phòng", "iddanhgiatimona": "", "idxacnhantimona": "", "iddonghocphi": "", "idtempdanhgia": "304942", "idtemp": "302259", "idtoken": "e4d7426e-53df-4285-be74-aba10259e188", "idVttech": "7", "app_id": "1416835846626859002", "secret_key": "HLBWj23hToA9fuiQvQY4", "oa_id": "3605866963832105989" }, 
+    { "id": "", "BranchCode": "", "Title": "Timona Academy Quận 10", "iddanhgiatimona": "", "idxacnhantimona": "", "iddonghocphi": "", "idtempdanhgia": "", "idtemp": "", "idtoken": "", "idVttech": "14", "app_id": "904566211493773951", "secret_key": "WPnPiFf8mEKuB3ZrqS5H", "oa_id": "" }, 
+    { "id": "c4a68bd5-c120-4bf0-a4d1-447e4921eb76", "BranchCode": "", "Title": "Timona Academy Thủ Đức", "iddanhgiatimona": "310068", "idxacnhantimona": "309732", "iddonghocphi": "306256", "idtempdanhgia": "", "idtemp": "", "idtoken": "", "idVttech": "15", "app_id": "904566211493773951", "secret_key": "WPnPiFf8mEKuB3ZrqS5H", "oa_id": "2380978004592308302" }, 
+    { "id": "", "BranchCode": "", "Title": "Timona Academy Gò Vấp", "iddanhgiatimona": "", "idxacnhantimona": "", "iddonghocphi": "", "idtempdanhgia": "", "idtemp": "", "idtoken": "", "idVttech": "16", "app_id": "904566211493773951", "secret_key": "WPnPiFf8mEKuB3ZrqS5H", "oa_id": "" }, 
+    { "id": "9a5cdc4d-fbbf-41c2-9222-9c01d5433148", "BranchCode": "", "Title": "Timona Academy Nha Trang", "iddanhgiatimona": "310072", "idxacnhantimona": "309731", "iddonghocphi": "", "idtempdanhgia": "", "idtemp": "", "idtoken": "", "idVttech": "17", "app_id": "904566211493773951", "secret_key": "WPnPiFf8mEKuB3ZrqS5H", "oa_id": "1546564356084994970" }, 
+    { "id": "7c152522-3858-4669-b745-a1fd2d25ad9a", "BranchCode": "", "Title": "Timona Academy Đà Nẵng", "iddanhgiatimona": "310074", "idxacnhantimona": "309730", "iddonghocphi": "", "idtempdanhgia": "", "idtemp": "", "idtoken": "", "idVttech": "18", "app_id": "904566211493773951", "secret_key": "WPnPiFf8mEKuB3ZrqS5H", "oa_id": "1193340503500193102" }, 
+    { "id": "", "BranchCode": "", "Title": "HR Tazagroup", "iddanhgiatimona": "", "idxacnhantimona": "", "iddonghocphi": "", "idtempdanhgia": "", "idtemp": "", "idtoken": "", "idVttech": "19", "app_id": "", "secret_key": "", "oa_id": "" }, 
+    { "id": "", "BranchCode": "", "Title": "Timona Academy Hà Nội", "iddanhgiatimona": "", "idxacnhantimona": "", "iddonghocphi": "", "idtempdanhgia": "", "idtemp": "", "idtoken": "", "idVttech": "20", "app_id": "904566211493773951", "secret_key": "WPnPiFf8mEKuB3ZrqS5H", "oa_id": "" }, 
+    { "id": "3b9e91d5-21ac-44b2-ba01-e87ee310fdcd", "BranchCode": "", "Title": "Building Timona CMT8", "iddanhgiatimona": "309501", "idxacnhantimona": "307749", "iddonghocphi": "307607", "idtempdanhgia": "", "idtemp": "", "idtoken": "", "idVttech": "21", "app_id": "904566211493773951", "secret_key": "WPnPiFf8mEKuB3ZrqS5H", "oa_id": "3749330583873161886" }
   ]
 
-export const ListNotifyType: any ={
-  success:'check_circle',
-  danger:'dangerous',
-  warning:'warning',
-  info:'info'
+export const ListTrangthailichhen: any[] = [
+  { id: 0, Title: "Chờ Xác Nhận", Class: "text-yellow-400" },
+  { id: 1, Title: "Đã Đặt Lịch", Class: "text-blue-400" },
+  { id: 2, Title: "Đã Đến", Class: "text-green-400" },
+  { id: 3, Title: "Đang Tham Khám", Class: "text-blue-400" },
+  { id: 4, Title: "Đang Tư Vấn", Class: "text-blue-400" },
+  { id: 5, Title: "Đang Lên phòng dịch vụ", Class: "text-blue-400" }
+]
+
+export const ListNotifyType: any = {
+  success: 'check_circle',
+  danger: 'dangerous',
+  warning: 'warning',
+  info: 'info'
 }
-  export const TYPE_TEMPLATE: any = {
-      user_received_message: "Sự kiện người dùng nhận thông báo ZNS",
-      change_template_quota: "Thông báo thay đổi quota mẫu ZNS rủi ro",
-      change_template_quality: "Thông báo thay đổi về chất lượng gửi của mẫu tin ZNS",
-      change_oa_template_tags: "Thông báo thay đổi về loại nội dung ZNS có thể gửi",
-      change_oa_daily_quota: "Thông báo về thay đổi hạn mức gửi ZNS",
-      user_feedback: "Sự kiện người dùng phản hồi template đánh giá dịch vụ",
-    }
+export const TYPE_TEMPLATE: any = {
+  user_received_message: "Sự kiện người dùng nhận thông báo ZNS",
+  change_template_quota: "Thông báo thay đổi quota mẫu ZNS rủi ro",
+  change_template_quality: "Thông báo thay đổi về chất lượng gửi của mẫu tin ZNS",
+  change_oa_template_tags: "Thông báo thay đổi về loại nội dung ZNS có thể gửi",
+  change_oa_daily_quota: "Thông báo về thay đổi hạn mức gửi ZNS",
+  user_feedback: "Sự kiện người dùng phản hồi template đánh giá dịch vụ",
+}
 
 export function Trangthai_Lichhen(item: any) {
   const ListType: any[] = [
-    {id:0,Title:"Chờ Xác Nhận",Class:"text-yellow-400"},
-    {id:1,Title:"Đã Đặt Lịch",Class:"text-blue-400"},
-    {id:2,Title:"Đã Đến",Class:"text-green-400"},
-    {id:3,Title:"Đang Tham Khám",Class:"text-blue-400"},
-    {id:4,Title:"Đang Tư Vấn",Class:"text-blue-400"},
-    {id:5,Title:"Đang Lên phòng dịch vụ",Class:"text-blue-400"},
+    { id: 0, Title: "Chờ Xác Nhận", Class: "text-yellow-400" },
+    { id: 1, Title: "Đã Đặt Lịch", Class: "text-blue-400" },
+    { id: 2, Title: "Đã Đến", Class: "text-green-400" },
+    { id: 3, Title: "Đang Tham Khám", Class: "text-blue-400" },
+    { id: 4, Title: "Đang Tư Vấn", Class: "text-blue-400" },
+    { id: 5, Title: "Đang Lên phòng dịch vụ", Class: "text-blue-400" },
   ]
-  
-  return ListType.find((v:any)=>v.id==item)
+
+  return ListType.find((v: any) => v.id == item)
 }
 export function TYPE_ZNS(item: any) {
   const ListType: any = {
@@ -78,13 +78,13 @@ export function ZALO_OA(item: any) {
   return ListType[item]
 }
 export function CHI_NHANH(item: any) {
-  const ListType: any = { 
+  const ListType: any = {
     "268b7a06-d2c5-4c98-af1d-334144ae280f": "Gò Vấp",
-    "f54de1e1-66bd-4690-8015-ad7315d6f14e": "Thủ Đức", 
-    "ca725bf4-4810-4ea2-8ef2-520b2a3121cc": "Quận 10", 
-    "e173b1c0-fbdb-4eeb-a00c-b56664068515": "Nha Trang", 
-    "9887ad61-4b2c-4db1-83e6-570f33cb540a": "Đà Nẵng", 
-    "d516ed9c-5453-4c1e-9c05-40de3cd0e7b1": "Bình Thạnh" 
+    "f54de1e1-66bd-4690-8015-ad7315d6f14e": "Thủ Đức",
+    "ca725bf4-4810-4ea2-8ef2-520b2a3121cc": "Quận 10",
+    "e173b1c0-fbdb-4eeb-a00c-b56664068515": "Nha Trang",
+    "9887ad61-4b2c-4db1-83e6-570f33cb540a": "Đà Nẵng",
+    "d516ed9c-5453-4c1e-9c05-40de3cd0e7b1": "Bình Thạnh"
   }
   return ListType[item]
 }
@@ -215,14 +215,14 @@ export function groupByfield(data: any[]) {
   return Object.values(convertedData);
 };
 
-export function flattenData(data:any) {
-    const flattenedData:any[] = [];
-    data.forEach((item:any) => {
-      flattenedData.push(item);
-      if (item.children) {
-        flattenedData.push(...flattenData(item.children));
-      }
-    });
-    return flattenedData;
+export function flattenData(data: any) {
+  const flattenedData: any[] = [];
+  data.forEach((item: any) => {
+    flattenedData.push(item);
+    if (item.children) {
+      flattenedData.push(...flattenData(item.children));
+    }
+  });
+  return flattenedData;
 };
 

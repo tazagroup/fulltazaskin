@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ZalotokenDetailComponent } from './zalotoken-detail/zalotoken-detail.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 @NgModule({
   imports: [
     CommonModule,
@@ -23,6 +24,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatButtonModule,
     MatDialogModule,
     MatDatepickerModule,
+    ClipboardModule,
     RouterModule.forChild([
       {
         path: '', component: ZalotokenComponent,

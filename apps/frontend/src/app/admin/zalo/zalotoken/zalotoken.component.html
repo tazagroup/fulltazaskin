@@ -27,9 +27,6 @@
           </mat-date-range-picker>
         </mat-form-field>
         <div class="flex flex-row space-x-2">
-        <button mat-icon-button (click)="Xacthuc()">
-          <span class="material-symbols-outlined text-blue-500">check_circle</span>
-        </button>
         <button mat-icon-button [matMenuTriggerFor]="menu">
           <span class="material-symbols-outlined">more_vert</span>
         </button>
@@ -70,13 +67,8 @@
             <div class="flex flex-row space-x-4 items-center">
               <img [src]="item.Image.src||'https://tazaskinclinic.com/images/taza-skin-clinic-logo.svg'" class="h-10">
               <div class="flex flex-col space-y-2">
-                <div class="flex flex-row space-x-2 items-center">
                 <span>{{item.Title}}</span>
-                <span class="italic text-xs">{{item.oa_id}}</span>
-                <button mat-icon-button (click)="GetFromZalo(item)">
-                  <span class="material-symbols-outlined text-xl text-blue-500" matTooltip="Đồng Bộ">cloud_sync</span>
-                </button>
-              </div>
+                <span class="italic text-xs">{{item.oa_id}}</span>              
                 <ng-container *ngIf="Checktime(Today,item.AuthenEnd)?.status; else elseTemplate">
                   <div class="flex flex-row {{Checktime(Today,item.AuthenEnd).text}} items-center">
                     <span class="material-symbols-outlined">
@@ -84,11 +76,19 @@
                       </span>
                     <span class="italic text-xs"> {{Checktime(Today,item.AuthenEnd).message}}</span>
                   </div>
-                  <div class="flex flex-row items-center">
-                    <span class="material-symbols-outlined text-green-600" (click)="getrefreshToken(item)">
+                  <div class="cursor-pointer flex flex-row space-x-3 items-center text-blue-600">
+                    <span matTooltip="Reset Token" class="material-symbols-outlined text-green-600" (click)="getrefreshToken(item)">
                       restart_alt
                       </span>
-                      <span class="text-xs">Cập Nhật Token</span>
+                      <span (click)="Xacthuc(item)" matTooltip="Get Token" class="material-symbols-outlined">
+                        key
+                      </span>
+                      <span (click)="GetFromZalo(item)" matTooltip="Đồng Bộ Đánh Giá" class="material-symbols-outlined">
+                        cloud_sync
+                      </span>
+                      <span [cdkCopyToClipboard]="item.Token.access_token" matTooltip="Sao Chép Token" class="material-symbols-outlined">
+                        content_copy
+                      </span>
                   </div>
                 </ng-container>
               </div>
