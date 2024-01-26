@@ -54,11 +54,12 @@
     </div>
     <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
       <div class="w-full flex flex-col lg:max-w-xl space-y-3">
-        <div class="flex flex-row justify-between items-center hover:bg-gray-200 hover:bg-opacity-50 border rounded-lg"
+        <div class="group/item flex flex-row justify-between items-center hover:bg-gray-200 hover:bg-opacity-50 border rounded-lg"
           *ngFor="let item of FilterLists; let i = index">
           <div class="flex flex-col space-y-2 items-center w-full">
             <div class="w-full flex flex-row justify-between p-2 text-white {{Style[item.Status]}} items-center rounded-t-lg">
             <span>{{Status[item.Status]}}</span>
+            <span (click)="SendZNS(item)" class="px-2 rounded-lg group/edit invisible hover:bg-slate-200 hover:text-black group-hover/item:visible">Gửi ZNS</span>
             </div>
             <div class="w-full p-2 grid grid-cols-1 gap-2">
               <div class="flex flex-col">
