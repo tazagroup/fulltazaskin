@@ -120,8 +120,6 @@ export class Vttech_thanhtoanService {
     }
   }
 
-
-  async GetVttechKhachhang() { }
   async sendZNSThanhtoan(data: any) {
     if (data.SDT != '0909300146') {
       const CheckData = await this.findid(data.id)
@@ -142,7 +140,7 @@ export class Vttech_thanhtoanService {
                     Title: 'Thanh Toán',
                     Slug: 'thanhtoan',
                     Action: 'sms',
-                    Mota: `${zns.Title}`
+                    Mota: `${zns.Title} -  SDT: ${data.SDT}`
                   }
                   this._LoggerService.create(logger)
                 }
@@ -151,13 +149,13 @@ export class Vttech_thanhtoanService {
                   data.StatusZNS = 2
                   data.Status = 2
                   this.update(data.id, data)
-                  const result = `<b><u>${zns.Title}</u></b>`;
+                  const result = `<b><u>${zns.Title}  -  SDT: ${data.SDT}</u></b>`;
                   this._TelegramService.SendNoti(result)
                   const logger = {
                     Title: 'Thanh Toán',
                     Slug: 'thanhtoan',
                     Action: 'done',
-                    Mota: `${zns.Title}`
+                    Mota: `${zns.Title} - SDT: ${data.SDT}`
                   }
                   this._LoggerService.create(logger)
                 }
@@ -177,7 +175,7 @@ export class Vttech_thanhtoanService {
             Title: 'Thanh Toán',
             Slug: 'thanhtoan',
             Action: 'chuadangkycn',
-            Mota: `${result}`
+            Mota: `${result}  - SDT: ${data.SDT}`
           }
           this._LoggerService.create(logger)
         }
@@ -191,7 +189,6 @@ export class Vttech_thanhtoanService {
       url: `https://tmtaza.vttechsolution.com/Customer/Payment/PaymentList/PaymentList_Service/?handler=LoadataPayment&CustomerID=${CustomerID}&CurrentID=0&CurrentType=`,
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
     };
-
     return axios.request(config)
       .then((response) => {
         return response.data
@@ -206,14 +203,9 @@ export class Vttech_thanhtoanService {
     return new Date(data);
   }
   async create(data: any) {
-    console.log("Old", data);
-
     const result = await this.findiChecktime(data.checkTime)
-    console.log("New", result);
-
     if (result) {
       return { error: 1001, data: "Trùng Dữ Liệu" }
-
     }
     else {
       this.Vttech_thanhtoanRepository.create(data);
@@ -221,7 +213,6 @@ export class Vttech_thanhtoanService {
     }
 
   }
-
   async findAll() {
     const result = await this.Vttech_thanhtoanRepository.find();
     result.forEach((v) => {
