@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, switchMap, take } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'apps/frontend/src/environments/environment';
+import * as moment from 'moment';
 @Injectable({
   providedIn: 'root'
 })
@@ -25,7 +26,11 @@ export class CauhinhchungService {
     );
   }
   TestTokenVttech() {
-    return this.http.get(environment.APIURL + '/vttechthanhtoan/getapi').pipe(
+    const data = {
+      "begin":moment().add(-1,'days').format("YYYY-MM-DD"),
+      "end":moment().format("YYYY-MM-DD")
+  }
+    return this.http.post(environment.APIURL + '/vttech_thanhtoan/getapi',data).pipe(
       map((data: any) => { 
         return data;
       })
