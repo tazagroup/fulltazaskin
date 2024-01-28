@@ -8,8 +8,9 @@ export class Vttech_dieutriController {
   @Interval(3600000)
   @Post("getvttech")
   GetDieutriVttech(@Body() data: any) {
-    LIST_CHI_NHANH.forEach((v)=>{
-       return this.vttech_dieutriService.GetDieutriVttech(v.idVttech,data);
+    console.log(data);
+    LIST_CHI_NHANH.forEach(async (v)=>{
+       return await this.vttech_dieutriService.GetDieutriVttech(v.idVttech,data);
     })
   }
   @Post("sendcamon")

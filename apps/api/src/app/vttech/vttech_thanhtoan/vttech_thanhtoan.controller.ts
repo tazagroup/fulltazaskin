@@ -9,7 +9,9 @@ export class Vttech_thanhtoanController {
   constructor(private readonly vttech_thanhtoanService:Vttech_thanhtoanService) {}
   @Interval(1800000)
   @Post('getapi')
-  async getApiRealtime(@Body() data: any) {      
+  async getApiRealtime(@Body() data: any) {    
+    console.log(data);
+      
     LIST_CHI_NHANH.forEach((v)=>{
       return this.vttech_thanhtoanService.getApiRealtime(v.idVttech,data);
     })

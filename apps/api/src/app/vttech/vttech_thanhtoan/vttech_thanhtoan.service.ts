@@ -42,8 +42,10 @@ export class Vttech_thanhtoanService {
       url: `https://tmtaza.vttechsolution.com/Report/Revenue/Branch/AllBranchGrid/?handler=LoadataDetailByBranch&branchID=${idVttech}&dateFrom=${begin}&dateTo=${end}`,
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
     };
-    try {
+    try {     
       const response = await axios.request(config);
+      console.log(response.data);
+      
       if (Array.isArray(response.data)) {
         response.data.forEach(async (v: any) => {
           let item: any = {}
@@ -64,6 +66,7 @@ export class Vttech_thanhtoanService {
             return { status: 1001, title: `Trùng Hoá Đơn ${result.InvoiceNum}` };
           }
         });
+        return response.data
       }
       else {
         const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` }

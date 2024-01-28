@@ -45,8 +45,9 @@ export class Vttech_dieutriService {
         'Xsrf-Token': this.XsrfToken
       }
     };
-    return axios.request(config)
+    return await axios.request(config)
       .then((response: any) => {
+        console.error(response.data);
         const logger = {
           Title: 'Điều Trị',
           Slug: 'dieutri',
@@ -75,12 +76,11 @@ export class Vttech_dieutriService {
             this._LoggerService.create(logger)
           }
         });        
-        return response.data
+        return response.data.length
       })
       .catch((error: any) => {
         console.log(error);
       });
-
   }
   async SendZNSAuto() {
     const ListDieutri = await this.fininday()
