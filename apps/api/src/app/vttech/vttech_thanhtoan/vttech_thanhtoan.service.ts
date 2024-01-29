@@ -54,16 +54,16 @@ export class Vttech_thanhtoanService {
           item.Dulieu = JSON.stringify(v)
           const result = await this.GetKHByCode(item)
           const checkInvoiceNum = await this.findInvoiceNum(result.InvoiceNum)
-          if (checkInvoiceNum) {
+          if (checkInvoiceNum) {    
+            const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${result.InvoiceNum} - ${result.SDT}` }
+            this._LoggerService.create(logger)
+            return { status: 1001, title: `Trùng Hoá Đơn ${result.InvoiceNum}` };
+          }
+          else {
             this.create(result)
             const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${response.data.length} Thanh Toán Từ Vttech` }
             this._LoggerService.create(logger)
             return { status: 201, title: `Lấy ${response.data.length} Thanh Toán Từ Vttech` };
-          }
-          else {
-            const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${result.InvoiceNum}` }
-            this._LoggerService.create(logger)
-            return { status: 1001, title: `Trùng Hoá Đơn ${result.InvoiceNum}` };
           }
         });
         return response.data
