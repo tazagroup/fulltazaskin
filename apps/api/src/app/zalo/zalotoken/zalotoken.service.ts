@@ -53,6 +53,8 @@ export class ZalotokenService {
       });
   }
   async getrefreshToken(item: any) {
+    console.error(item);
+    
     const options = {
       method: 'POST',
       url: 'https://oauth.zaloapp.com/v4/oa/access_token',
