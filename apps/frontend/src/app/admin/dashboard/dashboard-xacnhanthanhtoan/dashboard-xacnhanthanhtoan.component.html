@@ -1,7 +1,7 @@
 <div class="p-5 border rounded-lg">
   <div class="grid lg:grid-cols-2 grid-cols-1 gap-4 items-center text-center">
     <div class="text-xl font-bold">Thông Kê Gửi ZNS Xác Nhận Thanh Toán</div>
-    <div>
+    <div class="flex flex-row space-x-2 items-center">
       <mat-form-field appearance="outline" class="lg:text-sm text-xs">
         <mat-label>Chọn Khoảng Thời Gian</mat-label>
         <mat-date-range-input [rangePicker]="rangePicker">
@@ -17,6 +17,12 @@
             <button mat-raised-button color="primary" matDateRangePickerApply (click)="ChanggeData()">Đồng ý</button>
           </mat-date-range-picker-actions>
         </mat-date-range-picker>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Chi Nhánh</mat-label>
+        <mat-select (selectionChange)="ngOnInit()" [(ngModel)]="SearchParams.BranchID" [ngModelOptions]="{standalone: true}">
+          <mat-option [value]="item.id" *ngFor="let item of ListChiNhanh">{{item.Title}}</mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
   </div>

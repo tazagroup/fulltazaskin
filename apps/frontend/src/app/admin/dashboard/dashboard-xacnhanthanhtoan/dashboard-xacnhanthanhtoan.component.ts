@@ -6,6 +6,10 @@ import { MatInputModule } from '@angular/material/input';
 import * as moment from 'moment';
 import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexFill, ApexLegend, ApexPlotOptions, ApexResponsive, ApexXAxis, ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { VttechthanhtoanService } from '../../vttech/vttechthanhtoan/vttechthanhtoan.service';
+import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { CommonModule } from '@angular/common';
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -25,7 +29,10 @@ export type ChartOptions = {
     MatInputModule,
     ReactiveFormsModule,
     FormsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSelectModule,
+    MatOptionModule,
+    CommonModule
   ],
   templateUrl: './dashboard-xacnhanthanhtoan.component.html',
   styleUrls: ['./dashboard-xacnhanthanhtoan.component.css']
@@ -41,12 +48,15 @@ export class DashboardXacnhanthanhtoanComponent implements OnInit {
  // Status:any={0:'Mới',2:'Thành Công',3:'Chưa Có Temp OA',4:'Gửi SMS'}
   Style:any={0:'!bg-blue-500',1:'!bg-yellow-500',2:'!bg-green-500',3:'!bg-red-500',4:'!bg-purple-500'}
   List:any[]=[]
+  ListChiNhanh = LIST_CHI_NHANH
   ngOnInit() {
     this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
     this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data:any) => {
       if (data) {
         this.List = data.items.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))
         this.LoadData()
+        console.log(data);
+        
       }
     })
   }
