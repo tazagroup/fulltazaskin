@@ -109,10 +109,13 @@ export class ZalotokenComponent implements OnInit {
   }
   getrefreshToken(item: any) {
     console.log(item);
+
     const data = {
       oa_id: item.oa_id,
-      app_id: environment.app_id,
-      secret_key: environment.secret_key,
+      // app_id: environment.app_id,
+      // secret_key: environment.secret_key,
+      app_id: this.ListChiNhanh.find((v:any)=>v.oa_id==item.oa_id)?.app_id,
+      secret_key: this.ListChiNhanh.find((v:any)=>v.oa_id==item.oa_id)?.secret_key,
       refresh_token: item.Token.refresh_token
     }
     this._ZalotokenService.get_refreshToken(data).subscribe((res: any) => {
@@ -137,7 +140,9 @@ export class ZalotokenComponent implements OnInit {
       "begin":moment(this.SearchParams.Batdau).format('YYYY-MM-DD'),
       "end":moment(this.SearchParams.Ketthuc).format('YYYY-MM-DD')
      }
-     console.log(item);
-    this._ZalodanhgiaService.GetFromZalo(item).subscribe()
+    this._ZalodanhgiaService.GetFromZalo(item).subscribe((data)=>
+    {
+      this._NotifierService.notify("success","Cập Nhật Thành Công "+data.data.total)
+    })
   }
 }

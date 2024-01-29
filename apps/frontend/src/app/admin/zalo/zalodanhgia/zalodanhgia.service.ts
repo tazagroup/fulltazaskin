@@ -19,7 +19,7 @@ export class ZalodanhgiaService {
   GetFromZalo(data:any) {    
     return this.http.post(environment.APIURL + '/zalodanhgia/getdanhgia',data).pipe(
       map((data: any) => { 
-           console.log(data);
+           return data
       })
     );
   }
