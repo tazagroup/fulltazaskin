@@ -144,7 +144,7 @@
     </div>
     <div class="relative border-t flex flex-col">
       <!-- <mat-paginator (page)="onPageChange($event)" [length]="PagiLength"  [pageSizeOptions]="[5,50,Total]"></mat-paginator> -->
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+      <mat-paginator [pageSizeOptions]="pageSizeOptions"
       [pageSize]="SearchParams.pageSize"
       [length]="Total"
       [pageIndex]="SearchParams.pageNumber"

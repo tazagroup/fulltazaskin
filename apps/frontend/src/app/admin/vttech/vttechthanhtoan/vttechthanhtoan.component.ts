@@ -30,6 +30,7 @@ export class VttechthanhtoanComponent implements OnInit {
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   PagiLength:any=0
   StatusActive:any
+  pageSizeOptions:any
   Total:any=0
   constructor(
     private dialog: MatDialog,
@@ -43,6 +44,7 @@ export class VttechthanhtoanComponent implements OnInit {
       if(data)
       {     
         this.Total = data.totalCount   
+        this.pageSizeOptions = [10, 20, data.totalCount].filter(v => v <= data.totalCount);
         this.ListStatus = data.ListStatus   
         this.PagiLength = (Number(data.totalCount)/Number(this.SearchParams.pageSize)).toFixed()
         this.FilterLists = this.Lists = data.items
