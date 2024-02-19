@@ -47,7 +47,7 @@ export class Vttech_dieutriService {
     };
     return await axios.request(config)
       .then((response: any) => {
-        console.error(response.data);
+        // console.error(response.data);
         const logger = {
           Title: 'Điều Trị',
           Slug: 'dieutri',
@@ -111,7 +111,9 @@ export class Vttech_dieutriService {
   }
 
   async create(data: any) {
-    const check = await this.findbyCustCode(data)
+    const check = await this.findbyCustCode(data)    
+    console.log(check);
+    
     if (check) {
       return { error: 1001, data: "Trùng Dữ Liệu" }
     }
@@ -144,7 +146,8 @@ export class Vttech_dieutriService {
     return await this.Vttech_dieutriRepository.findOne({
       where: {
         CustCode: data.CustCode,
-        NgayVttech: data.NgayVttech
+        NgayVttech: data.NgayVttech,
+        idVttech:data.idVttech
       },
     });
   }

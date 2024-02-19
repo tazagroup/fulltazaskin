@@ -123,13 +123,28 @@ export class Vttech_thanhtoanService {
       const CheckData = await this.findid(data.id)
       if (CheckData.Status == 0 && data.SDT=='0977272967') {
         const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
+        console.log(Chinhanh);
+        
         if (Chinhanh) {
           try {
-            const SendNZS = await this._ZaloznsService.sendThanhtoanTaza(data, Chinhanh)
-            switch (SendNZS.status) {
+          //  const SendNZS = await this._ZaloznsService.sendThanhtoanTaza(data, Chinhanh)
+            let SendZNS:any={}
+            const TAZA_BRANCH_IDS = [1, 2, 3, 4, 6, 7];
+            const TIMONA_BRANCH_IDS = [7,14, 15, 16, 17, 18, 21];  
+            const isTazaBranch = TAZA_BRANCH_IDS.includes(Number(Chinhanh.idVttech));
+            const isTimonaBranch = TIMONA_BRANCH_IDS.includes(Number(Chinhanh.idVttech));    
+            if (isTazaBranch) {
+              SendZNS = await this._ZaloznsService.sendThanhtoanTaza(data, Chinhanh);
+              console.log("Send Taza");
+              
+            } else if (isTimonaBranch) {
+              SendZNS = await this._ZaloznsService.sendThanhtoanTimona(data, Chinhanh);
+              console.log("Send Timona");
+            }  
+            switch (SendZNS.status) {
               case 'sms':
                 {
-                  data.SMS = SendNZS.data
+                  data.SMS = SendZNS.data
                   data.ThucteZNS = new Date()
                   data.Status = 4
                   this.update(data.id, data)
@@ -137,7 +152,7 @@ export class Vttech_thanhtoanService {
                     Title: 'Thanh Toán',
                     Slug: 'thanhtoan',
                     Action: 'sms',
-                    Mota: `${SendNZS.Title} -  SDT: ${data.SDT}`
+                    Mota: `${SendZNS.Title} -  SDT: ${data.SDT}`
                   }
                   this._LoggerService.create(logger)
                 }
@@ -152,7 +167,7 @@ export class Vttech_thanhtoanService {
                     Title: 'Thanh Toán',
                     Slug: 'thanhtoan',
                     Action: 'done',
-                    Mota: `${SendNZS.Title} - SDT: ${data.SDT}`
+                    Mota: `${SendZNS.Title} - SDT: ${data.SDT}`
                   }
                   this._LoggerService.create(logger)
                 }
@@ -164,7 +179,7 @@ export class Vttech_thanhtoanService {
                   Title: 'Thanh Toán',
                   Slug: 'thanhtoan',
                   Action: 'loitoken',
-                  Mota: `${SendNZS.Title} - SDT: ${data.SDT}`
+                  Mota: `${SendZNS.Title} - SDT: ${data.SDT}`
                 }
                 this._LoggerService.create(logger)
               }
@@ -209,7 +224,7 @@ export class Vttech_thanhtoanService {
     return new Date(data);
   }
   async create(data: any) {
-    const result = await this.findiChecktime(data.checkTime)
+    const result = await this.findChecktime(data.checkTime)
     if (result) {
       return { error: 1001, data: "Trùng Dữ Liệu" }
     }
@@ -266,7 +281,7 @@ export class Vttech_thanhtoanService {
       where: { id: id },
     });
   }
-  async findiChecktime(time: string) {
+  async findChecktime(time: string) {
     return await this.Vttech_thanhtoanRepository.findOne({
       where: { checkTime: time },
     });

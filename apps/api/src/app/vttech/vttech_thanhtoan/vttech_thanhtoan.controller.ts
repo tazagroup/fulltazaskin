@@ -21,7 +21,9 @@ export class Vttech_thanhtoanController {
     return this.vttech_thanhtoanService.SendXNTTauto();
   }
   @Post('sendzns')
-  async Send1zns(@Body() data:any) {      
+  async Send1zns(@Body() data:any) {   
+    console.log(data);
+       
     return this.vttech_thanhtoanService.sendZNSThanhtoan(data);
   }
   @Post()
