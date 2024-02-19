@@ -8,13 +8,12 @@ export class Vttech_dieutriController {
  @Interval(3600000)
   @Post("getvttech")
   GetDieutriVttech(@Body() data: any) {
-    console.log(data);
     LIST_CHI_NHANH.forEach(async (v)=>{
        return await this.vttech_dieutriService.GetDieutriVttech(v.idVttech,data);
     })
   }
   @Post("sendcamon")
-  async SendCamon(@Body() data: any) {
+  async SendCamon(@Body() data: any) {   
     return await this.vttech_dieutriService.SendCamon(data);
   }
  @Interval(4000000)

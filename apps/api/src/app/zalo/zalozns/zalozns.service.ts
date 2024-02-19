@@ -420,15 +420,14 @@ export class ZaloznsService {
       };
     }
     danhgiadichvutaza(item: any, Chinhanh: any): any {
-      const templateId = Chinhanh.idtemp;
-      const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+      console.log('SendZNS',item);
+      
+      const templateId = Chinhanh.idtempdanhgia;
       return {
         phone: convertPhoneNum(item.SDT),
         template_id: templateId,
         template_data: {
-          order_code: item.InvoiceNum || 0,
-          note: moment(item.Created).format('DD/MM/YYYY'),
-          [priceProperty]: parseFloat(item.Amount).toFixed(0),
+          schedule_date: moment(item.CreateAt).format('DD/MM/YYYY'),
           customer_name: item.CustName,
         },
         tracking_id: GenId(12, true),

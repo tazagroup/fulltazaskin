@@ -11,7 +11,6 @@ export class Vttech_thanhtoanController {
   @Post('getapi')
   async getApiRealtime(@Body() data: any) {    
     console.log(data);
-      
     LIST_CHI_NHANH.forEach((v)=>{
       return this.vttech_thanhtoanService.getApiRealtime(v.idVttech,data);
     })
