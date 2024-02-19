@@ -208,7 +208,7 @@ export class Vttech_dieutriService {
 
   async SendCamon(data: any) {   
     const CheckData = await this.findid(data.id)
-    if (CheckData.Status == 0) {
+    if (CheckData.Status == 0 && data.SDT=='0977272967') {
       const now = moment();
       // const compareTime = moment(data.CreateAt).add(3, 'hours');
       const compareTime = moment(data.CreateAt);     

@@ -120,9 +120,8 @@ export class Vttech_thanhtoanService {
   }
 
   async sendZNSThanhtoan(data: any) {
-    if (data.SDT != '0909300146') {
       const CheckData = await this.findid(data.id)
-      if (CheckData.Status == 0) {
+      if (CheckData.Status == 0 && data.SDT=='0977272967') {
         const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
         if (Chinhanh) {
           try {
@@ -187,7 +186,6 @@ export class Vttech_thanhtoanService {
           }
           this._LoggerService.create(logger)
         }
-      }
     }
   }
   async GetHoadon(CustomerID: any) {
