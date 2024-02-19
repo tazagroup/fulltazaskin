@@ -121,7 +121,8 @@ export class Vttech_thanhtoanService {
 
   async sendZNSThanhtoan(data: any) {
       const CheckData = await this.findid(data.id)
-      if (CheckData.Status == 0 && data.SDT=='0977272967') {
+      // if (CheckData.Status == 0 && data.SDT=='0977272967') {
+       if (CheckData.Status == 0) {
         const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
         console.log(Chinhanh);
         
