@@ -137,7 +137,7 @@ export class ZalotokenComponent implements OnInit {
     {
       "access_token":data.Token.access_token,
       "template_id":LIST_CHI_NHANH.find((v)=>v.idtoken==data.id)?.idtempdanhgia,
-      "begin":moment(this.SearchParams.Batdau).format('YYYY-MM-DD'),
+      "begin":moment(this.SearchParams.Batdau).add().format('YYYY-MM-DD'),
       "end":moment(this.SearchParams.Ketthuc).format('YYYY-MM-DD')
      }
     this._ZalodanhgiaService.GetFromZalo(item).subscribe((data)=>

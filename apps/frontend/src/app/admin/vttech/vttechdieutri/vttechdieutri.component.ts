@@ -69,6 +69,8 @@ export class VttechdieutriComponent implements OnInit {
 
   }
   SendZNS(item: any) {
+    console.log(item);
+    
     this._VttechdieutriService.SendZns(item).subscribe()
   }
   async SendAllZNS(items: any) {
