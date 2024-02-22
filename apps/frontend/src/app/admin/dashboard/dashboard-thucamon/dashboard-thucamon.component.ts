@@ -44,7 +44,9 @@ export class DashboardThucamonComponent implements OnInit {
     this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
     this._VttechdieutriService.vttechdieutris$.subscribe((data:any) => {
       if (data) {
-        this.List = data.items.map((v:any)=>({Status:v.Status,Created:moment(v.CreateAt).format("DD/MM/YYYY")}))
+        this.List = data.items.map((v:any)=>({Status:v.Status,Created:moment(v.NgayVttech).format("DD/MM/YYYY")}))
+        console.log(data.items);
+        
         this.LoadData()
       }
     })
