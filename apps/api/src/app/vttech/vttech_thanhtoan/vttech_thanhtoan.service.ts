@@ -109,7 +109,7 @@ export class Vttech_thanhtoanService {
       {
         ...item,
         DukienZNS: new Date(),
-        SDT: response.data.Table[0].CustomerPhone,
+        SDT: response?.data?.Table[0]?.CustomerPhone,
         InvoiceNum: Hoadon_id?.InvoiceNum,
       }
       return Updatedata

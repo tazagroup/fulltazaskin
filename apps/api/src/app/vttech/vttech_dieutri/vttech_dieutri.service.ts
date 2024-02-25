@@ -56,6 +56,8 @@ export class Vttech_dieutriService {
         }
         this._LoggerService.create(logger)
         response.data.forEach(async (v: any) => {
+          console.log(v);
+          
           const result = await this.GetKhachhangbyCode(v.CustCode)          
           if (result) {
             let item: any = {}
@@ -63,8 +65,8 @@ export class Vttech_dieutriService {
             item.CustCode = v.CustCode
             item.checkTime = (new Date(begin)).getTime()
             item.NgayVttech = begin.format('YYYY-MM-DD')
-            item.SDT = result.Table[0]?.CustomerPhone
-            item.SDT2 = result.Table[0]?.CustomerPhone2
+            item.SDT = result?.Table[0]?.CustomerPhone
+            item.SDT2 = result?.Table[0]?.CustomerPhone2
             item.idVttech = idVttech
             const Ketqua = await this.create(item)            
             const logger = {

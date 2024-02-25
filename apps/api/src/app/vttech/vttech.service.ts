@@ -237,7 +237,7 @@ export class VttechService {
               const response1 = await axios.request(config);
               if (response1.data.Table[0]) {
                 const item: any = {}
-                item.SDT = response1.data.Table[0].CustomerPhone
+                item.SDT = response1?.data?.Table[0]?.CustomerPhone
                 item.CustID = data.CustID
                 item.ServiceName = v.ServiceName
                 item.Created = v.Created
