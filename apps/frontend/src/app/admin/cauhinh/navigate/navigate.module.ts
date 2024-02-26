@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NavigateDetailComponent } from './navigate-detail/navigate-detail.component';
 import { HinhanhModule } from '../../../shared/common/hinhanh/hinhanh.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 @NgModule({
   imports: [
     CommonModule,
@@ -22,6 +23,7 @@ import { HinhanhModule } from '../../../shared/common/hinhanh/hinhanh.module';
     MatMenuModule,
     MatButtonModule,
     MatDialogModule,
+    MatSlideToggleModule,
     HinhanhModule,
     RouterModule.forChild([
       {

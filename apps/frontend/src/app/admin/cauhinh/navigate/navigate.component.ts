@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { NavigateService } from './navigate.service';
+import { NotifierService } from 'angular-notifier';
 @Component({
   selector: 'app-navigate',
   templateUrl: './navigate.component.html',
@@ -15,6 +16,7 @@ export class NavigateComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private _NavigateService: NavigateService,
+    private _NotifierService: NotifierService,
   ) {
   }
   ngOnInit(): void {
@@ -48,5 +50,11 @@ export class NavigateComponent implements OnInit {
         this._NavigateService.DeleteNavigate(item.id).subscribe()
       }
     });
+  }
+  ChangeStatus(item: any, type: any) {
+      item[type] = item[type] == 0 ? 1 : 0
+      this._NavigateService.UpdateNavigate(item).subscribe(()=>{
+      this._NotifierService.notify("success","Cập Nhật Thành Công")
+    })
   }
 }

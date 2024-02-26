@@ -80,6 +80,9 @@ export class NavigateDetailComponent implements OnInit {
   {
     this._NavigateService.UpdateNavigate(data).subscribe();
   }
+  ChangeStatus(item: any, type: any) {
+    item[type] = item[type] == 0 ? 1 : 0
+  }
   GetUpload(e:any)
   {
     this.Detail.Image = e

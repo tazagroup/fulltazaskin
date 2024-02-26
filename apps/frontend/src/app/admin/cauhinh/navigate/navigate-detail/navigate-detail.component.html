@@ -31,6 +31,11 @@
           <input [(ngModel)]="Detail.Ordering" [ngModelOptions]="{standalone: true}" matInput type="text" class="w-full"
             placeholder="Slug" />
         </mat-form-field>
+        <div class="flex flex-row space-x-2" (click)="ChangeStatus(Detail,'Status')">
+          <span>Trạng thái</span>
+        <span *ngIf="Detail.Status==1" class="material-symbols-outlined text-blue-500">check_circle</span>
+        <span *ngIf="Detail.Status!=1" class="material-symbols-outlined text-red-500">cancel</span>
+         </div>
         <app-hinhanh class="h-full" [Image]="Detail.Image" (UploadEmit)="GetUpload($event)"></app-hinhanh>
       </div>
     </div>
