@@ -69,9 +69,7 @@ export class UploadController {
       storage: diskStorage({
         destination: (req, file, cb) => {
           // const path = './dist/' + req.query.folder;
-          const today = new Date()
-
-          const path = '/home/tazaspac/tazaskin/images/' + today.getTime;
+          const path = '/home/tazaspac/tazaskin/images/' + req.query.folder;
           if (!fs.existsSync(path)) {
             fs.mkdirSync(path, { recursive: true });
             console.log('Folder created:', path);
@@ -86,8 +84,7 @@ export class UploadController {
     }),
   )
   async serverlocal(@UploadedFile() file) { 
-   // console.error(file);
-    
+   console.error(file)
     const originalPath = file.path;
     // Create a directory to save resized copies
     //const resizedDirectory = './uploads/resized/';

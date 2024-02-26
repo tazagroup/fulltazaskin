@@ -76,6 +76,8 @@ export class UploadService {
         src:host+relativePath,
         alt: item.alt,
       }; 
+      console.log(item);
+      
       return this.create(data);
     } catch (err) {
       throw err;
