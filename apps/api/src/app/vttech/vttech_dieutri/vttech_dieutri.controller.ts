@@ -5,7 +5,7 @@ import { Interval } from '@nestjs/schedule';
 @Controller('vttech_dieutri')
 export class Vttech_dieutriController {
   constructor(private readonly vttech_dieutriService:Vttech_dieutriService) {}
- @Interval(3600000)
+ //@Interval(3600000)
   @Post("getvttech")
   GetDieutriVttech(@Body() data: any) {
     LIST_CHI_NHANH.forEach(async (v)=>{
@@ -16,7 +16,7 @@ export class Vttech_dieutriController {
   async SendCamon(@Body() data: any) {   
     return await this.vttech_dieutriService.SendCamon(data);
   }
- @Interval(4000000)
+ //@Interval(4000000)
   @Get("sendauto")
   SendZNSAuto() {
       return this.vttech_dieutriService.SendZNSAuto();

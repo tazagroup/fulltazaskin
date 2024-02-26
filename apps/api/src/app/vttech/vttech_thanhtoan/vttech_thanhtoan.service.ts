@@ -100,6 +100,7 @@ export class Vttech_thanhtoanService {
     try {
       const response = await axios.request(config);
       const Hoadon = await this.GetHoadon(response.data.Table[0]?.CustomerID)
+      
       const Hoadon_id = Hoadon?.Table?.find((v: any) => {
         const Date1 = new Date(v.Created)
         const Date2 = new Date(item.Created)
