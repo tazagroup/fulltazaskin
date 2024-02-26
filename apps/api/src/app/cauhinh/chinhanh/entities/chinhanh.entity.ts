@@ -20,6 +20,8 @@ export class ChinhanhEntity {
   Opentime: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Desc: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
+  Brand: string;
   @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('[]')" })
   ListSocial: string;
   @Column({ default: '' })
