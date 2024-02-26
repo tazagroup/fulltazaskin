@@ -46,6 +46,32 @@ export class NavigateService {
       where: { Title: Like(`%query%`) },
     });
   }
+  async search(params: any) {
+    console.log(params);
+    const queryBuilder = this.NavigateRepository.createQueryBuilder('navigate');
+    if (params.hasOwnProperty('Query')) {
+      queryBuilder.andWhere('navigate.Title LIKE :Title', { Title: `%${params.Query}%` })
+      .orWhere('navigate.Mota LIKE :Mota', { Mota: `%${params.Query}%` })
+      .orWhere('navigate.Noidung LIKE :Noidung', { Noidung: `%${params.Query}%` });
+    }
+    if (params.Title) {
+      queryBuilder.andWhere('navigate.Title LIKE :Title', { Title: `%${params.Title}%` });
+    }
+    if (params.hasOwnProperty('Type')) {
+      queryBuilder.andWhere('navigate.Type LIKE :Type', { Type: `%${params.Type}%` });
+    }
+    if (params.hasOwnProperty('Status')) {
+      queryBuilder.andWhere('navigate.Status = :Status', { Status: `${params.Status}` });
+    }
+    if (params.hasOwnProperty('Slug')) {
+      queryBuilder.andWhere('navigate.Type LIKE :Slug', { Slug: `%${params.Slug}%` });
+    }
+    const [items, totalCount] = await queryBuilder
+      .limit(params.pageSize || 10) // Set a default page size if not provided
+      .offset(params.pageNumber * params.pageSize || 0)
+      .getManyAndCount();
+    return { items, totalCount };
+  }
   async update(id: string, UpdateNavigateDto: UpdateNavigateDto) {
     this.NavigateRepository.save(UpdateNavigateDto);
     return await this.NavigateRepository.findOne({ where: { id: id } });

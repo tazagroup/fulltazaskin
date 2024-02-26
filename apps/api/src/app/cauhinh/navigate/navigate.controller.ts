@@ -30,6 +30,10 @@ export class NavigateController {
     async findQuery(@Query('query') query: string){
       return await this.navigateService.findQuery(query);
   }
+  @Post('search')
+    async search(@Body() SearchParams: any){
+      return await this.navigateService.search(SearchParams);
+  }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateNavigateDto: UpdateNavigateDto) {
     return this.navigateService.update(id, updateNavigateDto);

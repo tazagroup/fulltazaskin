@@ -24,6 +24,8 @@ export class NavigateEntity {
   Type: string;
   @Column({ default: 1 })
   Ordering: number;
+  @Column({ default: false })
+  Auth: boolean;
   @Column({ default: 0 })
   Status: number;
   @CreateDateColumn()
