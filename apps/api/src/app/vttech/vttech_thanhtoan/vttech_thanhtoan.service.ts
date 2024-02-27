@@ -43,9 +43,7 @@ export class Vttech_thanhtoanService {
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
     };
     try {     
-      const response = await axios.request(config);
-      console.log(response.data);
-      
+      const response = await axios.request(config);      
       if (Array.isArray(response.data)) {
         response.data.forEach(async (v: any) => {
           let item: any = {}
@@ -53,13 +51,20 @@ export class Vttech_thanhtoanService {
           item.checkTime = (new Date(v.Created)).getTime()
           item.Dulieu = JSON.stringify(v)
           const result = await this.GetKHByCode(item)
-          const checkInvoiceNum = await this.findInvoiceNum(result.InvoiceNum)
+          const checkInvoiceNum = await this.findInvoiceNum(result.InvoiceNum,item.checkTime)  
+          // if(checkInvoiceNum && checkInvoiceNum.SDT=='0977272967')  
+          // {
+          //   console.log(checkInvoiceNum);
+          // }
           if (checkInvoiceNum) {    
+            console.log("Trùng Hoá Đơn");
             const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${result.InvoiceNum} - ${result.SDT}` }
             this._LoggerService.create(logger)
             return { status: 1001, title: `Trùng Hoá Đơn ${result.InvoiceNum}` };
           }
           else {
+            console.log("Tạo mới");
+            console.log(checkInvoiceNum);
             this.create(result)
             const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${response.data.length} Thanh Toán Từ Vttech` }
             this._LoggerService.create(logger)
@@ -101,17 +106,21 @@ export class Vttech_thanhtoanService {
       const response = await axios.request(config);
       const Hoadon = await this.GetHoadon(response.data.Table[0]?.CustomerID)
       
-      const Hoadon_id = Hoadon?.Table?.find((v: any) => {
+      const Bill = Hoadon?.Table?.find((v: any) => {
         const Date1 = new Date(v.Created)
         const Date2 = new Date(item.Created)
         return Date1.getTime() == Date2.getTime()
       })
+      const BillChitiet = Hoadon?.Table1?.filter((v: any) => {return v.id == Bill.id})
+
       const Updatedata =
       {
         ...item,
         DukienZNS: new Date(),
         SDT: response?.data?.Table[0]?.CustomerPhone,
-        InvoiceNum: Hoadon_id?.InvoiceNum,
+        InvoiceNum: Bill?.InvoiceNum,
+        Bill:Bill,
+        BillChitiet:BillChitiet
       }
       return Updatedata
       //this.update(Updatedata.id, Updatedata)
@@ -122,11 +131,10 @@ export class Vttech_thanhtoanService {
 
   async sendZNSThanhtoan(data: any) {
       const CheckData = await this.findid(data.id)
-      // if (CheckData.Status == 0 && data.SDT=='0977272967') {
+   //   if (CheckData.Status == 0 && data.SDT=='0977272967') {
        if (CheckData.Status == 0) {
         const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
         console.log(Chinhanh);
-        
         if (Chinhanh) {
           try {
           //  const SendNZS = await this._ZaloznsService.sendThanhtoanTaza(data, Chinhanh)
@@ -204,6 +212,7 @@ export class Vttech_thanhtoanService {
           this._LoggerService.create(logger)
         }
     }
+  // }
   }
   async GetHoadon(CustomerID: any) {
     let config = {
@@ -288,9 +297,12 @@ export class Vttech_thanhtoanService {
       where: { checkTime: time },
     });
   }
-  async findInvoiceNum(InvoiceNum: string) {
+  async findInvoiceNum(InvoiceNum: string,checkTime:any) {
     return await this.Vttech_thanhtoanRepository.findOne({
-      where: { InvoiceNum: InvoiceNum },
+      where: { 
+        InvoiceNum: InvoiceNum,
+        checkTime:checkTime
+       },
     });
   }
   async findslug(slug: any) {

@@ -458,26 +458,26 @@ export class ZaloznsService {
           order_code: item.InvoiceNum || 0,
           date: moment(item.Created).format('DD/MM/YYYY'),
           student_name: item.CustName,
-          cost: parseFloat(item.Amount).toFixed(0),
+          cost: parseFloat(item.Bill.Amount).toFixed(0),
         },
         tracking_id: GenId(12, true),
       };
     }
-    xacnhanthanhtoanhocphitimona(item: any, Chinhanh: any): any {
-      const templateId = Chinhanh.idtemp;
-      const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
-      return {
-        phone: convertPhoneNum(item.SDT),
-        template_id: templateId,
-        template_data: {
-          order_code: item.InvoiceNum || 0,
-          note: moment(item.Created).format('DD/MM/YYYY'),
-          [priceProperty]: parseFloat(item.Amount).toFixed(0),
-          customer_name: item.CustName,
-        },
-        tracking_id: GenId(12, true),
-      };
-    }
+    // xacnhanthanhtoanhocphitimona(item: any, Chinhanh: any): any {
+    //   const templateId = Chinhanh.idtemp;
+    //   const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+    //   return {
+    //     phone: convertPhoneNum(item.SDT),
+    //     template_id: templateId,
+    //     template_data: {
+    //       order_code: item.InvoiceNum || 0,
+    //       note: moment(item.Created).format('DD/MM/YYYY'),
+    //       [priceProperty]: parseFloat(item.Amount).toFixed(0),
+    //       customer_name: item.CustName,
+    //     },
+    //     tracking_id: GenId(12, true),
+    //   };
+    // }
     danhgiadichvutaza(item: any, Chinhanh: any): any {
       console.log('SendZNS',item);
       
@@ -501,7 +501,7 @@ export class ZaloznsService {
         template_data: {
           order_code: item.InvoiceNum || 0,
           note: moment(item.Created).format('DD/MM/YYYY'),
-          [priceProperty]: parseFloat(item.Amount).toFixed(0),
+          [priceProperty]: parseFloat(item.Bill.Amount).toFixed(0),
           customer_name: item.CustName,
         },
         tracking_id: GenId(12, true),

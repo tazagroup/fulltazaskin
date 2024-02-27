@@ -7,7 +7,7 @@ import { LIST_CHI_NHANH } from '../../shared.utils';
 @Controller('vttech_thanhtoan')
 export class Vttech_thanhtoanController {
   constructor(private readonly vttech_thanhtoanService:Vttech_thanhtoanService) {}
- //@Interval(1800000)
+ @Interval(1800000)
   @Post('getapi')
   async getApiRealtime(@Body() data: any) {    
     console.log(data);
@@ -15,7 +15,7 @@ export class Vttech_thanhtoanController {
       return this.vttech_thanhtoanService.getApiRealtime(v.idVttech,data);
     })
   }
- //@Interval(1900000)
+ @Interval(1900000)
   @Get('sendauto')
   async SendXNTTauto() {      
     return this.vttech_thanhtoanService.SendXNTTauto();
