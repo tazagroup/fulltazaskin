@@ -91,7 +91,9 @@ export class ZalodanhgiaComponent implements OnInit {
     }
   }
   onChangeCN(event: MatSelectChange) {
-    this.SearchParams.BranchID = event.value
+    //this.SearchParams.BranchID = event.value
+    console.log(event.value);
+    
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
   onPageChange(event: any) {

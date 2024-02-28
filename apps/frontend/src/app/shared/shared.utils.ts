@@ -5,7 +5,7 @@ export interface SearchParams {
   take?: number;
   skip?: number;
 }
-export const LIST_CHI_NHANH: any[] =
+export const LIST_CHI_NHANH:any[] = 
 [
   {
     id: '268b7a06-d2c5-4c98-af1d-334144ae280f',
@@ -98,7 +98,7 @@ export const LIST_CHI_NHANH: any[] =
     oa_id: '3605866963832105989'
   },
   {
-    id: '',
+    id: '34aa91e2-c469-42bb-898b-a11618452ebd',
     BranchCode: '',
     Title: 'Timona Academy Quận 10',
     iddanhgiatimona: '',
@@ -121,14 +121,14 @@ export const LIST_CHI_NHANH: any[] =
     iddonghocphi: '306256',
     idtempdanhgia: '',
     idtemp: '',
-    idtoken: '',
+    idtoken: '76a21b5e-38cf-4d81-a27b-c74b416adb31',
     idVttech: '15',
     app_id: '904566211493773951',
     secret_key: 'WPnPiFf8mEKuB3ZrqS5H',
     oa_id: '2380978004592308302'
   },
   {
-    id: '',
+    id: 'ee3d1ed9-eafa-4b89-b045-46fa347c377e',
     BranchCode: '',
     Title: 'Timona Academy Gò Vấp',
     iddanhgiatimona: '',
@@ -151,7 +151,7 @@ export const LIST_CHI_NHANH: any[] =
     iddonghocphi: '',
     idtempdanhgia: '',
     idtemp: '',
-    idtoken: '',
+    idtoken: '05e7a1d9-f361-4b7f-8add-e49f977ecaa7',
     idVttech: '17',
     app_id: '904566211493773951',
     secret_key: 'WPnPiFf8mEKuB3ZrqS5H',
@@ -166,7 +166,7 @@ export const LIST_CHI_NHANH: any[] =
     iddonghocphi: '',
     idtempdanhgia: '',
     idtemp: '',
-    idtoken: '',
+    idtoken: '8dc3ec98-5ca4-4986-827b-11abc9073810',
     idVttech: '18',
     app_id: '904566211493773951',
     secret_key: 'WPnPiFf8mEKuB3ZrqS5H',
@@ -211,14 +211,13 @@ export const LIST_CHI_NHANH: any[] =
     iddonghocphi: '307607',
     idtempdanhgia: '',
     idtemp: '',
-    idtoken: '',
+    idtoken: '2b736510-064d-4e19-b134-4b92faa4fccb',
     idVttech: '21',
     app_id: '904566211493773951',
     secret_key: 'WPnPiFf8mEKuB3ZrqS5H',
     oa_id: '3749330583873161886'
   }
 ]
-
 export const ListTrangthailichhen: any[] = [
   { id: 0, Title: "Chờ Xác Nhận", Class: "text-yellow-400" },
   { id: 1, Title: "Đã Đặt Lịch", Class: "text-blue-400" },

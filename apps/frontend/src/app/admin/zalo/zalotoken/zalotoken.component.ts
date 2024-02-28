@@ -133,15 +133,29 @@ export class ZalotokenComponent implements OnInit {
   }
   GetFromZalo(data:any)
   {
+    console.log(data);
+    const Chinhanh = LIST_CHI_NHANH.find((v)=>v.idtoken==data.id)
+    let template_id=''
+    const TAZA_BRANCH_IDS = [1, 2, 3, 4, 6, 7];
+    const TIMONA_BRANCH_IDS = [7,14, 15, 16, 17, 18, 21];  
+    const isTazaBranch = TAZA_BRANCH_IDS.includes(Number(Chinhanh.idVttech));
+    const isTimonaBranch = TIMONA_BRANCH_IDS.includes(Number(Chinhanh.idVttech));
+    if (isTazaBranch) {
+      template_id = Chinhanh.idtempdanhgia    
+    } else if (isTimonaBranch) {
+      template_id = Chinhanh.iddanhgiatimona    
+    }      
     const item:any =
     {
       "access_token":data.Token.access_token,
-      "template_id":LIST_CHI_NHANH.find((v)=>v.idtoken==data.id)?.idtempdanhgia,
+      "template_id":template_id,
       "begin":moment(this.SearchParams.Batdau).add().format('YYYY-MM-DD'),
       "end":moment(this.SearchParams.Ketthuc).format('YYYY-MM-DD')
      }
     this._ZalodanhgiaService.GetFromZalo(item).subscribe((data)=>
     {
+      console.log(data);
+      
       this._NotifierService.notify("success","Cập Nhật Thành Công "+data.data.total)
     })
   }
