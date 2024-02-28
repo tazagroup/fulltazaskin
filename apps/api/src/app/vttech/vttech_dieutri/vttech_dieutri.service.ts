@@ -45,6 +45,7 @@ export class Vttech_dieutriService {
         'Xsrf-Token': this.XsrfToken
       }
     };
+
     return await axios.request(config)
       .then((response: any) => {
         // console.error(response.data);
@@ -55,9 +56,11 @@ export class Vttech_dieutriService {
           Mota: `Lấy dữ liệu từ Vttech ${JSON.stringify(response.data)}`
         }
         this._LoggerService.create(logger)
+        if (Array.isArray(response.data)) {
+          console.log(response.data);
+          
         response.data.forEach(async (v: any) => {
           console.log(v);
-          
           const result = await this.GetKhachhangbyCode(v.CustCode)          
           if (result) {
             let item: any = {}
@@ -77,8 +80,9 @@ export class Vttech_dieutriService {
             }
             this._LoggerService.create(logger)
           }
-        });        
+        }); 
         return response.data.length
+      }
       })
       .catch((error: any) => {
         console.log(error);

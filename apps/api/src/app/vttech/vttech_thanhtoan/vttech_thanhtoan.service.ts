@@ -45,6 +45,7 @@ export class Vttech_thanhtoanService {
     try {     
       const response = await axios.request(config);      
       if (Array.isArray(response.data)) {
+        console.log(response.data);
         response.data.forEach(async (v: any) => {
           let item: any = {}
           item = v

@@ -67,7 +67,7 @@ export class VttechController {
   }
   @Get('lichhen/:CUSID')
   GetLichhen(@Param('CUSID') CUSID: string) {
-    return this.vttechService.GetDichVu(CUSID);
+    return this.vttechService.GetLichhen(CUSID);
   }
   @Get()
   findAll() {
