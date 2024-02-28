@@ -117,6 +117,8 @@ export class ZalodanhgiaService {
     return { deleted: true };
   }
   async getDanhgia(data:any) {    
+    console.log(data);
+    
     const Batdau = new Date(data.begin)
     const Ketthuc = new Date(data.end)
     const config = {
@@ -127,6 +129,8 @@ export class ZalodanhgiaService {
     };
     try {
       const response = await axios.request(config);
+      console.log(response.data);
+      
       if(response.data.error==0)
       {
         

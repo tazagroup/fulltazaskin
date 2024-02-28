@@ -91,7 +91,7 @@ export const LIST_CHI_NHANH:any[] =
     oa_id: '3605866963832105989'
   },
   {
-    id: '',
+    id: '34aa91e2-c469-42bb-898b-a11618452ebd',
     BranchCode: '',
     Title: 'Timona Academy Quận 10',
     iddanhgiatimona: '',
@@ -121,7 +121,7 @@ export const LIST_CHI_NHANH:any[] =
     oa_id: '2380978004592308302'
   },
   {
-    id: '',
+    id: 'ee3d1ed9-eafa-4b89-b045-46fa347c377e',
     BranchCode: '',
     Title: 'Timona Academy Gò Vấp',
     iddanhgiatimona: '',
