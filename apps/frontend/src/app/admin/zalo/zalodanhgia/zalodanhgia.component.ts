@@ -91,19 +91,30 @@ export class ZalodanhgiaComponent implements OnInit {
     }
   }
   onChangeCN(event: MatSelectChange) {
-    //this.SearchParams.BranchID = event.value
-    console.log(event.value);
-    
-    this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
+    if(this.SearchParams.idCN!=''){
+      this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
+    }
   }
   onPageChange(event: any) {
     this.SearchParams.pageSize = event.pageSize
     this.SearchParams.pageNumber = event.pageIndex
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
-  Capnhatdanhgia() {
-
-  }
+  // Capnhatdanhgia() {
+  //   this.SearchParams.pageSize =999999
+  //   this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
+  //   this.FilterLists.forEach((item:any)=>
+  //   {
+  //     if(item.idCN=='')
+  //     {
+  //     console.log(item);
+  //     item.idCN = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==item.template_id||v.iddanhgiatimona==item.template_id)?.id||''
+  //     item.BranchID = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==item.template_id||v.iddanhgiatimona==item.template_id)?.idVttech||''
+  //     item.Chinhanh = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==item.template_id||v.iddanhgiatimona==item.template_id)?.Title||''
+  //     this._ZaloznsService.UpdateZalozns(item).subscribe()
+  //     }
+  //   })      
+  // }
   writeExcelFile(data: any) {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
       data.map((v: any, k: any) => ({

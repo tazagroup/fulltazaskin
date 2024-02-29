@@ -123,24 +123,11 @@ export class ZaloznsService {
     );
   }
   UpdateZalozns(data: any) {
-    return this.zaloznss$.pipe(
-      take(1),
-      switchMap((zaloznss: any) =>
-        this.http.patch(environment.APIURL + `/zalozns/${data.id}`, data).pipe(
+    return  this.http.patch(environment.APIURL + `/zalodanhgia/${data.id}`, data).pipe(
           map((zalozns) => {
-            const index = zaloznss.findIndex((item: any) => item.id === data.id);
-            if (index != -1) {
-              zaloznss[index] = data;
-              this._zaloznss.next(zaloznss as any[]);
-            } else {
-              this._zaloznss.next([zalozns]);
-
-            }
             return zalozns;
           })
         )
-      )
-    );
   }
   DeleteZalozns(id: string) {
     return this.zaloznss$.pipe(
