@@ -133,7 +133,7 @@ export class ZalodanhgiaService {
         response.data.data.data.forEach(async (v:any) => {
           let item:any = {}
           item.idCN = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id||v.iddanhgiatimona==data.template_id)?.id
-          item.BrandID = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id||v.iddanhgiatimona==data.template_id)?.idVttech
+          item.BranchID = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id||v.iddanhgiatimona==data.template_id)?.idVttech
           item.Chinhanh = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id||v.iddanhgiatimona==data.template_id)?.Title
           item.trackingId = v.trackingId
           item.oaId = v.oaId
