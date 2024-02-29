@@ -116,9 +116,7 @@ export class ZalodanhgiaService {
     await this.ZalodanhgiaRepository.delete(id);
     return { deleted: true };
   }
-  async getDanhgia(data:any) {    
-    console.log(data);
-    
+  async getDanhgia(data:any) {        
     const Batdau = new Date(data.begin)
     const Ketthuc = new Date(data.end)
     const config = {
@@ -128,17 +126,15 @@ export class ZalodanhgiaService {
       headers: { 'access_token': data.access_token},
     };
     try {
-      const response = await axios.request(config);
-      console.log(response.data);
-      
+      const response = await axios.request(config);      
       if(response.data.error==0)
       {
         
         response.data.data.data.forEach(async (v:any) => {
           let item:any = {}
-          item.idCN = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id)?.id
-          item.BrandId = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id)?.idVttech
-          item.Chinhanh = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id)?.Title
+          item.idCN = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id||v.iddanhgiatimona==data.template_id)?.id
+          item.BrandId = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id||v.iddanhgiatimona==data.template_id)?.idVttech
+          item.Chinhanh = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id||v.iddanhgiatimona==data.template_id)?.Title
           item.trackingId = v.trackingId
           item.oaId = v.oaId
           item.feedbacks = v.feedbacks

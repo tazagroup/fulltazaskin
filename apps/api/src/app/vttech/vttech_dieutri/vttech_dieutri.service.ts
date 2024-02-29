@@ -56,9 +56,8 @@ export class Vttech_dieutriService {
           Mota: `Lấy dữ liệu từ Vttech ${JSON.stringify(response.data)}`
         }
         this._LoggerService.create(logger)
-        if (Array.isArray(response.data)) {
-          console.log(response.data);
-          
+        console.log(response.data);
+        if (Array.isArray(response.data)) {   
         response.data.forEach(async (v: any) => {
           console.log(v);
           const result = await this.GetKhachhangbyCode(v.CustCode)          

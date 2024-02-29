@@ -43,7 +43,8 @@ export class Vttech_thanhtoanService {
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
     };
     try {     
-      const response = await axios.request(config);      
+      const response = await axios.request(config);     
+      console.log(response.data);
       if (Array.isArray(response.data)) {
         console.log(response.data);
         response.data.forEach(async (v: any) => {
