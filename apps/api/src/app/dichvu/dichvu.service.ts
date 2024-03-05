@@ -53,6 +53,35 @@ export class DichvuService {
       where: { Title: Like(`%${query}%`) },
     });
   }
+  async search(params: any){
+      console.error(params);
+      const queryBuilder = this.DichvuRepository.createQueryBuilder('dichvu');
+      if (params.Batdau && params.Ketthuc) {
+        queryBuilder.andWhere('dichvu.CreateAt BETWEEN :startDate AND :endDate', {
+          startDate: params.Batdau,
+          endDate: params.Ketthuc,
+        });
+      }
+      if (params.MaDichvu) {
+        queryBuilder.andWhere('dichvu.MaDichvu = :MaDichvu', { MaDichvu: `${params.MaDichvu}` });
+      }
+      if (params.hasOwnProperty('isDelete')) {
+        queryBuilder.andWhere('dichvu.isDelete = :isDelete', { isDelete: `${params.isDelete}` });
+      }
+      let [item, totalCount]:any = await queryBuilder
+        .limit(params.pageSize || 10) // Set a default page size if not provided
+        .offset(params.pageNumber * params.pageSize || 0)
+        .getManyAndCount();
+        // const items = await Promise.all(
+        //   item.map(async (v: any) => {
+        //     v.Giohangs = await this._GiohangService.findid(v.idGiohang);
+        //     v.Khachhang = await this._KhachhangService.findid(v.idKH);
+        //     return v; 
+        //   })
+        // );         
+      return { item, totalCount };
+  }
+
   async update(id: string, UpdateDichvuDto: UpdateDichvuDto) {
     this.DichvuRepository.save(UpdateDichvuDto);
     return await this.DichvuRepository.findOne({ where: { id: id } });

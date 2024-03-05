@@ -38,6 +38,10 @@ export class DichvuController {
     async findQuery(@Query('query') query: string){
       return await this.dichvuService.findQuery(query);
   }
+  @Post('search')
+    async search(@Query('query') query: string){
+      return await this.dichvuService.search(query);
+  }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDichvuDto: UpdateDichvuDto) {
     return this.dichvuService.update(id, updateDichvuDto);
