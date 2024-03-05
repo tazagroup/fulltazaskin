@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import { LIST_CHI_NHANH } from '../../shared.utils';
 import { ZaloznsService } from '../../zalo/zalozns/zalozns.service';
 import { LoggerService } from '../../logger/logger.service';
+import { TelegramService } from '../../shared/telegram.service';
 @Injectable()
 export class Vttech_thanhtoanService {
   Cookie: any = ''
@@ -19,6 +20,7 @@ export class Vttech_thanhtoanService {
     private _CauhinhchungService: CauhinhchungService,
     private _ZaloznsService: ZaloznsService,
     private _LoggerService: LoggerService,
+    private _TelegramService: TelegramService,
   ) {
     this._CauhinhchungService.findslug('vttechtoken').then((data: any) => {
       this.Cookie = data.Content.Cookie
@@ -26,6 +28,8 @@ export class Vttech_thanhtoanService {
     })
   }
   async getApiRealtime(idVttech: any, data: any = {}) {
+    const result = `Lấy Thanh Toán lúc ${moment()}`;
+    this._TelegramService.SendLogdev(result) 
     let begin: any
     let end: any
     if (Object.entries(data).length > 0) {
@@ -87,6 +91,8 @@ export class Vttech_thanhtoanService {
     }
   }
   async SendXNTTauto() {
+    const result = `Gửi Thanh Toán lúc ${moment()}`;
+    this._TelegramService.SendLogdev(result) 
     const ListThanhtoan = await this.fininday()
     ListThanhtoan.forEach((v: any) => {
       if (this.CheckTime()) {

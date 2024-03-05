@@ -7,6 +7,7 @@ import moment = require('moment');
 import { LIST_CHI_NHANH } from '../../shared.utils';
 import { ZaloznsService } from '../../zalo/zalozns/zalozns.service';
 import { LoggerService } from '../../logger/logger.service';
+import { TelegramService } from '../../shared/telegram.service';
 const axios = require('axios');
 @Injectable()
 export class Vttech_dieutriService {
@@ -18,6 +19,7 @@ export class Vttech_dieutriService {
     private _CauhinhchungService: CauhinhchungService,
     private _ZaloznsService: ZaloznsService,
     private _LoggerService: LoggerService,
+    private _TelegramService: TelegramService,
   ) {
     this._CauhinhchungService.findslug('vttechtoken').then((data: any) => {
       this.Cookie = data.Content.Cookie
@@ -26,6 +28,8 @@ export class Vttech_dieutriService {
   }
 
   async GetDieutriVttech(idVttech: any, data: any = {}) {
+    const result = `Lấy điều trị lúc ${moment()}`;
+    this._TelegramService.SendLogdev(result) 
     let begin: any
     let end: any
     if (Object.entries(data).length > 0) {
@@ -88,6 +92,8 @@ export class Vttech_dieutriService {
       });
   }
   async SendZNSAuto() {
+    const result = `Gửi điều trị lúc ${moment()}`;
+    this._TelegramService.SendLogdev(result) 
     const ListDieutri = await this.fininday()
     ListDieutri.forEach((v) => {
       if (this.CheckTime()) {
