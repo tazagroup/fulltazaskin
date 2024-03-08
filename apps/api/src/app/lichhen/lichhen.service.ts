@@ -36,6 +36,8 @@ export class LichhenService {
     });
   }
   async findsdt(SDT: any) {
+    console.log(SDT);
+    
     return await this.LichhenRepository.find({
       where: { SDTKhac: SDT},
     });

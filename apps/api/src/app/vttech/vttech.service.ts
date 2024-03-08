@@ -122,7 +122,14 @@ export class VttechService {
 
     try {
       const response = await axios.request(config);
-      return response.data;
+      // const result = response.data.Table.map((v:any)=>({
+      //   ServiceName:v.ServiceName, 
+      //   BranchName:v.BranchName, 
+      //   BranchCode:v.BranchCode,
+      //   TimeToTreatment:v.TimeToTreatment,
+      //   Treat_Index:v.Treat_Index
+      // }));  
+      return response.data
     } catch (error) {
       console.log(error);
     }
