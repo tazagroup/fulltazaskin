@@ -269,7 +269,7 @@ export class Vttech_dieutriService {
                   Title: 'Điều Trị',
                   Slug: 'dieutri',
                   Action: 'loitoken',
-                  Mota: `${SendZNS.Title} - SDT: ${data.SDT}`
+                  Mota: `${SendZNS.Title} - SDT: ${data.SDT} - Data: ${SendZNS.data}`
                 }
                 this._LoggerService.create(logger)
               }
