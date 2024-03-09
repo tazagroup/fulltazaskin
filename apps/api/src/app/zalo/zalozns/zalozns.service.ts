@@ -121,7 +121,7 @@ export class ZaloznsService {
       }
       else
       {
-        return { status: false, Title: `Lỗi data trả về` };
+        return { status: false, Title: `Lỗi data trả về`,data:response.data };
       }
     }
     } catch (error) {
@@ -212,7 +212,7 @@ export class ZaloznsService {
       }
       else
       {
-        return { status: false, Title: `Lỗi data trả về` };
+        return { status: false, Title: `Lỗi data trả về`,data:response.data };
       }
     }
     } catch (error) {
