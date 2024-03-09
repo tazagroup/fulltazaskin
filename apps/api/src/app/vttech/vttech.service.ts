@@ -133,7 +133,43 @@ export class VttechService {
     } catch (error) {
       console.log(error);
     }
+  }
+  async GetDichVus(CustomerID: any) {
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://tmtaza.vttechsolution.com/Service/ServiceList/?handler=LoadataService',
+      headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+    };
 
+    try {
+      const response = await axios.request(config);
+      // const result = response.data.Table.map((v:any)=>({
+      //   ServiceName:v.ServiceName, 
+      //   BranchName:v.BranchName, 
+      //   BranchCode:v.BranchCode,
+      //   TimeToTreatment:v.TimeToTreatment,
+      //   Treat_Index:v.Treat_Index
+      // }));  
+
+      const result = response.data.map((v:any)=>(
+        {
+          "ID": v.ID,
+          "CatID": v.CatID,
+          "ServiceName": v.ServiceName,
+          "ServiceCode": v.ServiceCode,
+          "IsProduct": v.IsProduct,
+          "TimeToTreatment": v.TimeToTreatment,
+          "IsDisabled": v.IsDisabled,
+          "CatName": v.CatName,
+          "ServiceNote": v.ServiceNote,
+          "IdenCode": v.IdenCode,
+          "IdenName": v.IdenName,
+  })).filter((v:any)=>v.IsProduct!=1&&v.IsDisabled!=1)
+      return result
+    } catch (error) {
+      console.log(error);
+    }
   }
   async GetLichhen(CustomerID: any) {
     let config = {

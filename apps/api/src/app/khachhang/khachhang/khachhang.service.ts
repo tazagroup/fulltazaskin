@@ -53,7 +53,7 @@ export class KhachhangService {
       let Hangthanhvien:any={Data:[]}
       Hangthanhvien = await this._CauhinhService.findslug('hang-thanh-vien')
       const Khachhang = await this.KhachhangRepository.findOne({where: { SDT: SDT}});
-      Khachhang.Hangthanhvien = Hangthanhvien.Data.find((v:any)=>Khachhang.Dathu>=v.FromAmount && Khachhang.Dathu<v.ToAmount)
+      Khachhang.Hangthanhvien = Hangthanhvien.Data.find((v:any)=>Khachhang?.Dathu>=v.FromAmount && Khachhang?.Dathu<v.ToAmount)
       return Khachhang
   }
   async findBySDT(SDT: string) {

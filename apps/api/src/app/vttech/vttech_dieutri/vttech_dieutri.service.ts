@@ -229,8 +229,7 @@ export class Vttech_dieutriService {
       const compareTime = moment(data.CreateAt);     
       if (now.isAfter(compareTime)) {
         const Chinhanh = LIST_CHI_NHANH.find((v: any) =>v.idVttech == data.idVttech)    
-        console.log(Chinhanh);
-               
+        console.log(Chinhanh);              
         if (Chinhanh) {
           try {
             let SendZNS:any={}

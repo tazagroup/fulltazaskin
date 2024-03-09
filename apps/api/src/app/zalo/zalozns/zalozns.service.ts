@@ -71,8 +71,12 @@ export class ZaloznsService {
       } else {
         if(this.CheckTime())
         {
-        const smsResponse = await this.sendFallbackSMS(item);
-         return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
+      // const smsResponse = await this.sendFallbackSMS(item);
+         return { 
+         status: 'sms', 
+         Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, 
+         data: JSON.stringify(response.data) };
+        //  return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
         }
       }
     }
@@ -103,6 +107,8 @@ export class ZaloznsService {
         data:requestData
       };
       const response = await axios.request(config)
+      console.log("Checkloi",response);
+      
       if (response.data.error === 0) {
         let dulieu: any={};
         dulieu.SDT = requestData.phone
@@ -158,8 +164,9 @@ export class ZaloznsService {
       } else {
         if(this.CheckTime())
         {
-        const smsResponse = await this.sendFallbackSMSTimona(item);
-         return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
+        //const smsResponse = await this.sendFallbackSMSTimona(item);
+         return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, 
+         data: JSON.stringify(response.data) };
         }
       }
     }

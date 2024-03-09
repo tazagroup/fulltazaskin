@@ -13,6 +13,8 @@ export class ChinhanhEntity {
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Title: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  BranchCode: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   Address: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Linkmap: string;
