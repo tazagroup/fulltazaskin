@@ -197,7 +197,7 @@ export class Vttech_thanhtoanService {
                   Title: 'Thanh Toán',
                   Slug: 'thanhtoan',
                   Action: 'loitoken',
-                  Mota: `${SendZNS.Title} - SDT: ${data.SDT} - Data: ${SendZNS.data}`
+                  Mota: `${SendZNS.Title} - SDT: ${data.SDT} - Data: ${JSON.stringify(SendZNS.data)}`
                 }
                 this._LoggerService.create(logger)
               }
