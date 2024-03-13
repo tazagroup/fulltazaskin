@@ -16,7 +16,7 @@ export class Vttech_dieutriController {
   async SendCamon(@Body() data: any) {   
     return await this.vttech_dieutriService.SendCamon(data);
   }
- //@Interval(4000000)
+ @Interval(4000000)
   @Get("sendauto")
   SendZNSAuto() {      
       return this.vttech_dieutriService.SendZNSAuto();

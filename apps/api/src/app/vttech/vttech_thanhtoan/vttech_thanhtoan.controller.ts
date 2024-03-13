@@ -15,7 +15,7 @@ export class Vttech_thanhtoanController {
       return this.vttech_thanhtoanService.getApiRealtime(v.idVttech,data);
     })
   }
- //@Interval(1900000)
+ @Interval(1900000)
   @Get('sendauto')
   async SendXNTTauto() {      
     return this.vttech_thanhtoanService.SendXNTTauto();
