@@ -57,7 +57,10 @@ export class Vttech_thanhtoanService {
           item.checkTime = (new Date(v.Created)).getTime()
           item.Dulieu = JSON.stringify(v)
           const result = await this.GetKHByCode(item)
-          const checkInvoiceNum = await this.findInvoiceNum(result.InvoiceNum,item.checkTime)  
+          if(result){
+            const checkInvoiceNum = await this.findInvoiceNum(result.InvoiceNum,item.checkTime)  
+
+
           // if(checkInvoiceNum && checkInvoiceNum.SDT=='0977272967')  
           // {
           //   console.log(checkInvoiceNum);
@@ -76,6 +79,7 @@ export class Vttech_thanhtoanService {
             this._LoggerService.create(logger)
             return { status: 201, title: `Lấy ${response.data.length} Thanh Toán Từ Vttech` };
           }
+        }
         });
         return response.data
       }
@@ -95,7 +99,7 @@ export class Vttech_thanhtoanService {
     this._TelegramService.SendLogdev(result) 
     const ListThanhtoan = await this.fininday()
     ListThanhtoan.forEach((v: any) => {
-      if(v.SDT!='0977272967')
+      if(v.SDT!=='0905085396')
       {
         if (this.CheckTime()) {
           this.sendZNSThanhtoan(v)

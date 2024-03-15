@@ -15,17 +15,17 @@ export class Vttech_thanhtoanController {
       return this.vttech_thanhtoanService.getApiRealtime(v.idVttech,data);
     })
   }
- @Interval(1900000)
-  @Get('sendauto')
-  async SendXNTTauto() {      
-    return this.vttech_thanhtoanService.SendXNTTauto();
-  }
-  @Post('sendzns')
-  async Send1zns(@Body() data:any) {   
-    console.log(data);
+//  @Interval(1900000)
+//   @Get('sendauto')
+//   async SendXNTTauto() {      
+//     return this.vttech_thanhtoanService.SendXNTTauto();
+//   }
+//   @Post('sendzns')
+//   async Send1zns(@Body() data:any) {   
+//     console.log(data);
        
-    return this.vttech_thanhtoanService.sendZNSThanhtoan(data);
-  }
+//     return this.vttech_thanhtoanService.sendZNSThanhtoan(data);
+//   }
   @Post()
   create(@Body() data: any) {
     return this.vttech_thanhtoanService.create(data);
