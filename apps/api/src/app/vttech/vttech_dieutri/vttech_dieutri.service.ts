@@ -28,8 +28,8 @@ export class Vttech_dieutriService {
   }
 
   async GetDieutriVttech(idVttech: any, data: any = {}) {
-    const result = `Lấy điều trị lúc ${moment()}`;
-    this._TelegramService.SendLogdev(result) 
+    // const result = `Lấy điều trị lúc ${moment()}`;
+    // this._TelegramService.SendLogdev(result) 
     let begin: any
     let end: any
     if (Object.entries(data).length > 0) {
@@ -49,21 +49,17 @@ export class Vttech_dieutriService {
         'Xsrf-Token': this.XsrfToken
       }
     };
-
-    return await axios.request(config)
-      .then((response: any) => {
-        // console.error(response.data);
-        const logger = {
-          Title: 'Điều Trị',
-          Slug: 'dieutri',
-          Action: 'getvttech',
-          Mota: `Lấy dữ liệu từ Vttech ${JSON.stringify(response.data)}`
-        }
-        this._LoggerService.create(logger)
-        console.log(response.data);
-        if (Array.isArray(response.data)) {   
-        response.data.forEach(async (v: any) => {
-          console.log(v);
+    try {
+      const ListKetqua:any=[]
+      const response = await fetch(config.url, config);
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+      const data = await response.json();
+      console.log(data);
+      
+      if (Array.isArray(data)) {
+       const promises = data.forEach(async (v: any) => {
           const result = await this.GetKhachhangbyCode(v.CustCode)          
           if (result) {
             let item: any = {}
@@ -74,22 +70,65 @@ export class Vttech_dieutriService {
             item.SDT = result?.Table[0]?.CustomerPhone
             item.SDT2 = result?.Table[0]?.CustomerPhone2
             item.idVttech = idVttech
-            const Ketqua = await this.create(item)            
-            const logger = {
-              Title: 'Điều Trị',
-              Slug: 'dieutri',
-              Action: 'addnew',
-              Mota: `Thêm Mới Điều Trị Từ Vttech ${JSON.stringify(Ketqua)}`
-            }
-            this._LoggerService.create(logger)
+            const Ketqua = await this.create(item)   
+             if(Ketqua && Ketqua.error==1001)
+             {ListKetqua.push(Ketqua)}         
           }
-        }); 
-        return response.data.length
-      }
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
+        });   
+        await Promise.all([promises]);   
+      }    
+      else return ListKetqua; 
+    } catch (error) {
+      console.error(error);
+      throw error; // Re-throw the error for further handling
+    }
+
+    // return await axios.request(config)
+    //   .then(async (response: any) => {
+    //     // console.error(response.data);
+    //     // const logger = {
+    //     //   Title: 'Điều Trị',
+    //     //   Slug: 'dieutri',
+    //     //   Action: 'getvttech',
+    //     //   Mota: `Lấy dữ liệu từ Vttech ${JSON.stringify(response.data)}`
+    //     // }
+    //     // this._LoggerService.create(logger)
+    //     console.log(response.data);
+        
+    //     if (Array.isArray(response.data)) {  
+    //       const server = await this.findAll()
+    //       console.log(server);
+    //       console.log(response.data);
+          
+
+    //     // response.data.forEach(async (v: any) => {
+    //     //   console.log(v);
+    //     //   const result = await this.GetKhachhangbyCode(v.CustCode)          
+    //     //   if (result) {
+    //     //     let item: any = {}
+    //     //     item.CustName = v.CustName
+    //     //     item.CustCode = v.CustCode
+    //     //     item.checkTime = (new Date(begin)).getTime()
+    //     //     item.NgayVttech = begin.format('YYYY-MM-DD')
+    //     //     item.SDT = result?.Table[0]?.CustomerPhone
+    //     //     item.SDT2 = result?.Table[0]?.CustomerPhone2
+    //     //     item.idVttech = idVttech
+    //     //     const Ketqua = await this.create(item)            
+    //     //     const logger = {
+    //     //       Title: 'Điều Trị',
+    //     //       Slug: 'dieutri',
+    //     //       Action: 'addnew',
+    //     //       Mota: `Thêm Mới Điều Trị Từ Vttech ${JSON.stringify(Ketqua)}`
+    //     //     }
+    //     //     this._LoggerService.create(logger)
+    //     //   }
+    //     // }); 
+    //   //  return response.data.length
+    //   }
+    //   })
+    //   .catch((error: any) => {
+    //     console.log(error);
+    //   });
   }
   async SendZNSAuto() {
     const result = `Gửi điều trị lúc ${moment()}`;
@@ -122,9 +161,7 @@ export class Vttech_dieutriService {
   }
 
   async create(data: any) {
-    const check = await this.findbyCustCode(data)    
-    console.log(check);
-    
+    const check = await this.findbyCustCode(data)        
     if (check) {
       return { error: 1001, data: "Trùng Dữ Liệu" }
     }

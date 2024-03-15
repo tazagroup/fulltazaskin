@@ -95,8 +95,15 @@ export class Vttech_thanhtoanService {
     this._TelegramService.SendLogdev(result) 
     const ListThanhtoan = await this.fininday()
     ListThanhtoan.forEach((v: any) => {
-      if (this.CheckTime()) {
-        this.sendZNSThanhtoan(v)
+      if(v.SDT!='0977272967')
+      {
+        if (this.CheckTime()) {
+          this.sendZNSThanhtoan(v)
+        }
+      }
+      else {
+        v.Status = 7
+        this.update(v.id, v)
       }
     })
   }

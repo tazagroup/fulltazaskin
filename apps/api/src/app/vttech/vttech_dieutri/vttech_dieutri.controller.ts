@@ -7,10 +7,14 @@ export class Vttech_dieutriController {
   constructor(private readonly vttech_dieutriService:Vttech_dieutriService) {}
   @Interval(3600000)
   @Post("getvttech")
-  GetDieutriVttech(@Body() data: any) {
-    LIST_CHI_NHANH.forEach(async (v)=>{
-       return await this.vttech_dieutriService.GetDieutriVttech(v.idVttech,data);
-    })
+  async GetDieutriVttech(@Body() data: any) {
+    const result: any[] = [];
+    const promises = LIST_CHI_NHANH.map(async (v, k) => {
+      const getData = await this.vttech_dieutriService.GetDieutriVttech(v.idVttech, data);
+      result.push(getData);
+    });
+    await Promise.all(promises);
+    return result;
   }
   @Post("sendcamon")
   async SendCamon(@Body() data: any) {   
