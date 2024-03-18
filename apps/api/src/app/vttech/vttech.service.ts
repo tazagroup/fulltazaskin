@@ -171,6 +171,32 @@ export class VttechService {
       console.log(error);
     }
   }
+
+  async GetThanhtoan(CustomerID: any) {
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://tmtaza.vttechsolution.com/Customer/Payment/PaymentList/PaymentList_Service/?handler=LoadataPayment&CustomerID=' + CustomerID + '&CurrentID=0&CurrentType=',
+      headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+    };
+
+    try {
+      const response = await axios.request(config);
+      // const result = response.data.Table.map((v:any)=>({
+      //   ServiceName:v.ServiceName, 
+      //   BranchName:v.BranchName, 
+      //   BranchCode:v.BranchCode,
+      //   TimeToTreatment:v.TimeToTreatment,
+      //   Treat_Index:v.Treat_Index
+      // }));  
+      return response.data
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
   async GetLichhen(CustomerID: any) {
     let config = {
       method: 'post',

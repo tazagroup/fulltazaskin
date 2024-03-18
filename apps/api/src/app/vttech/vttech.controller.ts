@@ -69,6 +69,10 @@ export class VttechController {
   GetDichVus(@Param('CUSID') CUSID: string) {
     return this.vttechService.GetDichVus(CUSID);
   }
+  @Post('thanhtoan/:CUSID')
+  GetThanhtoan(@Param('CUSID') CUSID: string) {
+    return this.vttechService.GetThanhtoan(CUSID);
+  }
   @Get('lichhen/:CUSID')
   GetLichhen(@Param('CUSID') CUSID: string) {
     return this.vttechService.GetLichhen(CUSID);
