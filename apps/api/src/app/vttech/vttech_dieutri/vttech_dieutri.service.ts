@@ -56,8 +56,7 @@ export class Vttech_dieutriService {
         throw new Error(`Error fetching data: ${response.statusText}`);
       }
       const data = await response.json();
-      console.log(data);
-      
+      ListKetqua.push(data)
       if (Array.isArray(data)) {
        const promises = data.forEach(async (v: any) => {
           const result = await this.GetKhachhangbyCode(v.CustCode)          
@@ -76,11 +75,13 @@ export class Vttech_dieutriService {
           }
         });   
         await Promise.all([promises]);   
+        return ListKetqua
       }    
       else return ListKetqua; 
     } catch (error) {
+      return error
       console.error(error);
-      throw error; // Re-throw the error for further handling
+      throw error;
     }
 
     // return await axios.request(config)

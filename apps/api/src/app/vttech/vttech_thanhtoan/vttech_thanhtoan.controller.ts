@@ -10,11 +10,16 @@ export class Vttech_thanhtoanController {
  @Interval(1800000)
   @Post('getapi')
   async getApiRealtime(@Body() data: any) {    
-    console.log(data);
-    LIST_CHI_NHANH.forEach((v)=>{
-      return this.vttech_thanhtoanService.getApiRealtime(v.idVttech,data);
-    })
+    const result: any[] = [];
+    const promises = LIST_CHI_NHANH.map(async (v, k) => {
+      const getData = await this.vttech_thanhtoanService.getApiRealtime(v.idVttech,data);
+      result.push(getData);
+    });
+    await Promise.all(promises);
+    return result;
+
   }
+
 //  @Interval(1900000)
 //   @Get('sendauto')
 //   async SendXNTTauto() {      

@@ -29,123 +29,72 @@ export class Vttech_thanhtoanService {
   }
   
   async getApiRealtime(idVttech: any, data: any = {}) {
-    const now = moment();
-    const begin = data?.begin ? moment(data.begin).format('DD-MM-YYYY') : now.format('DD-MM-YYYY');
-    const end = data?.end ? moment(data.end).format('DD-MM-YYYY') : now.format('DD-MM-YYYY');
-    const url = `https://tmtaza.vttechsolution.com/Report/Revenue/Branch/AllBranchGrid/?handler=LoadataDetailByBranch&branchID=${idVttech}&dateFrom=${begin}&dateTo=${end}`;
-  
-    try {
-      const ListKetqua:any=[]
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
-      });
-  
-      if (!response.ok) {
-        this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` });
-        return { status: 404, title: 'Lỗi Data Trả Về' };
-      }
-  
-      const data = await response.json();
-      ListKetqua.push(data)
-      if (!Array.isArray(data)) {
-        this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` });
-        return { status: 404, title: 'Lỗi Data Trả Về' };
-      }
-  
-      for (const item of data) {
-        item.checkTime = new Date(item.Created).getTime();
-        item.Dulieu = JSON.stringify(item);
-  
-        const checkInvoiceNum = await this.findInvoiceNum(item.InvoiceNum, item.checkTime);
-        if (checkInvoiceNum) {
-          console.log("Trùng Hoá Đơn");
-          this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${item.InvoiceNum} - ${item.SDT}` });
-          return { status: 1001, title: `Trùng Hoá Đơn ${item.InvoiceNum}` };
+    const result = `Lấy Thanh Toán lúc ${moment()}`;
+    this._TelegramService.SendLogdev(result) 
+    let begin: any
+    let end: any
+    if (Object.entries(data).length > 0) {
+      begin = moment(new Date(data.begin)).format('DD-MM-YYYY')
+      end = moment(new Date(data.end)).format('DD-MM-YYYY')
+    }
+    else {
+      begin = moment().format('DD-MM-YYYY')
+      end = moment().format('DD-MM-YYYY')
+    }
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `https://tmtaza.vttechsolution.com/Report/Revenue/Branch/AllBranchGrid/?handler=LoadataDetailByBranch&branchID=${idVttech}&dateFrom=${begin}&dateTo=${end}`,
+      headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+    };
+    try {     
+      const response = await axios.request(config);     
+      console.log(response.data);
+      if (Array.isArray(response.data)) {
+        console.log(response.data);
+        response.data.forEach(async (v: any) => {
+          let item: any = {}
+          item = v
+          item.checkTime = (new Date(v.Created)).getTime()
+          item.Dulieu = JSON.stringify(v)
+          const result = await this.GetKHByCode(item)
+          if(result){
+            const checkInvoiceNum = await this.findInvoiceNum(result.InvoiceNum,item.checkTime)  
+
+
+          // if(checkInvoiceNum && checkInvoiceNum.SDT=='0977272967')  
+          // {
+          //   console.log(checkInvoiceNum);
+          // }
+          if (checkInvoiceNum) {    
+            console.log("Trùng Hoá Đơn");
+            const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${result.InvoiceNum} - ${result.SDT}` }
+            this._LoggerService.create(logger)
+            return { status: 1001, title: `Trùng Hoá Đơn ${result.InvoiceNum}` };
+          }
+          else {
+            console.log("Tạo mới");
+            console.log(checkInvoiceNum);
+            this.create(result)
+            const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${response.data.length} Thanh Toán Từ Vttech` }
+            this._LoggerService.create(logger)
+            return { status: 201, title: `Lấy ${response.data.length} Thanh Toán Từ Vttech` };
+          }
         }
-  
-        console.log("Tạo mới");
-        const ketqua = await this.create(item);
-        ListKetqua.push(ketqua)   
+        });
+        return response.data
       }
-  
-      this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${data.length} Thanh Toán Từ Vttech` });
-      return { status: 201, title: `Lấy ${data.length} Thanh Toán Từ Vttech` };
+      else {
+        const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` }
+        this._LoggerService.create(logger)
+        return { status: 404, title: 'Lỗi Data Trả Về' };
+      }
     } catch (error) {
-      this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>` });
+      const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>` }
+      this._LoggerService.create(logger)
       return { status: 400, title: 'Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
     }
   }
-  
-
-  // async getApiRealtime(idVttech: any, data: any = {}) {
-  //   const result = `Lấy Thanh Toán lúc ${moment()}`;
-  //   this._TelegramService.SendLogdev(result) 
-  //   let begin: any
-  //   let end: any
-  //   if (Object.entries(data).length > 0) {
-  //     begin = moment(new Date(data.begin)).format('DD-MM-YYYY')
-  //     end = moment(new Date(data.end)).format('DD-MM-YYYY')
-  //   }
-  //   else {
-  //     begin = moment().format('DD-MM-YYYY')
-  //     end = moment().format('DD-MM-YYYY')
-  //   }
-  //   const config = {
-  //     method: 'post',
-  //     maxBodyLength: Infinity,
-  //     url: `https://tmtaza.vttechsolution.com/Report/Revenue/Branch/AllBranchGrid/?handler=LoadataDetailByBranch&branchID=${idVttech}&dateFrom=${begin}&dateTo=${end}`,
-  //     headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
-  //   };
-  //   try {     
-  //     const response = await axios.request(config);     
-  //     console.log(response.data);
-  //     if (Array.isArray(response.data)) {
-  //       console.log(response.data);
-  //       response.data.forEach(async (v: any) => {
-  //         let item: any = {}
-  //         item = v
-  //         item.checkTime = (new Date(v.Created)).getTime()
-  //         item.Dulieu = JSON.stringify(v)
-  //         const result = await this.GetKHByCode(item)
-  //         if(result){
-  //           const checkInvoiceNum = await this.findInvoiceNum(result.InvoiceNum,item.checkTime)  
-
-
-  //         if(checkInvoiceNum && checkInvoiceNum.SDT=='0977272967')  
-  //         {
-  //           console.log(checkInvoiceNum);
-  //         }
-
-  //         if (checkInvoiceNum) {    
-  //           console.log("Trùng Hoá Đơn");
-  //           const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${result.InvoiceNum} - ${result.SDT}` }
-  //           this._LoggerService.create(logger)
-  //           return { status: 1001, title: `Trùng Hoá Đơn ${result.InvoiceNum}` };
-  //         }
-  //         else {
-  //           console.log("Tạo mới");
-  //           console.log(checkInvoiceNum);
-  //           this.create(result)
-  //           const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${response.data.length} Thanh Toán Từ Vttech` }
-  //           this._LoggerService.create(logger)
-  //           return { status: 201, title: `Lấy ${response.data.length} Thanh Toán Từ Vttech` };
-  //         }
-  //       }
-  //       });
-  //       return response.data
-  //     }
-  //     else {
-  //       const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` }
-  //       this._LoggerService.create(logger)
-  //       return { status: 404, title: 'Lỗi Data Trả Về' };
-  //     }
-  //   } catch (error) {
-  //     const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>` }
-  //     this._LoggerService.create(logger)
-  //     return { status: 400, title: 'Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
-  //   }
-  // }
 
 
   async SendXNTTauto() {
