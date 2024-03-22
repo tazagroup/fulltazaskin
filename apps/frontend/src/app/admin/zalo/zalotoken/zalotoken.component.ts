@@ -109,7 +109,6 @@ export class ZalotokenComponent implements OnInit {
   }
   getrefreshToken(item: any) {
     console.log(item);
-
     const data = {
       oa_id: item.oa_id,
       // app_id: environment.app_id,
@@ -131,6 +130,69 @@ export class ZalotokenComponent implements OnInit {
       }
     })
   }
+  async RefreshAllToken() {
+  const promises  =  this.FilterLists.map((item:any)=>
+    {
+      const data = {
+        oa_id: item.oa_id,
+        // app_id: environment.app_id,
+        // secret_key: environment.secret_key,
+        app_id: this.ListChiNhanh.find((v:any)=>v.oa_id==item.oa_id)?.app_id,
+        secret_key: this.ListChiNhanh.find((v:any)=>v.oa_id==item.oa_id)?.secret_key,
+        refresh_token: item.Token.refresh_token
+      }
+      this._ZalotokenService.get_refreshToken(data).subscribe((res: any) => {
+        if (res.status == 200) {
+        }
+        else {
+          this._NotifierService.notify("error", res.note)
+        }
+      })
+    })
+    await Promise.all(promises);
+    this._NotifierService.notify("success", "Cập Nhật Thành Công")
+    setTimeout(() => {
+      window.location.href = window.location.pathname
+    }, 1000);
+  }
+  async GetAllFromZalo()
+  {
+    const promises  =  this.FilterLists.map((data:any,k:any)=>
+    {
+      console.log(data);
+      const Chinhanh = LIST_CHI_NHANH.find((v)=>v.idtoken==data.id)
+      let template_id=''
+      const TAZA_BRANCH_IDS = [1, 2, 3, 4, 6, 7];
+      const TIMONA_BRANCH_IDS = [7,14, 15, 16, 17, 18, 21];  
+      const isTazaBranch = TAZA_BRANCH_IDS.includes(Number(Chinhanh.idVttech));
+      const isTimonaBranch = TIMONA_BRANCH_IDS.includes(Number(Chinhanh.idVttech));
+      if (isTazaBranch) {
+        template_id = Chinhanh.idtempdanhgia    
+      } else if (isTimonaBranch) {
+        template_id = Chinhanh.iddanhgiatimona    
+      }      
+      const item:any =
+      {
+        "access_token":data.Token.access_token,
+        "template_id":template_id,
+        "begin":moment(this.SearchParams.Batdau).add().format('YYYY-MM-DD'),
+        "end":moment(this.SearchParams.Ketthuc).format('YYYY-MM-DD')
+       }
+      this._ZalodanhgiaService.GetFromZalo(item).subscribe((result)=>
+      {
+       setTimeout(() => {
+        this._NotifierService.notify("success",`Cập Nhật Thành Công ${data.Title} - ${result.data.total}`)
+        }, Math.random()*(k+10)*1000); 
+       
+      })
+    })
+    // await Promise.all(promises);
+    // this._NotifierService.notify("success", "Cập Nhật Thành Công")
+    // setTimeout(() => {
+    //   window.location.href = window.location.pathname
+    // }, 1000); 
+  }
+
   GetFromZalo(data:any)
   {
     console.log(data);
