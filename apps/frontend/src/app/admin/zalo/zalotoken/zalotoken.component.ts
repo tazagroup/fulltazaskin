@@ -33,6 +33,8 @@ export class ZalotokenComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
+    console.log();
+    
     // moment.locale('vi');
     this.activatedRoute.queryParams.subscribe((params: any) => {
       if (params.oa_id) {
