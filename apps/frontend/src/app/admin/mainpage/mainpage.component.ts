@@ -50,6 +50,7 @@ export class MainpageComponent implements OnInit {
       this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
       this.dataSource.data = this.Menus;
       this.treeControl.expandAll()
+      console.log(this.Menus);
       
     }
     )

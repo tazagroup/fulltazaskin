@@ -4,144 +4,169 @@
       <router-outlet></router-outlet>
     </div>
   </mat-drawer>
-  <mat-drawer-content class="!flex flex-col flex-auto min-w-0 relative bg-white !h-[90vh]">
-    <div class="relative border-b flex flex-col">
-      <div class="flex flex-row space-x-4 items-center p-2 h-16">
-        <!-- <mat-form-field appearance="outline" class="text-xs">
-          <mat-label>Tiêu Đề</mat-label>
-          <input matInput (keyup)="applyFilter($event)" class="w-full" placeholder="Mô Tả">
-          <span matPrefix class="material-symbols-outlined mr-2">search</span>
-        </mat-form-field> -->
-        <!-- <button mat-icon-button [matMenuTriggerFor]="menu">
-          <span class="material-symbols-outlined">more_vert</span>
-        </button> -->
-        <mat-form-field appearance="outline">
-            <mat-label>Danh Mục</mat-label>
-            <mat-select [(ngModel)]="TypeTeamplate" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeTemp($event)">
-              <mat-option [value]="item.key" *ngFor="let item of TypeTeamplates|keyvalue">{{item.value}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        
-        <button mat-stroked-button (click)="isShowDemo=!isShowDemo">
-         Gửi Tin Nhắn ZNS
-        </button>
+  <mat-drawer-content class="!flex flex-col flex-auto min-w-0 relative bg-gray-100 !h-[90vh] p-4">
+    <div class="flex flex-col bg-white rounded-lg">
+      <div class="relative border-b flex flex-col">
+        <!-- <div class="flex flex-row space-x-4 items-center p-2 h-16">
+          <mat-form-field appearance="outline">
+              <mat-label>Danh Mục</mat-label>
+              <mat-select [(ngModel)]="TypeTeamplate" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeTemp($event)">
+                <mat-option [value]="item.key" *ngFor="let item of TypeTeamplates|keyvalue">{{item.value}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+  
+            <mat-form-field appearance="outline">
+              <mat-label>Chi Nhánh</mat-label>
+              <mat-select [(ngModel)]="ZNS.idCN" [ngModelOptions]="{standalone: true}" (selectionChange)="onChinhanhChange($event)">
+                <mat-option [value]="item.id" *ngFor="let item of ZaloTokens">{{item.Title}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Zalo OA ID</mat-label>
+              <mat-select [(ngModel)]="ZNS.idCN" [ngModelOptions]="{standalone: true}" (selectionChange)="onChinhanhChange($event)">
+                <mat-option [value]="item.id" *ngFor="let item of ZaloTokens">{{item.Title}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+              <mat-label>Danh Mục</mat-label>
+              <mat-select [(ngModel)]="TypeTeamplate" [ngModelOptions]="{standalone: true}" (selectionChange)="ChangeTemp($event)">
+                <mat-option [value]="item.key" *ngFor="let item of TypeTeamplates|keyvalue">{{item.value}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          
+          <button mat-stroked-button (click)="isShowDemo=!isShowDemo">
+           Gửi Tin Nhắn ZNS
+          </button>
+  
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openDialog(dialogTemplate);Detail = {}">
+              <div class="flex flex-row space-x-2 items-center">
+                <span class="material-symbols-outlined text-xl" matTooltip="Tùy Chỉnh">add_circle</span>
+                <span class="text-sm">Thêm Mới</span>
+              </div>
+            </button>
+            <button mat-menu-item>
+              <div class="flex flex-row space-x-2 items-center">
+                <span class="material-symbols-outlined text-xl" matTooltip="Tùy Chỉnh">tune</span>
+                <span class="text-sm">Cấu Hình</span>
+              </div>
+            </button>
+            <button mat-menu-item>
+              <div class="flex flex-row space-x-2 items-center">
+                <span class="material-symbols-outlined text-xl" matTooltip="Lấy Mẫu">file_download</span>
+                <span class="text-sm">Download</span>
+              </div>
+            </button>
+            <button mat-menu-item>
+              <div class="flex flex-row space-x-2 items-center">
+                <span class="material-symbols-outlined text-xl" matTooltip="Upload File">file_upload</span>
+                <span class="text-sm">Upload</span>
+              </div>
+            </button>
+          </mat-menu>
+        </div> -->
+        <div class="p-4 grid lg:grid-cols-2 gap-4">
+          <div class="flex flex-col space-y-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Chi Nhánh</mat-label>
+              <mat-select [(ngModel)]="ZNS.idCN" [ngModelOptions]="{standalone: true}" (selectionChange)="onChinhanhChange($event)">
+                <mat-option [value]="item.id" *ngFor="let item of ZaloTokens" (click)="SelectChinhanh=item">{{item.Title}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full text-xs">
+              <mat-label>Zalo OA ID</mat-label>
+              <input [(ngModel)]="SelectChinhanh.oa_id" [ngModelOptions]="{standalone: true}" matInput class="w-full" disabled
+                placeholder="Zalo OA ID">
+            </mat-form-field>
+  
+            <mat-form-field appearance="outline">
+              <mat-label>Template ID</mat-label>
+              <mat-select [(ngModel)]="ZNS.template_id" [ngModelOptions]="{standalone: true}" (selectionChange)="onTemplateChange($event)">
+                <mat-option [value]="item.templateId" *ngFor="let item of Teamplates">{{item.templateName}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full text-xs">
+              <mat-label>Tracking ID</mat-label>
+              <input [(ngModel)]="ZNS.tracking_id" [ngModelOptions]="{standalone: true}" matInput class="w-full" disabled
+                placeholder="Tracking ID">
+            </mat-form-field>
+            <!-- <mat-form-field appearance="outline" class="w-full text-xs">
+              <mat-label>Template ID</mat-label>
+              <input [(ngModel)]="ZNS.template_id" [ngModelOptions]="{standalone: true}" matInput class="w-full" disabled
+                placeholder="Template ID">
+            </mat-form-field> -->
+            <mat-form-field appearance="outline" class="w-full text-xs">
+              <mat-label>Số Điện Thoại</mat-label>
+              <input [(ngModel)]="ZNS.SDT" [ngModelOptions]="{standalone: true}" matInput class="w-full"
+                placeholder="Số Điện Thoại">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full text-xs">
+              <mat-label>Họ Tên</mat-label>
+              <input [(ngModel)]="ZNS.Hoten" [ngModelOptions]="{standalone: true}" matInput class="w-full"
+                placeholder="Họ Tên">
+            </mat-form-field>
 
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="openDialog(dialogTemplate);Detail = {}">
-            <div class="flex flex-row space-x-2 items-center">
-              <span class="material-symbols-outlined text-xl" matTooltip="Tùy Chỉnh">add_circle</span>
-              <span class="text-sm">Thêm Mới</span>
+            <mat-form-field *ngFor="let item of Teamplate.listParams" appearance="outline" class="w-full text-xs">
+              <mat-label>{{item.name}}</mat-label>
+              <input [(ngModel)]="ZNS.Data[item.name]" [ngModelOptions]="{standalone: true}" matInput class="w-full"
+                placeholder="Họ Tên">
+            </mat-form-field>
+
+
+            <div class="col-span-2">
+              <button mat-stroked-button (click)="SendZns(ZNS)">Gửi ZNS</button>
             </div>
-          </button>
-          <button mat-menu-item>
-            <div class="flex flex-row space-x-2 items-center">
-              <span class="material-symbols-outlined text-xl" matTooltip="Tùy Chỉnh">tune</span>
-              <span class="text-sm">Cấu Hình</span>
-            </div>
-          </button>
-          <button mat-menu-item>
-            <div class="flex flex-row space-x-2 items-center">
-              <span class="material-symbols-outlined text-xl" matTooltip="Lấy Mẫu">file_download</span>
-              <span class="text-sm">Download</span>
-            </div>
-          </button>
-          <button mat-menu-item>
-            <div class="flex flex-row space-x-2 items-center">
-              <span class="material-symbols-outlined text-xl" matTooltip="Upload File">file_upload</span>
-              <span class="text-sm">Upload</span>
-            </div>
-          </button>
-        </mat-menu>
-      </div>
-      <div class="p-4 grid lg:grid-cols-2 gap-4"  *ngIf="isShowDemo">
-        <div class="flex flex-col space-y-2">
-          <mat-form-field appearance="outline">
-            <mat-label>Chi Nhánh</mat-label>
-            <mat-select [(ngModel)]="ZNS.idCN" [ngModelOptions]="{standalone: true}" (selectionChange)="onChinhanhChange($event)">
-              <mat-option [value]="item.id" *ngFor="let item of ZaloTokens">{{item.Title}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Template ID</mat-label>
-            <mat-select [(ngModel)]="ZNS.template_id" [ngModelOptions]="{standalone: true}" (selectionChange)="onTemplateChange($event)">
-              <mat-option [value]="item.templateId" *ngFor="let item of Teamplates">{{item.templateName}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="w-full text-xs">
-            <mat-label>Tracking ID</mat-label>
-            <input [(ngModel)]="ZNS.tracking_id" [ngModelOptions]="{standalone: true}" matInput class="w-full" disabled
-              placeholder="Tracking ID">
-          </mat-form-field>
-          <!-- <mat-form-field appearance="outline" class="w-full text-xs">
-            <mat-label>Template ID</mat-label>
-            <input [(ngModel)]="ZNS.template_id" [ngModelOptions]="{standalone: true}" matInput class="w-full" disabled
-              placeholder="Template ID">
-          </mat-form-field> -->
-          <mat-form-field appearance="outline" class="w-full text-xs">
-            <mat-label>Số Điện Thoại</mat-label>
-            <input [(ngModel)]="ZNS.SDT" [ngModelOptions]="{standalone: true}" matInput class="w-full"
-              placeholder="Số Điện Thoại">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="w-full text-xs">
-            <mat-label>Họ Tên</mat-label>
-            <input [(ngModel)]="ZNS.Hoten" [ngModelOptions]="{standalone: true}" matInput class="w-full"
-              placeholder="Họ Tên">
-          </mat-form-field>
-          <div class="col-span-2">
-            <button mat-stroked-button (click)="SendZns(ZNS)">Gửi ZNS</button>
           </div>
-        </div>
-        <div class="flex flex-col space-y-2">
-                <div *ngIf="Teamplate.previewUrl">
-                  <iframe [src]="iframe(Teamplate.previewUrl)" class="w-full h-80"></iframe>
-                  <!-- <iframe [src]="Teamplate?.previewUrl" frameborder="0"></iframe>
-                  {{Teamplate|json}} -->
-                </div>
-        </div>
-       
-      </div>
-    </div>
-    <div class="relative flex flex-col h-full w-full overflow-auto">
-      <div class="flex flex-col">
-        <div class="flex flex-row justify-between items-center p-4 hover:bg-gray-200 hover:font-bold"
-          *ngFor="let item of FilterLists; let i = index">
-          <div class="flex flex-row space-x-2 items-center justify-between w-full">
-            <div class="flex flex-row space-x-4 items-center">
-              <img [src]="item.Image.src||'https://tazaskinclinic.com/images/taza-skin-clinic-logo.svg'" class="h-10">
-              <ng-container *ngIf="item.ResponWebHook.event_name == 'user_feedback'; else elseTemplate">
-                <div class="flex flex-col">
-                  <span>{{GetTypeZns(item.event_name)}}</span>
-                  <span class="italic text-xs">TrackingId :{{item.ResponWebHook.message.tracking_id}}</span>
-                  <span class="italic text-xs">{{item.ResponWebHook?.recipient?.id}}</span>
-                  <span class="italic text-xs">{{GetZaloOa(item.ResponWebHook?.sender?.id)}}</span>
-                  <span class="italic text-xs">{{item.CreateAt|date:'hh:ss dd/MM/yyyy'}}</span>
-                  <span class="italic text-xs">Số Sao : {{item.ResponWebHook.message.rate}} Sao</span>
-                  <span class="italic text-xs">Ghi Chú: {{item.ResponWebHook.message.note}}</span>
-                  <span class="italic text-xs">
-                    Feedbacks :
-                    <div *ngFor="let item of item.ResponWebHook.message.feedbacks">
-                      {{item}}
-                    </div>
-                  </span>
-                </div>
-              </ng-container>
-              <ng-template #elseTemplate>
-                <div class="flex flex-col">
-                  <span>{{GetTypeZns(item.event_name)}}</span>
-                  <span class="italic text-xs">TrackingId :{{item.ResponWebHook.message.tracking_id}}</span>
-                  <span class="italic text-xs">{{item.ResponWebHook?.recipient?.id}}</span>
-                  <span class="italic text-xs">{{GetZaloOa(item.ResponWebHook?.sender?.id)}}</span>
-                  <span class="italic text-xs">{{item.CreateAt|date:'hh:ss dd/MM/yyyy'}}</span>
-                </div>
-              </ng-template>
-            </div>
-            <!-- <button mat-icon-button (click)="openDeleteDialog(dlgDeleteTemplate,item)">
-              <span class="material-symbols-outlined text-xl text-red-500" matTooltip="Xoá">delete</span>
-            </button> -->
+          <div class="flex flex-col space-y-2">
+                  <div *ngIf="Teamplate.previewUrl">
+                    <iframe [src]="iframe(Teamplate.previewUrl)" class="w-full h-80"></iframe>
+                    <!-- <iframe [src]="Teamplate?.previewUrl" frameborder="0"></iframe>
+                    {{Teamplate|json}} -->
+                  </div>
           </div>
         </div>
       </div>
+      <div class="relative flex flex-col h-full w-full overflow-auto">
+        <!-- <div class="flex flex-col">
+          <div class="flex flex-row justify-between items-center p-4 hover:bg-gray-200 hover:font-bold"
+            *ngFor="let item of FilterLists; let i = index">
+            <div class="flex flex-row space-x-2 items-center justify-between w-full">
+              <div class="flex flex-row space-x-4 items-center">
+                <img [src]="item.Image.src||'https://tazaskinclinic.com/images/taza-skin-clinic-logo.svg'" class="h-10">
+                <ng-container *ngIf="item.ResponWebHook.event_name == 'user_feedback'; else elseTemplate">
+                  <div class="flex flex-col">
+                    <span>{{GetTypeZns(item.event_name)}}</span>
+                    <span class="italic text-xs">TrackingId :{{item.ResponWebHook.message.tracking_id}}</span>
+                    <span class="italic text-xs">{{item.ResponWebHook?.recipient?.id}}</span>
+                    <span class="italic text-xs">{{GetZaloOa(item.ResponWebHook?.sender?.id)}}</span>
+                    <span class="italic text-xs">{{item.CreateAt|date:'hh:ss dd/MM/yyyy'}}</span>
+                    <span class="italic text-xs">Số Sao : {{item.ResponWebHook.message.rate}} Sao</span>
+                    <span class="italic text-xs">Ghi Chú: {{item.ResponWebHook.message.note}}</span>
+                    <span class="italic text-xs">
+                      Feedbacks :
+                      <div *ngFor="let item of item.ResponWebHook.message.feedbacks">
+                        {{item}}
+                      </div>
+                    </span>
+                  </div>
+                </ng-container>
+                <ng-template #elseTemplate>
+                  <div class="flex flex-col">
+                    <span>{{GetTypeZns(item.event_name)}}</span>
+                    <span class="italic text-xs">TrackingId :{{item.ResponWebHook.message.tracking_id}}</span>
+                    <span class="italic text-xs">{{item.ResponWebHook?.recipient?.id}}</span>
+                    <span class="italic text-xs">{{GetZaloOa(item.ResponWebHook?.sender?.id)}}</span>
+                    <span class="italic text-xs">{{item.CreateAt|date:'hh:ss dd/MM/yyyy'}}</span>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div> -->
+      </div>
     </div>
+
   </mat-drawer-content>
 </mat-drawer-container>
 <ng-template #dialogTemplate>

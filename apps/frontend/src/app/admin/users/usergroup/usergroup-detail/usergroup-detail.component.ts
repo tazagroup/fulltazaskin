@@ -38,7 +38,8 @@ export class UsergroupDetailComponent implements OnInit {
         this._UsergroupService.usergroup$.subscribe((res:any) => {
           if (res) {   
             this._MenuService.menus$.subscribe((data:any)=>{
-              this.ListMenu = data.map((v:any)=>({Title:v.Title,Slug:v.Slug,id:v.id,pid:v.pid,Checked:false}))
+              // this.ListMenu = data.map((v:any)=>({Title:v.Title,Slug:v.Slug,id:v.id,pid:v.pid,Checked:false}))
+              this.ListMenu = data.map((v:any)=>({...v,Checked:false}))
               this.ListMenu.forEach(v => {
                 if (!res.ListMenu.find((v1:any)=> v1.id === v.id)) {
                   res.ListMenu.push(v);

@@ -4,8 +4,9 @@
       arrow_back
     </span>
     <div class="text-xl">{{Detail.Title}}</div>
-    <div>
+    <div class="flex flex-row space-x-2">
       <button mat-raised-button color="primary" (click)="Update(Detail)">Cập Nhật</button>
+      <button mat-raised-button color="warn"  (click)="XoaDialog(XoaTeamplate)">Xoá</button>
     </div>
   </div>
   <div class="relative h-full w-full overflow-auto flex flex-col space-y-2 justify-between p-4">
@@ -27,7 +28,29 @@
               <input [(ngModel)]="Detail.Slug" [ngModelOptions]="{standalone: true}" matInput type="text"
                 class="w-full" placeholder="Liên Kết" />
             </mat-form-field>            
+            <mat-form-field appearance="outline">
+              <mat-label>Ordering</mat-label>
+              <input [(ngModel)]="Detail.Ordering" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Ordering" />
+            </mat-form-field>            
         </div>
       </div>
     </div>
   </div>
+
+    <ng-template #XoaTeamplate>
+      <div class="p-2 flex flex-col space-y-3">
+        <div mat-dialog-title>Xoá</div>
+        <div mat-dialog-content>
+          <div class="flex flex-col w-full space-y-4 lg:p-4">
+              Bạn chắc chắn muốn Xoá?
+          </div>
+          <div class="flex flex-row space-x-2 items-center justify-center">
+            <button mat-flat-button color="warn" mat-dialog-close="false">Huỷ</button>
+            <button mat-flat-button color="primary" mat-dialog-close="true">Đồng Ý</button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  
+  

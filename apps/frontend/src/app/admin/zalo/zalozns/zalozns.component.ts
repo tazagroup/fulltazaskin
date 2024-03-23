@@ -14,7 +14,8 @@ import * as moment from 'moment';
 })
 export class ZaloznsComponent implements OnInit {
   Detail: any = {};
-  ZNS: any = { template_id: "272889",tracking_id:GenId(8,true) };
+  SelectChinhanh:any={}
+  ZNS: any = {Data:{}};
   Lists: any[] = []
   FilterLists: any[] = []
   ZaloTokens: any[] = []
@@ -35,7 +36,10 @@ export class ZaloznsComponent implements OnInit {
   ngOnInit(): void {
     this.TypeTeamplate = "user_received_message",
     this._ZalotokenService.getAllZalotokens().subscribe()
-    this._ZalotokenService.zalotokens$.subscribe((data)=>{if(data){this.ZaloTokens=data}})
+    this._ZalotokenService.zalotokens$.subscribe((data)=>{if(data){
+      this.ZaloTokens=data
+      console.log(data);  
+    }})
     this._ZaloznsService.getPaginaZaloznss(1,10).subscribe()
     this._ZaloznsService.zaloznss$.subscribe((data: any) => {
       if(data)
@@ -53,6 +57,10 @@ export class ZaloznsComponent implements OnInit {
       if (data) {
         if(data)
         {
+          console.log(this.ZNS);
+          
+          console.log(data);
+         this.ZNS.tracking_id = `${this.ZNS.template_id}${(new Date()).getTime()}`
           this.Teamplate = data.data
         }
       }
@@ -60,9 +68,13 @@ export class ZaloznsComponent implements OnInit {
 
   }
   onChinhanhChange(event: MatSelectChange) {
+    console.log(event.value);
+    
     this._ZaloznsService.getallteamplate(event.value).subscribe()
     this._ZaloznsService.teamplates$.subscribe((data: any) => {
       if (data) {
+        console.log(data);
+        
         this.Teamplates = data.data  
         this.ZaloToken = data.token      
       }
@@ -108,17 +120,19 @@ export class ZaloznsComponent implements OnInit {
     return ZALO_OA(item)
   }
   SendZns(item: any) {
-    const now = new Date();
+    console.log(item);
+    console.log(this.ZaloToken);
+    
     const data =
     {
+      "token":this.ZaloToken,
+      "mode": "development",
       "phone": convertPhoneNum(item.SDT),
       "template_id": item.template_id,
-      "template_data": {
-        "customer_name": item.Hoten,
-        "schedule_date": moment(new Date()).format("hh:mm:ss DD/MM/YYYY"),
-      },
+      "template_data": item.Data,
       "tracking_id": item.tracking_id
     }
+    console.log(data);
     this._ZaloznsService.sendZns(data).subscribe((result) => console.log(result))
   }
   iframe(item: any) {

@@ -35,7 +35,7 @@ export class UsergroupComponent implements OnInit {
   openDialog(teamplate: TemplateRef<any>): void {
     const dialogRef = this.dialog.open(teamplate, {
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result) => {      
       if (result=="true") {
         this._UsergroupService.CreateUsergroup(this.Detail).subscribe()
       }

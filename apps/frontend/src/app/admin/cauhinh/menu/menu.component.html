@@ -1,5 +1,6 @@
 <mat-drawer-container class="example-container w-full h-full" autosize>
-  <mat-drawer #drawer mode="side" class="!flex flex-col flex-auto min-w-0 relative h-full lg:w-2/3 w-full" position="end">
+  <mat-drawer #drawer mode="side" class="!flex flex-col flex-auto min-w-0 relative h-full lg:w-2/3 w-full"
+    position="end">
     <div class="relative flex flex-col h-full w-full overflow-auto">
       <router-outlet></router-outlet>
     </div>
@@ -12,35 +13,41 @@
           <input matInput (keyup)="applyFilter($event)" class="w-full" placeholder="Mô Tả">
           <span matPrefix class="material-symbols-outlined mr-2">search</span>
         </mat-form-field>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-          <span class="material-symbols-outlined">more_vert</span>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="openDialog(dialogTemplate);Detail = {}">
-            <div class="flex flex-row space-x-2 items-center">
-              <span class="material-symbols-outlined text-xl" matTooltip="Tùy Chỉnh">add_circle</span>
-              <span class="text-sm">Thêm Mới</span>
-            </div>
-          </button>
-          <button mat-menu-item>
-            <div class="flex flex-row space-x-2 items-center">
-              <span class="material-symbols-outlined text-xl" matTooltip="Tùy Chỉnh">tune</span>
-              <span class="text-sm">Cấu Hình</span>
-            </div>
-          </button>
-          <button mat-menu-item>
-            <div class="flex flex-row space-x-2 items-center">
-              <span class="material-symbols-outlined text-xl" matTooltip="Lấy Mẫu">file_download</span>
-              <span class="text-sm">Download</span>
-            </div>
-          </button>
-          <button mat-menu-item>
-            <div class="flex flex-row space-x-2 items-center">
-              <span class="material-symbols-outlined text-xl" matTooltip="Upload File">file_upload</span>
-              <span class="text-sm">Upload</span>
-            </div>
-          </button>
-        </mat-menu>
+      </div>
+      <div class="flex flex-row space-x-3 items-center p-2">
+        <!-- <div class="relative mt-1 lg:w-80">
+          <input (keyup)="applyFilter($event)" type="text" name="email" id="topbar-search"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+            placeholder="Tìm Kiếm">
+        </div> -->
+        <div class="flex flex-wrap space-x-3 cursor-pointer">
+          <div (click)="writeExcelFile()" class="flex flex-col items-center p-2 hover:bg-gray-200 rounded-lg">
+            <span class="material-symbols-outlined text-xl" matTooltip="Upload File">file_download</span>
+            <span class="text-xs">Download</span>
+          </div>
+          <!-- <div (click)="uploadfile.click()"
+            class="flex flex-col items-center p-2 hover:bg-gray-200 rounded-lg">
+            <span class="material-symbols-outlined text-xl" matTooltip="Upload File">file_upload</span>
+            <span class="text-xs">Upload</span>
+            <input class="hidden" (change)="readExcelFile($event)" type="file" #uploadfile>
+          </div> -->
+          <div (click)="LoadDrive()"
+            class="flex flex-col items-center p-2 text-center justify-center hover:bg-gray-200 rounded-lg">
+            <span class="material-symbols-outlined text-xl" matTooltip="Drive">cloud_download</span>
+            <span class="text-xs">Drive ({{Lists.length||0}})</span>
+          </div>
+          <div *ngIf="Lists.length>0" (click)="SyncDrive()"
+            class="flex flex-col items-center p-2 text-center justify-center hover:bg-gray-200 rounded-lg">
+            <span class="material-symbols-outlined text-xl" matTooltip="Drive">cloud_sync</span>
+            <span class="text-xs">Sync ({{FilterLists.length||0}}/{{Lists.length||0}})</span>
+          </div>
+          <div (click)="openDialog(dialogTemplate);Detail = {}"
+            class="flex flex-col items-center p-2 text-center justify-center hover:bg-gray-200 rounded-lg">
+            <span class="material-symbols-outlined text-xl" matTooltip="Drive">add_circle</span>
+            <span class="text-xs">Thêm Mới</span>
+          </div>
+
+        </div>
       </div>
     </div>
     <div class="relative flex flex-col h-full w-full overflow-auto">
@@ -61,22 +68,30 @@
             </button>
           </div>
         </div> -->
-        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+        <mat-tree class="example-list cursor-pointer" cdkDropList (cdkDropListDropped)="drop($event)"
+          [dataSource]="dataSource" [treeControl]="treeControl">
           <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-            <div
-              class="flex flex-row space-x-2 justify-between p-3 w-full rounded-lg hover:bg-gray-100 hover:font-bold"
-              [routerLink]="[node.id]">
-              <span>
-                {{node.Title}}
+            <div cdkDrag
+              class="flex flex-row space-x-2 p-3 w-full rounded-lg bg-white hover:bg-gray-100 hover:font-bold">
+              <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+              <span class="material-symbols-outlined" cdkDragHandle>
+                drag_indicator
+              </span>
+              <span [routerLink]="[node.id]">
+                {{node.Ordering}} - {{node.Title}}
               </span>
             </div>
           </mat-tree-node>
           <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding class="pl-2">
-            <div
-              class="flex flex-row space-x-2 items-center justify-between p-3 w-full rounded-lg hover:bg-gray-100 hover:font-bold"
-              [routerLink]="[node.id]" routerLinkActive="bg-gray-100 font-bold">
-              <span>
-                {{node.Title}}
+            <div cdkDrag
+              class="flex flex-row space-x-2 items-center p-3 w-full rounded-lg bg-white hover:bg-gray-100 hover:font-bold"
+              routerLinkActive="bg-gray-100 font-bold">
+              <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+              <span class="material-symbols-outlined" cdkDragHandle>
+                drag_indicator
+              </span>
+              <span [routerLink]="[node.id]">
+                {{node.Ordering}} - {{node.Title}}
               </span>
               <span mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.Title">
                 <span
@@ -100,16 +115,16 @@
             <mat-option [value]="item.id" *ngFor="let item of FilterLists">{{item.Title}}</mat-option>
           </mat-select>
         </mat-form-field>
-          <mat-form-field appearance="outline" class="col-span-2">
-            <mat-label>Tiêu Đề</mat-label>
-            <input [(ngModel)]="Detail.Title" [ngModelOptions]="{standalone: true}" matInput type="text"
-              class="w-full" placeholder="Tiêu Đề" />
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="col-span-2">
-            <mat-label>Liên Kết</mat-label>
-            <input [(ngModel)]="Detail.Slug" [ngModelOptions]="{standalone: true}" matInput type="text"
-              class="w-full" placeholder="Liên Kết" />
-          </mat-form-field>
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label>Tiêu Đề</mat-label>
+          <input (input)="FillSlug()" [(ngModel)]="Detail.Title" [ngModelOptions]="{standalone: true}" matInput
+            type="text" class="w-full" placeholder="Tiêu Đề" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label>Liên Kết</mat-label>
+          <input [(ngModel)]="Detail.Slug" [ngModelOptions]="{standalone: true}" matInput type="text" class="w-full"
+            placeholder="Liên Kết" />
+        </mat-form-field>
       </div>
     </div>
     <div mat-dialog-actions class="flex flex-row space-x-2 justify-center">

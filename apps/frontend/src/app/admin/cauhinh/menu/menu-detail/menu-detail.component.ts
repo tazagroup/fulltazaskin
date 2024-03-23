@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'apps/frontend/src/environments/environment';
 import { MenuComponent } from '../menu.component';
 import { MenuService } from '../menu.service';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { NotifierService } from 'angular-notifier';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-menu-detail',
   templateUrl: './menu-detail.component.html',
@@ -19,7 +20,8 @@ export class MenuDetailComponent implements OnInit {
     private router: Router,
     private _MenuComponent: MenuComponent,
     private _MenuService: MenuService,
-    private _NotifierService: NotifierService
+    private _NotifierService: NotifierService,
+    private dialog: MatDialog,
     
   ) {}
   ngOnInit(): void {
@@ -82,5 +84,15 @@ export class MenuDetailComponent implements OnInit {
   {
     this._MenuService.UpdateMenu(data).subscribe(()=>
     this._NotifierService.notify("success","Cập Nhật Thành Công"));
+  }
+  XoaDialog(teamplate: TemplateRef<any>): void {
+    const dialogRef = this.dialog.open(teamplate, {
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == 'true') {
+        console.log(this.Detail);
+        this._MenuService.DeleteMenu(this.Detail.id).subscribe()
+      }
+    });
   }
 }

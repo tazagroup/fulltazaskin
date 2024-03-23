@@ -68,7 +68,7 @@ export class ZaloznsService {
     // );
   }
   sendZns(item:any) {
-    return this.http.post(environment.APIURL + '/zalozns/sendZns',item).pipe(
+    return this.http.post(environment.APIURL + '/zalozns/sendzns',item).pipe(
       map((data: any) => { 
         console.log(data);
       })
