@@ -13,6 +13,10 @@ export class ZaloznsController {
     private readonly zaloznsService:ZaloznsService,
     private _ZalotokenService: ZalotokenService,
     private readonly httpService: HttpService) {}
+  @Post('sendzns')
+  async sendzns(@Body() data: any): Promise<any> {
+    return this.zaloznsService.sendzns(data);
+   }
   @Post('webhook')
   async getwebhook(@Req() req: Request): Promise<any> {
     return this.zaloznsService.createzns(req);

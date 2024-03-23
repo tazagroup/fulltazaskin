@@ -32,9 +32,7 @@ export class Vttech_thanhtoanService {
     const now = moment();
     const begin = data?.begin ? moment(data.begin).format('DD-MM-YYYY') : now.format('DD-MM-YYYY');
     const end = data?.end ? moment(data.end).format('DD-MM-YYYY') : now.format('DD-MM-YYYY');
-    const url = `https://tmtaza.vttechsolution.com/Report/Revenue/Branch/AllBranchGrid/?handler=LoadataDetailByBranch&branchID=${idVttech}&dateFrom=${begin}&dateTo=${end}`;
-    console.log(this.XsrfToken);
-    
+    const url = `https://tmtaza.vttechsolution.com/Report/Revenue/Branch/AllBranchGrid/?handler=LoadataDetailByBranch&branchID=${idVttech}&dateFrom=${begin}&dateTo=${end}`;    
     try {
       const ListKetqua:any=[]
       const response = await fetch(url, {

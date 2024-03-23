@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
 } from 'typeorm';
-@Entity('menu', {orderBy: { Ordering: 'DESC' } })
+@Entity('menu', {orderBy: { Ordering: 'ASC' } })
 export class MenuEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
