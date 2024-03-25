@@ -10,7 +10,7 @@ import moment = require('moment');
 import { Vttech_tinhtrangphongService } from './vttech_tinhtrangphong/vttech_tinhtrangphong.service';
 import { Vttech_dieutriService } from './vttech_dieutri/vttech_dieutri.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import { LIST_CHI_NHANH, mergeNoDup } from '../shared.utils';
+import { LIST_CHI_NHANH, Phone_To_0, convertPhoneNum, mergeNoDup } from '../shared.utils';
 import { ZaloznsService } from '../zalo/zalozns/zalozns.service';
 import { CronJob } from '@nestjs/schedule/node_modules/cron/dist/job';
 import { LoggerService } from '../logger/logger.service';
@@ -98,11 +98,11 @@ export class VttechService {
     const date1 = new Date(data);
     return date1.getTime()
   }
-  async GetKHBySDT(data: any) {
+  async GetKHBySDT(data: any) {    
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://tmtaza.vttechsolution.com/Searching/Searching/?handler=SearchByOption&data=%5B%7B%22name%22%3A%22PHONENUMBER%22%2C%22value%22%3A%22' + data + '%22%7D%5D&CBeginID=0',
+      url: 'https://tmtaza.vttechsolution.com/Searching/Searching/?handler=SearchByOption&data=%5B%7B%22name%22%3A%22PHONENUMBER%22%2C%22value%22%3A%22' +  Phone_To_0(data) + '%22%7D%5D&CBeginID=0',
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
     };
     try {
@@ -194,17 +194,32 @@ export class VttechService {
       console.log(error);
     }
   }
-  async GetPaymentInfo(CustomerID: any) {
-    const response = await fetch(`https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=${CustomerID}`, {
+  async GetPaymentInfo(SDT: any) {
+    console.log(SDT);
+    const result = await this.GetKHBySDT(SDT)
+    console.log(result.Table[0].CustomerID);
+    
+    let config = {
       method: 'post',
+      maxBodyLength: Infinity,
+      url: `https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=${result.Table[0].CustomerID}`,
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      body: JSON.stringify({})
+    };
+    try {
+      const response = await fetch(config.url,config)
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }    
+      const data = await response.json();
+      console.log(data);
+      return data  
+    } catch (error) {
+      console.log(error);
+      
     }
-    const data = await response.json();
-    console.log(data);
-    return data  
+
   }
 
 

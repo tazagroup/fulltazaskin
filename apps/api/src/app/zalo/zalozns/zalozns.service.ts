@@ -285,8 +285,7 @@ export class ZaloznsService {
         throw new Error(`Error fetching data: ${response.statusText}`);
       }
       const data = await response.json();
-      return data
-      
+      return data  
   }
   async createzns(req: any) {
     const result: any = {}

@@ -229,7 +229,11 @@ export function convertPhoneNum(phoneNumber:any) {
   }
 }
 export function Phone_To_0(phoneNumber: any) {
-  if (phoneNumber.startsWith("84")) {
+  if(phoneNumber.length<10)
+  {
+    return "0" + phoneNumber;
+  }
+  else if (phoneNumber.startsWith("84")) {
     return "0" + phoneNumber.slice(2);
   } else {
     return phoneNumber;

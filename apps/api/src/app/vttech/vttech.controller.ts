@@ -73,11 +73,9 @@ export class VttechController {
   GetThanhtoan(@Param('CUSID') CUSID: string) {
     return this.vttechService.GetThanhtoan(CUSID);
   }
-  @Post('payment/:CUSID')
-  GetPaymentInfo(@Param('CUSID') CUSID: string) {
-    console.log(CUSID);
-    
-    return this.vttechService.GetPaymentInfo(CUSID);
+  @Post('payment/:SDT')
+  GetPaymentInfo(@Param('SDT') SDT: string) {
+    return this.vttechService.GetPaymentInfo(SDT);
   }
   @Get('lichhen/:CUSID')
   GetLichhen(@Param('CUSID') CUSID: string) {
