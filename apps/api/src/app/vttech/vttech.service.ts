@@ -194,6 +194,18 @@ export class VttechService {
       console.log(error);
     }
   }
+  async GetPaymentInfo(CustomerID: any) {
+    const response = await fetch(`https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=${CustomerID}`, {
+      method: 'post',
+      headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(data);
+    return data  
+  }
 
 
 

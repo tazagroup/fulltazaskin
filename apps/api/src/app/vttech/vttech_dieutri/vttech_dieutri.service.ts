@@ -314,7 +314,7 @@ export class Vttech_dieutriService {
                 break;
             }
           } catch (error) {
-            console.error(`Error calling Zalozns service: ${error.message}  - ${data.SDT}`);
+            console.error(`Error calling Zalozns service: ${error.message}  - ${data}`);
           }
         }
         else {

@@ -29,6 +29,8 @@ export class Vttech_thanhtoanService {
   }
   
   async getApiRealtime(idVttech: any, data: any = {}) {
+    console.log('Cookie:', this.Cookie, 'Xsrf-Token:', this.XsrfToken);
+    
     const now = moment();
     const begin = data?.begin ? moment(data.begin).format('DD-MM-YYYY') : now.format('DD-MM-YYYY');
     const end = data?.end ? moment(data.end).format('DD-MM-YYYY') : now.format('DD-MM-YYYY');
@@ -200,8 +202,9 @@ export class Vttech_thanhtoanService {
       console.error(error);
     }
   }
-
   async sendZNSThanhtoan(data: any) {
+    console.log(data);
+    
       const CheckData = await this.findid(data.id)
    //   if (CheckData.Status == 0 && data.SDT=='0977272967') {
        if (CheckData.Status == 0) {
@@ -268,7 +271,7 @@ export class Vttech_thanhtoanService {
                 break;
             }
           } catch (error) {
-            console.error(`Error calling Zalozns service: ${error.message} - ${data.SDT}`);
+            console.error(`Error calling Zalozns service: ${error.message} - ${data}`);
           }
         }
         else {
