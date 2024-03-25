@@ -197,17 +197,16 @@ export class VttechService {
   async GetPaymentInfo(SDT: any) {
     console.log(SDT);
     const result = await this.GetKHBySDT(SDT)
-    console.log(result.Table[0].CustomerID);
-    this._TelegramService.SendLogdev(JSON.stringify(result)) 
+    this._TelegramService.SendLogdev(JSON.stringify(result.Table[0].CustomerID)) 
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
       url: `https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=${result.Table[0].CustomerID}`,
-      headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
-      body: JSON.stringify({})
+      headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken }
     };
     try {
       const response = await fetch(config.url,config)
+      this._TelegramService.SendLogdev(JSON.stringify(response)) 
       if (!response.ok) {
         this._TelegramService.SendLogdev(JSON.stringify(response.status)) 
         throw new Error(`HTTP error! status: ${response.status}`);
