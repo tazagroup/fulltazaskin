@@ -226,7 +226,7 @@ export class VttechService {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=30056',
+      url: `https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=${result.Table[0].CustomerID}`,
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken }
     };
     try {
