@@ -207,19 +207,26 @@ export class VttechService {
       body: JSON.stringify({})
     };
     try {
-      const response = await fetch(config.url,config)
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }    
-      const data = await response.json();
-      console.log(data);
-      return data  
+      const response = await axios.request(config);
+      return response.data;
+      console.log(JSON.stringify(response.data));
     } catch (error) {
       console.log(error);
-      return error  
-      
     }
+    // try {
+    //   const response = await fetch(config.url,config)
+  
+    //   if (!response.ok) {
+    //     throw new Error(`HTTP error! status: ${response.status}`);
+    //   }    
+    //   const data = await response.json();
+    //   console.log(data);
+    //   return data  
+    // } catch (error) {
+    //   console.log(error);
+    //   return error  
+      
+    // }
 
   }
 
