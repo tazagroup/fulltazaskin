@@ -205,16 +205,9 @@ export class VttechService {
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken }
     };
     try {
-      const response = await fetch(config.url,config)
+      const response = await axios.request(config);
       this._TelegramService.SendLogdev(JSON.stringify(response)) 
-      if (!response.ok) {
-        this._TelegramService.SendLogdev(JSON.stringify(response.status)) 
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }    
-      const data = await response.json();
-      this._TelegramService.SendLogdev(JSON.stringify(data)) 
-      console.log(data);
-      return data  
+      return response  
     } catch (error) {
       console.log(error);
       this._TelegramService.SendLogdev(JSON.stringify(error)) 
