@@ -221,7 +221,7 @@ export class VttechService {
 
 
   async GetPaymentInfo(SDT: any) {
-        const result = await this.GetKHBySDT(SDT)
+    const result = await this.GetKHBySDT(SDT)
     this._TelegramService.SendLogdev(JSON.stringify(result.Table[0].CustomerID)) 
     let config = {
       method: 'post',
@@ -231,7 +231,7 @@ export class VttechService {
     };
     try {
       const response = await axios.request(config);
-      this._TelegramService.SendLogdev(JSON.stringify(response)) 
+      this._TelegramService.SendLogdev(JSON.stringify(response.data)) 
       return response.data;
     } catch (error) {
       console.log(error);
