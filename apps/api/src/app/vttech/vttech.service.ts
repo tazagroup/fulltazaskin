@@ -194,29 +194,59 @@ export class VttechService {
       console.log(error);
     }
   }
+  // async GetPaymentInfo(SDT: any) {
+  //   console.log(SDT);
+  //   const result = await this.GetKHBySDT(SDT)
+  //   this._TelegramService.SendLogdev(JSON.stringify(result.Table[0].CustomerID)) 
+  //   let config = {
+  //     method: 'post',
+  //     maxBodyLength: Infinity,
+  //     url: `https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=${result.Table[0].CustomerID}`,
+  //     headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken }
+  //   };
+  //   try {
+  //     const response = await axios.request(config);
+  //     this._TelegramService.SendLogdev(JSON.stringify(response)) 
+  //     return response  
+  //   } catch (error) {
+  //     console.log(error);
+  //     this._TelegramService.SendLogdev(JSON.stringify(error)) 
+  //     return error  
+      
+  //   }
+  // }
+
+  
+
+
+
   async GetPaymentInfo(SDT: any) {
-    console.log(SDT);
-    const result = await this.GetKHBySDT(SDT)
+        const result = await this.GetKHBySDT(SDT)
     this._TelegramService.SendLogdev(JSON.stringify(result.Table[0].CustomerID)) 
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=${result.Table[0].CustomerID}`,
+      url: 'https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=30056',
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken }
     };
     try {
       const response = await axios.request(config);
       this._TelegramService.SendLogdev(JSON.stringify(response)) 
-      return response  
+      return response.data;
     } catch (error) {
       console.log(error);
-      this._TelegramService.SendLogdev(JSON.stringify(error)) 
-      return error  
-      
     }
+
+    // axios.request(config)
+    // .then((response) => {
+    //   console.log(JSON.stringify(response.data));
+    // })
+    // .catch((error) => {
+    //   console.log(error);
+    // });
+    
+
   }
-
-
 
   async GetLichhen(CustomerID: any) {
     let config = {
