@@ -198,7 +198,7 @@ export class VttechService {
     console.log(SDT);
     const result = await this.GetKHBySDT(SDT)
     console.log(result.Table[0].CustomerID);
-    
+    this._TelegramService.SendLogdev(JSON.stringify(result)) 
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -207,27 +207,21 @@ export class VttechService {
       body: JSON.stringify({})
     };
     try {
-      const response = await axios.request(config);
-      return response.data;
-      console.log(JSON.stringify(response.data));
+      const response = await fetch(config.url,config)
+      if (!response.ok) {
+        this._TelegramService.SendLogdev(JSON.stringify(response.status)) 
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }    
+      const data = await response.json();
+      this._TelegramService.SendLogdev(JSON.stringify(data)) 
+      console.log(data);
+      return data  
     } catch (error) {
       console.log(error);
-    }
-    // try {
-    //   const response = await fetch(config.url,config)
-  
-    //   if (!response.ok) {
-    //     throw new Error(`HTTP error! status: ${response.status}`);
-    //   }    
-    //   const data = await response.json();
-    //   console.log(data);
-    //   return data  
-    // } catch (error) {
-    //   console.log(error);
-    //   return error  
+      this._TelegramService.SendLogdev(JSON.stringify(error)) 
+      return error  
       
-    // }
-
+    }
   }
 
 
