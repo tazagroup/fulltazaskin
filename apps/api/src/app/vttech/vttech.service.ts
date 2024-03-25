@@ -222,6 +222,8 @@ export class VttechService {
 
   async GetPaymentInfo(SDT: any) {
     const result = await this.GetKHBySDT(SDT)
+    console.log(result);
+    
     this._TelegramService.SendLogdev(JSON.stringify(result.Table[0].CustomerID)) 
     let config = {
       method: 'post',
