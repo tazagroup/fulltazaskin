@@ -268,6 +268,7 @@ export class ZaloznsService {
   }
   async sendzns(item: any) {
       console.log(item);
+      this._TelegramService.SendMiniAppLogdev(JSON.stringify(item)) 
       const accessToken = item.token;
       delete item.token
       let config = {
