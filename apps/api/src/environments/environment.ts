@@ -5,4 +5,5 @@ export const environment = {
   APITelegram_idGroup:"-4009392653",
   APITelegram_Logdev:"-4079959937",
   APITelegram_LogVttech:"-4095270531",
+  APITelegram_LogMiniApp:"-4119965253",
 };

@@ -20,6 +20,13 @@ export class TelegramService {
     const response = await axios.request(options);
     return response.data;
   }
+  async SendMiniAppLogdev(data: any): Promise<any> {
+    const options = {
+      url: `https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage?chat_id=${environment.APITelegram_Logdev}&text=${data}&parse_mode=html`,
+    };
+    const response = await axios.request(options);
+    return response.data;
+  }
   async SendDulieuVttech(data: string): Promise<any> {
     const options = {
       url: `https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage?chat_id=${environment.APITelegram_LogVttech}&text=${data}&parse_mode=html`,
