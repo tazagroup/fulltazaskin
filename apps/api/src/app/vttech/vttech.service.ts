@@ -286,21 +286,28 @@ export class VttechService {
     }
   }
 
-  async GetLichhen(CustomerID: any) {
+  async GetLichhen(SDT: any) {
+    const result = await this.GetKHBySDT(SDT)
+    if(result.Table.length>0)
+    {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://tmtaza.vttechsolution.com/Customer/ScheduleList_Schedule/?handler=Loadata&CustomerID=' + CustomerID + '&Limit=10&BeginID=0&IsDelete=0',
+      url: `https://tmtaza.vttechsolution.com/Customer/ScheduleList_Schedule/?handler=Loadata&CustomerID=${result.Table[0].CustomerID}&Limit=200&BeginID=0&IsDelete=0`,
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
     };
 
     try {
       const response = await axios.request(config);
       return response.data;
-      console.log(JSON.stringify(response.data));
     } catch (error) {
       console.log(error);
     }
+  }
+  else
+  {
+    this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`) 
+  }
 
   }
 

@@ -81,9 +81,9 @@ export class VttechController {
   GetHangthanhvien(@Param('SDT') SDT: string) {
     return this.vttechService.GetHangthanhvien(SDT);
   }
-  @Get('lichhen/:CUSID')
-  GetLichhen(@Param('CUSID') CUSID: string) {
-    return this.vttechService.GetLichhen(CUSID);
+  @Get('lichhen/:SDT')
+  GetLichhen(@Param('SDT') SDT: string) {
+    return this.vttechService.GetLichhen(SDT);
   }
   @Get()
   findAll() {
