@@ -271,7 +271,7 @@ export class Vttech_thanhtoanService {
                 break;
             }
           } catch (error) {
-            console.error(`Error calling Zalozns service: ${error.message} - ${data}`);
+            console.error(`Error calling Zalozns service: ${error.message} - ${JSON.stringify(data)}`);
           }
         }
         else {
