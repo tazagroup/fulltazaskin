@@ -77,6 +77,10 @@ export class VttechController {
   GetPaymentInfo(@Param('SDT') SDT: string) {
     return this.vttechService.GetPaymentInfo(SDT);
   }
+  @Get('hangthanhvien/:SDT')
+  GetHangthanhvien(@Param('SDT') SDT: string) {
+    return this.vttechService.GetHangthanhvien(SDT);
+  }
   @Get('lichhen/:CUSID')
   GetLichhen(@Param('CUSID') CUSID: string) {
     return this.vttechService.GetLichhen(CUSID);

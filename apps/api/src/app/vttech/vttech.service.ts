@@ -225,7 +225,8 @@ export class VttechService {
     } catch (error) {
       console.log(error);
     }
-  }  async GetPaymentInfo(SDT: any) {
+  }  
+  async GetPaymentInfo(SDT: any) {
     const result = await this.GetKHBySDT(SDT)
     if(result.Table.length>0)
     {
@@ -236,35 +237,53 @@ export class VttechService {
         headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken }
       };
       try {
-        const response = await axios.request(config);
+        const ListHangthanhvien = await this.GetHangthanhvien(SDT)
+        const response:any = await axios.request(config);
         const Noti = `${SDT} - CusID: ${JSON.stringify(result.Table[0].CustomerID)} - ${response.data[0].PRICE_DISCOUNTED} -${response.data[0].PRICE_TREAT}`
         this._TelegramService.SendMiniAppLogdev(Noti) 
         this._VttechpaymentService.create(response.data[0])
-        return response.data[0];
+        response.data[0]['Hangthanhvien'] ="Normal"
+        if(ListHangthanhvien.length>0)
+        {
+            response.data[0]['Hangthanhvien'] = ListHangthanhvien.find((v:any)=> {
+              return response.data[0].PAID>=v.AmountFrom && response.data[0].PAID<=v.AmountTo
+            })?.Name ||"Normal"
+            console.log(response.data[0]);    
+            return response.data[0];    
+        }
+
+      } catch (error) {        
+        console.log(error);
+      }
+    }
+    else
+    {
+      this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`) 
+    }    
+
+  }
+  async GetHangthanhvien(SDT: any) {
+    const result = await this.GetKHBySDT(SDT)
+    if(result.Table.length>0)
+    {
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=Loadata&CustomerID=${result.Table[0].CustomerID}&UserTeleLevel=2&UserTeleGroup=1`,
+        headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken }
+      };
+      try {
+        const response = await axios.request(config);
+        console.log(response.data.Member);
+        return response.data.Member;
       } catch (error) {
-        this._TelegramService.SendMiniAppLogdev(`Lỗi Get Payment ${error.response.status}`)  
-        const result = await this._VttechpaymentService.findslug(Phone_To_0(SDT))
-        console.log(SDT);
-        
-        console.log(result);
-        return result
+        console.log(error);
       }
     }
     else
     {
       this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`) 
     }
-
-
-    // axios.request(config)
-    // .then((response) => {
-    //   console.log(JSON.stringify(response.data));
-    // })
-    // .catch((error) => {
-    //   console.log(error);
-    // });
-    
-
   }
 
   async GetLichhen(CustomerID: any) {
