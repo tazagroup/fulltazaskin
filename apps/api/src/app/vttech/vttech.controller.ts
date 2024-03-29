@@ -61,13 +61,13 @@ export class VttechController {
   GetKHBySDT(@Param('SDT') SDT: string) {
     return this.vttechService.GetKHBySDT(SDT);
   }
-  @Get('dichvu/:CUSID')
-  GetDichVu(@Param('CUSID') CUSID: string) {
-    return this.vttechService.GetDichVu(CUSID);
+  @Get('dichvu/:SDT')
+  GetDichVu(@Param('SDT') SDT: string) {
+    return this.vttechService.GetDichVu(SDT);
   }
-  @Post('dichvus')
-  GetDichVus(@Param('CUSID') CUSID: string) {
-    return this.vttechService.GetDichVus(CUSID);
+  @Get('dichvus')
+  GetDichVus() {
+    return this.vttechService.GetDichVus();
   }
   @Post('thanhtoan/:CUSID')
   GetThanhtoan(@Param('CUSID') CUSID: string) {

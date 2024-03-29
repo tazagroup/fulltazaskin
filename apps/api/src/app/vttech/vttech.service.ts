@@ -112,29 +112,61 @@ export class VttechService {
       return {Table:[]}
     }
   }
-  async GetDichVu(CustomerID: any) {
+  async GetDichVu(SDT: any) {
+    const result = await this.GetKHBySDT(SDT)
+    if(result.Table.length>0)
+    {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://tmtaza.vttechsolution.com/Customer/Service/TabList/TabList_Service/?handler=LoadataTab&CustomerID=' + CustomerID + '&Record=0&Plan=0&ViewAll=1',
+      url: `https://tmtaza.vttechsolution.com/Customer/Service/TabList/TabList_Service/?handler=LoadataTab&CustomerID=${result.Table[0].CustomerID}&Record=0&Plan=0&ViewAll=1`,
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
     };
-
     try {
       const response = await axios.request(config);
-      // const result = response.data.Table.map((v:any)=>({
-      //   ServiceName:v.ServiceName, 
-      //   BranchName:v.BranchName, 
-      //   BranchCode:v.BranchCode,
-      //   TimeToTreatment:v.TimeToTreatment,
-      //   Treat_Index:v.Treat_Index
-      // }));  
-      return response.data
+      const ListDichvu = await this.GetDichVus() 
+
+      if(response.data.Table.length>0)
+      {
+       response.data.Table.forEach((v:any)=>
+        {
+          v.TenDichvu = ListDichvu.find((v1:any)=>v1.ID == v.Service_ID)?.IdenName
+          
+        })
+        return  response.data.Table
+      }      
     } catch (error) {
       console.log(error);
     }
+
+      // let config = {
+      //   method: 'post',
+      //   maxBodyLength: Infinity,
+      //   url: `https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=${result.Table[0].CustomerID}`,
+      //   headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken }
+      // };
+      // try {
+      //   const response = await axios.request(config);
+      //   const Noti = `${SDT} - CusID: ${JSON.stringify(result.Table[0].CustomerID)} - ${response.data[0].PRICE_DISCOUNTED} -${response.data[0].PRICE_TREAT}`
+      //   this._TelegramService.SendMiniAppLogdev(Noti) 
+      //   this._VttechpaymentService.create(response.data[0])
+      //   return response.data[0];
+      // } catch (error) {
+      //   this._TelegramService.SendMiniAppLogdev(`Lỗi Get Payment ${error.response.status}`)  
+      //   const result = await this._VttechpaymentService.findslug(Phone_To_0(SDT))
+      //   console.log(SDT);
+        
+      //   console.log(result);
+      //   return result
+      // }
+    }
+    else
+    {
+      this._TelegramService.SendMiniAppLogdev(`Get Dịch Vụ By User Không tìm thấy ${SDT} trên hệ thống Vttech`) 
+    }
+
   }
-  async GetDichVus(CustomerID: any) {
+  async GetDichVus() {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -193,34 +225,7 @@ export class VttechService {
     } catch (error) {
       console.log(error);
     }
-  }
-  // async GetPaymentInfo(SDT: any) {
-  //   console.log(SDT);
-  //   const result = await this.GetKHBySDT(SDT)
-  //   this._TelegramService.SendLogdev(JSON.stringify(result.Table[0].CustomerID)) 
-  //   let config = {
-  //     method: 'post',
-  //     maxBodyLength: Infinity,
-  //     url: `https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=${result.Table[0].CustomerID}`,
-  //     headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken }
-  //   };
-  //   try {
-  //     const response = await axios.request(config);
-  //     this._TelegramService.SendLogdev(JSON.stringify(response)) 
-  //     return response  
-  //   } catch (error) {
-  //     console.log(error);
-  //     this._TelegramService.SendLogdev(JSON.stringify(error)) 
-  //     return error  
-      
-  //   }
-  // }
-
-  
-
-
-
-  async GetPaymentInfo(SDT: any) {
+  }  async GetPaymentInfo(SDT: any) {
     const result = await this.GetKHBySDT(SDT)
     if(result.Table.length>0)
     {
@@ -232,7 +237,7 @@ export class VttechService {
       };
       try {
         const response = await axios.request(config);
-        const Noti = `${JSON.stringify(result.Table[0].CustomerID)} - ${JSON.stringify(response.data)}`
+        const Noti = `${SDT} - CusID: ${JSON.stringify(result.Table[0].CustomerID)} - ${response.data[0].PRICE_DISCOUNTED} -${response.data[0].PRICE_TREAT}`
         this._TelegramService.SendMiniAppLogdev(Noti) 
         this._VttechpaymentService.create(response.data[0])
         return response.data[0];
