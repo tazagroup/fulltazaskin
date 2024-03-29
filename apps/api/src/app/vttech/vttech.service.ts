@@ -14,6 +14,7 @@ import { LIST_CHI_NHANH, Phone_To_0, convertPhoneNum, mergeNoDup } from '../shar
 import { ZaloznsService } from '../zalo/zalozns/zalozns.service';
 import { CronJob } from '@nestjs/schedule/node_modules/cron/dist/job';
 import { LoggerService } from '../logger/logger.service';
+import { VttechpaymentService } from './vttech_payment/vttech_payment.service';
 @Injectable()
 export class VttechService {
   Cookie: any = ''
@@ -24,9 +25,7 @@ export class VttechService {
     private _Vttech_khachhangService: Vttech_khachhangService,
     private _Vttech_tinhtrangphongService: Vttech_tinhtrangphongService,
     private _Vttech_dieutriService: Vttech_dieutriService,
-    private schedulerRegistry: SchedulerRegistry,
-    private _ZaloznsService: ZaloznsService,
-    private _LoggerService: LoggerService,
+    private _VttechpaymentService: VttechpaymentService,
   ) {
     this._CauhinhchungService.findslug('vttechtoken').then((data: any) => {
       this.Cookie = data.Content.Cookie
@@ -109,7 +108,8 @@ export class VttechService {
       const response = await axios.request(config);
       return response.data;
     } catch (error) {
-      console.log(error);
+      this._TelegramService.SendMiniAppLogdev(`Lỗi Get KHBySDT ${error.response.status}`)  
+      return {Table:[]}
     }
   }
   async GetDichVu(CustomerID: any) {
@@ -222,20 +222,34 @@ export class VttechService {
 
   async GetPaymentInfo(SDT: any) {
     const result = await this.GetKHBySDT(SDT)
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: `https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=${result.Table[0].CustomerID}`,
-      headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken }
-    };
-    try {
-      const response = await axios.request(config);
-      const Noti = `${JSON.stringify(result.Table[0].CustomerID)} - ${JSON.stringify(response.data)}`
-      this._TelegramService.SendMiniAppLogdev(Noti) 
-      return response.data;
-    } catch (error) {
-      console.log(error);
+    if(result.Table.length>0)
+    {
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=${result.Table[0].CustomerID}`,
+        headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken }
+      };
+      try {
+        const response = await axios.request(config);
+        const Noti = `${JSON.stringify(result.Table[0].CustomerID)} - ${JSON.stringify(response.data)}`
+        this._TelegramService.SendMiniAppLogdev(Noti) 
+        this._VttechpaymentService.create(response.data[0])
+        return response.data[0];
+      } catch (error) {
+        this._TelegramService.SendMiniAppLogdev(`Lỗi Get Payment ${error.response.status}`)  
+        const result = await this._VttechpaymentService.findslug(Phone_To_0(SDT))
+        console.log(SDT);
+        
+        console.log(result);
+        return result
+      }
     }
+    else
+    {
+      this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`) 
+    }
+
 
     // axios.request(config)
     // .then((response) => {

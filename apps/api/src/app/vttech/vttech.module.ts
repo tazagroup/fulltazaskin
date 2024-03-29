@@ -10,6 +10,7 @@ import { ZaloznsModule } from '../zalo/zalozns/zalozns.module';
 import { LoggerModule } from '../logger/logger.module';
 import { VttechthanhtoanModule } from './vttechthanhtoan/vttechthanhtoan.module';
 import { Vttech_thanhtoanModule } from './vttech_thanhtoan/vttech_thanhtoan.module';
+import { VttechpaymentModule } from './vttech_payment/vttech_payment.module';
 @Module({
   imports: [
     Vttech_khachhangModule,
@@ -19,7 +20,8 @@ import { Vttech_thanhtoanModule } from './vttech_thanhtoan/vttech_thanhtoan.modu
     ZaloznsModule,
     LoggerModule, 
     VttechthanhtoanModule,
-    Vttech_thanhtoanModule
+    Vttech_thanhtoanModule,
+    VttechpaymentModule
   ],
   controllers: [VttechController],
   providers: [VttechService,TelegramService]
