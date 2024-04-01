@@ -11,6 +11,7 @@ import { LoggerModule } from '../logger/logger.module';
 import { VttechthanhtoanModule } from './vttechthanhtoan/vttechthanhtoan.module';
 import { Vttech_thanhtoanModule } from './vttech_thanhtoan/vttech_thanhtoan.module';
 import { VttechpaymentModule } from './vttech_payment/vttech_payment.module';
+import { VttechlichhenModule } from './vttechlichhen/vttechlichhen.module';
 @Module({
   imports: [
     Vttech_khachhangModule,
@@ -21,7 +22,8 @@ import { VttechpaymentModule } from './vttech_payment/vttech_payment.module';
     LoggerModule, 
     VttechthanhtoanModule,
     Vttech_thanhtoanModule,
-    VttechpaymentModule
+    VttechpaymentModule,
+    VttechlichhenModule
   ],
   controllers: [VttechController],
   providers: [VttechService,TelegramService]

@@ -15,6 +15,7 @@ import { ZaloznsService } from '../zalo/zalozns/zalozns.service';
 import { CronJob } from '@nestjs/schedule/node_modules/cron/dist/job';
 import { LoggerService } from '../logger/logger.service';
 import { VttechpaymentService } from './vttech_payment/vttech_payment.service';
+import { VttechlichhenService } from './vttechlichhen/vttechlichhen.service';
 @Injectable()
 export class VttechService {
   Cookie: any = ''
@@ -26,6 +27,7 @@ export class VttechService {
     private _Vttech_tinhtrangphongService: Vttech_tinhtrangphongService,
     private _Vttech_dieutriService: Vttech_dieutriService,
     private _VttechpaymentService: VttechpaymentService,
+    private _VttechlichhenService: VttechlichhenService,
   ) {
     this._CauhinhchungService.findslug('vttechtoken').then((data: any) => {
       this.Cookie = data.Content.Cookie
@@ -293,7 +295,8 @@ export class VttechService {
 
   async GetLichhen(SDT: any) {
     const result = await this.GetKHBySDT(SDT)
-    if(result.Table.length>0)
+
+    if(result.Table && result.Table.length>0)
     {
     let config = {
       method: 'post',
@@ -304,14 +307,30 @@ export class VttechService {
 
     try {
       const response = await axios.request(config);
+      console.log(response.data);
+      
+      if (response.data.length > 0) {
+        response.data.forEach((v: any) => {
+          const item:any=v
+          item.SDT = SDT
+          this._VttechlichhenService.create(item);
+        });
+      }
       return response.data;
     } catch (error) {
-      console.log(error);
+      const result = await this._VttechlichhenService.findslug(SDT)
+      console.log(result);
+      this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`) 
+      return result
     }
   }
   else
   {
+    const result = await this._VttechlichhenService.findslug(SDT)
+    console.log(result);
+    
     this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`) 
+    return result
   }
 
   }
