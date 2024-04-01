@@ -29,53 +29,58 @@ export class Vttech_thanhtoanService {
   }
   
   async getApiRealtime(idVttech: any, data: any = {}) {
-    console.log('Cookie:', this.Cookie, 'Xsrf-Token:', this.XsrfToken);
+    this._CauhinhchungService.findslug('vttechtoken').then(async (token: any) => {
+      this.Cookie = token.Content.Cookie
+      this.XsrfToken = token.Content.XsrfToken
+      const now = moment();
+      const begin = data?.begin ? moment(data.begin).format('DD-MM-YYYY') : now.format('DD-MM-YYYY');
+      const end = data?.end ? moment(data.end).format('DD-MM-YYYY') : now.format('DD-MM-YYYY');
+      const url = `https://tmtaza.vttechsolution.com/Report/Revenue/Branch/AllBranchGrid/?handler=LoadataDetailByBranch&branchID=${idVttech}&dateFrom=${begin}&dateTo=${end}`;    
+      try {
+        const ListKetqua:any=[]
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { Cookie: token.Content.Cookie, 'Xsrf-Token': token.Content.XsrfToken },
+        });
     
-    const now = moment();
-    const begin = data?.begin ? moment(data.begin).format('DD-MM-YYYY') : now.format('DD-MM-YYYY');
-    const end = data?.end ? moment(data.end).format('DD-MM-YYYY') : now.format('DD-MM-YYYY');
-    const url = `https://tmtaza.vttechsolution.com/Report/Revenue/Branch/AllBranchGrid/?handler=LoadataDetailByBranch&branchID=${idVttech}&dateFrom=${begin}&dateTo=${end}`;    
-    try {
-      const ListKetqua:any=[]
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
-      });
-  
-      if (!response.ok) {
-        this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` });
-        return { status: 404, title: 'Lỗi Data Trả Về' };
-      }
-  
-      const data = await response.json();
-      ListKetqua.push(data)
-      if (!Array.isArray(data)) {
-        this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` });
-        return { status: 404, title: 'Lỗi Data Trả Về' };
-      }
-  
-      for (const item of data) {
-        item.checkTime = new Date(item.Created).getTime();
-        item.Dulieu = JSON.stringify(item);
-  
-        const checkInvoiceNum = await this.findInvoiceNum(item.InvoiceNum, item.checkTime);
-        if (checkInvoiceNum) {
-          console.log("Trùng Hoá Đơn");
-          this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${item.InvoiceNum} - ${item.SDT}` });
-          return { status: 1001, title: `Trùng Hoá Đơn ${item.InvoiceNum}` };
+        if (!response.ok) {
+          this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` });
+          return { status: 404, title: 'Lỗi Data Trả Về' };
         }
-  
-        console.log("Tạo mới");
-        const ketqua = await this.create(item);
-        ListKetqua.push(ketqua)   
+    
+        const data = await response.json();
+        ListKetqua.push(data)
+        // if (!Array.isArray(data)) {
+
+        // }
+        if (Array.isArray(data)) {
+          for (const item of data) {
+            item.checkTime = new Date(item.Created).getTime();
+            item.Dulieu = JSON.stringify(item);
+      
+            const checkInvoiceNum = await this.findInvoiceNum(item.InvoiceNum, item.checkTime);
+            if (checkInvoiceNum) {
+              console.log("Trùng Hoá Đơn");
+              this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${item.InvoiceNum} - ${item.SDT}` });
+              return { status: 1001, title: `Trùng Hoá Đơn ${item.InvoiceNum}` };
+            }
+      
+            console.log("Tạo mới");
+            const ketqua = await this.create(item);
+            ListKetqua.push(ketqua)   
+          }
+      
+          this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${data.length} Thanh Toán Từ Vttech` });
+          return { status: 201, title: `Lấy ${data.length} Thanh Toán Từ Vttech` };
+        } else {
+          this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` });
+          return { status: 404, title: 'Lỗi Data Trả Về' };
+        }
+      } catch (error) {
+        this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>` });
+        return { status: 400, title: 'Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
       }
-  
-      this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${data.length} Thanh Toán Từ Vttech` });
-      return { status: 201, title: `Lấy ${data.length} Thanh Toán Từ Vttech` };
-    } catch (error) {
-      this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>` });
-      return { status: 400, title: 'Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
-    }
+    })
   }
   
 

@@ -114,7 +114,9 @@ export class VttechService {
   }
   async GetDichVu(SDT: any) {
     const result = await this.GetKHBySDT(SDT)
-    if(result.Table.length>0)
+    console.log(result);
+    
+    if(result?.Table?.length>0)
     {
     let config = {
       method: 'post',
@@ -228,7 +230,8 @@ export class VttechService {
   }  
   async GetPaymentInfo(SDT: any) {
     const result = await this.GetKHBySDT(SDT)
-    if(result.Table.length>0)
+    console.log(result.Table);
+    if(result.Table && result.Table.length>0)
     {
       let config = {
         method: 'post',
@@ -258,7 +261,9 @@ export class VttechService {
     }
     else
     {
+      const result = await this._VttechpaymentService.findSHD(SDT)
       this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`) 
+      return result
     }    
 
   }
