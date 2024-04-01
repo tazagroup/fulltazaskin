@@ -4,6 +4,7 @@ import { environment } from 'apps/frontend/src/environments/environment';
 import { LichhenComponent } from '../lichhen.component';
 import { LichhenService } from '../lichhen.service';
 import { EditorComponent } from '@tinymce/tinymce-angular';
+import { UploadService } from '../../../shared/upload.service';
 @Component({
   selector: 'app-lichhen-detail',
   templateUrl: './lichhen-detail.component.html',
@@ -17,7 +18,8 @@ export class LichhenDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _LichhenComponent: LichhenComponent,
-    private _LichhenService: LichhenService
+    private _LichhenService: LichhenService,
+    private _UploadService: UploadService
     
   ) {}
   ngOnInit(): void {
@@ -56,20 +58,31 @@ export class LichhenDetailComponent implements OnInit {
     default_link_target: '_blank',
     block_unsupported_drop: true,
     entity_encoding: 'raw',
-        images_upload_handler: (blobInfo: any) => {
-          const file = blobInfo.blob();
-          const formData = new FormData();
-          formData.append('file', file);
-          const filePath = `${Date.now()}-${blobInfo.filename()}`;
-          const promise = new Promise<string>((resolve, reject) => {
-            // this._KhoahocService.uploadDriver(formData).subscribe((res) => {
-            //   if (res) {   
-            //     resolve(GetImage(res.spath));
-            //   }
-            // });
-          });
-          return promise;
-        }, 
+    images_upload_handler: (blobInfo: any) => {
+      const file = blobInfo.blob();
+      const formData = new FormData();
+      formData.append('file', file);
+      const filePath = `${Date.now()}-${blobInfo.filename()}`;
+      const promise = new Promise<string>((resolve, reject) => {
+        this._UploadService.uploadDriver(formData).subscribe((res: any) => {
+          if (res) {
+            resolve(res.url);
+          }
+        });
+      });
+      return promise;
+    },
+    images_remove_handler: (blobInfo: any) => {
+      const filePath = blobInfo.src;
+      const promise = new Promise<void>((resolve, reject) => {
+        this._UploadService.DeleteuploadDriver({ url: filePath }).subscribe((res: any) => {
+          if (res) {
+            resolve();
+          }
+        });
+      });
+      return promise;
+    }
   };
   CloseDrawer()
   {
