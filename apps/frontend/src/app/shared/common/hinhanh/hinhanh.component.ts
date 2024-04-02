@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UploadService } from '../../upload.service';
+import { GetImage } from '../../shared.utils';
 
 @Component({
   selector: 'app-hinhanh',
@@ -26,5 +27,9 @@ export class HinhanhComponent implements OnInit {
       this.Image = {}
       this.UploadEmit.emit(this.Image);
     })
+  }
+  GetImage(item:any)
+  {
+    return GetImage(item)
   }
 }

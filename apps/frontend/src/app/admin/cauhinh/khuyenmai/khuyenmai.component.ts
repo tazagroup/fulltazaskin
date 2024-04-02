@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { KhuyenmaiService } from './khuyenmai.service';
+import { GetImage } from '../../../shared/shared.utils';
 @Component({
   selector: 'app-khuyenmai',
   templateUrl: './khuyenmai.component.html',
@@ -48,5 +49,9 @@ export class KhuyenmaiComponent implements OnInit {
         this._KhuyenmaiService.DeleteKhuyenmai(item.id).subscribe()
       }
     });
+  }
+  GetImage(item:any)
+  {
+    return GetImage(item)
   }
 }
