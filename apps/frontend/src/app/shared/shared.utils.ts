@@ -1,3 +1,19 @@
+import { environment } from "../../environments/environment";
+
+export function GetImage(data:any) {
+  if(data)
+  {   
+  //  const checkdomain =  data?.toLowerCase().includes('hderma')
+   const checkhttp =  data?.toLowerCase().includes('http')
+   const result = checkhttp?data:`${environment.ImageURL+data}`
+  //  const result = checkhttp?data:checkdomain?`${environment.ImageURL+data}`:`${environment.ImageURL+data}`
+   return result
+  }
+  else {
+    return environment.ImageURL+"assets/image/logo.svg";
+  }
+
+}
 export interface SearchParams {
   idChinhanh?: string;
   Dateranger?: {};

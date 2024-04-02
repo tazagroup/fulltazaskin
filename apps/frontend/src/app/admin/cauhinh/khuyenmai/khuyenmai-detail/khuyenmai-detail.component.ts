@@ -4,6 +4,8 @@ import { environment } from 'apps/frontend/src/environments/environment';
 import { KhuyenmaiComponent } from '../khuyenmai.component';
 import { KhuyenmaiService } from '../khuyenmai.service';
 import { EditorComponent } from '@tinymce/tinymce-angular';
+import { UploadService } from 'apps/frontend/src/app/shared/upload.service';
+import { GetImage } from 'apps/frontend/src/app/shared/shared.utils';
 @Component({
   selector: 'app-khuyenmai-detail',
   templateUrl: './khuyenmai-detail.component.html',
@@ -17,7 +19,8 @@ export class KhuyenmaiDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _KhuyenmaiComponent: KhuyenmaiComponent,
-    private _KhuyenmaiService: KhuyenmaiService
+    private _KhuyenmaiService: KhuyenmaiService,
+    private _UploadService: UploadService
     
   ) {}
   ngOnInit(): void {
@@ -58,15 +61,12 @@ export class KhuyenmaiDetailComponent implements OnInit {
     entity_encoding: 'raw',
         images_upload_handler: (blobInfo: any) => {
           const file = blobInfo.blob();
-          const formData = new FormData();
-          formData.append('file', file);
-          const filePath = `${Date.now()}-${blobInfo.filename()}`;
           const promise = new Promise<string>((resolve, reject) => {
-            // this._KhoahocService.uploadDriver(formData).subscribe((res) => {
-            //   if (res) {   
-            //     resolve(GetImage(res.spath));
-            //   }
-            // });
+            this._UploadService.uploadDriver(file).subscribe((res) => {
+              if (res) {   
+                resolve(GetImage(res.src));
+              }
+            });
           });
           return promise;
         }, 
