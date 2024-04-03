@@ -2,12 +2,18 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import {Vttech_dieutriService } from './vttech_dieutri.service';
 import { LIST_CHI_NHANH } from '../../shared.utils';
 import { Interval } from '@nestjs/schedule';
+import { TelegramService } from '../../shared/telegram.service';
+import moment = require('moment');
 @Controller('vttech_dieutri')
 export class Vttech_dieutriController {
-  constructor(private readonly vttech_dieutriService:Vttech_dieutriService) {}
+  constructor(
+    private readonly vttech_dieutriService:Vttech_dieutriService,
+    private  _TelegramService:TelegramService,
+    ) {}
   @Interval(3600000)
   @Post("getvttech")
   async GetDieutriVttech(@Body() data: any) {
+    this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Get API Realtime - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     const result: any[] = [];
     const promises = LIST_CHI_NHANH.map(async (v, k) => {
       const getData = await this.vttech_dieutriService.GetDieutriVttech(v.idVttech, data);
@@ -22,7 +28,8 @@ export class Vttech_dieutriController {
   }
  @Interval(4000000)
   @Get("sendauto")
-  SendZNSAuto() {      
+  SendZNSAuto() {    
+    this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Send ZNS Auto - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);  
       return this.vttech_dieutriService.SendZNSAuto();
   }
   @Post()

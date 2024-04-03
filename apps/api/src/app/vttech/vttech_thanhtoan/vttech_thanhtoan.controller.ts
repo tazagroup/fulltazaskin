@@ -4,12 +4,18 @@ import { CreateVttech_thanhtoanDto } from './dto/create-vttech_thanhtoan.dto';
 import { UpdateVttech_thanhtoanDto } from './dto/update-vttech_thanhtoan.dto';
 import { Cron, Interval, Timeout } from '@nestjs/schedule';
 import { LIST_CHI_NHANH } from '../../shared.utils';
+import { TelegramService } from '../../shared/telegram.service';
+import moment = require('moment');
 @Controller('vttech_thanhtoan')
 export class Vttech_thanhtoanController {
-  constructor(private readonly vttech_thanhtoanService:Vttech_thanhtoanService) {}
- @Interval(1800000)
+  constructor(
+    private readonly vttech_thanhtoanService:Vttech_thanhtoanService,
+    private _TelegramService: TelegramService,
+    ) {}
+@Interval(1800000)
   @Post('getapi')
   async getApiRealtime(@Body() data: any) {    
+    this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Get API Realtime - ${moment().format('HH:mm:ss DD/MM/YYYY')}`); 
     const result: any[] = [];
     const promises = LIST_CHI_NHANH.map(async (v, k) => {
       const getData = await this.vttech_thanhtoanService.getApiRealtime(v.idVttech,data);
@@ -21,7 +27,8 @@ export class Vttech_thanhtoanController {
   }
  @Interval(1900000)
   @Get('sendauto')
-  async SendXNTTauto() {      
+  async SendXNTTauto() {     
+    this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Send XNTT Auto - ${moment().format('HH:mm:ss DD/MM/YYYY')}`); 
     return this.vttech_thanhtoanService.SendXNTTauto();
   }
   @Post('sendzns')
