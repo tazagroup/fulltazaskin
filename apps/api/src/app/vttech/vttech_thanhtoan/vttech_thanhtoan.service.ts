@@ -44,6 +44,7 @@ export class Vttech_thanhtoanService {
         });
     
         if (!response.ok) {
+          this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lỗi Data Trả Về ${JSON.stringify(response)}`);
           this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` });
           return { status: 404, title: 'Lỗi Data Trả Về' };
         }
@@ -61,6 +62,7 @@ export class Vttech_thanhtoanService {
             const checkInvoiceNum = await this.findInvoiceNum(item.InvoiceNum, item.checkTime);
             if (checkInvoiceNum) {
               console.log("Trùng Hoá Đơn");
+              this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Trùng Hoá Đơn ${item.InvoiceNum} - ${item.SDT}`);
               this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${item.InvoiceNum} - ${item.SDT}` });
               return { status: 1001, title: `Trùng Hoá Đơn ${item.InvoiceNum}` };
             }
@@ -69,14 +71,16 @@ export class Vttech_thanhtoanService {
             const ketqua = await this.create(item);
             ListKetqua.push(ketqua)   
           }
-      
+          this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lấy ${data.length} Thanh Toán Từ Vttech`);
           this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${data.length} Thanh Toán Từ Vttech` });
           return { status: 201, title: `Lấy ${data.length} Thanh Toán Từ Vttech` };
         } else {
+          this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lỗi Data Trả Về ${JSON.stringify(response)}`);
           this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` });
           return { status: 404, title: 'Lỗi Data Trả Về' };
         }
       } catch (error) {
+        this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lỗi Xác Thực Lúc ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
         this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>` });
         return { status: 400, title: 'Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
       }
@@ -155,8 +159,6 @@ export class Vttech_thanhtoanService {
 
 
   async SendXNTTauto() {
-    const result = `Gửi Thanh Toán lúc ${moment()}`;
-    this._TelegramService.SendLogdev(result) 
     const ListThanhtoan = await this.fininday()
     ListThanhtoan.forEach((v: any) => {
       if(v.SDT!=='0905085396')
@@ -214,7 +216,7 @@ export class Vttech_thanhtoanService {
    //   if (CheckData.Status == 0 && data.SDT=='0977272967') {
        if (CheckData.Status == 0) {
         const Chinhanh = LIST_CHI_NHANH.find((v: any) => Number(v.idVttech) == Number(data.BranchID))
-        console.log(Chinhanh);
+        // console.log(Chinhanh);
         if (Chinhanh) {
           try {
           //  const SendNZS = await this._ZaloznsService.sendThanhtoanTaza(data, Chinhanh)
@@ -225,11 +227,11 @@ export class Vttech_thanhtoanService {
             const isTimonaBranch = TIMONA_BRANCH_IDS.includes(Number(Chinhanh.idVttech));    
             if (isTazaBranch) {
               SendZNS = await this._ZaloznsService.sendThanhtoanTaza(data, Chinhanh);
-              console.log("Send Taza");
+              this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Send ZNS Taza - ${JSON.stringify(SendZNS)}`);
               
             } else if (isTimonaBranch) {
               SendZNS = await this._ZaloznsService.sendThanhtoanTimona(data, Chinhanh);
-              console.log("Send Timona");
+              this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Send ZNS Timona - ${JSON.stringify(SendZNS)}`);
             }  
             switch (SendZNS.status) {
               case 'sms':
@@ -283,6 +285,7 @@ export class Vttech_thanhtoanService {
           data.Status = 3
           data.ThucteZNS = new Date()
           this.update(data.id, data)
+          this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Chi nhánh chưa đăng ký ZNS - SDT: ${data.SDT}`);
           const logger = {
             Title: 'Thanh Toán',
             Slug: 'thanhtoan',
