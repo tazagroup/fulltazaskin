@@ -30,7 +30,7 @@ export class CauhinhchungService {
       "begin":moment().add(-1,'days').format("YYYY-MM-DD"),
       "end":moment().format("YYYY-MM-DD")
   }
-    return this.http.post(environment.APIURL + '/vttech_thanhtoan/getapi',data).pipe(
+    return this.http.post(environment.APIURL + '/vttech_thanhtoan/getlichsuthuchi',data).pipe(
       map((data: any) => { 
         return data;
       })
