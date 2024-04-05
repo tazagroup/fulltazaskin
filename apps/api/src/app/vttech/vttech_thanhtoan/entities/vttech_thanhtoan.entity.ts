@@ -16,6 +16,8 @@ export class Vttech_thanhtoanEntity {
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     SDT: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
+    Code: string;
+    @Column({ type: 'text', collation: 'utf8_general_ci' })
     InvoiceNum: string;
     @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
     Bill: string;

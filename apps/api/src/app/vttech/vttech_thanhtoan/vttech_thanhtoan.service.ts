@@ -86,78 +86,55 @@ export class Vttech_thanhtoanService {
       }
     })
   }
+
+  async getLichSuThuChi(data: any = {}) {
+    const begin = data?.begin ? moment(data.begin).startOf('day').format('DD-MM-YYYY HH:mm:ss') : moment().startOf('day').format('DD-MM-YYYY HH:mm:ss');
+    const end = data?.end ? moment(data.end).endOf('day').format('DD-MM-YYYY HH:mm:ss') : moment().endOf('day').format('DD-MM-YYYY HH:mm:ss');
+    console.log(begin, end);
+    
+    try {
+      const response = await fetch(`https://tmtaza.vttechsolution.com/Account/InvoicePaymentTable/?handler=LoadataReceipt&dateTo=${end}&dateFrom=${begin}&branchid=0&branchtoken=&cashierid=0&limit=10000&currentid=0&type=0`, {
+        method: 'POST',
+        headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+      });
+      const data = await response.json();
+      const Lichsuthuchi = data.Master;
+      Lichsuthuchi.filter((v:any)=>v.VoucherType==-1 || v.VoucherType==-3 || v.VoucherType==-5);
+      Lichsuthuchi.forEach(async (v: any) => {
+        const checkCode = await this.findByCode(v.Code);
+        console.log(v);
+        console.log(checkCode);
+        if (checkCode) {
+          console.log("Trùng Hoá Đơn");
+          this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Trùng Hoá Đơn ${v.Code} - ${v.CustPhone}`);
+          this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${v.Code} - ${v.CustPhone}` });
+        }
+        else {
+        const item: any = {
+          Code: v.Code,
+          SDT: v.CustPhone,
+          Amount: v.Amount,
+          BranchID: v.BranchID,
+          CustomerID: v.CustID,
+          CustCode: v.CustCode,
+          CustName: v.CustName,
+          DocCode: v.CustDocCode,
+          Created: v.Created,
+          Type: v.VoucherType
+        };
+        const result = await this.createLichsu(item);
+        console.log(result);
+        
+        }
+      })
+
+    } catch (error) {
+      console.error(error.status);
+      this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lỗi Xác Thực - ${JSON.stringify(error.status)} - ${JSON.stringify(data)}`);
+      return error;
+    }
+  }
   
-
-  // async getApiRealtime(idVttech: any, data: any = {}) {
-  //   const result = `Lấy Thanh Toán lúc ${moment()}`;
-  //   this._TelegramService.SendLogdev(result) 
-  //   let begin: any
-  //   let end: any
-  //   if (Object.entries(data).length > 0) {
-  //     begin = moment(new Date(data.begin)).format('DD-MM-YYYY')
-  //     end = moment(new Date(data.end)).format('DD-MM-YYYY')
-  //   }
-  //   else {
-  //     begin = moment().format('DD-MM-YYYY')
-  //     end = moment().format('DD-MM-YYYY')
-  //   }
-  //   const config = {
-  //     method: 'post',
-  //     maxBodyLength: Infinity,
-  //     url: `https://tmtaza.vttechsolution.com/Report/Revenue/Branch/AllBranchGrid/?handler=LoadataDetailByBranch&branchID=${idVttech}&dateFrom=${begin}&dateTo=${end}`,
-  //     headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
-  //   };
-  //   try {     
-  //     const response = await axios.request(config);     
-  //     console.log(response.data);
-  //     if (Array.isArray(response.data)) {
-  //       console.log(response.data);
-  //       response.data.forEach(async (v: any) => {
-  //         let item: any = {}
-  //         item = v
-  //         item.checkTime = (new Date(v.Created)).getTime()
-  //         item.Dulieu = JSON.stringify(v)
-  //         const result = await this.GetKHByCode(item)
-  //         if(result){
-  //           const checkInvoiceNum = await this.findInvoiceNum(result.InvoiceNum,item.checkTime)  
-
-
-  //         if(checkInvoiceNum && checkInvoiceNum.SDT=='0977272967')  
-  //         {
-  //           console.log(checkInvoiceNum);
-  //         }
-
-  //         if (checkInvoiceNum) {    
-  //           console.log("Trùng Hoá Đơn");
-  //           const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${result.InvoiceNum} - ${result.SDT}` }
-  //           this._LoggerService.create(logger)
-  //           return { status: 1001, title: `Trùng Hoá Đơn ${result.InvoiceNum}` };
-  //         }
-  //         else {
-  //           console.log("Tạo mới");
-  //           console.log(checkInvoiceNum);
-  //           this.create(result)
-  //           const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lấy ${response.data.length} Thanh Toán Từ Vttech` }
-  //           this._LoggerService.create(logger)
-  //           return { status: 201, title: `Lấy ${response.data.length} Thanh Toán Từ Vttech` };
-  //         }
-  //       }
-  //       });
-  //       return response.data
-  //     }
-  //     else {
-  //       const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Data Trả Về ${JSON.stringify(response)}` }
-  //       this._LoggerService.create(logger)
-  //       return { status: 404, title: 'Lỗi Data Trả Về' };
-  //     }
-  //   } catch (error) {
-  //     const logger = { Title: 'Thanh Toán Từ Vttech', Mota: `Lỗi Xác Thực Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b>` }
-  //     this._LoggerService.create(logger)
-  //     return { status: 400, title: 'Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
-  //   }
-  // }
-
-
   async SendXNTTauto() {
     const ListThanhtoan = await this.fininday()
     ListThanhtoan.forEach((v: any) => {
@@ -326,7 +303,10 @@ export class Vttech_thanhtoanService {
       this.Vttech_thanhtoanRepository.create(data);
       return await this.Vttech_thanhtoanRepository.save(data);
     }
-
+  }
+  async createLichsu(data: any) {
+      this.Vttech_thanhtoanRepository.create(data);
+      return await this.Vttech_thanhtoanRepository.save(data);
   }
   async findAll() {
     const result = await this.Vttech_thanhtoanRepository.find();
@@ -385,6 +365,13 @@ export class Vttech_thanhtoanService {
       where: { 
         InvoiceNum: InvoiceNum,
         checkTime:checkTime
+       },
+    });
+  }
+  async findByCode(Code: any) {
+    return await this.Vttech_thanhtoanRepository.findOne({
+      where: { 
+        Code: Code,
        },
     });
   }

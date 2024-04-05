@@ -12,17 +12,25 @@ export class Vttech_thanhtoanController {
     private readonly vttech_thanhtoanService:Vttech_thanhtoanService,
     private _TelegramService: TelegramService,
     ) {}
+// @Interval(1800000)
+//   @Post('getapi')
+//   async getApiRealtime(@Body() data: any) {    
+//     this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Get API Realtime - ${moment().format('HH:mm:ss DD/MM/YYYY')}`); 
+//     const result: any[] = [];
+//     const promises = LIST_CHI_NHANH.map(async (v, k) => {
+//       const getData = await this.vttech_thanhtoanService.getApiRealtime(v.idVttech,data);
+//       result.push(getData);
+//     });
+//     await Promise.all(promises);
+//     return result;
+
+//   }
 @Interval(1800000)
-  @Post('getapi')
-  async getApiRealtime(@Body() data: any) {    
-    this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Get API Realtime - ${moment().format('HH:mm:ss DD/MM/YYYY')}`); 
-    const result: any[] = [];
-    const promises = LIST_CHI_NHANH.map(async (v, k) => {
-      const getData = await this.vttech_thanhtoanService.getApiRealtime(v.idVttech,data);
-      result.push(getData);
-    });
-    await Promise.all(promises);
-    return result;
+  @Post('getlichsuthuchi')
+  async getLichSuThuChi(@Body() data: any) {    
+   this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Get Lich Su Thu Chi - ${moment().format('HH:mm:ss DD/MM/YYYY')}`); 
+    const getData = await this.vttech_thanhtoanService.getLichSuThuChi(data);
+    return getData;
 
   }
  @Interval(1900000)
