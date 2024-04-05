@@ -99,76 +99,77 @@ export class VttechService {
     const date1 = new Date(data);
     return date1.getTime()
   }
-  async GetKHBySDT(data: any) {    
+  async GetKHBySDT(data: any) {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://tmtaza.vttechsolution.com/Searching/Searching/?handler=SearchByOption&data=%5B%7B%22name%22%3A%22PHONENUMBER%22%2C%22value%22%3A%22' +  Phone_To_0(data) + '%22%7D%5D&CBeginID=0',
+      url: 'https://tmtaza.vttechsolution.com/Searching/Searching/?handler=SearchByOption&data=%5B%7B%22name%22%3A%22PHONENUMBER%22%2C%22value%22%3A%22' + Phone_To_0(data) + '%22%7D%5D&CBeginID=0',
       headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
     };
     try {
       const response = await axios.request(config);
       return response.data;
     } catch (error) {
-      this._TelegramService.SendMiniAppLogdev(`Lỗi Get KHBySDT ${error.response.status}`)  
-      return {Table:[]}
+      this._TelegramService.SendMiniAppLogdev(`Lỗi Get KHBySDT ${error.response.status}`)
+      return { Table: [] }
     }
   }
   async GetDichVu(SDT: any) {
     const result = await this.GetKHBySDT(SDT)
     console.log(result);
-    
-    if(result?.Table?.length>0)
-    {
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: `https://tmtaza.vttechsolution.com/Customer/Service/TabList/TabList_Service/?handler=LoadataTab&CustomerID=${result.Table[0].CustomerID}&Record=0&Plan=0&ViewAll=1`,
-      headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
-    };
-    try {
-      const response = await axios.request(config);
-      const ListDichvu = await this.GetDichVus() 
 
-      if(response.data.Table.length>0)
-      {
-       response.data.Table.forEach((v:any)=>
-        {
-          v.TenDichvu = ListDichvu.find((v1:any)=>v1.ID == v.Service_ID)?.IdenName
-          
-        })
-        return  response.data.Table
-      }      
-    } catch (error) {
-      console.log(error);
-    }
+    if (result?.Table?.length > 0) {
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `https://tmtaza.vttechsolution.com/Customer/Service/TabList/TabList_Service/?handler=LoadataTab&CustomerID=${result.Table[0].CustomerID}&Record=0&Plan=0&ViewAll=1`,
+        headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+      };
+      try {
+        const response = await axios.request(config);
+        const ListDichvu = await this.GetDichVus()
 
-      // let config = {
-      //   method: 'post',
-      //   maxBodyLength: Infinity,
-      //   url: `https://tmtaza.vttechsolution.com/Customer/MainCustomer/?handler=LoadPaymentInfo&CustomerID=${result.Table[0].CustomerID}`,
-      //   headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken }
-      // };
-      // try {
-      //   const response = await axios.request(config);
-      //   const Noti = `${SDT} - CusID: ${JSON.stringify(result.Table[0].CustomerID)} - ${response.data[0].PRICE_DISCOUNTED} -${response.data[0].PRICE_TREAT}`
-      //   this._TelegramService.SendMiniAppLogdev(Noti) 
-      //   this._VttechpaymentService.create(response.data[0])
-      //   return response.data[0];
-      // } catch (error) {
-      //   this._TelegramService.SendMiniAppLogdev(`Lỗi Get Payment ${error.response.status}`)  
-      //   const result = await this._VttechpaymentService.findslug(Phone_To_0(SDT))
-      //   console.log(SDT);
-        
-      //   console.log(result);
-      //   return result
-      // }
-    }
-    else
-    {
-      this._TelegramService.SendMiniAppLogdev(`Get Dịch Vụ By User Không tìm thấy ${SDT} trên hệ thống Vttech`) 
-    }
+        if (response.data.Table.length > 0) {
+          response.data.Table.forEach((v: any) => {
+            v.TenDichvu = ListDichvu.find((v1: any) => v1.ID == v.Service_ID)?.IdenName
 
+          })
+          return response.data.Table
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    else {
+      this._TelegramService.SendMiniAppLogdev(`Get Dịch Vụ By User Không tìm thấy ${SDT} trên hệ thống Vttech`)
+    }
+  }
+
+  async GetLieutrinh(SDT: any) {
+    const result = await this.GetKHBySDT(SDT)
+    if (result?.Table?.length > 0) {
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `https://tmtaza.vttechsolution.com/Customer/Service/TabList/TabList_Service/?handler=LoadataTab&CustomerID=${result.Table[0].CustomerID}&Record=0&Plan=0&ViewAll=1`,
+        headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+      };
+      try {
+        const response = await axios.request(config);
+        const ListDichvu = await this.GetDichVus()
+        if (response.data.Table.length > 0) {
+          response.data.Table.forEach((v: any) => {
+            v.TenDichvu = ListDichvu.find((v1: any) => v1.ID == v.Service_ID)?.IdenName
+          });
+          return response.data.Table;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    else {
+      this._TelegramService.SendMiniAppLogdev(`Get Dịch Vụ By User Không tìm thấy ${SDT} trên hệ thống Vttech`)
+    }
   }
   async GetDichVus() {
     let config = {
@@ -188,7 +189,7 @@ export class VttechService {
       //   Treat_Index:v.Treat_Index
       // }));  
 
-      const result = response.data.map((v:any)=>(
+      const result = response.data.map((v: any) => (
         {
           "ID": v.ID,
           "CatID": v.CatID,
@@ -201,40 +202,65 @@ export class VttechService {
           "ServiceNote": v.ServiceNote,
           "IdenCode": v.IdenCode,
           "IdenName": v.IdenName,
-  })).filter((v:any)=>v.IsProduct!=1&&v.IsDisabled!=1)
+        })).filter((v: any) => v.IsProduct != 1 && v.IsDisabled != 1)
       return result
     } catch (error) {
       console.log(error);
     }
   }
 
-  async GetThanhtoan(CustomerID: any) {
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: 'https://tmtaza.vttechsolution.com/Customer/Payment/PaymentList/PaymentList_Service/?handler=LoadataPayment&CustomerID=' + CustomerID + '&CurrentID=0&CurrentType=',
-      headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
-    };
-
-    try {
-      const response = await axios.request(config);
-      // const result = response.data.Table.map((v:any)=>({
-      //   ServiceName:v.ServiceName, 
-      //   BranchName:v.BranchName, 
-      //   BranchCode:v.BranchCode,
-      //   TimeToTreatment:v.TimeToTreatment,
-      //   Treat_Index:v.Treat_Index
-      // }));  
-      return response.data
-    } catch (error) {
-      console.log(error);
+  async GetThanhtoan(SDT: any) {
+    const result = await this.GetKHBySDT(SDT)
+    if (result?.Table?.length > 0) {
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `https://tmtaza.vttechsolution.com/Customer/Payment/PaymentList/PaymentList_Service/?handler=LoadataPayment&CustomerID=${result.Table[0].CustomerID}&CurrentID=0&CurrentType=`,
+        headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+      };
+      try {
+        const response = await axios.request(config);
+        console.log(response.data);
+        response.data.Table.forEach((v: any) => {
+          v.children = response.data.Table1.filter((v1: any) => v1.ID == v.ID)
+        })
+        return response.data.Table
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }  
+    else {
+      this._TelegramService.SendMiniAppLogdev(`[GetThanhtoan] Không tìm thấy ${SDT} trên hệ thống Vttech`)
+      //this._TelegramService.SendMiniAppLogdev(`Get Dịch Vụ By User Không tìm thấy ${SDT} trên hệ thống Vttech`)
+    }
+
+
+
+    // let config = {
+    //   method: 'post',
+    //   maxBodyLength: Infinity,
+    //   url: 'https://tmtaza.vttechsolution.com/Customer/Payment/PaymentList/PaymentList_Service/?handler=LoadataPayment&CustomerID=' + CustomerID + '&CurrentID=0&CurrentType=',
+    //   headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+    // };
+
+    // try {
+    //   const response = await axios.request(config);
+    //   // const result = response.data.Table.map((v:any)=>({
+    //   //   ServiceName:v.ServiceName, 
+    //   //   BranchName:v.BranchName, 
+    //   //   BranchCode:v.BranchCode,
+    //   //   TimeToTreatment:v.TimeToTreatment,
+    //   //   Treat_Index:v.Treat_Index
+    //   // }));  
+    //   return response.data
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  }
   async GetPaymentInfo(SDT: any) {
     const result = await this.GetKHBySDT(SDT)
     console.log(result.Table);
-    if(result.Table && result.Table.length>0)
-    {
+    if (result.Table && result.Table.length > 0) {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -243,36 +269,33 @@ export class VttechService {
       };
       try {
         const ListHangthanhvien = await this.GetHangthanhvien(SDT)
-        const response:any = await axios.request(config);
+        const response: any = await axios.request(config);
         const Noti = `${SDT} - CusID: ${JSON.stringify(result.Table[0].CustomerID)} - ${response.data[0].PRICE_DISCOUNTED} -${response.data[0].PRICE_TREAT}`
-        this._TelegramService.SendMiniAppLogdev(Noti) 
+        this._TelegramService.SendMiniAppLogdev(Noti)
         this._VttechpaymentService.create(response.data[0])
-        response.data[0]['Hangthanhvien'] ="Normal"
-        if(ListHangthanhvien.length>0)
-        {
-            response.data[0]['Hangthanhvien'] = ListHangthanhvien.find((v:any)=> {
-              return response.data[0].PAID>=v.AmountFrom && response.data[0].PAID<=v.AmountTo
-            })?.Name ||"Normal"
-            console.log(response.data[0]);    
-            return response.data[0];    
+        response.data[0]['Hangthanhvien'] = "Normal"
+        if (ListHangthanhvien.length > 0) {
+          response.data[0]['Hangthanhvien'] = ListHangthanhvien.find((v: any) => {
+            return response.data[0].PAID >= v.AmountFrom && response.data[0].PAID <= v.AmountTo
+          })?.Name || "Normal"
+          console.log(response.data[0]);
+          return response.data[0];
         }
 
-      } catch (error) {        
+      } catch (error) {
         console.log(error);
       }
     }
-    else
-    {
+    else {
       const result = await this._VttechpaymentService.findSHD(SDT)
-      this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`) 
+      this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`)
       return result
-    }    
+    }
 
   }
   async GetHangthanhvien(SDT: any) {
     const result = await this.GetKHBySDT(SDT)
-    if(result.Table.length>0)
-    {
+    if (result.Table.length > 0) {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -287,51 +310,48 @@ export class VttechService {
         console.log(error);
       }
     }
-    else
-    {
-      this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`) 
+    else {
+      this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`)
     }
   }
 
   async GetLichhen(SDT: any) {
     const result = await this.GetKHBySDT(SDT)
 
-    if(result.Table && result.Table.length>0)
-    {
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: `https://tmtaza.vttechsolution.com/Customer/ScheduleList_Schedule/?handler=Loadata&CustomerID=${result.Table[0].CustomerID}&Limit=200&BeginID=0&IsDelete=0`,
-      headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
-    };
+    if (result.Table && result.Table.length > 0) {
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `https://tmtaza.vttechsolution.com/Customer/ScheduleList_Schedule/?handler=Loadata&CustomerID=${result.Table[0].CustomerID}&Limit=200&BeginID=0&IsDelete=0`,
+        headers: { Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken },
+      };
 
-    try {
-      const response = await axios.request(config);
-      console.log(response.data);
-      
-      if (response.data.length > 0) {
-        response.data.forEach((v: any) => {
-          const item:any=v
-          item.SDT = SDT
-          this._VttechlichhenService.create(item);
-        });
+      try {
+        const response = await axios.request(config);
+        console.log(response.data);
+
+        if (response.data.length > 0) {
+          response.data.forEach((v: any) => {
+            const item: any = v
+            item.SDT = SDT
+            this._VttechlichhenService.create(item);
+          });
+        }
+        return response.data;
+      } catch (error) {
+        const result = await this._VttechlichhenService.findslug(SDT)
+        console.log(result);
+        this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`)
+        return result
       }
-      return response.data;
-    } catch (error) {
+    }
+    else {
       const result = await this._VttechlichhenService.findslug(SDT)
       console.log(result);
-      this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`) 
+
+      this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`)
       return result
     }
-  }
-  else
-  {
-    const result = await this._VttechlichhenService.findslug(SDT)
-    console.log(result);
-    
-    this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`) 
-    return result
-  }
 
   }
 
@@ -365,7 +385,7 @@ export class VttechService {
               item.BeginTime = v.BeginTime
               item.Dulieu = v
               this._Vttech_tinhtrangphongService.create(item)
-            }));          
+            }));
             // const logger ={Title:'Tình Trạng Phòng',Mota:`Trạng Thái Phòng Code 201:  Cập Nhật Lúc <b><u>${moment().format("HH:mm:ss DD/MM/YYYY")}</u></b> Với Số Lượng: <b><u>${uniqueInData2.length}</u></b>`}
             // this._LoggerService.create(logger)
             return { status: 201, count: uniqueInData2.length, result: uniqueInData2 };
@@ -468,19 +488,19 @@ export class VttechService {
       // this._LoggerService.create(logger)
       return { status: 400, title: 'Điều trị Lỗi Xác Thực', Cookie: this.Cookie, 'Xsrf-Token': this.XsrfToken };
     }
-    
+
   }
   async CreateDieutri() {
-      await this.getTinhtrangphong();
-      const Tinhtrangphongs = await this._Vttech_tinhtrangphongService.fininday();
-      setTimeout(async () => {
-        Tinhtrangphongs.forEach((v: any) => {
-          this.getDieutri(v);
-        });
-      }, 5000);
-      // const logger ={Title:'Điều Trị',Mota:`Cập Nhật Điều Trị : Số Lượng ${Tinhtrangphongs.length}`}
-      // this._LoggerService.create(logger)
-      return {count:Tinhtrangphongs.length,data:Tinhtrangphongs}
+    await this.getTinhtrangphong();
+    const Tinhtrangphongs = await this._Vttech_tinhtrangphongService.fininday();
+    setTimeout(async () => {
+      Tinhtrangphongs.forEach((v: any) => {
+        this.getDieutri(v);
+      });
+    }, 5000);
+    // const logger ={Title:'Điều Trị',Mota:`Cập Nhật Điều Trị : Số Lượng ${Tinhtrangphongs.length}`}
+    // this._LoggerService.create(logger)
+    return { count: Tinhtrangphongs.length, data: Tinhtrangphongs }
   }
 
   // async CreateZNSDieutri() {

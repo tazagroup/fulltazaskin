@@ -65,13 +65,17 @@ export class VttechController {
   GetDichVu(@Param('SDT') SDT: string) {
     return this.vttechService.GetDichVu(SDT);
   }
+  @Get('lieutrinh/:SDT')
+  GetLieutrinh(@Param('SDT') SDT: string) {
+    return this.vttechService.GetLieutrinh(SDT);
+  }
   @Get('dichvus')
   GetDichVus() {
     return this.vttechService.GetDichVus();
   }
-  @Post('thanhtoan/:CUSID')
-  GetThanhtoan(@Param('CUSID') CUSID: string) {
-    return this.vttechService.GetThanhtoan(CUSID);
+  @Post('thanhtoan/:SDT')
+  GetThanhtoan(@Param('SDT') SDT: string) {
+    return this.vttechService.GetThanhtoan(SDT);
   }
   @Get('payment/:SDT')
   GetPaymentInfo(@Param('SDT') SDT: string) {
