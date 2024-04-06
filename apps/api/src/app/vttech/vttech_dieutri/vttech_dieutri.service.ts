@@ -52,6 +52,7 @@ export class Vttech_dieutriService {
     try {
       const ListKetqua:any=[]
       const response = await fetch(config.url, config);
+      this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Get API Realtime - ${response.status} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       if (!response.ok) {
         throw new Error(`Error fetching data: ${response.statusText}`);
       }
