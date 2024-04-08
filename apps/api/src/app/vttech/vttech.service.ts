@@ -355,7 +355,7 @@ export class VttechService {
         }
         return response.data;
       } catch (error) {
-        const result = await this._VttechlichhenService.findslug(SDT)
+        const result = await this._VttechlichhenService.findAllslug(SDT)
         console.log(result);
         this._TelegramService.SendMiniAppLogdev(`Không tìm thấy ${SDT} trên hệ thống Vttech`)
         return result

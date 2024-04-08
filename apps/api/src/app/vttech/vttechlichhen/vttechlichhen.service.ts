@@ -40,6 +40,11 @@ export class VttechlichhenService {
       where: { SDT: SDT },
     });
   }
+  async findAllslug(SDT: any) {
+    return await this.VttechlichhenRepository.find({
+      where: { SDT: SDT },
+    });
+  }
   async findPagination(page: number, perPage: number) {
     const skip = (page - 1) * perPage;
     const totalItems = await this.VttechlichhenRepository.count();
