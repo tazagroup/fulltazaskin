@@ -16,6 +16,7 @@ import { CronJob } from '@nestjs/schedule/node_modules/cron/dist/job';
 import { LoggerService } from '../logger/logger.service';
 import { VttechpaymentService } from './vttech_payment/vttech_payment.service';
 import { VttechlichhenService } from './vttechlichhen/vttechlichhen.service';
+import { VttechlieutrinhService } from './vttechlieutrinh/vttechlieutrinh.service';
 @Injectable()
 export class VttechService {
   Cookie: any = ''
@@ -28,6 +29,7 @@ export class VttechService {
     private _Vttech_dieutriService: Vttech_dieutriService,
     private _VttechpaymentService: VttechpaymentService,
     private _VttechlichhenService: VttechlichhenService,
+    private _VttechlieutrinhService: VttechlieutrinhService,
   ) {
     this._CauhinhchungService.findslug('vttechtoken').then((data: any) => {
       this.Cookie = data.Content.Cookie
@@ -134,6 +136,8 @@ export class VttechService {
             v.TenDichvu = ListDichvu.find((v1: any) => v1.ID == v.Service_ID)?.IdenName
 
           })
+          console.log(response.data.Table);
+          
           return response.data.Table
         }
       } catch (error) {
@@ -161,6 +165,11 @@ export class VttechService {
           response.data.Table.forEach((v: any) => {
             v.TenDichvu = ListDichvu.find((v1: any) => v1.ID == v.Service_ID)?.IdenName
           });
+          response.data.Table.forEach(async (v: any) => {
+            v.IDLieutrinh = v.ID
+            delete v.ID
+            await this._VttechlieutrinhService.create(v)
+          })
           return response.data.Table;
         }
       } catch (error) {
