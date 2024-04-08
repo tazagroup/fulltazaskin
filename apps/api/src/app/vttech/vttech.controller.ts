@@ -5,7 +5,6 @@ import { UpdateVttechDto } from './dto/update-vttech.dto';
 import { CauhinhchungService } from '../cauhinh/cauhinhchung/cauhinhchung.service';
 import { TelegramService } from '../shared/telegram.service';
 import { Vttech_khachhangService } from './vttech_khachhang/vttech_khachhang.service';
-import { Interval } from '@nestjs/schedule';
 @Controller('vttech')
 export class VttechController {
   Cookie: any = ''
@@ -66,16 +65,23 @@ export class VttechController {
     return this.vttechService.GetDichVu(SDT);
   }
   @Get('lieutrinh/:SDT')
-  GetLieutrinh(@Param('SDT') SDT: string) {
-    return this.vttechService.GetLieutrinh(SDT);
+  async GetLieutrinh(@Param('SDT') SDT: string) {
+    console.log('Lieu trinh',SDT);
+    const result = await this.vttechService.GetLieutrinh(SDT);
+    console.log(result);
+    
+    return result
   }
   @Get('dichvus')
   GetDichVus() {
     return this.vttechService.GetDichVus();
   }
   @Post('thanhtoan/:SDT')
-  GetThanhtoan(@Param('SDT') SDT: string) {
-    return this.vttechService.GetThanhtoan(SDT);
+  async GetThanhtoan(@Param('SDT') SDT: string) {
+    console.log('Thanh toan',SDT);
+    const result = await this.vttechService.GetThanhtoan(SDT);
+    console.log(result);
+    return result
   }
   @Get('payment/:SDT')
   GetPaymentInfo(@Param('SDT') SDT: string) {

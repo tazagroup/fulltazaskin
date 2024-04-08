@@ -16,74 +16,22 @@ export class VttechthanhtoanEntity {
     SDT: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     InvoiceNum: string;
-    @Column({default:null})
-    time: Date;
-    @Column({default:null})
-    DukienZNS: Date;
-    @Column({default:null})
-    ThucteZNS: Date;
-    @Column({default:0})
-    StatusZNS: number;
-    @Column({default:null})
-    TimeZNS: Date;
-    @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
-    ZNS: string;
-    @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
-    SMS: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    BranchID: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    CustomerID: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    CustOldCode: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    CustCode: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    CustName: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    DocCode: string;
-    @Column({ type: "decimal", precision: 10, scale: 2, default: 0 })
+    @Column({ type: 'bigint'})
     Amount: number;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    Source: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    Service: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    ServiceCat: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    TabID: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    Card: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    Medicine: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    Deposit: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    Birth1: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    Birth: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    Gender: string;
-    @Column({ type: 'text', collation: 'utf8_general_ci' })
-    IsNew: string;
-    @Column({ nullable: true })
+    @Column({default:null})
     Created: Date;
-    @Column({ nullable: true })
-    DateCreated: Date;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
-    Type: string;
+    MethodName: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
-    PaymentMethod: string;
+    BranchCode: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
-    PaymentMethodTransfer: string;
+    BranchName: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
-    PaymentMethodPos: string;
-    @Column({ type: "decimal", precision: 10, scale: 2, default: 0 })
-    PriceDiscounted: number;
-    @Column({ type: "decimal", precision: 10, scale: 2, default: 0 })
-    Paid: number;
-    @Column({ type: "decimal", precision: 10, scale: 2, default: 0 })
-    Debt: number
+    TypePayment: string;
+    @Column()
+    BranchID: number;
+    @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('[]')" })
+    children: string;
     @Column({ default: 1 })
     Ordering: number;
     @Column({ default: 0 })

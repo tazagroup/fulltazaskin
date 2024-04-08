@@ -150,6 +150,8 @@ export class VttechService {
   }
 
   async GetLieutrinh(SDT: any) {
+    console.log(SDT);
+    
     const result = await this.GetKHBySDT(SDT)
     if (result?.Table?.length > 0) {
       let config = {
@@ -177,7 +179,9 @@ export class VttechService {
       }
     }
     else {
-      this._TelegramService.SendMiniAppLogdev(`Get Dịch Vụ By User Không tìm thấy ${SDT} trên hệ thống Vttech`)
+     const result= await this._VttechlieutrinhService.findslug(SDT)
+    this._TelegramService.SendMiniAppLogdev(`Get Dịch Vụ By User Không tìm thấy ${SDT} trên hệ thống Vttech`)
+    return result
     }
   }
   async GetDichVus() {
@@ -239,6 +243,9 @@ export class VttechService {
       }
     }
     else {
+
+      console.log("Không tìm thấy");
+      return null
       this._TelegramService.SendMiniAppLogdev(`[GetThanhtoan] Không tìm thấy ${SDT} trên hệ thống Vttech`)
       //this._TelegramService.SendMiniAppLogdev(`Get Dịch Vụ By User Không tìm thấy ${SDT} trên hệ thống Vttech`)
     }
