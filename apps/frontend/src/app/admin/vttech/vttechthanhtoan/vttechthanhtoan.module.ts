@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { VttechthanhtoanDetailComponent } from './vttechthanhtoan-detail/vttechthanhtoan-detail.component';
 import { MaterialModule } from '../../../shared/material.module';
+import { VttechthanhtoanlistComponent } from './vttechthanhtoanlist/vttechthanhtoanlist.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -26,11 +27,10 @@ import { MaterialModule } from '../../../shared/material.module';
     RouterModule.forChild([
       {
         path: '', component: VttechthanhtoanComponent,
-        children: [{
-          path: ':id', component: VttechthanhtoanDetailComponent
-        }]
-    
-      }
+        children: [
+          {path: ':id', component: VttechthanhtoanDetailComponent},
+      ]
+      },
     ])
   ],
   declarations: [VttechthanhtoanComponent,VttechthanhtoanDetailComponent]

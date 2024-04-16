@@ -10,6 +10,9 @@ import {MatMenuModule} from '@angular/material/menu';
 import { NotificationsModule } from '../../shared/common/notifications/notifications.module';
 import { ChatrealtimeModule } from '../../shared/common/chatrealtime/chatrealtime.module';
 import { ProfileModule } from '../../shared/common/profile/profile.module';
+import { VttechthanhtoanlistComponent } from '../vttech/vttechthanhtoan/vttechthanhtoanlist/vttechthanhtoanlist.component';
+import { VttechdieutrilistComponent } from '../vttech/vttechdieutri/vttechdieutrilist/vttechdieutrilist.component';
+import { ZnsthanhtoanadminComponent } from '../../znsthanhtoan/znsthanhtoanadmin/znsthanhtoanadmin.component';
 
 @NgModule({
   imports: [
@@ -45,6 +48,9 @@ import { ProfileModule } from '../../shared/common/profile/profile.module';
           { path: 'vttechdieutri', loadChildren: () => import('../vttech/vttechdieutri/vttechdieutri.module').then(m => m.VttechdieutriModule)},
           { path: 'sms', loadChildren: () => import('../baocao/sms/sms.module').then(m => m.SmsModule)},
           { path: 'logger', loadChildren: () => import('../logger/logger.module').then(m => m.LoggerModule)},
+          {path: 'listthanhtoan', component: VttechthanhtoanlistComponent},
+          {path: 'listdieutri', component: VttechdieutrilistComponent},
+          {path: 'znsthanhtoan', component: ZnsthanhtoanadminComponent},
       ]
       }
     ])

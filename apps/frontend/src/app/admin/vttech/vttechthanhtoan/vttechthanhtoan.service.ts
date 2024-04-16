@@ -7,7 +7,11 @@ import { environment } from 'apps/frontend/src/environments/environment';
 })
 export class VttechthanhtoanService {
   private _vttechthanhtoans: BehaviorSubject<any[] | null> = new BehaviorSubject<any[] | null>(null);
+  private _thanhtoans: BehaviorSubject<any[] | null> = new BehaviorSubject<any[] | null>(null);
   private _vttechthanhtoan: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
+  get thanhtoans$(): Observable<any[] | null> {
+    return this._thanhtoans.asObservable();
+  }
   get vttechthanhtoans$(): Observable<any[] | null> {
     return this._vttechthanhtoans.asObservable();
   }
@@ -15,7 +19,14 @@ export class VttechthanhtoanService {
     return this._vttechthanhtoan.asObservable();
   }
   constructor(private http: HttpClient) { }
-
+  getAllthanhtoans() {
+    return this.http.get(environment.APIURL + '/vttechthanhtoan').pipe(
+      map((data: any) => { 
+        this._thanhtoans.next(data);
+        return data;
+      })
+    );
+  }
   // getAllAPIVttech() {
   //   return this.http.get(environment.APIURL + '/vttech_thanhtoan/apirealtime').pipe(
   //     map((data: any) => { 

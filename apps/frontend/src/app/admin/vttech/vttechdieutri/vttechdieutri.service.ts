@@ -7,14 +7,26 @@ import { environment } from 'apps/frontend/src/environments/environment';
 })
 export class VttechdieutriService {
   private _vttechdieutris: BehaviorSubject<any[] | null> = new BehaviorSubject<any[] | null>(null);
+  private _vttechlistdieutri: BehaviorSubject<any[] | null> = new BehaviorSubject<any[] | null>(null);
   private _vttechdieutri: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
   get vttechdieutris$(): Observable<any[] | null> {
     return this._vttechdieutris.asObservable();
+  }
+  get vttechlistdieutri$(): Observable<any[] | null> {
+    return this._vttechlistdieutri.asObservable();
   }
   get vttechdieutri$(): Observable<any | null> {
     return this._vttechdieutri.asObservable();
   }
   constructor(private http: HttpClient) { }
+  getListDieutri() {
+    return this.http.get(environment.APIURL + '/vttechdieutri').pipe(
+      map((data: any) => { 
+        this._vttechlistdieutri.next(data);
+        return data;
+      })
+    );
+  }
   getAllVttechdieutris() {
     return this.http.get(environment.APIURL + '/vttech_dieutri').pipe(
       map((data: any) => { 
