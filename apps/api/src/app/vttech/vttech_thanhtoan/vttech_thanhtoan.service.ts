@@ -10,10 +10,13 @@ import { LIST_CHI_NHANH } from '../../shared.utils';
 import { ZaloznsService } from '../../zalo/zalozns/zalozns.service';
 import { LoggerService } from '../../logger/logger.service';
 import { TelegramService } from '../../shared/telegram.service';
+import { VttechService } from '../vttech.service';
+import { SharedService } from '../../shared/shared.service';
 @Injectable()
 export class Vttech_thanhtoanService {
   Cookie: any = ''
   XsrfToken: any = ''
+  Token:any=''
   constructor(
     @InjectRepository(Vttech_thanhtoanEntity)
     private Vttech_thanhtoanRepository: Repository<Vttech_thanhtoanEntity>,
@@ -21,10 +24,14 @@ export class Vttech_thanhtoanService {
     private _ZaloznsService: ZaloznsService,
     private _LoggerService: LoggerService,
     private _TelegramService: TelegramService,
+    private _SharedService: SharedService,
   ) {
     this._CauhinhchungService.findslug('vttechtoken').then((data: any) => {
       this.Cookie = data.Content.Cookie
       this.XsrfToken = data.Content.XsrfToken
+    })
+    this._SharedService.getToken({Name: "Taza",Password: "1b9287d492b256x7taza",Type: "web"}).then((data:any)=>{
+      this.Token=data.Token
     })
   }
   
@@ -134,6 +141,76 @@ export class Vttech_thanhtoanService {
       return error;
     }
   }
+
+
+  async getThanhtoan(data: any = {}) {
+    // const begin = data?.begin ? moment(data.begin).startOf('day').format('DD-MM-YYYY HH:mm:ss') : moment().startOf('day').format('DD-MM-YYYY HH:mm:ss');
+    // const end = data?.end ? moment(data.end).endOf('day').format('DD-MM-YYYY HH:mm:ss') : moment().endOf('day').format('DD-MM-YYYY HH:mm:ss');
+    // console.log(begin, end);
+    console.log(data);
+    const result = await this._SharedService.getToken(data)
+    console.log(result);
+    
+    try {
+      const response = await fetch(`https://apismsvtt.vttechsolution.com/api/Customer/GetTreat`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json', 
+          'withCredentials': 'true',
+          credentials: 'include',
+          'Authorization': `Bearer ${result[0].Token}`, 
+          'Cookie': result[1],
+        //  'Cookie': '.AspNetCore.Session=CfDJ8CdMGPNML0VGqZwat9Bn4SBLJ0IqKurMYOSPZ0vZCoJBubN0oA%2FSoKl%2Bu%2FnytFArLdgrp3egLQoiwc0G1ybsdY524WigYsMCrdB2Xsj4H9Wok7rvPUNE8U7A%2B1GDiWhY9TYvyxa0XIN06we87l3wunGwMOHF6R2%2F3ocB%2FomsPOyL'
+        },
+        body: JSON.stringify({
+          "DateFrom": "2024-04-09",
+          "DateTo": "2024-04-09",
+          "BranchID": "0",
+          "PagingNumber": "1"
+        })
+      });
+      const data = await response.json();      
+      return data
+      // const Lichsuthuchi = data.Master;
+      // Lichsuthuchi.filter((v:any)=>v.VoucherType==-1 || v.VoucherType==-3 || v.VoucherType==-5);
+      // Lichsuthuchi.forEach(async (v: any) => {
+      //   const checkCode = await this.findByCode(v.Code);
+      //   console.log(v);
+      //   console.log(checkCode);
+      //   if (checkCode) {
+      //     console.log("Trùng Hoá Đơn");
+      //     this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Trùng Hoá Đơn ${v.Code} - ${v.CustPhone}`);
+      //     this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${v.Code} - ${v.CustPhone}` });
+      //   }
+      //   else {
+      //   const item: any = {
+      //     Code: v.Code,
+      //     SDT: v.CustPhone,
+      //     Amount: v.Amount,
+      //     BranchID: v.BranchID,
+      //     CustomerID: v.CustID,
+      //     CustCode: v.CustCode,
+      //     CustName: v.CustName,
+      //     DocCode: v.CustDocCode,
+      //     Created: v.Created,
+      //     Type: v.VoucherType
+      //   };
+      //   const result = await this.createLichsu(item);
+      //   console.log(result);
+      //   }
+      // })
+
+    } catch (error) {
+      console.error(error.status);
+      this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lỗi Xác Thực - ${JSON.stringify(error.status)} - ${JSON.stringify(data)}`);
+      return error;
+    }
+  }
+
+
+
+
+  
   
   async SendXNTTauto() {
     const ListThanhtoan = await this.fininday()

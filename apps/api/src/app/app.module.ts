@@ -23,6 +23,7 @@ import { SmsModule } from './sms/sms.module';
 import { LoggerModule } from './logger/logger.module';
 import { VttechthanhtoanModule } from './vttech/vttechthanhtoan/vttechthanhtoan.module';
 import { ZaloappuudaiModule } from './zaloappuudai/zaloappuudai.module';
+import { ZnsthanhtoanModule } from './zns/znsthanhtoan/znsthanhtoan.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -53,10 +54,10 @@ import { ZaloappuudaiModule } from './zaloappuudai/zaloappuudai.module';
     UsersModule,
     KhachhangdichvuModule,
     VttechModule,
-    // TasksModule,
     SmsModule,
     LoggerModule,
     ZaloappuudaiModule,
+    ZnsthanhtoanModule
   ],
   controllers: [AppController],
   providers: [AppService],

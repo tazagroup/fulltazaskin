@@ -36,6 +36,36 @@ export class VttechService {
       this.XsrfToken = data.Content.XsrfToken
     })
   }
+  async getToken(item: any) { 
+    console.log(item);
+    
+    try {
+      const response:any = await fetch('https://apismsvtt.vttechsolution.com/api/Client/Autho', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: item && typeof item === 'object' && Object.keys(item).length > 0 ? JSON.stringify(item) : JSON.stringify({"Name": "Taza","Password": "1b9287d492b256x7taza","Type": "web"}),
+      });
+      const data = await response.json();
+      const cookies = await response.headers.get('set-cookie');
+      console.log(cookies);
+      console.log(response.headers);
+      
+      return cookies
+      switch (data.Status) {
+        case 1:
+          return data;
+        default:
+          this._TelegramService.SendMiniAppLogdev(`Lỗi Xác Thực ${JSON.stringify(item)} Vttech ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
+          return data
+      }
+    } catch (error) {
+     return  this._TelegramService.SendMiniAppLogdev(`Lỗi Xác Thực ${error} Vttech ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
+    }
+  }
+  
   async getAllKhachhang(data: any) {
     const formattedBegin = moment(new Date(data.begin)).format("DD-MM-YYYY");
     const formattedEnd = moment(new Date(data.end)).format("DD-MM-YYYY");
@@ -179,7 +209,7 @@ export class VttechService {
       }
     }
     else {
-     const result= await this._VttechlieutrinhService.findslug(SDT)
+     const result= await this._VttechlieutrinhService.findAllslug(SDT)
     this._TelegramService.SendMiniAppLogdev(`Get Dịch Vụ By User Không tìm thấy ${SDT} trên hệ thống Vttech`)
     return result
     }

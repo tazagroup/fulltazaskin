@@ -25,7 +25,7 @@ export class Vttech_thanhtoanController {
 //     return result;
 
 //   }
-@Interval(1800000)
+// @Interval(1800000)
   @Post('getlichsuthuchi')
   async getLichSuThuChi(@Body() data: any) {    
    this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Get Lich Su Thu Chi - ${moment().format('HH:mm:ss DD/MM/YYYY')}`); 
@@ -33,7 +33,14 @@ export class Vttech_thanhtoanController {
     return getData;
 
   }
- @Interval(1900000)
+// @Interval(1800000)
+  @Post('thanhtoanoffical')
+  async getThanhtoan(@Body() data: any) {    
+  //  this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Get Thanh Toan - ${moment().format('HH:mm:ss DD/MM/YYYY')}`); 
+    const getData = await this.vttech_thanhtoanService.getThanhtoan(data);
+    return getData;
+}
+//  @Interval(1900000)
   @Get('sendauto')
   async SendXNTTauto() {     
     this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Send XNTT Auto - ${moment().format('HH:mm:ss DD/MM/YYYY')}`); 

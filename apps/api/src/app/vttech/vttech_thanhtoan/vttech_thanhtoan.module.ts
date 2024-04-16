@@ -7,6 +7,9 @@ import { CauhinhchungModule } from '../../cauhinh/cauhinhchung/cauhinhchung.modu
 import { TelegramService } from '../../shared/telegram.service';
 import { ZaloznsModule } from '../../zalo/zalozns/zalozns.module';
 import { LoggerModule } from '../../logger/logger.module';
+import { VttechService } from '../vttech.service';
+import { VttechModule } from '../vttech.module';
+import { SharedService } from '../../shared/shared.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Vttech_thanhtoanEntity]),
   CauhinhchungModule,
@@ -14,7 +17,7 @@ import { LoggerModule } from '../../logger/logger.module';
   LoggerModule
 ],
   controllers: [Vttech_thanhtoanController],
-  providers: [Vttech_thanhtoanService,TelegramService],
+  providers: [Vttech_thanhtoanService,TelegramService,SharedService],
   exports:[Vttech_thanhtoanService]
 })
 export class Vttech_thanhtoanModule {}

@@ -1,14 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import {VttechthanhtoanService } from './vttechthanhtoan.service';
-import { CreateVttechthanhtoanDto } from './dto/create-vttechthanhtoan.dto';
-import { UpdateVttechthanhtoanDto } from './dto/update-vttechthanhtoan.dto';
+import { Interval } from '@nestjs/schedule';
 @Controller('vttechthanhtoan')
 export class VttechthanhtoanController {
   constructor(private readonly vttechthanhtoanService:VttechthanhtoanService) {}
 
   @Post()
-  create(@Body() createVttechthanhtoanDto: CreateVttechthanhtoanDto) {
-    return this.vttechthanhtoanService.create(createVttechthanhtoanDto);
+  create(@Body() data: any) {
+    return this.vttechthanhtoanService.create(data);
   }
   @Get()
   async findAll() {
@@ -18,9 +17,9 @@ export class VttechthanhtoanController {
   async findOne(@Param('id') id: string) {
     return await this.vttechthanhtoanService.findid(id);
   }
-  @Get('findslug/:slug')
+  @Get('findby/:slug')
   async findslug(@Param('slug') slug: string) {
-    return await this.vttechthanhtoanService.findslug(slug);
+    return await this.vttechthanhtoanService.findby(slug);
   }
   @Get('pagination')
   async findPagination(@Query('page') page: number,@Query('perPage') perPage: number){
@@ -31,12 +30,18 @@ export class VttechthanhtoanController {
       return await this.vttechthanhtoanService.findQuery(SearchParams);
   }
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVttechthanhtoanDto: UpdateVttechthanhtoanDto) {
-    return this.vttechthanhtoanService.update(id, updateVttechthanhtoanDto);
+  update(@Param('id') id: string, @Body() data: any) {
+    return this.vttechthanhtoanService.update(id, data);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.vttechthanhtoanService.remove(id);
   }
+  // @Interval(1800000)
+  @Post('getthanhtoan')
+  async getThanhtoan(@Body() data: any) {    
+    const getData = await this.vttechthanhtoanService.getThanhtoan(data);
+    return getData;
+}
 }

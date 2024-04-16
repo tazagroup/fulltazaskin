@@ -1,0 +1,13 @@
+import { Module } from '@nestjs/common';
+import { VttechkhachhangService } from './vttechkhachhang.service';
+import { VttechkhachhangController } from './vttechkhachhang.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { VttechkhachhangEntity } from './entities/vttechkhachhang.entity';
+import { TelegramService } from '../../shared/telegram.service';
+import { SharedService } from '../../shared/shared.service';
+@Module({
+  imports: [TypeOrmModule.forFeature([VttechkhachhangEntity])],
+  controllers: [VttechkhachhangController],
+  providers: [VttechkhachhangService,TelegramService,SharedService]
+})
+export class VttechkhachhangModule {}

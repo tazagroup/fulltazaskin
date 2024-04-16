@@ -6,12 +6,16 @@ import {
     UpdateDateColumn,
     DeleteDateColumn,
 } from 'typeorm';
-@Entity('vttechthanhtoan', { orderBy: { CreateAt: 'DESC' } })
-export class VttechthanhtoanEntity {
+@Entity('vttechkhachhang', { orderBy: { CreateAt: 'DESC' } })
+export class VttechkhachhangEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     idVttech: string;
+    @Column({ type: 'text', collation: 'utf8_general_ci' })
+    Code: string;
+    @Column({ type: 'text', collation: 'utf8_general_ci' })
+    Name: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     SDT: string;
     @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
@@ -20,8 +24,6 @@ export class VttechthanhtoanEntity {
     Ordering: number;
     @Column({ default: 0 })
     Status: number;
-    @CreateDateColumn()
-    Created: Date;
     @CreateDateColumn()
     CreateAt: Date;
     @UpdateDateColumn()

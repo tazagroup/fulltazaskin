@@ -41,6 +41,11 @@ export class VttechlieutrinhService {
       where: { IDLieutrinh: IDLieutrinh },
     });
   }
+  async findAllslug(IDLieutrinh: any) {
+    return await this.VttechlieutrinhRepository.find({
+      where: { IDLieutrinh: IDLieutrinh },
+    });
+  }
   async findPagination(page: number, perPage: number) {
     const skip = (page - 1) * perPage;
     const totalItems = await this.VttechlieutrinhRepository.count();

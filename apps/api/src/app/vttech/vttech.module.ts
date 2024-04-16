@@ -14,6 +14,8 @@ import { VttechpaymentModule } from './vttech_payment/vttech_payment.module';
 import { VttechlichhenModule } from './vttechlichhen/vttechlichhen.module';
 import { VttechlichsuthanhtoanModule } from './vttechlichsuthanhtoan/vttechlichsuthanhtoan.module';
 import { VttechlieutrinhModule } from './vttechlieutrinh/vttechlieutrinh.module';
+import { VttechdieutriModule } from './vttechdieutri/vttechdieutri.module';
+import { VttechkhachhangModule } from './vttechkhachhang/vttechkhachhang.module';
 @Module({
   imports: [
     Vttech_khachhangModule,
@@ -27,10 +29,12 @@ import { VttechlieutrinhModule } from './vttechlieutrinh/vttechlieutrinh.module'
     VttechpaymentModule,
     VttechlichhenModule,
     VttechlichsuthanhtoanModule,
-    VttechlieutrinhModule
+    VttechlieutrinhModule,
+    VttechdieutriModule,
+    VttechkhachhangModule
   ],
   controllers: [VttechController],
-  providers: [VttechService,TelegramService]
+  providers: [VttechService,TelegramService],
 
 })
 export class VttechModule {}

@@ -3,9 +3,12 @@ import { VttechthanhtoanService } from './vttechthanhtoan.service';
 import { VttechthanhtoanController } from './vttechthanhtoan.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VttechthanhtoanEntity } from './entities/vttechthanhtoan.entity';
+import { TelegramService } from '../../shared/telegram.service';
+import { SharedService } from '../../shared/shared.service';
 @Module({
   imports: [TypeOrmModule.forFeature([VttechthanhtoanEntity])],
   controllers: [VttechthanhtoanController],
-  providers: [VttechthanhtoanService]
+  providers: [VttechthanhtoanService,TelegramService,SharedService],
+  exports: [VttechthanhtoanService]
 })
 export class VttechthanhtoanModule {}

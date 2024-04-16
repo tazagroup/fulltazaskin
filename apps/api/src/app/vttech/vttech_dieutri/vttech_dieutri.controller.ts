@@ -10,7 +10,7 @@ export class Vttech_dieutriController {
     private readonly vttech_dieutriService:Vttech_dieutriService,
     private  _TelegramService:TelegramService,
     ) {}
-  @Interval(3600000)
+  // @Interval(3600000)
   @Post("getvttech")
   async GetDieutriVttech(@Body() data: any) {
     this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Get API Realtime - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
@@ -26,7 +26,7 @@ export class Vttech_dieutriController {
   async SendCamon(@Body() data: any) {   
     return await this.vttech_dieutriService.SendCamon(data);
   }
- @Interval(4000000)
+//  @Interval(4000000)
   @Get("sendauto")
   SendZNSAuto() {    
     this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Send ZNS Auto - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);  
