@@ -80,14 +80,14 @@ export class ZalotokenService {
           return { status: 400, note: "Refesh Token Hết Hạn" }
         }
         else {
-          return this.findbyoaid(item.oa_id).then((res: any) => {
+          return this.findbyoaid(item.oa_id).then(async (res: any) => {
             if (res) {
               const res1 = { ...res }
               res1.Token = response.data
               res1.AuthenAt = new Date()
               res1.AuthenEnd = new Date(res1.AuthenAt.getTime() + 90000 * 1000);
-              this.update(res1.id, res1)
-              return { status: 200, note: "Gia Hạn Thành Công" }
+              const result = await this.update(res1.id, res1)
+              return { status: 200, note: "Gia Hạn Thành Công",data:result }
             }
             else {
               return { status: 400, note: "Chứa Có Oa Trên Server" }

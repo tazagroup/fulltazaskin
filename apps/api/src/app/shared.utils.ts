@@ -453,7 +453,7 @@ export function convertPhoneNum(phoneNumber: any) {
   } else if (phoneNumber.length === 10) {
     return `+84${phoneNumber}`;
   } else {
-    throw new Error("Invalid phone number format");
+    return "Invalid phone number format";
   }
 }
 export function Phone_To_0(phoneNumber: any) {

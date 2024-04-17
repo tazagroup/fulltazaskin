@@ -26,6 +26,8 @@ export class ZnsthanhtoanEntity {
   Status: number;
   @Column()
   Statuscode: number;
+  @Column()
+  SMSCode: number;
   @CreateDateColumn()
   Created: Date;
   @CreateDateColumn()
