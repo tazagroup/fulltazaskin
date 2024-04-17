@@ -50,6 +50,8 @@ export class ZalotokenComponent implements OnInit {
           this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
             console.log(res)
             if (res.status == 200) {
+              // chinhanh.ZaloOaToken = res.data
+              // this._ChinhanhService.UpdateChinhanh(chinhanh).subscribe()
               this._NotifierService.notify("success", res.note)
             }
             else {
