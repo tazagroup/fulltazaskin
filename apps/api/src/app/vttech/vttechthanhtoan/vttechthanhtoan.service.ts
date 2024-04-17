@@ -95,14 +95,11 @@ export class VttechthanhtoanService {
   async getThanhtoan(item: any = {}) {
     console.log(item);
     const result = await this._SharedService.getToken(item)
-    console.log(result);
     try {
       const response = await fetch(`https://apismsvtt.vttechsolution.com/api/Revenue/GetList`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json', 
-          'withCredentials': 'true',
-          credentials: 'include',
           'Authorization': `Bearer ${result[0].Token}`, 
           'Cookie': result[1],
         },
@@ -124,38 +121,9 @@ export class VttechthanhtoanService {
         });
       }  
       return data
-      // const Lichsuthuchi = data.Master;
-      // Lichsuthuchi.filter((v:any)=>v.VoucherType==-1 || v.VoucherType==-3 || v.VoucherType==-5);
-      // Lichsuthuchi.forEach(async (v: any) => {
-      //   const checkCode = await this.findByCode(v.Code);
-      //   console.log(v);
-      //   console.log(checkCode);
-      //   if (checkCode) {
-      //     console.log("Trùng Hoá Đơn");
-      //     this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Trùng Hoá Đơn ${v.Code} - ${v.CustPhone}`);
-      //     this._LoggerService.create({ Title: 'Thanh Toán Từ Vttech', Mota: `Trùng Hoá Đơn ${v.Code} - ${v.CustPhone}` });
-      //   }
-      //   else {
-      //   const item: any = {
-      //     Code: v.Code,
-      //     SDT: v.CustPhone,
-      //     Amount: v.Amount,
-      //     BranchID: v.BranchID,
-      //     CustomerID: v.CustID,
-      //     CustCode: v.CustCode,
-      //     CustName: v.CustName,
-      //     DocCode: v.CustDocCode,
-      //     Created: v.Created,
-      //     Type: v.VoucherType
-      //   };
-      //   const result = await this.createLichsu(item);
-      //   console.log(result);
-      //   }
-      // })
-
     } catch (error) {
-      console.error(error.status);
-      this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lỗi Xác Thực - ${JSON.stringify(error.status)} - ${JSON.stringify(item)}`);
+      console.error(error);
+      this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lỗi Xác Thực - ${JSON.stringify(error)} - ${JSON.stringify(item)} - ${JSON.stringify(result)}`);
       return error;
     }
   }
