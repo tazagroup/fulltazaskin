@@ -1,5 +1,5 @@
 on: push
-name:  Deploy Fe Taza Skin Clinic
+name:  Deploy Backend Taza Skin Clinic
 jobs:
   web-deploy:
     name:  Deploy

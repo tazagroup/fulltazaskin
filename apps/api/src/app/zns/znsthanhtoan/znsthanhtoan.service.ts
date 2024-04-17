@@ -41,44 +41,44 @@ export class ZnsthanhtoanService {
     const Chinhanh = await this._ChinhanhService.findbyidVttech(data.BranchID)
     console.log(Chinhanh);
     return Chinhanh
-    try {
-      const token: any = await this._ZalotokenService.findid(Chinhanh.idtoken);
-      if (!token) {
+    // try {
+    //   const token: any = await this._ZalotokenService.findid(Chinhanh.idtoken);
+    //   if (!token) {
 
-      }
-      else
-      {
+    //   }
+    //   else
+    //   {
 
-        // xacnhanthanhtoantaza(item: any, Chinhanh: any): any {
-        //   const templateId = Chinhanh.idtemp;
-        //   const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
-        //   return {
-        //     phone: convertPhoneNum(item.SDT),
-        //     template_id: templateId,
-        //     template_data: {
-        //       order_code: item.InvoiceNum || 0,
-        //       note: moment(item.Created).format('DD/MM/YYYY'),
-        //       [priceProperty]: parseFloat(item.Bill.Amount).toFixed(0),
-        //       customer_name: item.CustName,
-        //     },
-        //     tracking_id: GenId(12, true),
-        //   };
-        // }
+    //     // xacnhanthanhtoantaza(item: any, Chinhanh: any): any {
+    //     //   const templateId = Chinhanh.idtemp;
+    //     //   const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+    //     //   return {
+    //     //     phone: convertPhoneNum(item.SDT),
+    //     //     template_id: templateId,
+    //     //     template_data: {
+    //     //       order_code: item.InvoiceNum || 0,
+    //     //       note: moment(item.Created).format('DD/MM/YYYY'),
+    //     //       [priceProperty]: parseFloat(item.Bill.Amount).toFixed(0),
+    //     //       customer_name: item.CustName,
+    //     //     },
+    //     //     tracking_id: GenId(12, true),
+    //     //   };
+    //     // }
 
-      // const requestData = this.xacnhanthanhtoantaza(item, Chinhanh);
-      // const config = {
-      //   method: 'post',
-      //   headers: {
-      //     'access_token': token.Token.access_token,
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(requestData)
-      // };
-      // const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
-    }
-    } catch (error) {
-      throw error; // Rethrow for proper error propagation
-    }
+    //   // const requestData = this.xacnhanthanhtoantaza(item, Chinhanh);
+    //   // const config = {
+    //   //   method: 'post',
+    //   //   headers: {
+    //   //     'access_token': token.Token.access_token,
+    //   //     'Content-Type': 'application/json',
+    //   //   },
+    //   //   body: JSON.stringify(requestData)
+    //   // };
+    //   // const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
+    // }
+    // } catch (error) {
+    //   throw error; // Rethrow for proper error propagation
+    // }
   }
   async create(data: any) {
     const check = await this.findSHD(data)
