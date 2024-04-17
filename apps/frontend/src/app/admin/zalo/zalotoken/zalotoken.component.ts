@@ -50,8 +50,12 @@ export class ZalotokenComponent implements OnInit {
           this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
             console.log(res)
             if (res.status == 200) {
-              // chinhanh.ZaloOaToken = res.data
-              // this._ChinhanhService.UpdateChinhanh(chinhanh).subscribe()
+              chinhanh.ZaloOaToken.AuthenAt = res.data.AuthenAt
+              chinhanh.ZaloOaToken.AuthenEnd = res.data.AuthenEnd
+              chinhanh.ZaloOaToken.access_token = res.data.Token.access_token
+              chinhanh.ZaloOaToken.expires_in = res.data.Token.expires_in
+              chinhanh.ZaloOaToken.refresh_token = res.data.Token.refresh_token
+              this._ChinhanhService.UpdateChinhanh(chinhanh).subscribe()
               this._NotifierService.notify("success", res.note)
             }
             else {
