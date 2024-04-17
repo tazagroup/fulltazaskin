@@ -36,9 +36,10 @@ export class ZalotokenComponent implements OnInit {
   }
   ngOnInit(): void {
     console.log();
-    this._ChinhanhService.getAllChinhanhs().subscribe((chinhanh:any)=>
+    this._ChinhanhService.getAllChinhanhs().subscribe((result:any)=>
     {
       this.activatedRoute.queryParams.subscribe((params: any) => {
+        const chinhanh = result.find((v:any)=>v.ZaloOa.oa_id==params.oa_id)
         if (params.oa_id) {
           const data:any = {
             oa_id: params.oa_id,

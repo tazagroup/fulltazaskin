@@ -94,6 +94,7 @@ export class ChinhanhChitietComponent implements OnInit {
   }
   Xacthuc(data:any) {
     window.location.href = `https://oauth.zaloapp.com/v4/oa/permission?app_id=${data.ZaloOa.app_id}&redirect_uri=https://zalo.tazaskinclinic.com/admin/zalotoken`
+    // window.location.href = `https://oauth.zaloapp.com/v4/oa/permission?app_id=${data.ZaloOa.app_id}&redirect_uri=https://zalo.tazaskinclinic.com/admin/zalotoken`
   }
   getrefreshToken(item: any) {
     // console.log(item);
