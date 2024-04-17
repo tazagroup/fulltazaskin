@@ -59,13 +59,14 @@
               <input [(ngModel)]="Detail.ZaloOa.secret_key" [ngModelOptions]="{standalone: true}" matInput type="text"
                 class="w-full" placeholder="Zalo Oa Secret Key" />
             </mat-form-field>
-            <div class="cursor-pointer flex flex-row space-x-3 items-center text-blue-600">
-              <span matTooltip="Reset Token" class="material-symbols-outlined text-green-600" (click)="getrefreshToken(Detail)">
+            <div class="col-span-3 w-full cursor-pointer flex flex-row space-x-3 items-center text-blue-600">
+               <span matTooltip="Reset Token" class="material-symbols-outlined text-green-600" (click)="getrefreshToken(Detail)">
                 restart_alt
                 </span>
                 <span (click)="Xacthuc(Detail)" matTooltip="Get Token" class="material-symbols-outlined">
                   key
                 </span>
+                <span class="text-red-500">{{Detail.ZaloOaToken.AuthenAt|date:'HH:mm:ss dd/MM/yyyy'}} - {{Detail.ZaloOaToken.AuthenEnd|date:'HH:mm:ss dd/MM/yyyy'}}</span>
                 <!-- <span (click)="GetFromZalo(item)" matTooltip="Đồng Bộ Đánh Giá" class="material-symbols-outlined">
                   cloud_sync
                 </span> -->
