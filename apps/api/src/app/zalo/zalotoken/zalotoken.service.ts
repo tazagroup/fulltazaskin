@@ -4,12 +4,14 @@ import { Like, Repository } from 'typeorm';
 import { CreateZalotokenDto } from './dto/create-zalotoken.dto';
 import { UpdateZalotokenDto } from './dto/update-zalotoken.dto';
 import { ZalotokenEntity } from './entities/zalotoken.entity';
+import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 const axios = require('axios');
 @Injectable()
 export class ZalotokenService {
   constructor(
     @InjectRepository(ZalotokenEntity)
-    private ZalotokenRepository: Repository<ZalotokenEntity>
+    private ZalotokenRepository: Repository<ZalotokenEntity>,
+    private _ChinhanhService: ChinhanhService
   ) { }
   async getAccessToken(item: any) {
     const options = {
@@ -32,14 +34,14 @@ export class ZalotokenService {
           return { status: 400, note: "Autho Code Hết Hạn" }
         }
         else {
-          return this.findbyoaid(item.oa_id).then((res: any) => {
+          return this.findbyoaid(item.oa_id).then(async (res: any) => {
             if (res) {
               const res1 = { ...res }
               res1.Token = response.data
               res1.AuthenAt = new Date()
               res1.AuthenEnd = new Date(res1.AuthenAt.getTime() + 90000 * 1000);
-              this.update(res1.id, res1)
-              return { status: 200, note: "Xác Thực Thành Công" }
+              const result = await this.update(res1.id, res1)
+              return { status: 200, note: "Xác Thực Thành Công",data:result }
             }
             else {
               return { status: 400, note: "Chứa Có Oa Trên Server" }
