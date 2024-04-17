@@ -40,7 +40,7 @@ export class VttechdieutrilistComponent implements OnInit {
   FilterLists: any[] = []
   Sitemap: any = { loc: '', priority: '' }
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
-  displayedColumns: string[] = ['Code','Name', 'Phone','Treat','BranchID','CreatedDate'];
+  displayedColumns: string[] = ['Code','Name', 'Phone','Treat','BranchID','Created'];
   
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
