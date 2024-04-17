@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { NotifierService } from 'angular-notifier';
 import { ZalodanhgiaService } from '../zalodanhgia/zalodanhgia.service';
 import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
+import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 @Component({
   selector: 'app-zalotoken',
   templateUrl: './zalotoken.component.html',
@@ -29,36 +30,61 @@ export class ZalotokenComponent implements OnInit {
     private _ZalotokenService: ZalotokenService,
     private activatedRoute: ActivatedRoute,
     private _NotifierService: NotifierService,
-    private _ZalodanhgiaService: ZalodanhgiaService
+    private _ZalodanhgiaService: ZalodanhgiaService,
+    private _ChinhanhService: ChinhanhService
   ) {
   }
   ngOnInit(): void {
     console.log();
-    
+    this._ChinhanhService.getAllChinhanhs().subscribe((chinhanh:any)=>
+    {
+      this.activatedRoute.queryParams.subscribe((params: any) => {
+        if (params.oa_id) {
+          const data:any = {
+            oa_id: params.oa_id,
+            code: params.code,
+            app_id: chinhanh.ZaloOa.app_id,
+            secret_key: chinhanh.ZaloOa.secret_key
+          }
+          this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
+            console.log(res)
+            if (res.status == 200) {
+              this._NotifierService.notify("success", res.note)
+            }
+            else {
+              this._NotifierService.notify("error", res.note)
+            }
+            // setTimeout(() => {
+            //   window.location.href = window.location.pathname
+            // }, 1000);
+          }
+          )
+        }
+        // if (params.oa_id) {
+        //   const data:any = {
+        //     oa_id: params.oa_id,
+        //     code: params.code,
+        //     app_id: this.ListChiNhanh.find((v:any)=>v.oa_id==params.oa_id)?.app_id,
+        //     secret_key: this.ListChiNhanh.find((v:any)=>v.oa_id==params.oa_id)?.secret_key
+        //   }
+        //   this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
+        //     console.log(res)
+        //     if (res.status == 200) {
+        //       this._NotifierService.notify("success", res.note)
+        //     }
+        //     else {
+        //       this._NotifierService.notify("error", res.note)
+        //     }
+        //     setTimeout(() => {
+        //       window.location.href = window.location.pathname
+        //     }, 1000);
+        //   }
+        //   )
+        // }
+      });
+    })
     // moment.locale('vi');
-    this.activatedRoute.queryParams.subscribe((params: any) => {
-      if (params.oa_id) {
-        const data:any = {
-          oa_id: params.oa_id,
-          code: params.code,
-          app_id: this.ListChiNhanh.find((v:any)=>v.oa_id==params.oa_id)?.app_id,
-          secret_key: this.ListChiNhanh.find((v:any)=>v.oa_id==params.oa_id)?.secret_key
-        }
-        this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
-          console.log(res)
-          if (res.status == 200) {
-            this._NotifierService.notify("success", res.note)
-          }
-          else {
-            this._NotifierService.notify("error", res.note)
-          }
-          setTimeout(() => {
-            window.location.href = window.location.pathname
-          }, 1000);
-        }
-        )
-      }
-    });
+
     this._ZalotokenService.getAllZalotokens().subscribe()
     this._ZalotokenService.zalotokens$.subscribe((data: any) => {      
       this.FilterLists = this.Lists = data

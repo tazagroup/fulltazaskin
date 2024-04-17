@@ -44,12 +44,37 @@
             </div>
             <div class="grid lg:grid-cols-3 grid-cols-1 gap-2">
             <mat-form-field appearance="outline">
-              <mat-label>Zalo Oa</mat-label>
-              <input [(ngModel)]="Detail.ZaloOa" [ngModelOptions]="{standalone: true}" matInput type="text"
-                class="w-full" placeholder="Zalo Oa" />
+              <mat-label>Zalo Oa ID</mat-label>
+              <input [(ngModel)]="Detail.ZaloOa.oa_id" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Zalo Oa ID" />
                 <a href="https://zalo.me/{{Detail.ZaloOa}}" matSuffix class="material-symbols-outlined">link</a>
-                <!-- <mat-hint class="text-red-500"><a href="https://zalo.me/{{Detail.ZaloOa}}">https://zalo.me/{{Detail.ZaloOa}}</a> </mat-hint> -->
             </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Zalo Oa App ID</mat-label>
+              <input [(ngModel)]="Detail.ZaloOa.app_id" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Zalo Oa App ID" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Zalo Oa Secret Key</mat-label>
+              <input [(ngModel)]="Detail.ZaloOa.secret_key" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Zalo Oa Secret Key" />
+            </mat-form-field>
+            <div class="cursor-pointer flex flex-row space-x-3 items-center text-blue-600">
+              <span matTooltip="Reset Token" class="material-symbols-outlined text-green-600" (click)="getrefreshToken(Detail)">
+                restart_alt
+                </span>
+                <span (click)="Xacthuc(Detail)" matTooltip="Get Token" class="material-symbols-outlined">
+                  key
+                </span>
+                <!-- <span (click)="GetFromZalo(item)" matTooltip="Đồng Bộ Đánh Giá" class="material-symbols-outlined">
+                  cloud_sync
+                </span> -->
+                <!-- <span [cdkCopyToClipboard]="item.Token.access_token" matTooltip="Sao Chép Token" class="material-symbols-outlined">
+                  content_copy
+                </span> -->
+            </div>
+            </div>
+            <div class="grid lg:grid-cols-2 grid-cols-1 gap-2">
             <mat-form-field appearance="outline">
               <mat-label>Template Đánh Giá</mat-label>
               <input [(ngModel)]="Detail.TemplateDanhgia" [ngModelOptions]="{standalone: true}" matInput type="text"

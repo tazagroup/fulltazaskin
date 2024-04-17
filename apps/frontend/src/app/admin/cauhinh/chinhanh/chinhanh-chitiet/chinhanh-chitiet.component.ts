@@ -92,4 +92,30 @@ export class ChinhanhChitietComponent implements OnInit {
     this.Detail.Image = e
     this._ChinhanhService.UpdateChinhanh(this.Detail).subscribe();
   }
+  Xacthuc(data:any) {
+    window.location.href = `https://oauth.zaloapp.com/v4/oa/permission?app_id=${data.ZaloOa.app_id}&redirect_uri=https://zalo.tazaskinclinic.com/admin/zalotoken`
+  }
+  getrefreshToken(item: any) {
+    // console.log(item);
+    // const data = {
+    //   oa_id: item.oa_id,
+    //   // app_id: environment.app_id,
+    //   // secret_key: environment.secret_key,
+    //   app_id: this.ListChiNhanh.find((v:any)=>v.oa_id==item.oa_id)?.app_id,
+    //   secret_key: this.ListChiNhanh.find((v:any)=>v.oa_id==item.oa_id)?.secret_key,
+    //   refresh_token: item.Token.refresh_token
+    // }
+    // this._ZalotokenService.get_refreshToken(data).subscribe((res: any) => {
+    //   if (res.status == 200) {
+    //     this._NotifierService.notify("success", res.note)
+    //     setTimeout(() => {
+    //       window.location.href = window.location.pathname
+    //     }, 1000);
+    //   }
+    //   else {
+    //     this._NotifierService.notify("error", res.note)
+
+    //   }
+    // })
+  }
 }
