@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import {VttechthanhtoanService } from './vttechthanhtoan.service';
+import { VttechthanhtoanService } from './vttechthanhtoan.service';
 import { Interval } from '@nestjs/schedule';
+import moment = require('moment');
 @Controller('vttechthanhtoan')
 export class VttechthanhtoanController {
-  constructor(private readonly vttechthanhtoanService:VttechthanhtoanService) {}
+  constructor(private readonly vttechthanhtoanService: VttechthanhtoanService) { }
 
   @Post()
   create(@Body() data: any) {
@@ -22,12 +23,12 @@ export class VttechthanhtoanController {
     return await this.vttechthanhtoanService.findby(slug);
   }
   @Get('pagination')
-  async findPagination(@Query('page') page: number,@Query('perPage') perPage: number){
-       return await this.vttechthanhtoanService.findPagination(page,perPage);
-    }
+  async findPagination(@Query('page') page: number, @Query('perPage') perPage: number) {
+    return await this.vttechthanhtoanService.findPagination(page, perPage);
+  }
   @Post('search')
-    async findQuery(@Body() SearchParams: any){
-      return await this.vttechthanhtoanService.findQuery(SearchParams);
+  async findQuery(@Body() SearchParams: any) {
+    return await this.vttechthanhtoanService.findQuery(SearchParams);
   }
   @Patch(':id')
   update(@Param('id') id: string, @Body() data: any) {
@@ -38,10 +39,25 @@ export class VttechthanhtoanController {
   remove(@Param('id') id: string) {
     return this.vttechthanhtoanService.remove(id);
   }
-  // @Interval(1800000)
   @Post('getthanhtoan')
   async getThanhtoan(@Body() data: any) {    
     const getData = await this.vttechthanhtoanService.getThanhtoan(data);
     return getData;
-}
+  }
+  @Interval(1800000)
+  @Post()
+  async getAuto() {    
+    const data:any= {
+      "Name": "Taza",
+      "Password": "1b9287d492b256x7taza",
+      "Type": "web",
+      "DateFrom": moment().format('YYYY-MM-DD'),
+      "DateTo": moment().format('YYYY-MM-DD'),
+      "BranchID": "0",
+      "PagingNumber": "1"
+  }
+    console.log(data);
+    const getData = await this.vttechthanhtoanService.getThanhtoan(data);
+    return getData;
+  }
 }

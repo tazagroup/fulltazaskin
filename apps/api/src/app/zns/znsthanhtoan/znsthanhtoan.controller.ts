@@ -1,12 +1,18 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import {ZnsthanhtoanService } from './znsthanhtoan.service';
+import { Interval } from '@nestjs/schedule';
 @Controller('znsthanhtoan')
 export class ZnsthanhtoanController {
   constructor(private readonly znsthanhtoanService:ZnsthanhtoanService) {}
-
+  @Interval(1900000)
   @Post('createzns')
   createzns(@Body() data: any) {
     return this.znsthanhtoanService.createzns(data);
+  }
+  //@Interval(1900000)
+  @Post('sendzns')
+  sendzns(@Body() data: any) {
+    return this.znsthanhtoanService.sendzns(data);
   }
   @Post()
   create(@Body() data: any) {

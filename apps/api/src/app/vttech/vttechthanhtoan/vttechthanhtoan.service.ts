@@ -51,7 +51,7 @@ export class VttechthanhtoanService {
       data: vttechthanhtoans,
     };
   }
-  async findQuery(params: any={CreatedBegin:new Date(),CreatedEnd:new Date()}) {
+  async findQuery(params: any={CreatedBegin:moment().format('YYYY-MM-DD'),CreatedEnd:moment().format('YYYY-MM-DD')}) {
     console.error(params);
     const queryBuilder = this.VttechthanhtoanRepository.createQueryBuilder('vttechthanhtoan');
 
@@ -59,13 +59,6 @@ export class VttechthanhtoanService {
       queryBuilder.andWhere('vttechthanhtoan.Created BETWEEN :startDate AND :endDate', {
         startDate: params.CreatedBegin,
         endDate: params.CreatedEnd,
-      });
-    }
-
-    if (params.Batdau && params.Ketthuc) {
-      queryBuilder.andWhere('vttechthanhtoan.CreateAt BETWEEN :startDate AND :endDate', {
-        startDate: params.Batdau,
-        endDate: params.Ketthuc,
       });
     }
     if (params.Title) {
@@ -103,7 +96,6 @@ export class VttechthanhtoanService {
     console.log(item);
     const result = await this._SharedService.getToken(item)
     console.log(result);
-    
     try {
       const response = await fetch(`https://apismsvtt.vttechsolution.com/api/Revenue/GetList`, {
         method: 'POST',
@@ -117,6 +109,7 @@ export class VttechthanhtoanService {
         body: JSON.stringify(item)
       });
       const data = await response.json();  
+      this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lấy dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")} ${JSON.stringify(data.Data.length)}`);
       if(data.Data.length>0){
         data.Data.forEach((v:any,k:any) => {
           const item:any={}

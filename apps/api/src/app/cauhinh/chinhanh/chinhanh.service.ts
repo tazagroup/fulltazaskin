@@ -24,6 +24,11 @@ export class ChinhanhService {
 
     });
   }
+  async findbyidVttech(idVttech: string) {
+    return await this.ChinhanhRepository.findOne({
+      where: { idVttech: idVttech },
+    });
+  }
   async findslug(slug: any) {
     return await this.ChinhanhRepository.findOne({
       where: { Slug: slug},
@@ -46,8 +51,10 @@ export class ChinhanhService {
       where: { Title: Like(`%query%`) },
     });
   }
-  async update(id: string, UpdateChinhanhDto: UpdateChinhanhDto) {
-    this.ChinhanhRepository.save(UpdateChinhanhDto);
+  async update(id: string, data: any) {
+    console.log(data);
+    
+    await this.ChinhanhRepository.save(data);
     return await this.ChinhanhRepository.findOne({ where: { id: id } });
   }
   async remove(id: string) {

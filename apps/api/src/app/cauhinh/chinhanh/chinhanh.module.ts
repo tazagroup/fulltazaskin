@@ -6,6 +6,7 @@ import { ChinhanhEntity } from './entities/chinhanh.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([ChinhanhEntity])],
   controllers: [ChinhanhController],
-  providers: [ChinhanhService]
+  providers: [ChinhanhService],
+  exports: [ChinhanhService],
 })
 export class ChinhanhModule {}

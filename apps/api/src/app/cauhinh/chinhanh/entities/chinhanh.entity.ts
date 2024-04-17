@@ -15,6 +15,10 @@ export class ChinhanhEntity {
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   idVttech: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  TemplateDanhgia: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
+  TemplateThanhtoan: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   BranchCode: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Address: string;
@@ -28,6 +32,8 @@ export class ChinhanhEntity {
   Brand: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   ZaloOa: string;
+  @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
+  ZaloOaToken: string;
   @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('[]')" })
   ListSocial: string;
   @Column({ default: '' })

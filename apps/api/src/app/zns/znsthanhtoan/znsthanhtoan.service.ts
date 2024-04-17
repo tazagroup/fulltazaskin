@@ -3,15 +3,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { ZnsthanhtoanEntity } from './entities/znsthanhtoan.entity';
 import { VttechthanhtoanService } from '../../vttech/vttechthanhtoan/vttechthanhtoan.service';
+import { TelegramService } from '../../shared/telegram.service';
+import moment = require('moment');
+import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 @Injectable()
 export class ZnsthanhtoanService {
   constructor(
     @InjectRepository(ZnsthanhtoanEntity)
     private ZnsthanhtoanRepository: Repository<ZnsthanhtoanEntity>,
     private _VttechthanhtoanService: VttechthanhtoanService,
+    private _TelegramService: TelegramService,
+    private _ChinhanhService: ChinhanhService,
   ) { }
   async createzns(data: any) {    
     const Thanhtoans = await this._VttechthanhtoanService.findQuery(data)
+    this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Create ${Thanhtoans.length} Thanh Toan - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     if(Thanhtoans.length>0) 
       {
         Thanhtoans.forEach((v:any,k:any) => {
@@ -29,7 +35,50 @@ export class ZnsthanhtoanService {
         });
       }
     return Thanhtoans
-    //console.log(Thanhtoans);
+  }
+  async sendzns(data: any) { 
+    console.log(data);
+    const Chinhanh = await this._ChinhanhService.findbyidVttech(data.BranchID)
+    console.log(Chinhanh);
+    return Chinhanh
+    try {
+      const token: any = await this._ZalotokenService.findid(Chinhanh.idtoken);
+      if (!token) {
+
+      }
+      else
+      {
+
+        // xacnhanthanhtoantaza(item: any, Chinhanh: any): any {
+        //   const templateId = Chinhanh.idtemp;
+        //   const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+        //   return {
+        //     phone: convertPhoneNum(item.SDT),
+        //     template_id: templateId,
+        //     template_data: {
+        //       order_code: item.InvoiceNum || 0,
+        //       note: moment(item.Created).format('DD/MM/YYYY'),
+        //       [priceProperty]: parseFloat(item.Bill.Amount).toFixed(0),
+        //       customer_name: item.CustName,
+        //     },
+        //     tracking_id: GenId(12, true),
+        //   };
+        // }
+
+      // const requestData = this.xacnhanthanhtoantaza(item, Chinhanh);
+      // const config = {
+      //   method: 'post',
+      //   headers: {
+      //     'access_token': token.Token.access_token,
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(requestData)
+      // };
+      // const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
+    }
+    } catch (error) {
+      throw error; // Rethrow for proper error propagation
+    }
   }
   async create(data: any) {
     const check = await this.findSHD(data)

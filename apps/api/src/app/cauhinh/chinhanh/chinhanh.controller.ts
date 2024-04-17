@@ -18,6 +18,10 @@ export class ChinhanhController {
   async findOne(@Param('id') id: string) {
     return await this.chinhanhService.findid(id);
   }
+  @Get('findbyidVttech/:id')
+  async findbyidVttech(@Param('id') id: string) {
+    return await this.chinhanhService.findbyidVttech(id);
+  }
   @Get('findslug/:slug')
   async findslug(@Param('slug') slug: string) {
     return await this.chinhanhService.findslug(slug);

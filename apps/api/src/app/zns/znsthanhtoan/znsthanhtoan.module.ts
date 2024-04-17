@@ -5,13 +5,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ZnsthanhtoanEntity } from './entities/znsthanhtoan.entity';
 import { VttechthanhtoanService } from '../../vttech/vttechthanhtoan/vttechthanhtoan.service';
 import { VttechthanhtoanModule } from '../../vttech/vttechthanhtoan/vttechthanhtoan.module';
+import { TelegramService } from '../../shared/telegram.service';
+import { ChinhanhModule } from '../../cauhinh/chinhanh/chinhanh.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([ZnsthanhtoanEntity]),
-    VttechthanhtoanModule
+    VttechthanhtoanModule,
+    ChinhanhModule,
   ],
   controllers: [ZnsthanhtoanController],
-  providers: [ZnsthanhtoanService]
+  providers: [ZnsthanhtoanService,TelegramService]
 })
 export class ZnsthanhtoanModule {}
 
