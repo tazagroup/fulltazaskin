@@ -13,14 +13,14 @@ export class VttechthanhtoanEntity {
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     idVttech: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
-    SDT: string;
+    CustPhone: string;
     @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
     Dulieu: string
     @Column({ default: 1 })
     Ordering: number;
     @Column({ default: 0 })
     Status: number;
-    @CreateDateColumn()
+    @Column()
     Created: Date;
     @CreateDateColumn()
     CreateAt: Date;

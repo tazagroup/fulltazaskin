@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import {ZnsthanhtoanService } from './znsthanhtoan.service';
 import { Interval } from '@nestjs/schedule';
+import moment = require('moment');
 @Controller('znsthanhtoan')
 export class ZnsthanhtoanController {
   constructor(private readonly znsthanhtoanService:ZnsthanhtoanService) {}
@@ -13,6 +14,10 @@ export class ZnsthanhtoanController {
   @Post('sendzns')
   sendzns(@Body() data: any) {
     return this.znsthanhtoanService.sendzns(data);
+  }
+  @Post('sendznsauto')
+  sendznsauto(@Body() data: any) {
+    return this.znsthanhtoanService.sendznsauto(data);
   }
   @Post()
   create(@Body() data: any) {
@@ -41,5 +46,10 @@ export class ZnsthanhtoanController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.znsthanhtoanService.remove(id);
+  }
+  CheckTime() {
+    const now = moment();
+    const checkTime = now.hour() >= 8 && now.hour() <= 21;
+    return checkTime
   }
 }

@@ -34,7 +34,7 @@ export class VttechthanhtoanService {
   async findby(data: any) {
     return await this.VttechthanhtoanRepository.findOne({ 
       where: {
-         SDT: data.SDT,
+        CustPhone: data.CustPhone,
          idVttech: data.idVttech 
         },
      });
@@ -62,7 +62,7 @@ export class VttechthanhtoanService {
       });
     }
     if (params.Title) {
-      queryBuilder.andWhere('vttechthanhtoan.Title LIKE :Title', { SDT: `%${params.Title}%` });
+      queryBuilder.andWhere('vttechthanhtoan.CustPhone LIKE :Title', { CustPhone: `%${params.CustPhone}%` });
     }
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
@@ -112,7 +112,7 @@ export class VttechthanhtoanService {
           const item:any={}
           item.Dulieu = v
           item.idVttech = v.ID
-          item.SDT = v.CustPhone   
+          item.CustPhone = v.CustPhone   
           item.Created = moment(v.Created).format('YYYY-MM-DD')
           setTimeout(() => {
             this.create(item); 

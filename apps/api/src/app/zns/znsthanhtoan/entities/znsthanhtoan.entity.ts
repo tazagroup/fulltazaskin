@@ -14,6 +14,10 @@ export class ZnsthanhtoanEntity {
   BranchID: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Code: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
+  msg_id: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
+  messageId: string;
   @Column({ type: 'bigint'})
   Paid: number;
   @Column({ default: '' })
@@ -28,7 +32,7 @@ export class ZnsthanhtoanEntity {
   Statuscode: number;
   @Column()
   SMSCode: number;
-  @CreateDateColumn()
+  @Column()
   Created: Date;
   @CreateDateColumn()
   CreateAt: Date;

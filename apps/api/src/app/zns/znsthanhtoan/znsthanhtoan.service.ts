@@ -69,9 +69,11 @@ export class ZnsthanhtoanService {
   async sendzns(data: any) {
     console.log(data);
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
+    console.log(Chinhanh);
+    
     try {
-      if (!Chinhanh.ZaloOaToken.access_token) {
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${Chinhanh.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+      if (!Chinhanh?.ZaloOaToken?.access_token) {
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         throw new Error('Chưa Có Token');
       }
       else {
@@ -106,6 +108,7 @@ export class ZnsthanhtoanService {
         this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${result.error} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         if (result.error == 0) {
           data.Status = 1;
+          data.message_id =result.data.message_id;
           this.update(data.id, data)
         }
         else {
@@ -121,6 +124,7 @@ export class ZnsthanhtoanService {
           })
           console.log(resultsms);
           data.SMSCode = resultsms.data.status;
+          data.messageId =resultsms.data.messageId;
           this.update(data.id, data)
         }
 
@@ -130,6 +134,14 @@ export class ZnsthanhtoanService {
     } catch (error) {
       throw error; // Rethrow for proper error propagation
     }
+  }
+  async sendznsauto(data: any) {
+    data.CreatedBegin?data.CreatedBegin = data.CreatedBegin:moment().format('YYYY-MM-DD');
+    data.createdEnd?data.createdEnd = data.createdEnd:moment().format('YYYY-MM-DD');
+    data.Status?data.Status = data.Status:0;
+    const result = await this.findQuery(data)
+    return result
+    
   }
   async create(data: any) {
     const check = await this.findSHD(data)
@@ -175,23 +187,30 @@ export class ZnsthanhtoanService {
     };
   }
   async findQuery(params: any) {
-    console.error(params);
     const queryBuilder = this.ZnsthanhtoanRepository.createQueryBuilder('znsthanhtoan');
-    if (params.Batdau && params.Ketthuc) {
+    if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
+      queryBuilder.andWhere('znsthanhtoan.Created BETWEEN :startDate AND :endDate', {
+        startDate: params.CreatedBegin,
+        endDate: params.CreatedEnd,
+      });
+    }
+    if (params.hasOwnProperty('Batdau') && params.hasOwnProperty('Ketthuc')) {
       queryBuilder.andWhere('znsthanhtoan.CreateAt BETWEEN :startDate AND :endDate', {
         startDate: params.Batdau,
         endDate: params.Ketthuc,
       });
     }
-    if (params.Title) {
+    if (params.hasOwnProperty('Title')) {
       queryBuilder.andWhere('znsthanhtoan.Title LIKE :Title', { SDT: `%${params.Title}%` });
+    }
+    if (params.hasOwnProperty('Status')) {
+      queryBuilder.andWhere('znsthanhtoan.Status = :Status', { Status: `${params.Status}` });
     }
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
     console.log(items, totalCount);
-
     return { items, totalCount };
   }
   async update(id: string, UpdateZnsthanhtoanDto: any) {
