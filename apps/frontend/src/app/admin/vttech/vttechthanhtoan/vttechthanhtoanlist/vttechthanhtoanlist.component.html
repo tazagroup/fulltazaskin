@@ -5,11 +5,11 @@
         </div>
     </mat-drawer>
     <mat-drawer-content class="!flex flex-col flex-auto min-w-0 relative bg-white p-4">
-      <mat-form-field>
-        <mat-label>Filter</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>Tìm Kiếm</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Tìm Kiếm" #input>
       </mat-form-field>
-      <div class="w-full p-8">
+      <div class="w-full flex flex-col space-y-2 overflow-auto p-2">
         <table class="border w-full" mat-table [dataSource]="dataSource" matSort>
           <ng-container matColumnDef="ID">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>

@@ -2,7 +2,6 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { NotifierService } from 'angular-notifier';
-import { VttechdieutriService } from '../vttechdieutri.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,8 +13,9 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ZnsdieutriService } from '../znsdieutri.service';
 @Component({
-  selector: 'app-vttechdieutrilist',
+  selector: 'app-znsdieutriadmin',
   standalone: true,
   imports:[
     CommonModule,
@@ -31,16 +31,16 @@ import { MatTableDataSource } from '@angular/material/table';
     RouterLink,
     RouterOutlet
   ],
-  templateUrl: './vttechdieutrilist.component.html',
-  styleUrls: ['./vttechdieutrilist.component.css']
+  templateUrl: './znsdieutriadmin.component.html',
+  styleUrls: ['./znsdieutriadmin.component.css']
 })
-export class VttechdieutrilistComponent implements OnInit {
+export class ZnsdieutriadminComponent implements OnInit {
   Detail: any = {};
   Lists: any[] = []
   FilterLists: any[] = []
   Sitemap: any = { loc: '', priority: '' }
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
-  displayedColumns: string[] = ['Code','Name', 'Phone','Treat','BranchID','Created'];
+  displayedColumns: string[] = ['CustName', 'CustPhone','Code','Paid','BranchID','Created','Status'];
   
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -48,20 +48,20 @@ export class VttechdieutrilistComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private _Notification: NotifierService,
-    private _VttechdieutriService: VttechdieutriService,
+    private _ZnsdieutriService: ZnsdieutriService,
   ) {
   }
   ngOnInit(): void {
-    this._VttechdieutriService.getListDieutri().subscribe((data)=>{
-      console.log(data.map((v:any)=>({ ...v, ...v.Dulieu })));
+    this._ZnsdieutriService.getAllZnsdieutris().subscribe((data)=>{
+      console.log(data);
       this.FilterLists = this.Lists = data
-      this.dataSource = new MatTableDataSource(data.map((v:any)=>({ ...v, ...v.Dulieu })));
+      this.dataSource = new MatTableDataSource(data);
       this.dataSource.sortingDataAccessor = (item, property) => {
         switch(property) {
           case 'Diachi': return item.Giohangs.Khachhang.Diachi;
           case 'Hoten': return item.Giohangs.Khachhang.Hoten;
           case 'SDT': return item.Giohangs.Khachhang.SDT;
-          case 'Hinhthuc': return item.Thanhtoan.Hinhthuc;
+          case 'Hinhthuc': return item.Dieutri.Hinhthuc;
           default: return item[property];
         }
       };
@@ -76,6 +76,8 @@ export class VttechdieutrilistComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+    console.log(this.dataSource.filteredData);
+    
   }
   openDialog(teamplate: TemplateRef<any>): void {
   //   const dialogRef = this.dialog.open(teamplate, {

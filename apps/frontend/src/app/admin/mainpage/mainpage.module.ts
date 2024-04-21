@@ -13,6 +13,7 @@ import { ProfileModule } from '../../shared/common/profile/profile.module';
 import { VttechthanhtoanlistComponent } from '../vttech/vttechthanhtoan/vttechthanhtoanlist/vttechthanhtoanlist.component';
 import { VttechdieutrilistComponent } from '../vttech/vttechdieutri/vttechdieutrilist/vttechdieutrilist.component';
 import { ZnsthanhtoanadminComponent } from '../../znsthanhtoan/znsthanhtoanadmin/znsthanhtoanadmin.component';
+import { ZnsdieutriadminComponent } from '../../znsdieutri/znsdieutriadmin/znsdieutriadmin.component';
 
 @NgModule({
   imports: [
@@ -51,6 +52,7 @@ import { ZnsthanhtoanadminComponent } from '../../znsthanhtoan/znsthanhtoanadmin
           {path: 'listthanhtoan', component: VttechthanhtoanlistComponent},
           {path: 'listdieutri', component: VttechdieutrilistComponent},
           {path: 'znsthanhtoan', component: ZnsthanhtoanadminComponent},
+          {path: 'znsdieutri', component: ZnsdieutriadminComponent},
       ]
       }
     ])
