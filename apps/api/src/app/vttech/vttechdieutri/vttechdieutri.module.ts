@@ -8,7 +8,8 @@ import { TelegramService } from '../../shared/telegram.service';
 @Module({
   imports: [TypeOrmModule.forFeature([VttechdieutriEntity])],
   controllers: [VttechdieutriController],
-  providers: [VttechdieutriService,SharedService,TelegramService]
+  providers: [VttechdieutriService,SharedService,TelegramService],
+  exports: [VttechdieutriService]
 })
 export class VttechdieutriModule {}
 

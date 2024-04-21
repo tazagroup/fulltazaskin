@@ -24,6 +24,7 @@ import { LoggerModule } from './logger/logger.module';
 import { VttechthanhtoanModule } from './vttech/vttechthanhtoan/vttechthanhtoan.module';
 import { ZaloappuudaiModule } from './zaloappuudai/zaloappuudai.module';
 import { ZnsthanhtoanModule } from './zns/znsthanhtoan/znsthanhtoan.module';
+import { ZnsdieutriModule } from './zns/znsdieutri/znsdieutri.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -57,7 +58,8 @@ import { ZnsthanhtoanModule } from './zns/znsthanhtoan/znsthanhtoan.module';
     SmsModule,
     LoggerModule,
     ZaloappuudaiModule,
-    ZnsthanhtoanModule
+    ZnsthanhtoanModule,
+    ZnsdieutriModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { ZnsdieutriEntity } from './entities/znsdieutri.entity';
-import { VttechthanhtoanService } from '../../vttech/vttechthanhtoan/vttechthanhtoan.service';
+import { VttechdieutriService } from '../../vttech/vttechdieutri/vttechdieutri.service';
 import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
 import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
@@ -12,15 +12,15 @@ export class ZnsdieutriService {
   constructor(
     @InjectRepository(ZnsdieutriEntity)
     private ZnsdieutriRepository: Repository<ZnsdieutriEntity>,
-    private _VttechthanhtoanService: VttechthanhtoanService,
+    private _VttechdieutriService: VttechdieutriService,
     private _TelegramService: TelegramService,
     private _ChinhanhService: ChinhanhService,
   ) { }
   async createzns(data: any) {
-    const Thanhtoans = await this._VttechthanhtoanService.findQuery(data)
-    this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Create ${Thanhtoans.length} Thanh Toan - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-    if (Thanhtoans.length > 0) {
-      Thanhtoans.forEach((v: any, k: any) => {
+    const Dieutris = await this._VttechdieutriService.findQuery(data)
+    this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Create ${Dieutris.length} Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+    if (Dieutris.length > 0) {
+      Dieutris.forEach((v: any, k: any) => {
         const item: any = {}
         item.Dulieu = v
         item.CustPhone = v.CustPhone
@@ -34,7 +34,7 @@ export class ZnsdieutriService {
         }, k * 300);
       });
     }
-    return Thanhtoans
+    return Dieutris
   }
   async getTemplateData(id: any, token: any) {
     try {
@@ -50,21 +50,21 @@ export class ZnsdieutriService {
       console.log(error);
     }
   }
-  async sendsms(data: any) {
-    try {
-      const response = await fetch('https://sms.cmctelecom.vn/SMS_CMCTelecom/api/sms/sendutf', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-      const responseData = await response.json();
-      return responseData;
-    } catch (error) {
-      return error;
-    }
-  }
+  // async sendsms(data: any) {
+  //   try {
+  //     const response = await fetch('https://sms.cmctelecom.vn/SMS_CMCTelecom/api/sms/sendutf', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify(data)
+  //     });
+  //     const responseData = await response.json();
+  //     return responseData;
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // }
 
   async sendzns(data: any) {
     console.log(data);
@@ -73,15 +73,15 @@ export class ZnsdieutriService {
     
     try {
       if (!Chinhanh?.ZaloOaToken?.access_token) {
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         throw new Error('Chưa Có Token');
       }
       else {
-        const priceProperty = Chinhanh.TemplateThanhtoan === '301891' || Chinhanh.TemplateThanhtoan === '302259' ? 'price' : 'cost';
+        const priceProperty = Chinhanh.TemplateDieutri === '301891' || Chinhanh.TemplateDieutri === '302259' ? 'price' : 'cost';
         const requestData = {
           mode: "development",
           phone: convertPhoneNum(data.CustPhone),
-          template_id: Chinhanh.TemplateThanhtoan,
+          template_id: Chinhanh.TemplateDieutri,
           template_data: {
             order_code: data.Code,
             note: moment(data.Created).format('DD/MM/YYYY'),
@@ -105,7 +105,7 @@ export class ZnsdieutriService {
         }
         const result = await response.json();
         console.log(result);
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${result.error} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${result.error} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         if (result.error == 0) {
           data.Status = 1;
           data.message_id =result.data.message_id;
@@ -114,17 +114,17 @@ export class ZnsdieutriService {
         else {
           data.Status = 2;
           data.Statuscode = result.error;
-          const resultsms = await this.sendsms({
-            "Brandname": "TAZA",
-            "Message": `${data.CustName} da thanh toan so tien ${data.Paid} co ma hoa don la ${data.Code}. Taza cam on quy khach`,
-            "Phonenumber": data.CustPhone,
-            "user": "ctytaza2",
-            "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
-            "messageId": data.CustPhone + (new Date()).getTime()
-          })
-          console.log(resultsms);
-          data.SMSCode = resultsms.data.status;
-          data.messageId =resultsms.data.messageId;
+          // const resultsms = await this.sendsms({
+          //   "Brandname": "TAZA",
+          //   "Message": `${data.CustName} da dieu tri so tien ${data.Paid} co ma hoa don la ${data.Code}. Taza cam on quy khach`,
+          //   "Phonenumber": data.CustPhone,
+          //   "user": "ctytaza2",
+          //   "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
+          //   "messageId": data.CustPhone + (new Date()).getTime()
+          // })
+          // console.log(resultsms);
+          // data.SMSCode = resultsms.data.status;
+          // data.messageId =resultsms.data.messageId;
           this.update(data.id, data)
         }
 
