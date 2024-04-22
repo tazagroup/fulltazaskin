@@ -28,13 +28,12 @@ export class ZalotokenService {
       },
     };
     return axios(options)
-      .then((response:any) => {
+      .then(async (response:any) => {
         console.error(response.data);
         if (response.data.error == '-14019') {
           return { status: 400, note: "Autho Code Hết Hạn" }
         }
         else {
-          return this.findbyoaid(item.oa_id).then(async (res: any) => {
             item.ZaloOaToken = response.data
             item.ZaloOaToken.AuthenAt = new Date()
             item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
@@ -52,7 +51,6 @@ export class ZalotokenService {
             // else {
             //   return { status: 400, note: "Chứa Có Oa Trên Server" }
             // }
-          })
         }
       })
       .catch((error) => {
