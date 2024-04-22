@@ -76,8 +76,8 @@ export class ZnsdieutriService {
 
   async sendzns(data: any) {
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
-   console.log(Chinhanh.ZaloOaToken);
-   console.log(Chinhanh.ZaloOaToken.access_token);
+    console.log(Chinhanh);
+    
     try {
       if (!Chinhanh?.ZaloOaToken?.access_token) {
         this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
@@ -87,7 +87,7 @@ export class ZnsdieutriService {
         const requestData = {
           mode: "development",
           phone: convertPhoneNum(data.CustPhone),
-          template_id: Chinhanh.TemplateDieutri,
+          template_id: Chinhanh.TemplateDanhgia,
           template_data: {
             customer_name: data.CustName,
             schedule_date: moment(data.Created).format('DD/MM/YYYY')
@@ -112,7 +112,7 @@ export class ZnsdieutriService {
         this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${result.error} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         if (result.error == 0) {
           data.Status = 1;
-          data.message_id =result.data.message_id;
+          data.message_id =result.data.msg_id;
           this.update(data.id, data)
         }
         else {
@@ -126,14 +126,13 @@ export class ZnsdieutriService {
       throw error;
     }
   }
-  async sendznsauto(data: any) {
-    data.CreatedBegin?data.CreatedBegin = data.CreatedBegin:moment().format('YYYY-MM-DD');
-    data.createdEnd?data.createdEnd = data.createdEnd:moment().format('YYYY-MM-DD');
-    data.Status?data.Status = data.Status:0;
-    const result = await this.findQuery(data)
-    return result
-    
-  }
+  // async sendznsauto(data: any) {
+  //   data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+  //   data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+  //   data.Status?data.Status = data.Status:0;
+  //   const result = await this.findQuery(data)
+  //   return result 
+  // }
   async create(data: any) {
     const check = await this.findSHD(data)
     if (!check) {

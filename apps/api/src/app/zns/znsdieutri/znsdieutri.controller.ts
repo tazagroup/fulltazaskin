@@ -5,19 +5,31 @@ import moment = require('moment');
 @Controller('znsdieutri')
 export class ZnsdieutriController {
   constructor(private readonly znsdieutriService:ZnsdieutriService) {}
-  @Interval(1900000)
+  @Interval(2100000)
   @Post('createzns')
   createzns(@Body() data: any) {
     return this.znsdieutriService.createzns(data);
   }
-  //@Interval(1900000)
   @Post('sendzns')
   sendzns(@Body() data: any) {    
     return this.znsdieutriService.sendzns(data);
   }
+  @Interval(2400000)
   @Post('sendznsauto')
-  sendznsauto(@Body() data: any) {
-    return this.znsdieutriService.sendznsauto(data);
+  async sendznsauto(@Body() data: any) {
+    data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+    data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+    data.Status = 0;
+    if(this.CheckTime() == true){
+      const result = await this.findQuery(data)
+      if(result.items.length > 0){
+        for (const item of result.items) {
+          await this.sendzns(item)
+        }
+        return result
+      }
+    }
+    else  return "Không thể gửi tin nhắn vào thời gian này";
   }
   @Post()
   create(@Body() data: any) {
