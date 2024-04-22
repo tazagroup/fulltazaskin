@@ -132,8 +132,7 @@ export class ZalotokenComponent implements OnInit {
     });
   }
   Xacthuc(data:any) {
-    const app_id =  this.ListChiNhanh.find((v:any)=>v.oa_id==data.oa_id)?.app_id
-    window.location.href = `https://oauth.zaloapp.com/v4/oa/permission?app_id=${app_id}&redirect_uri=https://zalo.tazaskinclinic.com/admin/zalotoken`
+    window.location.href = `https://oauth.zaloapp.com/v4/oa/permission?app_id=${data.ZaloOa.app_id}&redirect_uri=https://zalo.tazaskinclinic.com/admin/zalotoken`
   }
   Checktime(timein: Date, timeout: Date) {
     let result = { message: 'Chưa Xác Thực', status: false, text: 'text-red-500' }
