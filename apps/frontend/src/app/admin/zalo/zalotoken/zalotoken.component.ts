@@ -41,32 +41,33 @@ export class ZalotokenComponent implements OnInit {
         if(result){
           this.FilterLists = this.Lists = result
           console.log(result);
-            this.activatedRoute.queryParams.subscribe((params: any) => {
-              const chinhanh = result.find((v:any)=>v.ZaloOa.oa_id==params.oa_id)
+            this.activatedRoute.queryParams.subscribe((params: any) => {              
               if (params.oa_id) {
-                const data:any = {
-                  oa_id: params.oa_id,
-                  code: params.code,
-                  app_id: chinhanh.ZaloOa.app_id,
-                  secret_key: chinhanh.ZaloOa.secret_key
-                }
-                this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
+                const chinhanh:any = result.find((v:any)=>v.ZaloOa.oa_id==params.oa_id)
+                // const data:any = {
+                //   oa_id: params.oa_id,
+                //   code: params.code,
+                //   app_id: chinhanh.ZaloOa.app_id,
+                //   secret_key: chinhanh.ZaloOa.secret_key
+                // }
+                chinhanh.code = params.code
+                this._ZalotokenService.get_accesstoken(chinhanh).subscribe((res: any) => {
                   console.log(res)
                   if (res.status == 200) {
-                    chinhanh.ZaloOaToken.AuthenAt = res.data.AuthenAt
-                    chinhanh.ZaloOaToken.AuthenEnd = res.data.AuthenEnd
-                    chinhanh.ZaloOaToken.access_token = res.data.Token.access_token
-                    chinhanh.ZaloOaToken.expires_in = res.data.Token.expires_in
-                    chinhanh.ZaloOaToken.refresh_token = res.data.Token.refresh_token
-                    this._ChinhanhService.UpdateChinhanh(chinhanh).subscribe()
+                    // chinhanh.ZaloOaToken.AuthenAt = res.data.AuthenAt
+                    // chinhanh.ZaloOaToken.AuthenEnd = res.data.AuthenEnd
+                    // chinhanh.ZaloOaToken.access_token = res.data.Token.access_token
+                    // chinhanh.ZaloOaToken.expires_in = res.data.Token.expires_in
+                    // chinhanh.ZaloOaToken.refresh_token = res.data.Token.refresh_token
+                    // this._ChinhanhService.UpdateChinhanh(chinhanh).subscribe()
                     this._NotifierService.notify("success", res.note)
                   }
                   else {
                     this._NotifierService.notify("error", res.note)
                   }
-                  // setTimeout(() => {
-                  //   window.location.href = window.location.pathname
-                  // }, 1000);
+                  setTimeout(() => {
+                    window.location.href = window.location.pathname
+                  }, 1000);
                 }
                 )
               }
