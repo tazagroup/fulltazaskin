@@ -466,6 +466,12 @@ export function Phone_To_0(phoneNumber: any) {
     return phoneNumber;
   }
 }
+export function convertToZeroMinutesSeconds(dateTimeString: any) {
+    const dateTime = new Date(dateTimeString);
+    dateTime.setMinutes(0, 0);
+    dateTime.setSeconds(0, 0);
+    return new Date(dateTime.toISOString())
+}
 export function formatVND(price: any) {
   const formattedPrice = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add thousands separators
   return `${formattedPrice} đ`; // Append the VND symbol

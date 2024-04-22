@@ -20,15 +20,23 @@ export class ZnsdieutriService {
     const Dieutris = await this._VttechdieutriService.findQuery(data)
     this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Create ${Dieutris.length} Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     if (Dieutris.length > 0) {
-      Dieutris.forEach((v: any, k: any) => {
+      const uniqueDieutris = Dieutris.reduce((acc: any[], curr: any) => {
+        const existingDieutri = acc.find((d: any) => d.idVttech === curr.idVttech && d.CustPhone === curr.CustPhone);
+        console.log(existingDieutri,curr.idVttech,curr.CustPhone);
+        
+        if (!existingDieutri) {
+          acc.push(curr);
+        }
+        return acc;
+      }, []);
+      uniqueDieutris.forEach((v: any, k: any) => {
         const item: any = {}
-        item.Dulieu = v
+        item.idVttech = v.idVttech
+        item.idDieutri = v.id
         item.CustPhone = v.CustPhone
-        item.CustName = v.CustName
-        item.CustCode = v.CustCode
+        item.CustName = v.Name
         item.BranchID = v.BranchID
-        item.Paid = v.Paid
-        item.Code = v.Code
+        item.Created =  moment(v.Created).format('YYYY-MM-DD')
         setTimeout(() => {
           this.create(item)
         }, k * 300);
@@ -67,73 +75,57 @@ export class ZnsdieutriService {
   // }
 
   async sendzns(data: any) {
-    console.log(data);
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
     console.log(Chinhanh);
     
-    try {
-      if (!Chinhanh?.ZaloOaToken?.access_token) {
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-        throw new Error('Chưa Có Token');
-      }
-      else {
-        const priceProperty = Chinhanh.TemplateDieutri === '301891' || Chinhanh.TemplateDieutri === '302259' ? 'price' : 'cost';
-        const requestData = {
-          mode: "development",
-          phone: convertPhoneNum(data.CustPhone),
-          template_id: Chinhanh.TemplateDieutri,
-          template_data: {
-            order_code: data.Code,
-            note: moment(data.Created).format('DD/MM/YYYY'),
-            [priceProperty]: parseFloat(data.Paid).toFixed(0),
-            customer_name: data.CustName,
-          },
-          tracking_id: GenId(12, true),
-        };
-        const config = {
-          method: 'post',
-          headers: {
-            'access_token': Chinhanh.ZaloOaToken.access_token,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestData)
-        };
-        // if (data.CustPhone == "0977272967") {
-        const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
-        if (!response.ok) {
-          throw new Error(`Error fetching data: ${response.statusText}`);
-        }
-        const result = await response.json();
-        console.log(result);
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${result.error} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-        if (result.error == 0) {
-          data.Status = 1;
-          data.message_id =result.data.message_id;
-          this.update(data.id, data)
-        }
-        else {
-          data.Status = 2;
-          data.Statuscode = result.error;
-          // const resultsms = await this.sendsms({
-          //   "Brandname": "TAZA",
-          //   "Message": `${data.CustName} da dieu tri so tien ${data.Paid} co ma hoa don la ${data.Code}. Taza cam on quy khach`,
-          //   "Phonenumber": data.CustPhone,
-          //   "user": "ctytaza2",
-          //   "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
-          //   "messageId": data.CustPhone + (new Date()).getTime()
-          // })
-          // console.log(resultsms);
-          // data.SMSCode = resultsms.data.status;
-          // data.messageId =resultsms.data.messageId;
-          this.update(data.id, data)
-        }
-
-        return result
-        // }
-      }
-    } catch (error) {
-      throw error; // Rethrow for proper error propagation
-    }
+   // console.log(Chinhanh.ZaloOaToken.access_token);
+    // try {
+    //   if (!Chinhanh?.ZaloOaToken?.access_token) {
+    //     this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+    //     throw new Error('Chưa Có Token');
+    //   }
+    //   else {
+    //     const requestData = {
+    //       mode: "development",
+    //       phone: convertPhoneNum(data.CustPhone),
+    //       template_id: Chinhanh.TemplateDieutri,
+    //       template_data: {
+    //         customer_name: data.CustName,
+    //         schedule_date: moment(data.Created).format('DD/MM/YYYY')
+    //       },
+    //       tracking_id: GenId(12, true),
+    //     };
+    //     const config = {
+    //       method: 'post',
+    //       headers: {
+    //         'access_token': Chinhanh.ZaloOaToken.access_token,
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify(requestData)
+    //     };
+    //     // if (data.CustPhone == "0977272967") {
+    //     const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
+    //     if (!response.ok) {
+    //       throw new Error(`Error fetching data: ${response.statusText}`);
+    //     }
+    //     const result = await response.json();
+    //     console.log(result);
+    //     this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${result.error} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+    //     if (result.error == 0) {
+    //       data.Status = 1;
+    //       data.message_id =result.data.message_id;
+    //       this.update(data.id, data)
+    //     }
+    //     else {
+    //       data.Status = 2;
+    //       data.Statuscode = result.error;
+    //       this.update(data.id, data)
+    //     }
+    //     return result
+    //   }
+    // } catch (error) {
+    //   throw error;
+    // }
   }
   async sendznsauto(data: any) {
     data.CreatedBegin?data.CreatedBegin = data.CreatedBegin:moment().format('YYYY-MM-DD');
@@ -164,7 +156,7 @@ export class ZnsdieutriService {
   async findSHD(data: any) {
     return await this.ZnsdieutriRepository.findOne({
       where: {
-        Code: data.Code,
+        idVttech: data.idVttech,
         CustPhone: data.CustPhone
       },
     });

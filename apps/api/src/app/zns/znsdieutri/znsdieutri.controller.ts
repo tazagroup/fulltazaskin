@@ -12,7 +12,7 @@ export class ZnsdieutriController {
   }
   //@Interval(1900000)
   @Post('sendzns')
-  sendzns(@Body() data: any) {
+  sendzns(@Body() data: any) {    
     return this.znsdieutriService.sendzns(data);
   }
   @Post('sendznsauto')

@@ -13,6 +13,8 @@ export class VttechdieutriEntity {
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   idVttech: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  TabCode: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   ServiceCode: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   CustPhone: string;

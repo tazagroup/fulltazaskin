@@ -5,6 +5,7 @@ import { VttechdieutriEntity } from './entities/vttechdieutri.entity';
 import { SharedService } from '../../shared/shared.service';
 import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
+import { convertToZeroMinutesSeconds } from '../../shared.utils';
 @Injectable()
 export class VttechdieutriService {
   constructor(
@@ -32,8 +33,9 @@ export class VttechdieutriService {
   async findby(data: any) {
     return await this.VttechdieutriRepository.findOne({ 
       where: {
-        CustPhone: data.CustPhone,
-         idVttech: data.idVttech 
+         CustPhone: data.CustPhone,
+         idVttech: data.idVttech, 
+         TabCode: data.TabCode, 
         },
      });
   }
@@ -66,18 +68,8 @@ export class VttechdieutriService {
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
-    const data = items.map((v: any) => (v.Dulieu))
-
-  const mergedData = Object.values(data.reduce((acc:any, obj:any) => {
-        const { CustPhone, Code, Paid } = obj;
-        if (!acc[CustPhone]) {
-            acc[CustPhone] = { ...obj };
-        } else {
-            acc[CustPhone].Paid += Paid;
-        }
-        return acc;
-    }, {}));
-    return mergedData;
+      const data = items.map((v: any) => ({...v,...v.Dulieu}))
+    return data;
   }
   async update(id: string, UpdateVttechdieutriDto: any) {
     this.VttechdieutriRepository.save(UpdateVttechdieutriDto);
@@ -109,15 +101,16 @@ export class VttechdieutriService {
         data.Data.forEach((v:any,k:any) => {
           const item:any={}
           item.Dulieu = v
-          item.idVttech = v.ID
+          item.idVttech = convertToZeroMinutesSeconds(v.CreatedDate).getTime()
           item.CustPhone = v.Phone   
-          item.Created = moment(v.Created).format('YYYY-MM-DD')
+          item.TabCode = v.Service.TabCode   
+          item.Created = moment(v.CreatedDate).format('YYYY-MM-DD')
           setTimeout(async () => {            
           const result = await this.create(item); 
           }, k*200);       
-
         });
       }  
+
       return data
     } catch (error) {
       console.error(error);

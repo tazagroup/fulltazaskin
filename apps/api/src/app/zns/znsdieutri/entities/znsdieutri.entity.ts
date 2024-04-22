@@ -5,6 +5,10 @@ export class ZnsdieutriEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  idDieutri: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
+  idVttech: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   CustPhone: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   CustName: string;
