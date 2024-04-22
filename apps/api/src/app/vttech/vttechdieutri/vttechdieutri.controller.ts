@@ -56,7 +56,6 @@ export class VttechdieutriController {
       "BranchID": "0",
       "PagingNumber": "1"
   }
-    console.log(data);
     const getData = await this.vttechdieutriService.getdieutri(data);
     return getData;
   }

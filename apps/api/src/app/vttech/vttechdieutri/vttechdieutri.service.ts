@@ -83,7 +83,7 @@ export class VttechdieutriService {
 
 
   async getdieutri(item: any = {}) {
-    console.log(item);
+  this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Bắt Đầu Lấy Dữ Liệu Điều Trị - ${moment().format("HH:mm:ss DD/MM/YYYY")} - ${JSON.stringify(item)}`);
     const result = await this._SharedService.getToken(item)
     try {
       const response = await fetch(`https://apismsvtt.vttechsolution.com/api/Customer/GetTreat`, {

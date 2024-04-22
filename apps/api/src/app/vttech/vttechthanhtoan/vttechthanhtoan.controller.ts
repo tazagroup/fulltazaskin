@@ -56,7 +56,6 @@ export class VttechthanhtoanController {
       "BranchID": "0",
       "PagingNumber": "1"
   }
-    console.log(data);
     const getData = await this.vttechthanhtoanService.getThanhtoan(data);
     return getData;
   }

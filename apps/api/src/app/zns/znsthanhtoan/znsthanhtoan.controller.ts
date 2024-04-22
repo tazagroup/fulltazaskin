@@ -2,9 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import {ZnsthanhtoanService } from './znsthanhtoan.service';
 import { Interval } from '@nestjs/schedule';
 import moment = require('moment');
+import { TelegramService } from '../../shared/telegram.service';
 @Controller('znsthanhtoan')
 export class ZnsthanhtoanController {
-  constructor(private readonly znsthanhtoanService:ZnsthanhtoanService) {}
+  constructor(
+    private readonly znsthanhtoanService:ZnsthanhtoanService,
+    private readonly _TelegramService:TelegramService,
+  ) {}
   @Interval(2100000)
   @Post('createzns')
   createzns(@Body() data: any) {
@@ -17,6 +21,7 @@ export class ZnsthanhtoanController {
   @Interval(2400000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any) {
+    this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Gửi ZNS Tự Động Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.Status = 0;
