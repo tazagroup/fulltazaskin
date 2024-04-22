@@ -35,7 +35,7 @@ export class ZalotokenService {
         }
         else {
           return this.findbyoaid(item.oa_id).then(async (res: any) => {
-            item.ZaloOaToken.access_token = response.data
+            item.ZaloOaToken = response.data
             item.ZaloOaToken.AuthenAt = new Date()
             item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
             delete item.code
@@ -86,7 +86,7 @@ export class ZalotokenService {
           return { status: 400, note: "Refesh Token Hết Hạn" }
         }
         else {
-          item.ZaloOaToken.access_token = response.data
+          item.ZaloOaToken = response.data
           item.ZaloOaToken.AuthenAt = new Date()
           item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
           const result = await this._ChinhanhService.update(item.id, item)

@@ -76,56 +76,55 @@ export class ZnsdieutriService {
 
   async sendzns(data: any) {
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
-    console.log(Chinhanh);
-    
-   // console.log(Chinhanh.ZaloOaToken.access_token);
-    // try {
-    //   if (!Chinhanh?.ZaloOaToken?.access_token) {
-    //     this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-    //     throw new Error('Chưa Có Token');
-    //   }
-    //   else {
-    //     const requestData = {
-    //       mode: "development",
-    //       phone: convertPhoneNum(data.CustPhone),
-    //       template_id: Chinhanh.TemplateDieutri,
-    //       template_data: {
-    //         customer_name: data.CustName,
-    //         schedule_date: moment(data.Created).format('DD/MM/YYYY')
-    //       },
-    //       tracking_id: GenId(12, true),
-    //     };
-    //     const config = {
-    //       method: 'post',
-    //       headers: {
-    //         'access_token': Chinhanh.ZaloOaToken.access_token,
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify(requestData)
-    //     };
-    //     // if (data.CustPhone == "0977272967") {
-    //     const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
-    //     if (!response.ok) {
-    //       throw new Error(`Error fetching data: ${response.statusText}`);
-    //     }
-    //     const result = await response.json();
-    //     console.log(result);
-    //     this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${result.error} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-    //     if (result.error == 0) {
-    //       data.Status = 1;
-    //       data.message_id =result.data.message_id;
-    //       this.update(data.id, data)
-    //     }
-    //     else {
-    //       data.Status = 2;
-    //       data.Statuscode = result.error;
-    //       this.update(data.id, data)
-    //     }
-    //     return result
-    //   }
-    // } catch (error) {
-    //   throw error;
-    // }
+   console.log(Chinhanh.ZaloOaToken);
+   console.log(Chinhanh.ZaloOaToken.access_token);
+    try {
+      if (!Chinhanh?.ZaloOaToken?.access_token) {
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        throw new Error('Chưa Có Token');
+      }
+      else {
+        const requestData = {
+          mode: "development",
+          phone: convertPhoneNum(data.CustPhone),
+          template_id: Chinhanh.TemplateDieutri,
+          template_data: {
+            customer_name: data.CustName,
+            schedule_date: moment(data.Created).format('DD/MM/YYYY')
+          },
+          tracking_id: GenId(12, true),
+        };
+        const config = {
+          method: 'post',
+          headers: {
+            'access_token': Chinhanh.ZaloOaToken.access_token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData)
+        };
+        // if (data.CustPhone == "0977272967") {
+        const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
+        if (!response.ok) {
+          throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+        const result = await response.json();
+        console.log(result);
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${result.error} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        if (result.error == 0) {
+          data.Status = 1;
+          data.message_id =result.data.message_id;
+          this.update(data.id, data)
+        }
+        else {
+          data.Status = 2;
+          data.Statuscode = result.error;
+          this.update(data.id, data)
+        }
+        return result
+      }
+    } catch (error) {
+      throw error;
+    }
   }
   async sendznsauto(data: any) {
     data.CreatedBegin?data.CreatedBegin = data.CreatedBegin:moment().format('YYYY-MM-DD');
