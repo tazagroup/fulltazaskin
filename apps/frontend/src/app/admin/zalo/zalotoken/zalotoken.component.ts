@@ -36,68 +36,74 @@ export class ZalotokenComponent implements OnInit {
   }
   ngOnInit(): void {
     console.log();
-    this._ChinhanhService.getAllChinhanhs().subscribe((result:any)=>
-    {
-      this.activatedRoute.queryParams.subscribe((params: any) => {
-        const chinhanh = result.find((v:any)=>v.ZaloOa.oa_id==params.oa_id)
-        if (params.oa_id) {
-          const data:any = {
-            oa_id: params.oa_id,
-            code: params.code,
-            app_id: chinhanh.ZaloOa.app_id,
-            secret_key: chinhanh.ZaloOa.secret_key
-          }
-          this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
-            console.log(res)
-            if (res.status == 200) {
-              chinhanh.ZaloOaToken.AuthenAt = res.data.AuthenAt
-              chinhanh.ZaloOaToken.AuthenEnd = res.data.AuthenEnd
-              chinhanh.ZaloOaToken.access_token = res.data.Token.access_token
-              chinhanh.ZaloOaToken.expires_in = res.data.Token.expires_in
-              chinhanh.ZaloOaToken.refresh_token = res.data.Token.refresh_token
-              this._ChinhanhService.UpdateChinhanh(chinhanh).subscribe()
-              this._NotifierService.notify("success", res.note)
-            }
-            else {
-              this._NotifierService.notify("error", res.note)
-            }
-            // setTimeout(() => {
-            //   window.location.href = window.location.pathname
-            // }, 1000);
-          }
-          )
+    this._ChinhanhService.getAllChinhanhs().subscribe()
+      this._ChinhanhService.chinhanhs$.subscribe((result: any) => {     
+        if(result){
+          this.FilterLists = this.Lists = result
+          console.log(result);
+            this.activatedRoute.queryParams.subscribe((params: any) => {
+              const chinhanh = result.find((v:any)=>v.ZaloOa.oa_id==params.oa_id)
+              if (params.oa_id) {
+                const data:any = {
+                  oa_id: params.oa_id,
+                  code: params.code,
+                  app_id: chinhanh.ZaloOa.app_id,
+                  secret_key: chinhanh.ZaloOa.secret_key
+                }
+                this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
+                  console.log(res)
+                  if (res.status == 200) {
+                    chinhanh.ZaloOaToken.AuthenAt = res.data.AuthenAt
+                    chinhanh.ZaloOaToken.AuthenEnd = res.data.AuthenEnd
+                    chinhanh.ZaloOaToken.access_token = res.data.Token.access_token
+                    chinhanh.ZaloOaToken.expires_in = res.data.Token.expires_in
+                    chinhanh.ZaloOaToken.refresh_token = res.data.Token.refresh_token
+                    this._ChinhanhService.UpdateChinhanh(chinhanh).subscribe()
+                    this._NotifierService.notify("success", res.note)
+                  }
+                  else {
+                    this._NotifierService.notify("error", res.note)
+                  }
+                  // setTimeout(() => {
+                  //   window.location.href = window.location.pathname
+                  // }, 1000);
+                }
+                )
+              }
+              // if (params.oa_id) {
+              //   const data:any = {
+              //     oa_id: params.oa_id,
+              //     code: params.code,
+              //     app_id: this.ListChiNhanh.find((v:any)=>v.oa_id==params.oa_id)?.app_id,
+              //     secret_key: this.ListChiNhanh.find((v:any)=>v.oa_id==params.oa_id)?.secret_key
+              //   }
+              //   this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
+              //     console.log(res)
+              //     if (res.status == 200) {
+              //       this._NotifierService.notify("success", res.note)
+              //     }
+              //     else {
+              //       this._NotifierService.notify("error", res.note)
+              //     }
+              //     setTimeout(() => {
+              //       window.location.href = window.location.pathname
+              //     }, 1000);
+              //   }
+              //   )
+              // }
+            });
         }
-        // if (params.oa_id) {
-        //   const data:any = {
-        //     oa_id: params.oa_id,
-        //     code: params.code,
-        //     app_id: this.ListChiNhanh.find((v:any)=>v.oa_id==params.oa_id)?.app_id,
-        //     secret_key: this.ListChiNhanh.find((v:any)=>v.oa_id==params.oa_id)?.secret_key
-        //   }
-        //   this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
-        //     console.log(res)
-        //     if (res.status == 200) {
-        //       this._NotifierService.notify("success", res.note)
-        //     }
-        //     else {
-        //       this._NotifierService.notify("error", res.note)
-        //     }
-        //     setTimeout(() => {
-        //       window.location.href = window.location.pathname
-        //     }, 1000);
-        //   }
-        //   )
-        // }
-      });
-    })
+        })         
+
+
     // moment.locale('vi');
 
-    this._ZalotokenService.getAllZalotokens().subscribe()
-    this._ZalotokenService.zalotokens$.subscribe((data: any) => {      
-      this.FilterLists = this.Lists = data
-      console.log(data);
+    // this._ZalotokenService.getAllZalotokens().subscribe()
+    // this._ZalotokenService.zalotokens$.subscribe((data: any) => {      
+    //   this.FilterLists = this.Lists = data
+    //   console.log(data);
       
-    })
+    // })
   }
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value;
@@ -144,15 +150,7 @@ export class ZalotokenComponent implements OnInit {
   }
   getrefreshToken(item: any) {
     console.log(item);
-    const data = {
-      oa_id: item.oa_id,
-      // app_id: environment.app_id,
-      // secret_key: environment.secret_key,
-      app_id: this.ListChiNhanh.find((v:any)=>v.oa_id==item.oa_id)?.app_id,
-      secret_key: this.ListChiNhanh.find((v:any)=>v.oa_id==item.oa_id)?.secret_key,
-      refresh_token: item.Token.refresh_token
-    }
-    this._ZalotokenService.get_refreshToken(data).subscribe((res: any) => {
+    this._ZalotokenService.get_refreshToken(item).subscribe((res: any) => {
       if (res.status == 200) {
         this._NotifierService.notify("success", res.note)
         setTimeout(() => {
@@ -169,14 +167,12 @@ export class ZalotokenComponent implements OnInit {
   const promises  =  this.FilterLists.map((item:any)=>
     {
       const data = {
-        oa_id: item.oa_id,
-        // app_id: environment.app_id,
-        // secret_key: environment.secret_key,
-        app_id: this.ListChiNhanh.find((v:any)=>v.oa_id==item.oa_id)?.app_id,
-        secret_key: this.ListChiNhanh.find((v:any)=>v.oa_id==item.oa_id)?.secret_key,
-        refresh_token: item.Token.refresh_token
+        oa_id: item.ZaloOaToken.oa_id,
+        app_id: item.ZaloOaToken.app_id,
+        secret_key: item.ZaloOaToken.secret_key,
+        refresh_token: item.ZaloOaToken.refresh_token
       }
-      this._ZalotokenService.get_refreshToken(data).subscribe((res: any) => {
+      this._ZalotokenService.get_refreshToken(item).subscribe((res: any) => {
         if (res.status == 200) {
         }
         else {

@@ -40,7 +40,7 @@ export class ZnsdieutriadminComponent implements OnInit {
   FilterLists: any[] = []
   Sitemap: any = { loc: '', priority: '' }
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
-  displayedColumns: string[] = ['CustName', 'CustPhone','Code','Paid','BranchID','Created','Status'];
+  displayedColumns: string[] = ['CustName', 'CustPhone','BranchID','Created','Status'];
   
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
