@@ -26,6 +26,7 @@ export class ZnsdieutriController {
     data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.Status = 0;
     if(this.CheckTime() == true){
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Đã Gửi Tự Động Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       const result = await this.findQuery(data)
       if(result.items.length > 0){
         for (const item of result.items) {
