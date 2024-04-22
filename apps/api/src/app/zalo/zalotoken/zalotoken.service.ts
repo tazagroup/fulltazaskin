@@ -19,11 +19,11 @@ export class ZalotokenService {
       url: 'https://oauth.zaloapp.com/v4/oa/access_token',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'secret_key': item.secret_key,
+        'secret_key': item.ZaloOa.secret_key,
       },
       data: {
         code: item.code,
-        app_id: item.app_id,
+        app_id: item.ZaloOa.app_id,
         grant_type: 'authorization_code',
       },
     };
@@ -35,17 +35,23 @@ export class ZalotokenService {
         }
         else {
           return this.findbyoaid(item.oa_id).then(async (res: any) => {
-            if (res) {
-              const res1 = { ...res }
-              res1.Token = response.data
-              res1.AuthenAt = new Date()
-              res1.AuthenEnd = new Date(res1.AuthenAt.getTime() + 90000 * 1000);
-              const result = await this.update(res1.id, res1)
-              return { status: 200, note: "Xác Thực Thành Công",data:result }
-            }
-            else {
-              return { status: 400, note: "Chứa Có Oa Trên Server" }
-            }
+            item.ZaloOaToken.access_token = response.data
+            item.ZaloOaToken.AuthenAt = new Date()
+            item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
+            delete item.code
+            const result = await this._ChinhanhService.update(item.id, item)
+            return { status: 200, note: "Xác Thực Thành Công",data:result }
+            // if (res) {
+            //   const res1 = { ...res }
+            //   res1.Token = response.data
+            //   res1.AuthenAt = new Date()
+            //   res1.AuthenEnd = new Date(res1.AuthenAt.getTime() + 90000 * 1000);
+            //   const result = await this.update(res1.id, res1)
+            //   return { status: 200, note: "Xác Thực Thành Công",data:result }
+            // }
+            // else {
+            //   return { status: 400, note: "Chứa Có Oa Trên Server" }
+            // }
           })
         }
       })
@@ -62,7 +68,7 @@ export class ZalotokenService {
       url: 'https://oauth.zaloapp.com/v4/oa/access_token',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'secret_key': item.secret_key,
+        'secret_key': item.ZaloOa.secret_key,
       },
       data: {
         refresh_token:  item.ZaloOaToken.refresh_token,
