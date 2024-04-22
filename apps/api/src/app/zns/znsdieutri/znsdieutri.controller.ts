@@ -34,7 +34,11 @@ export class ZnsdieutriController {
         return result
       }
     }
-    else  return "Không thể gửi tin nhắn vào thời gian này";
+    else  
+    {
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Không thể gửi tin nhắn vào thời gian này - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+    }
+
   }
   @Post()
   create(@Body() data: any) {
