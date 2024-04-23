@@ -12,6 +12,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { VttechthanhtoanDetailComponent } from './vttechthanhtoan-detail/vttechthanhtoan-detail.component';
 import { MaterialModule } from '../../../shared/material.module';
 import { VttechthanhtoanlistComponent } from './vttechthanhtoanlist/vttechthanhtoanlist.component';
+import { ZnsthanhtoanadminComponent } from '../../../znsthanhtoan/znsthanhtoanadmin/znsthanhtoanadmin.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -25,12 +26,18 @@ import { VttechthanhtoanlistComponent } from './vttechthanhtoanlist/vttechthanht
     MatDialogModule,
     MaterialModule,
     RouterModule.forChild([
-      {
-        path: '', component: VttechthanhtoanComponent,
-        children: [
-          {path: ':id', component: VttechthanhtoanDetailComponent},
-      ]
-      },
+      { path: 'vttech', component: VttechthanhtoanlistComponent},
+      { path: 'zns', component: VttechthanhtoanComponent},
+      // {
+      //   path: 'vttech', component: VttechthanhtoanlistComponent,
+      // //   children: [
+      // //     {path: ':id', component: VttechthanhtoanDetailComponent},
+      // // ]
+      // //   path: '', component: VttechthanhtoanComponent,
+      // //   children: [
+      // //     {path: ':id', component: VttechthanhtoanDetailComponent},
+      // // ]
+      // },
     ])
   ],
   declarations: [VttechthanhtoanComponent,VttechthanhtoanDetailComponent]

@@ -15,6 +15,8 @@ import {MatBadgeModule} from '@angular/material/badge';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
+import { ZnsdieutriadminComponent } from '../../../znsdieutri/znsdieutriadmin/znsdieutriadmin.component';
+import { VttechdieutrilistComponent } from './vttechdieutrilist/vttechdieutrilist.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -33,9 +35,14 @@ import { MatSelectModule } from '@angular/material/select';
     MatChipsModule,
     MatSelectModule,
     RouterModule.forChild([
-      {
-        path: '', component: VttechdieutriComponent,    
-      }
+      { path: 'vttech', component: VttechdieutrilistComponent},
+      { path: 'zns', component: VttechdieutriComponent},
+      // {
+      //   path: '', component: VttechdieutrilistComponent,    
+      // }
+      // {
+      //   path: '', component: VttechdieutriComponent,    
+      // }
     ])
   ],
   declarations: [VttechdieutriComponent]

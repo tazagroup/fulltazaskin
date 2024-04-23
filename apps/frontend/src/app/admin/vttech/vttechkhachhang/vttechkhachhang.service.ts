@@ -17,7 +17,7 @@ export class VttechkhachhangService {
   constructor(private http: HttpClient) { }
 
   getAllVttechkhachhangs() {
-    return this.http.get(environment.APIURL + '/vttech_khachhang').pipe(
+    return this.http.get(environment.APIURL + '/vttechkhachhang').pipe(
       map((data: any) => { 
         this._vttechkhachhangs.next(data);
         return data;
@@ -25,7 +25,7 @@ export class VttechkhachhangService {
     );
   }
   searchVttechkhachhangs(SearchParams:any) {
-    return this.http.post(environment.APIURL + `/vttech_khachhang/search`,SearchParams).pipe(
+    return this.http.post(environment.APIURL + `/vttechkhachhang/search`,SearchParams).pipe(
       map((data: any) => { 
         this._vttechkhachhangs.next(data);
         return data;
@@ -33,7 +33,7 @@ export class VttechkhachhangService {
     );
   }
   getVttechkhachhangBySlug(slug: string) {
-    return this.http.get(environment.APIURL + `/vttech_khachhang/findslug/${slug}`).pipe(
+    return this.http.get(environment.APIURL + `/vttechkhachhang/findslug/${slug}`).pipe(
       map((data: any) => {
         this._vttechkhachhang.next(data);
         return data;
@@ -42,14 +42,14 @@ export class VttechkhachhangService {
   }
   getPaginaVttechkhachhangs(page: number, perPage: number) {
     const params ={ page: String(page), perPage: String(perPage) }
-    return this.http.get(environment.APIURL+'/vttech_khachhang/pagination',{ params }).pipe(
+    return this.http.get(environment.APIURL+'/vttechkhachhang/pagination',{ params }).pipe(
       map((data: any) => {
         return data;
       })
     );
   }
   getVttechkhachhangById(id: string) {
-    return this.http.get(environment.APIURL + `/vttech_khachhang/findid/${id}`).pipe(
+    return this.http.get(environment.APIURL + `/vttechkhachhang/findid/${id}`).pipe(
       map((data: any) => {
         this._vttechkhachhang.next(data);
         return data;
@@ -75,7 +75,7 @@ export class VttechkhachhangService {
     return this.vttechkhachhangs$.pipe(
       take(1),
       switchMap((vttechkhachhangs: any) =>
-        this.http.patch(environment.APIURL + `/vttech_khachhang/${data.id}`, data).pipe(
+        this.http.patch(environment.APIURL + `/vttechkhachhang/${data.id}`, data).pipe(
           map((vttechkhachhang) => {
             const index = vttechkhachhangs.findIndex((item: any) => item.id === data.id);
             if (index != -1) {
@@ -95,7 +95,7 @@ export class VttechkhachhangService {
     return this.vttechkhachhangs$.pipe(
       take(1),
       switchMap((vttechkhachhangs: any) =>
-        this.http.delete(environment.APIURL + `/vttech_khachhang/${id}`).pipe(
+        this.http.delete(environment.APIURL + `/vttechkhachhang/${id}`).pipe(
           map((isDelete) => {
             const updateVttechkhachhang = vttechkhachhangs.filter((e: any) => e.id != id);
             this._vttechkhachhangs.next(updateVttechkhachhang);

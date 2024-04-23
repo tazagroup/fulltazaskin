@@ -27,13 +27,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatSelectModule,
     MatPaginatorModule,
     RouterModule.forChild([
-      {
-        path: '', component: VttechkhachhangComponent,
-        // children: [{
-        //   path: ':id', component: VttechkhachhangDetailComponent
-        // }]
+      { path: 'vttech', component: VttechkhachhangComponent},
+      // {
+      //   path: '', component: VttechkhachhangComponent,
+      //   // children: [{
+      //   //   path: ':id', component: VttechkhachhangDetailComponent
+      //   // }]
     
-      }
+      // }
     ])
   ],
   declarations: [VttechkhachhangComponent]

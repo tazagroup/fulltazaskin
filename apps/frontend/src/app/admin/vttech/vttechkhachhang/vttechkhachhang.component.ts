@@ -33,13 +33,13 @@ export class VttechkhachhangComponent implements OnInit {
     this._VttechkhachhangService.vttechkhachhangs$.subscribe((data:any)=>{    
       if(data)
       {
-        console.log(data);
-        data.items.forEach((v:any) => {
-          if (typeof v.Dulieu !== 'object')
-          {
-            v.Dulieu = JSON.parse(v.Dulieu)
-          }
-        });
+        console.log(data.items);
+        // data.items.forEach((v:any) => {
+        //   if (typeof v.Dulieu !== 'object')
+        //   {
+        //     v.Dulieu = JSON.parse(v.Dulieu)
+        //   }
+        // });
         this.PagiLength = (Number(data.totalCount)/Number(this.SearchParams.pageSize)).toFixed()
         this.FilterLists = this.Lists = data.items
       }  
