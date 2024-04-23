@@ -9,7 +9,7 @@ export class ZnsdieutriController {
     private readonly znsdieutriService:ZnsdieutriService,
     private readonly _TelegramService:TelegramService,
   ) {}
-  @Interval(2100000)
+  @Interval(1900000)
   @Post('createzns')
   createzns(@Body() data: any) {
     return this.znsdieutriService.createzns(data);
@@ -18,7 +18,7 @@ export class ZnsdieutriController {
   sendzns(@Body() data: any) {    
     return this.znsdieutriService.sendzns(data);
   }
-  @Interval(2400000)
+  @Interval(2000000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any) {
     this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Gửi ZNS Tự Động Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
