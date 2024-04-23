@@ -6,7 +6,7 @@ import { VttechthanhtoanService } from '../../vttech/vttechthanhtoan/vttechthanh
 import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
 import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
-import { GenId, convertPhoneNum } from '../../shared.utils';
+import { DescErrorZalo, GenId, convertPhoneNum } from '../../shared.utils';
 @Injectable()
 export class ZnsthanhtoanService {
   constructor(
@@ -79,7 +79,7 @@ export class ZnsthanhtoanService {
       else {
         const priceProperty = Chinhanh.TemplateThanhtoan === '301891' || Chinhanh.TemplateThanhtoan === '302259' ? 'price' : 'cost';
         const requestData = {
-          mode: "development",
+         // mode: "development",
           phone: convertPhoneNum(data.CustPhone),
           template_id: Chinhanh.TemplateThanhtoan,
           template_data: {
@@ -105,7 +105,7 @@ export class ZnsthanhtoanService {
         }
         const result = await response.json();
         console.log(result);
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${result.error} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         if (result.error == 0) {
           data.Status = 1;
           data.message_id =result.data.message_id;

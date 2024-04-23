@@ -225,7 +225,10 @@ export const ZALO_ERROR: any[] =
       "desc": "Lấy E2EE key thất bại"
     }
   ]
-
+export function DescErrorZalo(errorcode: string) {
+  const desc = ZALO_ERROR.find(x => x.errorcode == errorcode);
+  return desc ? desc.desc : "Không xác định";
+}
 export const LIST_CHI_NHANH: any[] =
   [
     {

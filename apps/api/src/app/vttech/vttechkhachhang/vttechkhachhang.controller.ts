@@ -41,17 +41,16 @@ export class VttechkhachhangController {
   // @Interval(1800000)
   @Post('getkhachhang')
   async getKhachhang(@Body() data: any) { 
-    const ListDate = await this.getListRangeDate();   
-    ListDate.forEach(async (v:any,k:any) => {
-      data.DateFrom = v.startDate;
-      data.DateTo = v.endDate;
-      setTimeout(async () => {
-        await this.vttechkhachhangService.getKhachhang(data);
-      }, k*300);
+    return await this.vttechkhachhangService.getKhachhang(data);
+    // const ListDate = await this.getListRangeDate();   
+    // ListDate.forEach(async (v:any,k:any) => {
+    //   data.DateFrom = v.startDate;
+    //   data.DateTo = v.endDate;
+    //   setTimeout(async () => {
+    //     await this.vttechkhachhangService.getKhachhang(data);
+    //   }, k*1000);
   
-    });
-    // const getData = await this.vttechkhachhangService.getKhachhang(data);
-    // return getData;
+    // });
   }
 async getListRangeDate() {
   let startDate = new Date(2019, 0, 1); // Start date: 01/01/2019

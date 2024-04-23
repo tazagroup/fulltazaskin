@@ -14,8 +14,6 @@ export class VttechkhachhangService {
   ) { }
   async create(data: any) {
     const check = await this.findby(data)
-    console.log(check);
-    
     if(!check) {
       this.VttechkhachhangRepository.create(data);
       return await this.VttechkhachhangRepository.save(data);
@@ -98,6 +96,9 @@ export class VttechkhachhangService {
         },
         body: JSON.stringify(item)
       });
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
       const data = await response.json();  
       if(data.Data.length>0){
         data.Data.forEach((v:any,k:any) => {
@@ -106,17 +107,18 @@ export class VttechkhachhangService {
           item.idVttech = v.ID
           item.Code = v.Code
           item.Name = v.Name
-          item.SDT = v.CustPhone   
+          item.SDT = v.Phone   
+          item.SDT2 = v.Phone2   
           setTimeout(() => {
             this.create(item); 
           }, k*200);       
-
         });
       }  
       return data
     } catch (error) {
+      throw new Error(error);
       console.error(error.status);
-      this._TelegramService.SendMiniAppLogdev(`[VTTECH_KHACHHANG] - Lỗi Xác Thực - ${JSON.stringify(error.status)} - ${JSON.stringify(item)}`);
+      //this._TelegramService.SendMiniAppLogdev(`[VTTECH_KHACHHANG] - Lỗi Xác Thực - ${JSON.stringify(error.status)} - ${JSON.stringify(item)}`);
       return error;
     }
   }

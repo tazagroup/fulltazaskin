@@ -18,6 +18,8 @@ export class VttechkhachhangEntity {
     Name: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     SDT: string;
+    @Column({ type: 'text', collation: 'utf8_general_ci' })
+    SDT2: string;
     @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
     Dulieu: string
     @Column({ default: 1 })
