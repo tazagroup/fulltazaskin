@@ -30,9 +30,11 @@ export class ZnsthanhtoanController {
       const result = await this.findQuery(data)
       if(result.items.length > 0){
         for (const item of result.items) {
-          await this.sendzns(item)
+          await this.sendzns(item);
+          const delay = Math.floor(Math.random() * 5000) + 1000; // Random delay between 1 and 5 seconds
+          await new Promise(resolve => setTimeout(resolve, delay));
         }
-        return result
+        return result;
       }
     }
     else  return "Không thể gửi tin nhắn vào thời gian này";

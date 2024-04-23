@@ -77,7 +77,7 @@ export class ZnsthanhtoanService {
     try {
       if (!Chinhanh?.ZaloOaToken?.access_token) {
         this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-        throw new Error('Chưa Có Token');
+      // throw new Error('Chưa Có Token');
       }
       else {
         const priceProperty = Chinhanh.TemplateThanhtoan === '301891' || Chinhanh.TemplateThanhtoan === '302259' ? 'price' : 'cost';
@@ -108,7 +108,7 @@ export class ZnsthanhtoanService {
         }
         const result = await response.json();
         console.log(result);
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${result.error} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         if (result.error == 0) {
           data.Status = 1;
           data.message_id =result.data.message_id;
