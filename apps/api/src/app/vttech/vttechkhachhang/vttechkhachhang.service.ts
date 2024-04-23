@@ -106,6 +106,7 @@ export class VttechkhachhangService {
           item.Dulieu = v
           item.idVttech = v.ID
           item.Code = v.Code
+          item.BranchID = v.BranchID
           item.Name = v.Name
           item.SDT = v.Phone   
           item.SDT2 = v.Phone2   

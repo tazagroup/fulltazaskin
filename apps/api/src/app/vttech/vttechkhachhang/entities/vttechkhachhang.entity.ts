@@ -17,6 +17,8 @@ export class VttechkhachhangEntity {
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     Name: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
+    BranchID: string;
+    @Column({ type: 'text', collation: 'utf8_general_ci' })
     SDT: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     SDT2: string;
