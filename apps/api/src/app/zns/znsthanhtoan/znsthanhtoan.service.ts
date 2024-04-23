@@ -27,6 +27,7 @@ export class ZnsthanhtoanService {
         item.CustName = v.CustName
         item.CustCode = v.CustCode
         item.BranchID = v.BranchID
+        item.Created =  moment(v.Created).format('YYYY-MM-DD')
         item.Paid = v.Paid
         item.Code = v.Code
         setTimeout(() => {
