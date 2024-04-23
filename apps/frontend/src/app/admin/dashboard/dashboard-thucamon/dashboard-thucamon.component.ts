@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import * as moment from 'moment';
 import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexFill, ApexLegend, ApexPlotOptions, ApexResponsive, ApexXAxis, ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { VttechdieutriService } from '../../vttech/vttechdieutri/vttechdieutri.service';
+import { ZnsdieutriService } from '../../../znsdieutri/znsdieutri.service';
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -37,12 +38,14 @@ export class DashboardThucamonComponent implements OnInit {
     pageSize: 9999,
     pageNumber: 0
   };
-  Status:any={0:'Mới',1:'Đợi gửi',2:'Thành Công',3:'Chưa Có Temp OA',4:'Gửi SMS'}
-  Style:any={0:'!bg-blue-500',1:'!bg-yellow-500',2:'!bg-green-500',3:'!bg-red-500',4:'!bg-purple-500'}
+  Status:any={0:'Mới',1:'Thành Công',2:'Gửi SMS'}
+  Style:any={0:'!bg-blue-500',1:'!bg-green-500',2:'!bg-purple-500'}
   List:any[]=[]
+  _VttechdieutriService: VttechdieutriService = inject(VttechdieutriService)
+  _ZnsdieutriService: ZnsdieutriService = inject(ZnsdieutriService)
   ngOnInit() {
-    this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
-    this._VttechdieutriService.vttechdieutris$.subscribe((data:any) => {
+    this._ZnsdieutriService.searchZnsdieutri(this.SearchParams).subscribe()
+    this._ZnsdieutriService.znsdieutris$.subscribe((data:any) => {
       if (data) {
         this.List = data.items.map((v:any)=>({Status:v.Status,Created:moment(v.NgayVttech).format("DD/MM/YYYY")}))
         console.log(data.items);
@@ -52,7 +55,6 @@ export class DashboardThucamonComponent implements OnInit {
     })
   }
   ChoosenDate() { }
-  _VttechdieutriService: VttechdieutriService = inject(VttechdieutriService)
   @ViewChild("chart") chart!: ChartComponent;
   public chartOptions: any;
   constructor() {

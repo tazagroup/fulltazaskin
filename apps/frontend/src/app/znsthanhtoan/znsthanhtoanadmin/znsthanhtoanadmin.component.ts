@@ -14,6 +14,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ZnsthanhtoanService } from '../znsthanhtoan.service';
+import * as moment from 'moment';
 @Component({
   selector: 'app-znsthanhtoanadmin',
   standalone: true,
@@ -54,6 +55,10 @@ export class ZnsthanhtoanadminComponent implements OnInit {
   ngOnInit(): void {
     this._ZnsthanhtoanService.getAllZnsthanhtoans().subscribe((data)=>{
       console.log(data);
+      // data.forEach((v:any) => {
+      //   v.Created = moment(v.Dulieu.Created).format('YYYY-MM-DD')
+      //   this._ZnsthanhtoanService.UpdateZnsthanhtoan(v).subscribe()
+      // });
       this.FilterLists = this.Lists = data
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sortingDataAccessor = (item, property) => {

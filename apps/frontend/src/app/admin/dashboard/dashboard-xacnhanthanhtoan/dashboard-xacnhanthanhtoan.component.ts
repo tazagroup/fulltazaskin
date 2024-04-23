@@ -10,6 +10,7 @@ import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
+import { ZnsthanhtoanService } from '../../../znsthanhtoan/znsthanhtoan.service';
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -44,24 +45,22 @@ export class DashboardXacnhanthanhtoanComponent implements OnInit {
     pageSize: 9999,
     pageNumber: 0
   };
-  Status:any={0:'Mới',1:'Đợi gửi',2:'Thành Công',3:'Chưa Có Temp OA',4:'Gửi SMS'}
- // Status:any={0:'Mới',2:'Thành Công',3:'Chưa Có Temp OA',4:'Gửi SMS'}
-  Style:any={0:'!bg-blue-500',1:'!bg-yellow-500',2:'!bg-green-500',3:'!bg-red-500',4:'!bg-purple-500'}
+  Status:any={0:'Mới',1:'Thành Công',2:'Gửi SMS'}
+  Style:any={0:'!bg-blue-500',1:'!bg-green-500',2:'!bg-purple-500'}
   List:any[]=[]
   ListChiNhanh = LIST_CHI_NHANH
+  _ZnsthanhtoanService: ZnsthanhtoanService = inject(ZnsthanhtoanService)
   ngOnInit() {
-    this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
-    this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data:any) => {
+    this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe()
+    this._ZnsthanhtoanService.znsthanhtoans$.subscribe((data:any) => {
       if (data) {
         this.List = data.items.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))
         this.LoadData()
         console.log(data);
-        
       }
     })
   }
   ChoosenDate() { }
-  _VttechthanhtoanService: VttechthanhtoanService = inject(VttechthanhtoanService)
   @ViewChild("chart") chart!: ChartComponent;
   public chartOptions: any;
   constructor() {
@@ -160,6 +159,6 @@ export class DashboardXacnhanthanhtoanComponent implements OnInit {
     };
   }
   ChanggeData() {
-    this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
+    this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe()
   }
 }

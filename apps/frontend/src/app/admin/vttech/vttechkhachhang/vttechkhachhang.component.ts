@@ -5,6 +5,9 @@ import { VttechkhachhangService } from './vttechkhachhang.service';
 import * as moment from 'moment';
 import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
 import { MatSelectChange } from '@angular/material/select';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-vttechkhachhang',
   templateUrl: './vttechkhachhang.component.html',
@@ -19,10 +22,14 @@ export class VttechkhachhangComponent implements OnInit {
   SearchParams: any = {
     Batdau:moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
-    pageSize:10,
+    pageSize:9999,
     pageNumber:0
   };
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
+  displayedColumns: string[] = ['Code','Name','SDT','SDT2','BranchID'];
+  dataSource!: MatTableDataSource<any>;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   constructor(
     private dialog: MatDialog,
     private _VttechkhachhangService: VttechkhachhangService,
@@ -35,13 +42,23 @@ export class VttechkhachhangComponent implements OnInit {
       {
         console.log(data.items);
         // data.items.forEach((v:any) => {
-        //   if (typeof v.Dulieu !== 'object')
-        //   {
-        //     v.Dulieu = JSON.parse(v.Dulieu)
-        //   }
+        //   v.BranchID = v.Dulieu.BranchID
+        //   this._VttechkhachhangService.UpdateVttechkhachhang(v).subscribe()
         // });
         this.PagiLength = (Number(data.totalCount)/Number(this.SearchParams.pageSize)).toFixed()
         this.FilterLists = this.Lists = data.items
+        this.dataSource = new MatTableDataSource(data.items);
+        this.dataSource.sortingDataAccessor = (item, property) => {
+          switch(property) {
+            case 'Diachi': return item.Giohangs.Khachhang.Diachi;
+            case 'Hoten': return item.Giohangs.Khachhang.Hoten;
+            case 'SDT': return item.Giohangs.Khachhang.SDT;
+            case 'Hinhthuc': return item.Dieutri.Hinhthuc;
+            default: return item[property];
+          }
+        };
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       }  
 
     })
