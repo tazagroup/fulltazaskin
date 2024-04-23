@@ -22,10 +22,21 @@ export class TelegramService {
   }
   async SendMiniAppLogdev(data: any): Promise<any> {
     const options = {
-      url: `https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage?chat_id=${environment.APITelegram_LogMiniApp}&text=${data}&parse_mode=html`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: environment.APITelegram_LogMiniApp,
+        text: data,
+        parse_mode: 'html',
+      }),
     };
-    const response = await axios.request(options);
-    return response.data;
+    const response = await fetch(`https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage`, options);
+    if (!response.ok) {
+      throw new Error(`Error fetching data: ${response.statusText}`);
+    }
+    return response.json();
   }
   async SendDulieuVttech(data: string): Promise<any> {
     const options = {
