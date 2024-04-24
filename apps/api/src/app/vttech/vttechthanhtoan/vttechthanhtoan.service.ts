@@ -5,6 +5,7 @@ import { VttechthanhtoanEntity } from './entities/vttechthanhtoan.entity';
 import { SharedService } from '../../shared/shared.service';
 import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
+import axios from 'axios';
 @Injectable()
 export class VttechthanhtoanService {
   constructor(
@@ -94,33 +95,29 @@ export class VttechthanhtoanService {
 
   async getThanhtoan(item: any = {}) {
     this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Bắt Đầu Lấy Dữ Liệu Thanh Toán : ${moment().format("HH:mm:ss DD/MM/YYYY")} ${JSON.stringify(item)}`);
-    const result = await this._SharedService.getToken(item)
+    const result = await this._SharedService.getToken(item);
     try {
-      const response = await fetch(`https://apismsvtt.vttechsolution.com/api/Revenue/GetList`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${result[0].Token}`, 
+      const response = await axios.post(`https://apismsvtt.vttechsolution.com/api/Revenue/GetList`, item, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${result[0].Token}`,
           'Cookie': result[1],
         },
-        body: JSON.stringify(item)
       });
-      const data = await response.json();  
+      const data = response.data;
       this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lấy dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")} ${JSON.stringify(data.Data.length)}`);
-      if(data.Data.length>0){
-        data.Data.forEach((v:any,k:any) => {
-          const item:any={}
-          item.Dulieu = v
-          item.idVttech = v.ID
-          item.CustPhone = v.CustPhone   
-          item.Created = moment(v.Created).format('YYYY-MM-DD')
-          setTimeout(() => {
-            this.create(item); 
-          }, k*200);       
-
+      if (data.Data.length > 0) {
+        data.Data.forEach(async (v: any, k: any) => {
+          const item: any = {};
+          item.Dulieu = v;
+          item.idVttech = v.ID;
+          item.CustPhone = v.CustPhone;
+          item.Created = moment(v.Created).format('YYYY-MM-DD');
+          await new Promise((resolve) => setTimeout(resolve, k * 200));
+          await this.create(item);
         });
-      }  
-      return data
+      }
+      return data;
     } catch (error) {
       console.error(error);
       this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lỗi Xác Thực - ${JSON.stringify(error)} - ${JSON.stringify(item)} - ${JSON.stringify(result)}`);

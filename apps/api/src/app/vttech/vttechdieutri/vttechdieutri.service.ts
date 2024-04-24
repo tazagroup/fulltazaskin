@@ -6,6 +6,7 @@ import { SharedService } from '../../shared/shared.service';
 import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
 import { convertToZeroMinutesSeconds } from '../../shared.utils';
+import axios from 'axios';
 @Injectable()
 export class VttechdieutriService {
   constructor(
@@ -83,35 +84,32 @@ export class VttechdieutriService {
 
 
   async getdieutri(item: any = {}) {
-  this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Bắt Đầu Lấy Dữ Liệu Điều Trị - ${moment().format("HH:mm:ss DD/MM/YYYY")} - ${JSON.stringify(item)}`);
-    const result = await this._SharedService.getToken(item)
+    this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Bắt Đầu Lấy Dữ Liệu Điều Trị - ${moment().format("HH:mm:ss DD/MM/YYYY")} - ${JSON.stringify(item)}`);
+    const result = await this._SharedService.getToken(item);
     try {
-      const response = await fetch(`https://apismsvtt.vttechsolution.com/api/Customer/GetTreat`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${result[0].Token}`, 
+      const response = await axios.post(`https://apismsvtt.vttechsolution.com/api/Customer/GetTreat`, item, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${result[0].Token}`,
           'Cookie': result[1],
         },
-        body: JSON.stringify(item)
       });
-      const data = await response.json();  
+      const data = response.data;
       this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Lấy dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")} ${JSON.stringify(data.Data.length)}`);
-      if(data.Data.length>0){
-        data.Data.forEach((v:any,k:any) => {
-          const item:any={}
-          item.Dulieu = v
-          item.idVttech = convertToZeroMinutesSeconds(v.CreatedDate).getTime()
-          item.CustPhone = v.Phone   
-          item.TabCode = v.Service.TabCode   
-          item.Created = moment(v.CreatedDate).format('YYYY-MM-DD')
-          setTimeout(async () => {            
-          const result = await this.create(item); 
-          }, k*200);       
+      if (data.Data.length > 0) {
+        data.Data.forEach(async (v: any, k: any) => {
+          const item: any = {};
+          item.Dulieu = v;
+          item.idVttech = convertToZeroMinutesSeconds(v.CreatedDate).getTime();
+          item.CustPhone = v.Phone;
+          item.TabCode = v.Service.TabCode;
+          item.Created = moment(v.CreatedDate).format('YYYY-MM-DD');
+          setTimeout(async () => {
+            const result = await this.create(item);
+          }, k * 200);
         });
-      }  
-
-      return data
+      }
+      return data;
     } catch (error) {
       console.error(error);
       this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Lỗi Xác Thực - ${JSON.stringify(error)} - ${JSON.stringify(item)} - ${JSON.stringify(result)}`);

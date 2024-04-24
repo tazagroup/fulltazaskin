@@ -4,6 +4,7 @@ import { Like, Repository } from 'typeorm';
 import { VttechkhachhangEntity } from './entities/vttechkhachhang.entity';
 import { SharedService } from '../../shared/shared.service';
 import { TelegramService } from '../../shared/telegram.service';
+import axios from 'axios';
 @Injectable()
 export class VttechkhachhangService {
   constructor(
@@ -82,45 +83,33 @@ export class VttechkhachhangService {
 
    
   async getKhachhang(item: any = {}) {
-    console.log(item);
-    const result = await this._SharedService.getToken(item)    
+    const result = await this._SharedService.getToken(item);
     try {
-      const response = await fetch(`https://apismsvtt.vttechsolution.com/api/Customer/GetList`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'withCredentials': 'true',
-          credentials: 'include',
-          'Authorization': `Bearer ${result[0].Token}`, 
+      const response = await axios.post('https://apismsvtt.vttechsolution.com/api/Customer/GetList', item, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${result[0].Token}`,
           'Cookie': result[1],
         },
-        body: JSON.stringify(item)
       });
-      if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
-      }
-      const data = await response.json();  
-      if(data.Data.length>0){
-        data.Data.forEach((v:any,k:any) => {
-          const item:any={}
-          item.Dulieu = v
-          item.idVttech = v.ID
-          item.Code = v.Code
-          item.BranchID = v.BranchID
-          item.Name = v.Name
-          item.SDT = v.Phone   
-          item.SDT2 = v.Phone2   
-          setTimeout(() => {
-            this.create(item); 
-          }, k*200);       
+      const data = response.data;
+      if (data.Data.length > 0) {
+        data.Data.forEach(async (v: any, k: any) => {
+          const item: any = {};
+          item.Dulieu = v;
+          item.idVttech = v.ID;
+          item.Code = v.Code;
+          item.BranchID = v.BranchID;
+          item.Name = v.Name;
+          item.SDT = v.Phone;
+          item.SDT2 = v.Phone2;
+          await new Promise((resolve) => setTimeout(resolve, k * 200));
+          await this.create(item);
         });
-      }  
-      return data
+      }
+      return data;
     } catch (error) {
-      throw new Error(error);
-      console.error(error.status);
-      //this._TelegramService.SendMiniAppLogdev(`[VTTECH_KHACHHANG] - Lỗi Xác Thực - ${JSON.stringify(error.status)} - ${JSON.stringify(item)}`);
-      return error;
+      this._TelegramService.SendMiniAppLogdev(`[VTTECH_KHACHHANG] - Lỗi Xác Thực - ${JSON.stringify(error.status)} - ${JSON.stringify(item)}`);
     }
   }
 
