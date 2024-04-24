@@ -50,7 +50,7 @@ export class DashboardThucamonComponent implements OnInit {
         this.List = data.items.map((v:any)=>({Status:v.Status,Created:moment(v.NgayVttech).format("DD/MM/YYYY")}))
         console.log(data.items);
         
-        this.LoadData()
+       this.LoadData()
       }
     })
   }
