@@ -5,13 +5,15 @@ import { CreateZalotokenDto } from './dto/create-zalotoken.dto';
 import { UpdateZalotokenDto } from './dto/update-zalotoken.dto';
 import { ZalotokenEntity } from './entities/zalotoken.entity';
 import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
+import { TelegramService } from '../../shared/telegram.service';
 const axios = require('axios');
 @Injectable()
 export class ZalotokenService {
   constructor(
     @InjectRepository(ZalotokenEntity)
     private ZalotokenRepository: Repository<ZalotokenEntity>,
-    private _ChinhanhService: ChinhanhService
+    private _ChinhanhService: ChinhanhService,
+    private _TelegramService: TelegramService
   ) { }
   async getAccessToken(item: any) {
     const options = {
@@ -41,6 +43,7 @@ export class ZalotokenService {
           item.ZaloOaToken.AuthenAt = new Date()
           item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
           const result = await this._ChinhanhService.update(item.id, item)
+          this._TelegramService.SendMiniAppLogdev(`Đã cập nhật lại token cho chi nhánh ${item.Title}`)
           return { status: 200, note: "Xác Thực Thành Công",data:result }
         }
       })
