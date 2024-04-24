@@ -42,6 +42,7 @@ export class ZalotokenService {
         item.ZaloOaToken.AuthenAt = new Date();
         item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
         const result = await this._ChinhanhService.update(item.id, item);
+        this._TelegramService.SendMiniAppLogdev(`Đã cập nhật lại token cho chi nhánh ${result}`);
         this._TelegramService.SendMiniAppLogdev(`Đã cập nhật lại token cho chi nhánh ${item.Title}`);
         return { status: 200, note: "Xác Thực Thành Công", data: result };
       }
