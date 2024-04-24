@@ -31,6 +31,8 @@ export class ZalotokenService {
       .then(async (response:any) => {
         console.error(response.data);
         if (response.data.error == '-14019') {
+          item.ZaloOaToken={};
+          const result = await this._ChinhanhService.update(item.id, item)
           return { status: 400, note: "Autho Code Hết Hạn" }
         }
         else {
@@ -39,23 +41,6 @@ export class ZalotokenService {
           item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
           const result = await this._ChinhanhService.update(item.id, item)
           return { status: 200, note: "Xác Thực Thành Công",data:result }
-            // item.ZaloOaToken = response.data
-            // item.ZaloOaToken.AuthenAt = new Date()
-            // item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
-            // delete item.code
-            // const result = await this._ChinhanhService.update(item.id, item)
-            // return { status: 200, note: "Xác Thực Thành Công",data:result }
-            // if (res) {
-            //   const res1 = { ...res }
-            //   res1.Token = response.data
-            //   res1.AuthenAt = new Date()
-            //   res1.AuthenEnd = new Date(res1.AuthenAt.getTime() + 90000 * 1000);
-            //   const result = await this.update(res1.id, res1)
-            //   return { status: 200, note: "Xác Thực Thành Công",data:result }
-            // }
-            // else {
-            //   return { status: 400, note: "Chứa Có Oa Trên Server" }
-            // }
         }
       })
       .catch((error) => {
@@ -83,9 +68,13 @@ export class ZalotokenService {
       .then(async (response:any) => {
         console.error(response.data);
         if (response.data.error == '-14014') {
+          item.ZaloOaToken={};
+          const result = await this._ChinhanhService.update(item.id, item)
           return { status: 400, note: "Refesh Token Không Đúng" }
         }
         else if (response.data.error == '-14020') {
+          item.ZaloOaToken={};
+          const result = await this._ChinhanhService.update(item.id, item)
           return { status: 400, note: "Refesh Token Hết Hạn" }
         }
         else {
@@ -94,21 +83,6 @@ export class ZalotokenService {
           item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
           const result = await this._ChinhanhService.update(item.id, item)
           return { status: 200, note: "Gia Hạn Thành Công",data:result }
-
-
-          // return this.findbyoaid(item.oa_id).then(async (res: any) => {
-          //   if (res) {
-          //     const res1 = { ...res }
-          //     res1.Token = response.data
-          //     res1.AuthenAt = new Date()
-          //     res1.AuthenEnd = new Date(res1.AuthenAt.getTime() + 90000 * 1000);
-          //     const result = await this.update(res1.id, res1)
-          //     return { status: 200, note: "Gia Hạn Thành Công",data:result }
-          //   }
-          //   else {
-          //     return { status: 400, note: "Chứa Có Oa Trên Server" }
-          //   }
-          // })
         }
       })
       .catch((error) => {
