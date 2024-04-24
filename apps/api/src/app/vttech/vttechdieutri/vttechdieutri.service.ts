@@ -103,6 +103,7 @@ export class VttechdieutriService {
           item.Dulieu = v;
           item.idVttech = convertToZeroMinutesSeconds(v.CreatedDate).getTime();
           item.CustPhone = v.Phone;
+          item.CustName = v.Name;
           item.BranchID = v.BranchID;
           item.TabCode = v.Service.TabCode;
           item.Created = moment(v.CreatedDate).format('YYYY-MM-DD');
