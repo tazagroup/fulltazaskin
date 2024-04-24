@@ -34,7 +34,7 @@ export class ZnsdieutriService {
         item.idVttech = v.idVttech
         item.idDieutri = v.id
         item.CustPhone = v.CustPhone
-        item.CustName = v.Name
+        item.CustName = v.CustName
         item.BranchID = v.BranchID
         item.Created =  moment(v.Created).format('YYYY-MM-DD')
         setTimeout(() => {
@@ -79,7 +79,6 @@ export class ZnsdieutriService {
     try {
       if (!Chinhanh?.ZaloOaToken?.access_token) {
         this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-        throw new Error('Chưa Có Token');
       }
       else {
         const requestData = {
