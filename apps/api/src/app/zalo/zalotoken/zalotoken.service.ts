@@ -34,12 +34,17 @@ export class ZalotokenService {
           return { status: 400, note: "Autho Code Hết Hạn" }
         }
         else {
-            item.ZaloOaToken = response.data
-            item.ZaloOaToken.AuthenAt = new Date()
-            item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
-            delete item.code
-            const result = await this._ChinhanhService.update(item.id, item)
-            return { status: 200, note: "Xác Thực Thành Công",data:result }
+          item.ZaloOaToken = response.data
+          item.ZaloOaToken.AuthenAt = new Date()
+          item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
+          const result = await this._ChinhanhService.update(item.id, item)
+          return { status: 200, note: "Xác Thực Thành Công",data:result }
+            // item.ZaloOaToken = response.data
+            // item.ZaloOaToken.AuthenAt = new Date()
+            // item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
+            // delete item.code
+            // const result = await this._ChinhanhService.update(item.id, item)
+            // return { status: 200, note: "Xác Thực Thành Công",data:result }
             // if (res) {
             //   const res1 = { ...res }
             //   res1.Token = response.data
@@ -75,7 +80,7 @@ export class ZalotokenService {
       },
     };
     return axios(options)
-      .then(async (response) => {
+      .then(async (response:any) => {
         console.error(response.data);
         if (response.data.error == '-14014') {
           return { status: 400, note: "Refesh Token Không Đúng" }
