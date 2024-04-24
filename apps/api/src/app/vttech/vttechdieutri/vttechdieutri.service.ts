@@ -7,6 +7,7 @@ import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
 import { convertToZeroMinutesSeconds } from '../../shared.utils';
 import axios from 'axios';
+import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 @Injectable()
 export class VttechdieutriService {
   constructor(
@@ -14,6 +15,7 @@ export class VttechdieutriService {
     private VttechdieutriRepository: Repository<VttechdieutriEntity>,
     private _SharedService: SharedService,
     private _TelegramService: TelegramService,
+    private _ChinhanhService: ChinhanhService,
   ) { }
   async create(data: any) {
     const check = await this.findby(data)    
@@ -68,9 +70,8 @@ export class VttechdieutriService {
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
-      .getManyAndCount();
-      const data = items.map((v: any) => ({...v,...v.Dulieu}))
-    return data;
+      .getManyAndCount();  
+    return items;
   }
   async update(id: string, UpdateVttechdieutriDto: any) {
     this.VttechdieutriRepository.save(UpdateVttechdieutriDto);
@@ -102,6 +103,7 @@ export class VttechdieutriService {
           item.Dulieu = v;
           item.idVttech = convertToZeroMinutesSeconds(v.CreatedDate).getTime();
           item.CustPhone = v.Phone;
+          item.BranchID = v.BranchID;
           item.TabCode = v.Service.TabCode;
           item.Created = moment(v.CreatedDate).format('YYYY-MM-DD');
           setTimeout(async () => {
