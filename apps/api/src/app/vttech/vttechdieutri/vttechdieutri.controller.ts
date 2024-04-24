@@ -45,7 +45,7 @@ export class VttechdieutriController {
     return getData;
   }
   @Interval(1800000)
-  @Post()
+  @Get('getauto')
   async getAuto() {    
     const data:any= {
       "Name": "Taza",

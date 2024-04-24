@@ -95,7 +95,7 @@ export class VttechdieutriService {
         },
       });
       const data = response.data;
-      this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Lấy dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")} ${JSON.stringify(data.Data.length)}`);
+      this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Đã Lấy (${JSON.stringify(data.Data.length)}) dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
       if (data.Data.length > 0) {
         data.Data.forEach(async (v: any, k: any) => {
           const item: any = {};
