@@ -36,6 +36,7 @@ export class ZalotokenService {
           return { status: 400, note: "Autho Code Hết Hạn" }
         }
         else {
+          delete item.code;
           item.ZaloOaToken = response.data
           item.ZaloOaToken.AuthenAt = new Date()
           item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
@@ -75,6 +76,8 @@ export class ZalotokenService {
         else if (response.data.error == '-14020') {
           item.ZaloOaToken={};
           const result = await this._ChinhanhService.update(item.id, item)
+          console.log(result);
+          
           return { status: 400, note: "Refesh Token Hết Hạn" }
         }
         else {

@@ -52,8 +52,6 @@ export class ChinhanhService {
     });
   }
   async update(id: string, data: any) {
-    console.log(data);
-    
     await this.ChinhanhRepository.save(data);
     return await this.ChinhanhRepository.findOne({ where: { id: id } });
   }
