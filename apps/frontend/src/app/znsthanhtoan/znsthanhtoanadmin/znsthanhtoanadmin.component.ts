@@ -15,6 +15,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ZnsthanhtoanService } from '../znsthanhtoan.service';
 import * as moment from 'moment';
+import { ChinhanhService } from '../../admin/cauhinh/chinhanh/chinhanh.service';
+import { Status, Style, Style1 } from '../../shared/shared.utils';
 @Component({
   selector: 'app-znsthanhtoanadmin',
   standalone: true,
@@ -39,41 +41,49 @@ export class ZnsthanhtoanadminComponent implements OnInit {
   Detail: any = {};
   Lists: any[] = []
   FilterLists: any[] = []
+  ListChiNhanh: any[] = []
   Sitemap: any = { loc: '', priority: '' }
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
-  displayedColumns: string[] = ['CustName', 'CustPhone','Code','Paid','BranchID','Created','Status'];
-  
+  displayedColumns: string[] = ['CustName', 'CustPhone','Code','Paid','Chinhanh','Created','Status'];
   dataSource!: MatTableDataSource<any>;
+  SearchParams: any = {
+    CreatedBegin: moment().format('YYYY-MM-DD'),
+    CreatedEnd: moment().format('YYYY-MM-DD'),
+    pageSize:9999,
+    pageNumber:0
+  };
+  ListStatus: any = Status
+  Style: any = Style1
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
     private dialog: MatDialog,
     private _Notification: NotifierService,
     private _ZnsthanhtoanService: ZnsthanhtoanService,
+    private _ChinhanhService: ChinhanhService,
   ) {
   }
   ngOnInit(): void {
-    this._ZnsthanhtoanService.getAllZnsthanhtoans().subscribe((data)=>{
-      console.log(data);
-      // data.forEach((v:any) => {
-      //   v.Created = moment(v.Dulieu.Created).format('YYYY-MM-DD')
-      //   this._ZnsthanhtoanService.UpdateZnsthanhtoan(v).subscribe()
-      // });
-      this.FilterLists = this.Lists = data
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch(property) {
-          case 'Diachi': return item.Giohangs.Khachhang.Diachi;
-          case 'Hoten': return item.Giohangs.Khachhang.Hoten;
-          case 'SDT': return item.Giohangs.Khachhang.SDT;
-          case 'Hinhthuc': return item.Thanhtoan.Hinhthuc;
-          default: return item[property];
-        }
-      };
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    })
+    this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe()
+    this._ChinhanhService.getAllChinhanhs().subscribe()
+    this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {
+      this.ListChiNhanh = chinhanhs
+      if (chinhanhs && chinhanhs.length > 0) {
+        this._ZnsthanhtoanService.znsthanhtoans$.subscribe((data: any) => {
+          if (data) {
+            data.forEach((v: any) => {
+              v.Chinhanh = chinhanhs.find((c: any) => c.idVttech === v.BranchID)?.Title;
+            })
+            this.FilterLists = this.Lists = data
+            this.dataSource = new MatTableDataSource(this.FilterLists);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          }
 
+        })
+      }
+
+    })
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -83,6 +93,17 @@ export class ZnsthanhtoanadminComponent implements OnInit {
     }
     console.log(this.dataSource.filteredData);
     
+  }
+  ChangeSearchParams() {
+    this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe()
+  }
+  GetStype(item:any)
+  {
+    return this.Style[item]
+  }
+  CountStatus(item: any) {
+    const result = this.FilterLists.filter((v: any) => v.Status == item)
+    return result.length
   }
   openDialog(teamplate: TemplateRef<any>): void {
   //   const dialogRef = this.dialog.open(teamplate, {

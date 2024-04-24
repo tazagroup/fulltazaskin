@@ -28,7 +28,7 @@ export class VttechdieutriService {
     );
   }
   getAllVttechdieutris() {
-    return this.http.get(environment.APIURL + '/vttech_dieutri').pipe(
+    return this.http.get(environment.APIURL + '/vttechdieutri').pipe(
       map((data: any) => { 
         this._vttechdieutris.next(data);
         return data;
@@ -36,7 +36,7 @@ export class VttechdieutriService {
     );
   }
   searchVttechdieutri(SearchParams:any) {
-    return this.http.post(environment.APIURL + `/vttech_dieutri/search`,SearchParams).pipe(
+    return this.http.post(environment.APIURL + `/vttechdieutri/search`,SearchParams).pipe(
       map((data: any) => { 
         this._vttechdieutris.next(data);
         return data;
@@ -44,7 +44,7 @@ export class VttechdieutriService {
     );
   }
   getVttechdieutriBySlug(slug: string) {
-    return this.http.get(environment.APIURL + `/vttech_dieutri/findslug/${slug}`).pipe(
+    return this.http.get(environment.APIURL + `/vttechdieutri/findslug/${slug}`).pipe(
       map((data: any) => {
         this._vttechdieutri.next(data);
         return data;
@@ -53,7 +53,7 @@ export class VttechdieutriService {
   }
   getPaginaVttechdieutris(page: number, perPage: number) {
     const params ={ page: String(page), perPage: String(perPage) }
-    return this.http.get(environment.APIURL+'/vttech_dieutri/pagination',{ params }).pipe(
+    return this.http.get(environment.APIURL+'/vttechdieutri/pagination',{ params }).pipe(
       map((data: any) => {
         this._vttechdieutris.next(data);
         return data;
@@ -61,7 +61,7 @@ export class VttechdieutriService {
     );
   }
   getVttechdieutriById(id: string) {
-    return this.http.get(environment.APIURL + `/vttech_dieutri/findid/${id}`).pipe(
+    return this.http.get(environment.APIURL + `/vttechdieutri/findid/${id}`).pipe(
       map((data: any) => {
         this._vttechdieutri.next(data);
         return data;
@@ -69,7 +69,7 @@ export class VttechdieutriService {
     );
   }
   SendZns(data: any) {
-    return this.http.post(environment.APIURL + '/vttech_dieutri/sendcamon', data).pipe(
+    return this.http.post(environment.APIURL + '/vttechdieutri/sendcamon', data).pipe(
           map((result) => {
             console.log(result); 
             return result;
@@ -80,7 +80,7 @@ export class VttechdieutriService {
     return this.vttechdieutris$.pipe(
       take(1),
       switchMap((vttechdieutris: any) =>
-        this.http.post(environment.APIURL + '/vttech_dieutri', data).pipe(
+        this.http.post(environment.APIURL + '/vttechdieutri', data).pipe(
           map((vttechdieutri) => {
             if (vttechdieutris?.length > 0) {
               this._vttechdieutris.next([...vttechdieutris, vttechdieutri]);
@@ -95,7 +95,7 @@ export class VttechdieutriService {
     return this.vttechdieutris$.pipe(
       take(1),
       switchMap((vttechdieutris: any) =>
-        this.http.patch(environment.APIURL + `/vttech_dieutri/${data.id}`, data).pipe(
+        this.http.patch(environment.APIURL + `/vttechdieutri/${data.id}`, data).pipe(
           map((vttechdieutri) => {
             const index = vttechdieutris.findIndex((item: any) => item.id === data.id);
             if (index != -1) {
@@ -115,7 +115,7 @@ export class VttechdieutriService {
     return this.vttechdieutris$.pipe(
       take(1),
       switchMap((vttechdieutris: any) =>
-        this.http.delete(environment.APIURL + `/vttech_dieutri/${id}`).pipe(
+        this.http.delete(environment.APIURL + `/vttechdieutri/${id}`).pipe(
           map((isDelete) => {
             const updateVttechdieutri = vttechdieutris.filter((e: any) => e.id != id);
             this._vttechdieutris.next(updateVttechdieutri);

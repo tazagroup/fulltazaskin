@@ -30,7 +30,7 @@ export class ZnsdieutriService {
   searchZnsdieutri(SearchParams:any) {
     return this.http.post(environment.APIURL + `/znsdieutri/search`,SearchParams).pipe(
       map((data: any) => { 
-        this._znsdieutris.next(data);
+        this._znsdieutris.next(data.items);
         return data;
       })
     );

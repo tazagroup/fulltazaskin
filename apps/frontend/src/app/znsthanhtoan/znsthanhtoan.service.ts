@@ -30,7 +30,7 @@ export class ZnsthanhtoanService {
   searchZnsthanhtoan(SearchParams:any) {
     return this.http.post(environment.APIURL + `/znsthanhtoan/search`,SearchParams).pipe(
       map((data: any) => { 
-        this._znsthanhtoans.next(data);
+        this._znsthanhtoans.next(data.items);
         return data;
       })
     );

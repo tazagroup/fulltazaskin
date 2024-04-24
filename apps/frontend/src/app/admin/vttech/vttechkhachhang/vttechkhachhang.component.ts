@@ -8,6 +8,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 @Component({
   selector: 'app-vttechkhachhang',
   templateUrl: './vttechkhachhang.component.html',
@@ -17,90 +18,91 @@ export class VttechkhachhangComponent implements OnInit {
   Detail: any = {};
   Lists: any[] = []
   FilterLists: any[] = []
-  ListChiNhanh:any = LIST_CHI_NHANH
-  PagiLength:any=0
+  ListChiNhanh: any = LIST_CHI_NHANH
+  PagiLength: any = 0
   SearchParams: any = {
-    Batdau:moment().startOf('day').toDate(),
+    Batdau: moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
-    pageSize:9999,
-    pageNumber:0
+    pageSize: 9999,
+    pageNumber: 0
   };
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
-  displayedColumns: string[] = ['Code','Name','SDT','SDT2','BranchID'];
+  displayedColumns: string[] = ['Code', 'Name', 'SDT', 'SDT2', 'Chinhanh'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
     private dialog: MatDialog,
     private _VttechkhachhangService: VttechkhachhangService,
+    private _ChinhanhService: ChinhanhService,
   ) {
   }
   ngOnInit(): void {
+    this._ChinhanhService.getAllChinhanhs().subscribe()
     this._VttechkhachhangService.searchVttechkhachhangs(this.SearchParams).subscribe()
-    this._VttechkhachhangService.vttechkhachhangs$.subscribe((data:any)=>{    
-      if(data)
-      {
-        console.log(data.items);
-        // data.items.forEach((v:any) => {
-        //   v.BranchID = v.Dulieu.BranchID
-        //   this._VttechkhachhangService.UpdateVttechkhachhang(v).subscribe()
-        // });
-        this.PagiLength = (Number(data.totalCount)/Number(this.SearchParams.pageSize)).toFixed()
-        this.FilterLists = this.Lists = data.items
-        this.dataSource = new MatTableDataSource(data.items);
-        this.dataSource.sortingDataAccessor = (item, property) => {
-          switch(property) {
-            case 'Diachi': return item.Giohangs.Khachhang.Diachi;
-            case 'Hoten': return item.Giohangs.Khachhang.Hoten;
-            case 'SDT': return item.Giohangs.Khachhang.SDT;
-            case 'Hinhthuc': return item.Dieutri.Hinhthuc;
-            default: return item[property];
+    this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {
+      this.ListChiNhanh = chinhanhs
+      if (chinhanhs && chinhanhs.length > 0) {
+        this._VttechkhachhangService.vttechkhachhangs$.subscribe((data: any) => {
+          if (data) {
+            data.items.forEach((v: any) => {
+              v.Chinhanh = chinhanhs.find((c: any) => c.idVttech === v.BranchID)?.Title;
+            })
+            this.FilterLists = this.Lists = data.items
+            this.dataSource = new MatTableDataSource(data.items);
+            this.dataSource.sortingDataAccessor = (item, property) => {
+              switch (property) {
+                case 'Diachi': return item.Giohangs.Khachhang.Diachi;
+                case 'Hoten': return item.Giohangs.Khachhang.Hoten;
+                case 'SDT': return item.Giohangs.Khachhang.SDT;
+                case 'Hinhthuc': return item.Dieutri.Hinhthuc;
+                default: return item[property];
+              }
+            };
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
           }
-        };
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      }  
+
+        })
+      }
 
     })
   }
-  ChoosenDate()
-  {
+  ChoosenDate() {
     this._VttechkhachhangService.searchVttechkhachhangs(this.SearchParams).subscribe()
   }
-  applyFilter(event: Event,field:any) {
-    const value = (event.target as HTMLInputElement).value;
-    if (value.length > 2) {
-      this.SearchParams[field] = value
-      this._VttechkhachhangService.searchVttechkhachhangs(this.SearchParams).subscribe()
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
   }
   onSelectChange(event: MatSelectChange) {
     this.SearchParams.idCN = event.value
     console.log(this.SearchParams);
-    
     this._VttechkhachhangService.searchVttechkhachhangs(this.SearchParams).subscribe()
   }
   openDialog(teamplate: TemplateRef<any>): void {
     const dialogRef = this.dialog.open(teamplate, {
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result=="true") {
+      if (result == "true") {
         this._VttechkhachhangService.CreateVttechkhachhang(this.Detail).subscribe()
       }
     });
   }
-  openDeleteDialog(teamplate: TemplateRef<any>,item:any): void {
+  openDeleteDialog(teamplate: TemplateRef<any>, item: any): void {
     const dialogRef = this.dialog.open(teamplate, {});
     dialogRef.afterClosed().subscribe((result) => {
-      if (result=="true") {
+      if (result == "true") {
         this._VttechkhachhangService.DeleteVttechkhachhang(item.id).subscribe()
       }
     });
   }
-  onPageChange(event:any)
-  {
-    this.SearchParams.pageSize=event.pageSize
-     this.SearchParams.pageNumber=event.pageIndex
-     this._VttechkhachhangService.searchVttechkhachhangs(this.SearchParams).subscribe()
+  onPageChange(event: any) {
+    this.SearchParams.pageSize = event.pageSize
+    this.SearchParams.pageNumber = event.pageIndex
+    this._VttechkhachhangService.searchVttechkhachhangs(this.SearchParams).subscribe()
   }
 }

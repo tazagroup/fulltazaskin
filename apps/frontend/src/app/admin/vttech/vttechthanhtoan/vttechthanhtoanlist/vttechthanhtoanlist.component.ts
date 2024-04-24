@@ -14,6 +14,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ChinhanhService } from '../../../cauhinh/chinhanh/chinhanh.service';
 @Component({
   selector: 'app-vttechthanhtoanlist',
   standalone: true,
@@ -39,9 +40,12 @@ export class VttechthanhtoanlistComponent implements OnInit {
   Lists: any[] = []
   FilterLists: any[] = []
   Sitemap: any = { loc: '', priority: '' }
+  SearchParams: any = {
+    pageSize:9999,
+    pageNumber:0
+  };
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
-  displayedColumns: string[] = ['ID','CustName', 'CustPhone','Code','TypeName','Paid', 'DiscountAmount','DepositAmountUsing','TotalPaid','BranchID','Created'];
-  
+  displayedColumns: string[] = ['CustName', 'CustPhone','Code','TypeName','Paid', 'DiscountAmount','DepositAmountUsing','TotalPaid','Chinhanh','Created'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -49,26 +53,36 @@ export class VttechthanhtoanlistComponent implements OnInit {
     private dialog: MatDialog,
     private _Notification: NotifierService,
     private _VttechthanhtoanService: VttechthanhtoanService,
+    private _ChinhanhService: ChinhanhService,
   ) {
   }
   ngOnInit(): void {
-    this._VttechthanhtoanService.getAllthanhtoans().subscribe((data)=>{
-      console.log(data.map((v:any)=>(v.Dulieu)));
-      this.FilterLists = this.Lists = data
-      this.dataSource = new MatTableDataSource(data.map((v:any)=>(v.Dulieu)));
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch(property) {
-          case 'Diachi': return item.Giohangs.Khachhang.Diachi;
-          case 'Hoten': return item.Giohangs.Khachhang.Hoten;
-          case 'SDT': return item.Giohangs.Khachhang.SDT;
-          case 'Hinhthuc': return item.Thanhtoan.Hinhthuc;
-          default: return item[property];
-        }
-      };
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+    this._ChinhanhService.getAllChinhanhs().subscribe()
+    this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
+    this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {
+      if (chinhanhs && chinhanhs.length > 0) {
+        this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data: any) => {
+          if (data) {
+            data.forEach((v: any) => {
+              v.Chinhanh = chinhanhs.find((c: any) => c.idVttech === v.BranchID)?.Title;
+            })
+            this.FilterLists = this.Lists = data
+            this.dataSource = new MatTableDataSource(this.FilterLists);
+            // this.dataSource.sortingDataAccessor = (item, property) => {
+            //   switch (property) {
+            //     case 'Diachi': return item.Giohangs.Khachhang.Diachi;
+            //     case 'Hoten': return item.Giohangs.Khachhang.Hoten;
+            //     case 'SDT': return item.Giohangs.Khachhang.SDT;
+            //     case 'Hinhthuc': return item.Dieutri.Hinhthuc;
+            //     default: return item[property];
+            //   }
+            // };
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          }
+        })
+      }
     })
-
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

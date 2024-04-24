@@ -1,5 +1,7 @@
 import { environment } from "../../environments/environment";
-
+export const Status:any={0:'Mới',1:'Thành Công',2:'Gửi SMS'}
+export const Style:any={0:'text-white bg-blue-500',1:'text-white bg-green-500',2:'text-white bg-purple-500'}
+export const Style1:any={0:'font-bold text-blue-500',1:'font-bold text-green-500',2:'font-bold text-purple-500'}
 export function GetImage(data:any) {
   if(data)
   {   
