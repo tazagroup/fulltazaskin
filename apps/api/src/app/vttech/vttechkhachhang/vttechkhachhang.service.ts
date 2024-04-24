@@ -94,7 +94,19 @@ export class VttechkhachhangService {
       });
       const data = response.data;
       if (data.Data.length > 0) {
-        await Promise.all(data.Data.map(async (v: any, k: any) => {
+        // await Promise.all(data.Data.map(async (v: any, k: any) => {
+        //   const item: any = {};
+        //   item.Dulieu = v;
+        //   item.idVttech = v.ID;
+        //   item.Code = v.Code;
+        //   item.BranchID = v.BranchID;
+        //   item.Name = v.Name;
+        //   item.SDT = v.Phone;
+        //   item.SDT2 = v.Phone2;
+        //   await new Promise((resolve) => setTimeout(resolve, k * 200));
+        //   await this.create(item);
+        // }));
+        data.Data.map(async (v: any, k: any) => {
           const item: any = {};
           item.Dulieu = v;
           item.idVttech = v.ID;
@@ -105,7 +117,7 @@ export class VttechkhachhangService {
           item.SDT2 = v.Phone2;
           await new Promise((resolve) => setTimeout(resolve, k * 200));
           await this.create(item);
-        }));
+        });
         this._TelegramService.SendMiniAppLogdev(`[VTTECH_KHACHHANG] - Hoàn Thành Đồng Bộ Dữ Liệu - ${data.Data.length}`);
       }
       return data;
