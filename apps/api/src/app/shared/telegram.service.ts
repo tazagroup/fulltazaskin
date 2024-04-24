@@ -32,6 +32,7 @@ export class TelegramService {
         parse_mode: 'html',
       }),
     };
+    //fetch telegram
     const response = await fetch(`https://api.telegram.org/bot${environment.APITelegram_accesstoken}/sendMessage`, options);
     if (!response.ok) {
       throw new Error(`Error fetching data: ${response.statusText}`);
