@@ -18,77 +18,72 @@ export class ZalotokenService {
   async getAccessToken(item: any) {
     const options = {
       method: 'POST',
-      url: 'https://oauth.zaloapp.com/v4/oa/access_token',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'secret_key': item.ZaloOa.secret_key,
       },
-      data: {
+      body: new URLSearchParams({
         code: item.code,
         app_id: item.ZaloOa.app_id,
         grant_type: 'authorization_code',
-      },
+      }),
     };
-    return axios(options)
-      .then(async (response:any) => {
-        console.error(response.data);
-        if (response.data.error == '-14019') {
-          item.ZaloOaToken={};
-          const result = await this._ChinhanhService.update(item.id, item)
-          return { status: 400, note: "Autho Code Hết Hạn" }
-        }
-        else {
-          delete item.code;
-          item.ZaloOaToken = response.data
-          item.ZaloOaToken.AuthenAt = new Date()
-          item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
-          const result = await this._ChinhanhService.update(item.id, item)
-          this._TelegramService.SendMiniAppLogdev(`Đã cập nhật lại token cho chi nhánh ${item.Title}`)
-          return { status: 200, note: "Xác Thực Thành Công",data:result }
-        }
-      })
-      .catch((error) => {
-        // Handle error
-        console.error(error);
-      });
+    try {
+      const response = await fetch('https://oauth.zaloapp.com/v4/oa/access_token', options);
+      const data = await response.json();
+      console.error(data);
+      if (data.error == '-14019') {
+        item.ZaloOaToken = {};
+        const result = await this._ChinhanhService.update(item.id, item);
+        return { status: 400, note: "Autho Code Hết Hạn" };
+      } else {
+        delete item.code;
+        item.ZaloOaToken = data;
+        item.ZaloOaToken.AuthenAt = new Date();
+        item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
+        const result = await this._ChinhanhService.update(item.id, item);
+        this._TelegramService.SendMiniAppLogdev(`Đã cập nhật lại token cho chi nhánh ${item.Title}`);
+        return { status: 200, note: "Xác Thực Thành Công", data: result };
+      }
+    } catch (error) {
+      // Handle error
+      console.error(error);
+    }
   }
+
+
   async getrefreshToken(item: any) {
-    console.log(item);
-    
     const options = {
       method: 'POST',
-      url: 'https://oauth.zaloapp.com/v4/oa/access_token',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'secret_key': item.ZaloOa.secret_key,
       },
-      data: {
-        refresh_token:  item.ZaloOaToken.refresh_token,
+      body: new URLSearchParams({
+        refresh_token: item.ZaloOaToken.refresh_token,
         app_id: item.ZaloOa.app_id,
         grant_type: 'refresh_token',
-      },
+      }),
     };
-    return axios(options)
-      .then(async (response:any) => {
+    return fetch('https://oauth.zaloapp.com/v4/oa/access_token', options)
+      .then(async (response: any) => {
         console.error(response.data);
-        if (response.data.error == '-14014') {
-          item.ZaloOaToken={};
-          const result = await this._ChinhanhService.update(item.id, item)
-          return { status: 400, note: "Refesh Token Không Đúng" }
-        }
-        else if (response.data.error == '-14020') {
-          item.ZaloOaToken={};
-          const result = await this._ChinhanhService.update(item.id, item)
+        const data = await response.json();
+        if (data.error == '-14014') {
+          item.ZaloOaToken = {};
+          const result = await this._ChinhanhService.update(item.id, item);
+          return { status: 400, note: "Refesh Token Không Đúng" };
+        } else if (data.error == '-14020') {
+          item.ZaloOaToken = {};
+          const result = await this._ChinhanhService.update(item.id, item);
           console.log(result);
-          
-          return { status: 400, note: "Refesh Token Hết Hạn" }
-        }
-        else {
-          item.ZaloOaToken = response.data
-          item.ZaloOaToken.AuthenAt = new Date()
+          return { status: 400, note: "Refesh Token Hết Hạn" };
+        } else {
+          item.ZaloOaToken = data;
+          item.ZaloOaToken.AuthenAt = new Date();
           item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
-          const result = await this._ChinhanhService.update(item.id, item)
-          return { status: 200, note: "Gia Hạn Thành Công",data:result }
+          const result = await this._ChinhanhService.update(item.id, item);
+          return { status: 200, note: "Gia Hạn Thành Công", data: result };
         }
       })
       .catch((error) => {
@@ -96,6 +91,8 @@ export class ZalotokenService {
         console.error(error);
       });
   }
+
+
   async create(CreateZalotokenDto: CreateZalotokenDto) {
     this.ZalotokenRepository.create(CreateZalotokenDto);
     return await this.ZalotokenRepository.save(CreateZalotokenDto);
