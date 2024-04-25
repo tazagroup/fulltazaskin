@@ -47,7 +47,7 @@ export class DashboardThucamonComponent implements OnInit {
     this._ZnsdieutriService.searchZnsdieutri(this.SearchParams).subscribe()
     this._ZnsdieutriService.znsdieutris$.subscribe((data:any) => {
       if (data) {
-        this.List = data.items.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))
+        this.List = data.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))
         console.log(data.items);
         
        this.LoadData()

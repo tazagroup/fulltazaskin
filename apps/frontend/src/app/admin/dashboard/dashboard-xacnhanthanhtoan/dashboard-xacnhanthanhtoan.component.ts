@@ -54,7 +54,9 @@ export class DashboardXacnhanthanhtoanComponent implements OnInit {
     this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe()
     this._ZnsthanhtoanService.znsthanhtoans$.subscribe((data:any) => {
       if (data) {
-        this.List = data.items.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))
+        console.log(data);
+        
+        this.List = data.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))
         this.LoadData()
         console.log(data);
       }
