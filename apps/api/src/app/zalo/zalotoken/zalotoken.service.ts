@@ -23,35 +23,18 @@ export class ZalotokenService {
       url: 'https://oauth.zaloapp.com/v4/oa/access_token',
       headers: { 
         'Content-Type': 'application/x-www-form-urlencoded', 
-        'secret_key': 'HLBWj23hToA9fuiQvQY4'
+        'secret_key': item.ZaloOa.secret_key,
       },
-      data : JSON.stringify({
+      data : {
         code: item.code,
         app_id: item.ZaloOa.app_id,
         grant_type: 'authorization_code',
-      }),
+      },
     };
-    
-    axios.request(config)
-    // const options = {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/x-www-form-urlencoded',
-    //     'secret_key': item.ZaloOa.secret_key,
-    //   },
-    //   data: JSON.stringify({
-    //     code: item.code,
-    //     app_id: item.ZaloOa.app_id,
-    //     grant_type: 'authorization_code',
-    //   }),
-    // };
     try {
-    
       const response = await axios.request(config)
-      // const response = await axios.post('https://oauth.zaloapp.com/v4/oa/access_token', options);
       const data = response.data;
-      return {data}
-          if(data.error == '0')
+          if(!data.hasOwnProperty("error"))
             {
                 delete item.code;
                 item.ZaloOaToken = data;
@@ -72,45 +55,45 @@ export class ZalotokenService {
           console.error(error);
         }
       }
-
-
-      async getRefreshToken(item: any) {
-        const options = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'secret_key': item.ZaloOa.secret_key,
-          },
-          data: JSON.stringify({
-            code: item.code,
-            app_id: item.ZaloOa.app_id,
-            grant_type: 'authorization_code',
-          }),
-        };
-        try {
-          const response = await axios.req('https://oauth.zaloapp.com/v4/oa/access_token', options);
-          const data = response.data;
-          console.error(data);
-          if(data.error == '0')
-            {
-              item.ZaloOaToken = data;
-              item.ZaloOaToken.AuthenAt = new Date();
-              item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
-              this._ChinhanhService.update(item.id, item);
-              this._TelegramService.SendMiniAppLogdev(`Đã refresh token cho chi nhánh ${item.Title}`);
-              return { status: 200, note: "Gia Hạn Thành Công", data: item };
-            }
-          else {
-            item.ZaloOaToken = {};
-            this._ChinhanhService.update(item.id, item);
-            this._TelegramService.SendMiniAppLogdev(`Đã refresh token cho chi nhánh ${item.Title} - ${data.error}`);
-            return { status: 400, note: "Refresh Token Không Đúng" };
-          }
-        } catch (error) {
-          // Handle error
-          console.error(error);
+  async getRefreshToken(item: any) {
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://oauth.zaloapp.com/v4/oa/access_token',
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded', 
+        'secret_key': item.ZaloOa.secret_key,
+      },
+      data : {
+        code: item.code,
+        app_id: item.ZaloOa.app_id,
+        grant_type: 'authorization_code',
+      },
+    };
+    try {
+      const response = await axios.request(config)
+      const data = response.data;
+      console.error(data);
+      if(!data.hasOwnProperty("error"))
+        {
+          item.ZaloOaToken = data;
+          item.ZaloOaToken.AuthenAt = new Date();
+          item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
+          this._ChinhanhService.update(item.id, item);
+          this._TelegramService.SendMiniAppLogdev(`Đã refresh token cho chi nhánh ${item.Title}`);
+          return { status: 200, note: "Gia Hạn Thành Công", data: item };
         }
+      else {
+        item.ZaloOaToken = {};
+        this._ChinhanhService.update(item.id, item);
+        this._TelegramService.SendMiniAppLogdev(`Đã refresh token cho chi nhánh ${item.Title} - ${data.error}`);
+        return { status: 400, note: "Refresh Token Không Đúng" };
       }
+    } catch (error) {
+      // Handle error
+      console.error(error);
+    }
+  }
 
 
   async create(CreateZalotokenDto: CreateZalotokenDto) {
