@@ -22,11 +22,11 @@ export class ZalotokenService {
         'Content-Type': 'application/x-www-form-urlencoded',
         'secret_key': item.ZaloOa.secret_key,
       },
-      data: new URLSearchParams({
+      data: {
         code: item.code,
         app_id: item.ZaloOa.app_id,
         grant_type: 'authorization_code',
-      }),
+      },
     };
     try {
       const response = await axios.post('https://oauth.zaloapp.com/v4/oa/access_token', options);
@@ -62,11 +62,11 @@ export class ZalotokenService {
         'Content-Type': 'application/x-www-form-urlencoded',
         'secret_key': item.ZaloOa.secret_key,
       },
-      data: new URLSearchParams({
+      data:{
         refresh_token: item.ZaloOaToken.refresh_token,
         app_id: item.ZaloOa.app_id,
         grant_type: 'refresh_token',
-      }),
+      },
     };
     try {
       const response = await axios.post('https://oauth.zaloapp.com/v4/oa/access_token', options);
