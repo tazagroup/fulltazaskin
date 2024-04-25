@@ -53,33 +53,12 @@ export class ZalotokenComponent implements OnInit {
                   else {
                     this._NotifierService.notify("error", res.note)
                   }
-                  // setTimeout(() => {
-                  //   window.location.href = window.location.pathname
-                  // }, 1000);
+                  setTimeout(() => {
+                    window.location.href = window.location.pathname
+                  }, 1000);
                 }
                 )
               }
-              // if (params.oa_id) {
-              //   const data:any = {
-              //     oa_id: params.oa_id,
-              //     code: params.code,
-              //     app_id: this.ListChiNhanh.find((v:any)=>v.oa_id==params.oa_id)?.app_id,
-              //     secret_key: this.ListChiNhanh.find((v:any)=>v.oa_id==params.oa_id)?.secret_key
-              //   }
-              //   this._ZalotokenService.get_accesstoken(data).subscribe((res: any) => {
-              //     console.log(res)
-              //     if (res.status == 200) {
-              //       this._NotifierService.notify("success", res.note)
-              //     }
-              //     else {
-              //       this._NotifierService.notify("error", res.note)
-              //     }
-              //     setTimeout(() => {
-              //       window.location.href = window.location.pathname
-              //     }, 1000);
-              //   }
-              //   )
-              // }
             });
         }
         })         
@@ -141,9 +120,9 @@ export class ZalotokenComponent implements OnInit {
     this._ZalotokenService.get_refreshToken(item).subscribe((res: any) => {
       if (res.status == 200) {
         this._NotifierService.notify("success", res.note)
-        // setTimeout(() => {
-        //   window.location.href = window.location.pathname
-        // }, 1000);
+        setTimeout(() => {
+          window.location.href = window.location.pathname
+        }, 1000);
       }
       else {
         this._NotifierService.notify("error", res.note)
@@ -154,12 +133,12 @@ export class ZalotokenComponent implements OnInit {
   async RefreshAllToken() {
   const promises  =  this.FilterLists.map((item:any)=>
     {
-      // const data = {
-      //   oa_id: item.ZaloOaToken.oa_id,
-      //   app_id: item.ZaloOaToken.app_id,
-      //   secret_key: item.ZaloOaToken.secret_key,
-      //   refresh_token: item.ZaloOaToken.refresh_token
-      // }
+      const data = {
+        oa_id: item.ZaloOaToken.oa_id,
+        app_id: item.ZaloOaToken.app_id,
+        secret_key: item.ZaloOaToken.secret_key,
+        refresh_token: item.ZaloOaToken.refresh_token
+      }
       this._ZalotokenService.get_refreshToken(item).subscribe((res: any) => {
         if (res.status == 200) {
         }
@@ -170,9 +149,9 @@ export class ZalotokenComponent implements OnInit {
     })
     await Promise.all(promises);
     this._NotifierService.notify("success", "Cập Nhật Thành Công")
-    // setTimeout(() => {
-    //   window.location.href = window.location.pathname
-    // }, 1000);
+    setTimeout(() => {
+      window.location.href = window.location.pathname
+    }, 1000);
   }
   async GetAllFromZalo()
   {
