@@ -36,7 +36,7 @@ import { VttechdieutrilistComponent } from './vttechdieutrilist/vttechdieutrilis
     MatSelectModule,
     RouterModule.forChild([
       { path: 'vttech', component: VttechdieutrilistComponent},
-      { path: 'zns', component: VttechdieutriComponent},
+      { path: 'zns', component: ZnsdieutriadminComponent},
       // {
       //   path: '', component: VttechdieutrilistComponent,    
       // }

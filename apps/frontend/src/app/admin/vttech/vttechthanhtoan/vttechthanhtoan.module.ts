@@ -27,7 +27,7 @@ import { ZnsthanhtoanadminComponent } from '../../../znsthanhtoan/znsthanhtoanad
     MaterialModule,
     RouterModule.forChild([
       { path: 'vttech', component: VttechthanhtoanlistComponent},
-      { path: 'zns', component: VttechthanhtoanComponent},
+      { path: 'zns', component: ZnsthanhtoanadminComponent},
       // {
       //   path: 'vttech', component: VttechthanhtoanlistComponent,
       // //   children: [
