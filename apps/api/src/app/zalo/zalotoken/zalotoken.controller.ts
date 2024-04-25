@@ -12,7 +12,7 @@ export class ZalotokenController {
   }
   @Post('get_refreshtoken')
   getrefreshToken(@Body() data: any) {
-    return this.zalotokenService.getrefreshToken(data);
+    return this.zalotokenService.getRefreshToken(data);
   }
   @Post()
   create(@Body() createZalotokenDto: CreateZalotokenDto) {

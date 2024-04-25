@@ -15,8 +15,8 @@ export class ZalotokenService {
     private _ChinhanhService: ChinhanhService,
     private _TelegramService: TelegramService
   ) { }
+  
   async getAccessToken(item: any) {
-    
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -55,6 +55,7 @@ export class ZalotokenService {
           console.error(error);
         }
       }
+
   async getRefreshToken(item: any) {
     let config = {
       method: 'post',
