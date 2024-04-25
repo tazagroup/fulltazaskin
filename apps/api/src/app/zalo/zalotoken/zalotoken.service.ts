@@ -31,7 +31,7 @@ export class ZalotokenService {
     try {
       const response = await axios.post('https://oauth.zaloapp.com/v4/oa/access_token', options);
       const data = response.data;
-      console.error(data);
+      return data
       if(data.error == '0')
         {
             delete item.code;
