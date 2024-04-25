@@ -32,20 +32,22 @@ export class ZalotokenService {
       const response = await axios.post('https://oauth.zaloapp.com/v4/oa/access_token', options);
       const data = response.data;
       console.error(data);
-      if (data.error == '-14019') {
+      if(data.error == '0')
+        {
+            delete item.code;
+            item.ZaloOaToken = data;
+            item.ZaloOaToken.AuthenAt = new Date();
+            item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
+            const result = await this._ChinhanhService.update(item.id, item);
+            this._TelegramService.SendMiniAppLogdev(`Đã cập nhật lại token cho chi nhánh ${item.Title}`);
+            return { status: 200, note: "Xác Thực Thành Công", data: result };
+        }
+      else {
         item.ZaloOaToken = {};
         const result = await this._ChinhanhService.update(item.id, item);
+        this._TelegramService.SendMiniAppLogdev(`Đã cập nhật lại token cho chi nhánh ${item.Title} - ${data.error}`);
         return { status: 400, note: "Autho Code Hết Hạn" };
-      } else {
-        delete item.code;
-        item.ZaloOaToken = data;
-        item.ZaloOaToken.AuthenAt = new Date();
-        item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
-        const result = await this._ChinhanhService.update(item.id, item);
-        // this._TelegramService.SendMiniAppLogdev(`Đã cập nhật lại token cho chi nhánh ${JSON.stringify(result)}`);
-        // this._TelegramService.SendMiniAppLogdev(`Đã cập nhật lại token cho chi nhánh ${item.Title}`);
-        return { status: 200, note: "Xác Thực Thành Công", data: result };
-      }
+      } 
     } catch (error) {
       // Handle error
       console.error(error);
@@ -70,21 +72,20 @@ export class ZalotokenService {
       const response = await axios.post('https://oauth.zaloapp.com/v4/oa/access_token', options);
       const data = response.data;
       console.error(data);
-      if (data.error == '-14014') {
+      if(data.error == '0')
+        {
+          item.ZaloOaToken = data;
+          item.ZaloOaToken.AuthenAt = new Date();
+          item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
+          const result = await this._ChinhanhService.update(item.id, item);
+          this._TelegramService.SendMiniAppLogdev(`Đã refresg token cho chi nhánh ${item.Title}`);
+          return { status: 200, note: "Gia Hạn Thành Công", data: result };
+        }
+      else {
         item.ZaloOaToken = {};
         const result = await this._ChinhanhService.update(item.id, item);
+        this._TelegramService.SendMiniAppLogdev(`Đã refresg token cho chi nhánh ${item.Title} - ${data.error}`);
         return { status: 400, note: "Refesh Token Không Đúng" };
-      } else if (data.error == '-14020') {
-        item.ZaloOaToken = {};
-        const result = await this._ChinhanhService.update(item.id, item);
-        console.log(result);
-        return { status: 400, note: "Refesh Token Hết Hạn" };
-      } else {
-        item.ZaloOaToken = data;
-        item.ZaloOaToken.AuthenAt = new Date();
-        item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
-        const result = await this._ChinhanhService.update(item.id, item);
-        return { status: 200, note: "Gia Hạn Thành Công", data: result };
       }
     } catch (error) {
       // Handle error
