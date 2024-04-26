@@ -37,7 +37,7 @@ export class ZalodanhgiaComponent implements OnInit {
   totalDanhgia = 0;
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   @ViewChild('myDiv') myDivRef!: ElementRef;
-  displayedColumns: string[] = ['SDT','CustName', 'CustPhone','Code','Paid','Chinhanh','TimeSend','Status'];
+  displayedColumns: string[] = ['CustPhone','CustName','Code','Feedbacks','Note','Chinhanh','TimeSend','Tinhtrang'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

@@ -61,50 +61,55 @@
 
     <div class="w-full overflow-auto">
       <table class="border w-full" mat-table [dataSource]="dataSource" matSort>
-        <ng-container matColumnDef="SDT">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> SDT </th>
-          <td mat-cell *matCellDef="let row"> {{row.SDT}} </td>
+        <ng-container matColumnDef="CustPhone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại </th>
+          <td mat-cell *matCellDef="let row"> {{row.CustPhone}} </td>
         </ng-container>
         <ng-container matColumnDef="CustName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> CustName </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Khách Hàng </th>
           <td mat-cell *matCellDef="let row"> {{row.CustName}} </td>
         </ng-container>
-        <ng-container matColumnDef="CustPhone">
+        <ng-container matColumnDef="Tinhtrang">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Tình Trạng </th>
           <td mat-cell *matCellDef="let row">
-            <div class="w-full text-white rounded-t-lg {{row.rate<=3?'bg-red-500':'bg-blue-500'}} p-2">
-              {{row.rate<=3?'Cần Xử Lý':'Tốt'}} </div>
+            <span class="p-2 rounded-lg text-white {{row.rate<=3?'bg-red-500':'bg-blue-500'}} p-2">
+              {{row.rate<=3?'Cần Xử Lý':'Tốt'}} </span>
           </td>
         </ng-container>
         <ng-container matColumnDef="Code">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Sao </th>
-          <td mat-cell *matCellDef="let row">                    
+          <td mat-cell *matCellDef="let row" class="whitespace-nowrap">                    
              <div class="font-bold">
             <span class="material-symbols-outlined text-yellow-500"
               *ngFor="let i of CreateStart(row.rate)"> star </span>
           </div> </td>
         </ng-container>
-        <ng-container matColumnDef="Paid">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Paid </th>
-          <td mat-cell *matCellDef="let row"> {{row.Paid| number:'1.0-0'}}đ </td>
+        <ng-container matColumnDef="Feedbacks">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Đánh Giá </th>
+          <td mat-cell *matCellDef="let row"> 
+            <ol class="list-disc px-4">
+              <li *ngFor="let item of row.feedbacks">
+                {{item}}
+              </li>
+            </ol>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Note">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Ghi Chú </th>
+          <td mat-cell *matCellDef="let row"> 
+            <span>
+              {{row.note}}
+            </span>
+          </td>
         </ng-container>
         <ng-container matColumnDef="Chinhanh">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Chi Nhánh </th>
           <td mat-cell *matCellDef="let row"> {{row.Chinhanh}} </td>
         </ng-container>
         <ng-container matColumnDef="TimeSend">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> TimeSend </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Thời Gian </th>
           <td mat-cell *matCellDef="let row"> {{row.TimeSend|date:'HH:mm:ss dd/MM/yyyy'}} </td>
         </ng-container>
-        <ng-container matColumnDef="Status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-          <td mat-cell *matCellDef="let row">
-            <!-- <span class="p-2 rounded-lg {{GetStype(row.Status)}}">
-            {{ListStatus[row.Status]}} 
-            </span> -->
-          </td>
-        </ng-container>
-
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <!-- <tr class="mat-row" *matNoDataRow>
