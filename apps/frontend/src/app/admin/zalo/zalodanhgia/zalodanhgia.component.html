@@ -1,158 +1,117 @@
-<mat-drawer-container class="example-container w-full h-full" autosize>
-  <mat-drawer #drawer mode="side" class="!flex flex-col flex-auto min-w-0 relative h-full lg:w-2/3 w-full"
-    position="end">
+<mat-drawer-container class="example-container w-full h-full lg:p-8 p-2" autosize>
+  <mat-drawer #drawer mode="side" class="!flex flex-col flex-auto min-w-0 relative h-full w-2/3" position="end">
     <div class="relative flex flex-col h-full w-full overflow-auto">
-      <router-outlet></router-outlet>
+      <!-- <router-outlet></router-outlet> -->
     </div>
   </mat-drawer>
-  <mat-drawer-content class="!flex flex-col flex-auto min-w-0 relative bg-white !h-[90vh]">
-    <div class="w-full flex flex-col p-4 justify-center items-center space-y-2">
-      <div class="grid lg:grid-cols-3 grid-cols-2 gap-4 items-center">
-        <mat-form-field appearance="outline" class="lg:text-sm text-xs lg:col-span-1 col-span-2">
-          <mat-label>Tìm Kiếm</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Mô Tả">
-          <span matPrefix class="material-symbols-outlined mr-2">search</span>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="lg:text-sm text-xs">
-          <mat-label>Chọn Khoảng Thời Gian</mat-label>
-          <mat-date-range-input [rangePicker]="rangePicker">
-            <input matStartDate placeholder="Từ Ngày" [(ngModel)]="SearchParams.Batdau" [ngModelOptions]="{standalone: true}">
-            <input matEndDate placeholder="Đến Ngày" [(ngModel)]="SearchParams.Ketthuc" [ngModelOptions]="{standalone: true}">
-          </mat-date-range-input>
-          <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
-          <mat-date-range-picker #rangePicker>
-            <mat-date-range-picker-actions>
-              <button mat-button matDateRangePickerCancel>Huỷ</button>
-              <button mat-raised-button color="primary" matDateRangePickerApply (click)="ChoosenDate()">Đồng ý</button>
-            </mat-date-range-picker-actions>
-          </mat-date-range-picker>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="lg:text-sm">
-            <mat-label>Chi Nhánh</mat-label>
-            <mat-select [(ngModel)]="SearchParams.idCN" [ngModelOptions]="{standalone: true}" (selectionChange)="onChangeCN($event)">
-              <mat-option [value]="0">Tất Cả</mat-option>
-              <mat-option [value]="item.id" *ngFor="let item of LIST_CHI_NHANH">{{item.Title}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <div> 
-        </div>
-      </div>
-      <div class="flex flex-row space-x-3 text-xs items-center cursor-pointer">
-        <div class="flex flex-row space-x-2 text-xs items-center">
-        <span class="material-symbols-outlined {{SearchParams.star > index?'text-yellow-500':''}}" (click)="onStarClick(index)"
-        *ngFor="let i of CreateStart(5); let index = index"> star </span>
-      </div>
-       <span class="font-bold" *ngIf="SearchParams.star>0"> Số Lượng ({{Total}})</span>
-       <mat-chip-list class="flex space-x-2 flex-row items-center justify-between">
-       <mat-chip (click)="Allstar()">
-          Tất Cả Sao
-        </mat-chip>
-       <mat-chip (click)="writeExcelFile(FilterLists)">
-        <span class="material-symbols-outlined">
-          sim_card_download
-          </span>
-          Xuất
-        </mat-chip>
-        </mat-chip-list>
-      </div>
-      <!-- <div class="flex flex-row text-xs">
-         <div (click)="ChangeStatusButton(item)" class="flex flex-col lg:space-x-2 lg:flex-row items-center border rounded-lg p-2 text-white {{Style[item]}}" *ngFor="let item of [0,1,2,4,3]">
-              <span>{{Status[item]}}</span>
-              <span class="font-bold">{{StatusActive===item?Total:Report(FilterLists,item)}}</span>
-         </div> 
-      </div> -->
-      <!-- <span (click)="Capnhatdanhgia()">Load Du Lieu</span> -->
+  <mat-drawer-content class="!flex flex-col space-y-2 flex-auto min-w-0 relative bg-white p-4">
+
+    <div class="grid lg:grid-cols-4 grid-cols-2 gap-2">
+      <mat-form-field appearance="outline">
+        <mat-label>Tìm Kiếm</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Tìm Kiếm" #input>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Chọn Khoảng Thời Gian</mat-label>
+        <mat-date-range-input [rangePicker]="rangePicker">
+          <input matStartDate placeholder="Từ Ngày" [(ngModel)]="SearchParams.CreatedBegin"
+            [ngModelOptions]="{standalone: true}">
+          <input matEndDate placeholder="Đến Ngày" [(ngModel)]="SearchParams.CreatedEnd"
+            [ngModelOptions]="{standalone: true}">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker #rangePicker>
+          <mat-date-range-picker-actions>
+            <button mat-button matDateRangePickerCancel>Huỷ</button>
+            <button mat-raised-button color="primary" matDateRangePickerApply (click)="ChangeSearchParams()">Đồng
+              ý</button>
+          </mat-date-range-picker-actions>
+        </mat-date-range-picker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Chi Nhánh</mat-label>
+        <mat-select (selectionChange)="ChangeSearchParams()" class="w-full" [(ngModel)]="SearchParams.BrandID"
+          [ngModelOptions]="{standalone: true}">
+          <mat-option [value]="item.id" *ngFor="let item of ListChiNhanh">{{item.Title}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Trạng Thái</mat-label>
+        <mat-select (selectionChange)="ChangeSearchParams()" class="w-full" [(ngModel)]="SearchParams.Status" [ngModelOptions]="{standalone: true}">
+          <mat-option [value]="item.key" *ngFor="let item of ListStatus|keyvalue">{{item.value}}</mat-option>
+        </mat-select>
+      </mat-form-field> -->
     </div>
-    <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
-      <div class="w-full flex flex-col lg:max-w-xl space-y-3">
-        <div class="flex flex-row justify-between items-center hover:bg-gray-200 border rounded-lg"
-          *ngFor="let item of FilterLists; let i = index">
-          <div class="flex flex-col space-y-2 items-center w-full">
-            <div class="w-full text-white rounded-t-lg {{item.rate<=3?'bg-red-500':'bg-blue-500'}} p-2">
-                 {{item.rate<=3?'Cần Xử Lý':'Tốt'}}
-            </div>
-            <div class="w-full flex felx-col space-y-2 p-4">
-              <div class="w-full flex flex-col">
-                <div class="flex flex-col space-y-4">
-                  <div class="flex flex-row justify-between border-b">
-                    <span>Số Điện Thoại : </span>
-                    <span class="font-bold">{{item.SDT}}</span>
-                  </div>
-                  <div class="flex flex-row justify-between border-b">
-                    <span>Chi Nhánh : </span>
-                    <span class="font-bold">{{GetNameChinhanh(item.idCN,'id')}}</span>
-                  </div>
-                  <div class="flex flex-row justify-between border-b">
-                    <span>Thời Gian : </span>
-                    <span class="font-bold">{{item.Ngaygui}}</span>
-                  </div>
-                  <div class="flex flex-row justify-between border-b">
-                    <span>Đánh Giá ({{item.rate}}) : </span>
-                    <div class="font-bold">
-                      <span class="material-symbols-outlined text-yellow-500"
-                        *ngFor="let i of CreateStart(item.rate)"> star </span>
-                    </div>
-                    <!-- <span>{{item.rate}} Sao</span> -->
-                  </div>
-                  <div class="flex flex-row justify-between border-b">
-                    <span>Feedbacks : </span>
-                    <div class="flex flex-col space-y-2 font-bold">
-                      <span *ngFor="let item of item.feedbacks">
-                        {{item}}</span>
-                    </div>
-                  </div>
-                  <div class="flex flex-row justify-between">
-                    <span>Ghi Chú : </span>
-                    <span class="font-bold">{{item.note}}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- <button mat-icon-button (click)="openDeleteDialog(dlgDeleteTemplate,item)">
-              <span class="material-symbols-outlined text-xl text-red-500" matTooltip="Xoá">delete</span>
-            </button> -->
-          </div>
-        </div>
+    <div>
+      <div>
+        {{input.value}}
+      </div>
+      <div class="flex flex-row space-x-2 items-center">
+        <span class="p-2 font-bold text-black">
+          ({{FilterLists.length}}) Tất Cả
+        </span>
+        <!-- <span class="p-2 {{GetStype(item.key)}}" *ngFor="let item of ListStatus|keyvalue">
+            ({{CountStatus(item.key)}})  {{item.value}}
+          </span> -->
       </div>
     </div>
-    <div class="relative border-t flex flex-col">
-      <!-- <mat-paginator (page)="onPageChange($event)" [length]="Total" [pageSize]="5"
-        [pageSizeOptions]="pageSizeOptions"></mat-paginator> -->
-        <mat-paginator [pageSizeOptions]="pageSizeOptions"
-        [pageSize]="SearchParams.pageSize"
-        [length]="Total"
-        [pageIndex]="SearchParams.pageNumber"
-        (page)="onPageChange($event)">
-</mat-paginator>
+
+    <div class="w-full overflow-auto">
+      <table class="border w-full" mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="SDT">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> SDT </th>
+          <td mat-cell *matCellDef="let row"> {{row.SDT}} </td>
+        </ng-container>
+        <ng-container matColumnDef="CustName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> CustName </th>
+          <td mat-cell *matCellDef="let row"> {{row.CustName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="CustPhone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Tình Trạng </th>
+          <td mat-cell *matCellDef="let row">
+            <div class="w-full text-white rounded-t-lg {{row.rate<=3?'bg-red-500':'bg-blue-500'}} p-2">
+              {{row.rate<=3?'Cần Xử Lý':'Tốt'}} </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Code">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Sao </th>
+          <td mat-cell *matCellDef="let row">                    
+             <div class="font-bold">
+            <span class="material-symbols-outlined text-yellow-500"
+              *ngFor="let i of CreateStart(row.rate)"> star </span>
+          </div> </td>
+        </ng-container>
+        <ng-container matColumnDef="Paid">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Paid </th>
+          <td mat-cell *matCellDef="let row"> {{row.Paid| number:'1.0-0'}}đ </td>
+        </ng-container>
+        <ng-container matColumnDef="Chinhanh">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Chi Nhánh </th>
+          <td mat-cell *matCellDef="let row"> {{row.Chinhanh}} </td>
+        </ng-container>
+        <ng-container matColumnDef="TimeSend">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> TimeSend </th>
+          <td mat-cell *matCellDef="let row"> {{row.TimeSend|date:'HH:mm:ss dd/MM/yyyy'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+          <td mat-cell *matCellDef="let row">
+            <!-- <span class="p-2 rounded-lg {{GetStype(row.Status)}}">
+            {{ListStatus[row.Status]}} 
+            </span> -->
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <!-- <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr> -->
+      </table>
     </div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" pageSize="10"></mat-paginator>
   </mat-drawer-content>
 </mat-drawer-container>
-<ng-template #dialogTemplate>
-  <div class="min-w-[672px]">
-    <div mat-dialog-title>Thêm Mới</div>
-    <div mat-dialog-content>
-      <div class="flex flex-col w-full space-y-4 p-4">
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Tiêu Đề</mat-label>
-          <input matInput [(ngModel)]="Detail.Title" [ngModelOptions]="{standalone: true}" placeholder="Tiêu Đề">
-        </mat-form-field>
-      </div>
-    </div>
-    <div mat-dialog-actions class="flex flex-row space-x-2 justify-center">
-      <button mat-button class="bg-red-400 hover:bg-red-600 text-white" mat-dialog-close="false">Huỷ</button>
-      <button mat-button class="bg-blue-400 hover:bg-blue-600 text-white" mat-dialog-close="true">Đồng Ý</button>
-    </div>
-  </div>
-</ng-template>
-<ng-template #dlgDeleteTemplate>
-  <div>
-    <div mat-dialog-title>Xoá</div>
-    <div mat-dialog-content>
-      <span class="font-bold text-red-500">Bạn Có Chắc Chắn Xoá</span>
-    </div>
-    <div mat-dialog-actions class="flex flex-row space-x-2 justify-center">
-      <button mat-button class="bg-red-400 hover:bg-red-600 text-white" mat-dialog-close="false">Huỷ</button>
-      <button mat-button class="bg-blue-400 hover:bg-blue-600 text-white" mat-dialog-close="true">Đồng Ý</button>
-    </div>
-  </div>
-</ng-template>

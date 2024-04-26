@@ -7,6 +7,10 @@ import { ZaloznsService } from '../zalozns/zalozns.service';
 import { LIST_CHI_NHANH } from '../../../shared/shared.utils';
 import { MatSelectChange } from '@angular/material/select';
 import * as XLSX from 'xlsx';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 @Component({
   selector: 'app-zalodanhgia',
   templateUrl: './zalodanhgia.component.html',
@@ -16,6 +20,7 @@ export class ZalodanhgiaComponent implements OnInit {
   Detail: any = {};
   Lists: any[] = []
   FilterLists: any[] = []
+  ListChiNhanh: any[] = []
   SearchParams: any = {
     Batdau: moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
@@ -32,26 +37,67 @@ export class ZalodanhgiaComponent implements OnInit {
   totalDanhgia = 0;
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   @ViewChild('myDiv') myDivRef!: ElementRef;
+  displayedColumns: string[] = ['SDT','CustName', 'CustPhone','Code','Paid','Chinhanh','TimeSend','Status'];
+  dataSource!: MatTableDataSource<any>;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   constructor(
     private dialog: MatDialog,
     private _ZalodanhgiaService: ZalodanhgiaService,
     private _ZaloznsService: ZaloznsService,
+    private _ChinhanhService: ChinhanhService,
   ) {
   }
   ngOnInit(): void {
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
-    this._ZaloznsService.zaloznss$.subscribe((data: any) => {
-      if (data) {
-        this.Total = data.totalCount
-        this.pageSizeOptions = [10, 20, data.totalCount].filter(v => v <= data.totalCount);
-        data.items.sort((a: any, b: any) => b.star - a.star)
-        data.items.forEach((v: any) => {
-          v.Ngaygui = moment(Number(v.submitDate)).format('HH:mm:ss DD/MM/YYYY');
-        }); ((a: any, b: any) => b.star - a.star)
-        this.FilterLists = this.Lists = data.items
+    this._ChinhanhService.getAllChinhanhs().subscribe()
+    this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {
+      this.ListChiNhanh = chinhanhs
+      if (chinhanhs && chinhanhs.length > 0) {
+        this._ZaloznsService.zaloznss$.subscribe((data: any) => {
+          console.log(data);
+          
+          if (data) {
+            data.forEach((v: any) => {
+              v.Chinhanh = chinhanhs.find((c: any) => c.idVttech === v.BranchID)?.Title;
+              v.TimeSend = moment(Number(v.submitDate)).toISOString();
+            })
+            console.log(data);
+            
+            this.FilterLists = this.Lists = data
+            this.dataSource = new MatTableDataSource(this.FilterLists);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          }
+
+        })
       }
 
     })
+    // this._ZaloznsService.zaloznss$.subscribe((data: any) => {
+    //   if (data) {
+    //     this.Total = data.totalCount
+    //     this.pageSizeOptions = [10, 20, data.totalCount].filter(v => v <= data.totalCount);
+    //     data.items.sort((a: any, b: any) => b.star - a.star)
+    //     data.items.forEach((v: any) => {
+    //       v.Ngaygui = moment(Number(v.submitDate)).format('HH:mm:ss DD/MM/YYYY');
+    //     }); ((a: any, b: any) => b.star - a.star)
+    //     this.FilterLists = this.Lists = data.items
+    //   }
+
+    // })
+  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+    console.log(this.dataSource.filteredData);
+    
+  }
+  ChangeSearchParams() {
+    this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
   onStarClick(index: number) {
     this.SearchParams.star = index + 1
@@ -78,18 +124,18 @@ export class ZalodanhgiaComponent implements OnInit {
       this.SearchParams.Ketthuc = moment(this.SearchParams.Ketthuc).endOf('day').toDate(),
       this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
-  applyFilter(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    if (value.length > 2) {
-      this.FilterLists = this.Lists.filter((v) => {
-        return v.SDT.toLowerCase().includes(value)
-      }
-      )
-    }
-    else {
-      this.FilterLists = this.Lists
-    }
-  }
+  // applyFilter(event: Event) {
+  //   const value = (event.target as HTMLInputElement).value;
+  //   if (value.length > 2) {
+  //     this.FilterLists = this.Lists.filter((v) => {
+  //       return v.SDT.toLowerCase().includes(value)
+  //     }
+  //     )
+  //   }
+  //   else {
+  //     this.FilterLists = this.Lists
+  //   }
+  // }
   onChangeCN(event: MatSelectChange) {
     if(this.SearchParams.idCN!=''){
       this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()

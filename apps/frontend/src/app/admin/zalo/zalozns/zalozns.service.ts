@@ -77,7 +77,7 @@ export class ZaloznsService {
   searchZalozns(SearchParams:any) {
     return this.http.post(environment.APIURL + `/zalodanhgia/search`,SearchParams).pipe(
       map((data: any) => { 
-        this._zaloznss.next(data);
+        this._zaloznss.next(data.items);
         return data;
       })
     );

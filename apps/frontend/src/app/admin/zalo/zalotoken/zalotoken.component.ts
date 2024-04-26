@@ -120,9 +120,9 @@ export class ZalotokenComponent implements OnInit {
     this._ZalotokenService.get_refreshToken(item).subscribe((res: any) => {
       if (res.status == 200) {
         this._NotifierService.notify("success", res.note)
-        setTimeout(() => {
-          window.location.href = window.location.pathname
-        }, 1000);
+        // setTimeout(() => {
+        //   window.location.href = window.location.pathname
+        // }, 1000);
       }
       else {
         this._NotifierService.notify("error", res.note)
