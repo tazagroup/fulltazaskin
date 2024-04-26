@@ -12,6 +12,7 @@ export class ZnsdieutriController {
   @Interval(1900000)
   @Post('createzns')
   createzns(@Body() data: any) {
+    data.pageSize = 9999;
     return this.znsdieutriService.createzns(data);
   }
   @Post('sendzns')

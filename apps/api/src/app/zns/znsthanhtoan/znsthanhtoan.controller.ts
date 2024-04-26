@@ -12,6 +12,7 @@ export class ZnsthanhtoanController {
   @Interval(1600000)
   @Post('createzns')
   createzns(@Body() data: any) {
+    data.pageSize = 9999;
     return this.znsthanhtoanService.createzns(data);
   }
   @Post('sendzns')

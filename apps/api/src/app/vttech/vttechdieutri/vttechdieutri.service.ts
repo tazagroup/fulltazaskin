@@ -55,7 +55,6 @@ export class VttechdieutriService {
     };
   }
   async findQuery(params: any={CreatedBegin:moment().format('YYYY-MM-DD'),CreatedEnd:moment().format('YYYY-MM-DD')}) {
-    console.error(params);
     const queryBuilder = this.VttechdieutriRepository.createQueryBuilder('vttechdieutri');
 
     if (params.CreatedBegin && params.CreatedEnd) {
