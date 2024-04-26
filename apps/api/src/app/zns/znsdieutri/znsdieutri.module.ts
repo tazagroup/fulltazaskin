@@ -16,7 +16,8 @@ import { ZaloznstrackingModule } from '../../zalo/zaloznstracking/zaloznstrackin
     ZaloznstrackingModule
   ],
   controllers: [ZnsdieutriController],
-  providers: [ZnsdieutriService,TelegramService]
+  providers: [ZnsdieutriService,TelegramService],
+  exports: [ZnsdieutriService]
 })
 export class ZnsdieutriModule {}
 

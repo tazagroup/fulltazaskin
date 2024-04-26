@@ -111,7 +111,7 @@ export class ZnsdieutriService {
         this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi :  ${result.error} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         if (result.error == 0) {
           data.Status = 1;
-          data.message_id =result.data.msg_id;
+          data.messageId =result.data.msg_id;
           data.trackingId =requestData.tracking_id;
           this.update(data.id, data)
         }
@@ -150,6 +150,9 @@ export class ZnsdieutriService {
   }
   async findid(id: string) {
     return await this.ZnsdieutriRepository.findOne({ where: { id: id } });
+  }
+  async findbytrackingid(trackingId: string) {
+    return await this.ZnsdieutriRepository.findOne({ where: { trackingId: trackingId } });
   }
   async findSHD(data: any) {
     return await this.ZnsdieutriRepository.findOne({

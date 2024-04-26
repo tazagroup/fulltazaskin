@@ -5,8 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ZalodanhgiaEntity } from './entities/zalodanhgia.entity';
 import { ZaloznstrackingModule } from '../zaloznstracking/zaloznstracking.module';
 import { LoggerModule } from '../../logger/logger.module';
+import { ZnsdieutriModule } from '../../zns/znsdieutri/znsdieutri.module';
 @Module({
-  imports: [TypeOrmModule.forFeature([ZalodanhgiaEntity]),ZaloznstrackingModule,LoggerModule],
+  imports: [TypeOrmModule.forFeature([ZalodanhgiaEntity]),
+  ZaloznstrackingModule,
+  LoggerModule,
+  ZnsdieutriModule
+],
   controllers: [ZalodanhgiaController],
   providers: [ZalodanhgiaService],
   exports: [ZalodanhgiaService],

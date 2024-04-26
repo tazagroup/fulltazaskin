@@ -9,11 +9,13 @@ import { LIST_CHI_NHANH, Phone_To_0 } from '../../shared.utils';
 import { ZaloznstrackingService } from '../zaloznstracking/zaloznstracking.service';
 import { error } from 'console';
 import { LoggerService } from '../../logger/logger.service';
+import { ZnsdieutriService } from '../../zns/znsdieutri/znsdieutri.service';
 @Injectable()
 export class ZalodanhgiaService {
   constructor(
     @InjectRepository(ZalodanhgiaEntity)
     private ZalodanhgiaRepository: Repository<ZalodanhgiaEntity>,
+    private _ZnsdieutriService: ZnsdieutriService,
     private _ZaloznstrackingService: ZaloznstrackingService,
     private _LoggerService: LoggerService
   ) {}
@@ -91,20 +93,30 @@ export class ZalodanhgiaService {
     let [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10)
       .offset(params.pageNumber * params.pageSize || 0)
-      .getManyAndCount();
-      console.log(items);
+      .getManyAndCount();   
+      console.log(items[0]);
       
       await Promise.all(
         items.map(async (v:any) => {
-          const ZNS:any = await this._ZaloznstrackingService.findtrackingid(v.trackingId);   
-          console.log(ZNS);
-                 
-          if (ZNS) {
-            v.SDT = Phone_To_0(ZNS.SDT);
-            v.CustName = ZNS.Hoten;
+          const Customer:any = await this._ZnsdieutriService.findbytrackingid(v.trackingId);
+          console.log(Customer);    
+          if (Customer) {
+            v.CustPhone = Phone_To_0(Customer.CustPhone);
+            v.CustName = Customer.CustName;
           }
         })
       );      
+      // await Promise.all(
+      //   items.map(async (v:any) => {
+      //     const ZNS:any = await this._ZaloznstrackingService.findtrackingid(v.trackingId);   
+      //     console.log(ZNS);
+                 
+      //     if (ZNS) {
+      //       v.SDT = Phone_To_0(ZNS.SDT);
+      //       v.CustName = ZNS.Hoten;
+      //     }
+      //   })
+      // );      
     const [result] = await queryBuilder1.getManyAndCount();
     const ListStatus = result.map((v: any) => ({ rate: v.rate }))
     return { items, totalCount, ListStatus };

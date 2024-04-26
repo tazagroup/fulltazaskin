@@ -17,7 +17,7 @@ export class ZalodanhgiaEntity {
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Chinhanh: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
-  SDT: string;
+  CustPhone: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   CustName: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
