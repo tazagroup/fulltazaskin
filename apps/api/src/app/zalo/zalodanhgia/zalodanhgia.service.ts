@@ -92,9 +92,13 @@ export class ZalodanhgiaService {
       .limit(params.pageSize || 10)
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
+      console.log(items);
+      
       await Promise.all(
         items.map(async (v) => {
           const ZNS = await this._ZaloznstrackingService.findtrackingid(v.trackingId);
+          console.log(ZNS);
+          
           if (ZNS) {
             v.SDT = Phone_To_0(ZNS.SDT);
           }

@@ -7,11 +7,13 @@ import { VttechthanhtoanService } from '../../vttech/vttechthanhtoan/vttechthanh
 import { VttechthanhtoanModule } from '../../vttech/vttechthanhtoan/vttechthanhtoan.module';
 import { TelegramService } from '../../shared/telegram.service';
 import { ChinhanhModule } from '../../cauhinh/chinhanh/chinhanh.module';
+import { ZaloznstrackingModule } from '../../zalo/zaloznstracking/zaloznstracking.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([ZnsthanhtoanEntity]),
     VttechthanhtoanModule,
     ChinhanhModule,
+    ZaloznstrackingModule
   ],
   controllers: [ZnsthanhtoanController],
   providers: [ZnsthanhtoanService,TelegramService]

@@ -7,6 +7,7 @@ import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
 import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 import { DescErrorZalo, GenId, convertPhoneNum } from '../../shared.utils';
+import { ZaloznstrackingService } from '../../zalo/zaloznstracking/zaloznstracking.service';
 @Injectable()
 export class ZnsthanhtoanService {
   constructor(
@@ -15,6 +16,7 @@ export class ZnsthanhtoanService {
     private _VttechthanhtoanService: VttechthanhtoanService,
     private _TelegramService: TelegramService,
     private _ChinhanhService: ChinhanhService,
+    private _ZaloznstrackingService: ZaloznstrackingService,
   ) { }
   async createzns(data: any) {
     const Thanhtoans = await this._VttechthanhtoanService.findQuery(data)
@@ -112,6 +114,13 @@ export class ZnsthanhtoanService {
           data.Status = 1;
           data.message_id =result.data.message_id;
           this.update(data.id, data)
+          let dulieu: any={};
+          dulieu.SDT = data.SDT
+          dulieu.Hoten = data.CustName
+          dulieu.tracking_id = requestData.tracking_id
+          dulieu.msg_id = result.data.data.msg_id
+          dulieu.template_id = result.tempDanhgiaid
+          this._ZaloznstrackingService.create(dulieu)
         }
         else {
           data.Status = 2;
