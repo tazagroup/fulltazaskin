@@ -57,6 +57,8 @@ export class ZalotokenService {
       }
 
   async getRefreshToken(item: any) {
+    console.log(item);
+    
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -66,9 +68,9 @@ export class ZalotokenService {
         'secret_key': item.ZaloOa.secret_key,
       },
       data : {
-        code: item.code,
+        refresh_token:item.ZaloOaToken.refresh_token,
         app_id: item.ZaloOa.app_id,
-        grant_type: 'authorization_code',
+        grant_type: 'refresh_token',
       },
     };
     try {

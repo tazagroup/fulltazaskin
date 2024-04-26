@@ -31,7 +31,7 @@ export class ZnsdieutriController {
       if(result.items.length > 0){
         for (const item of result.items) {
           await this.sendzns(item);
-          const delay = Math.floor(Math.random() * 5000) + 1000; // Random delay between 1 and 5 seconds
+          const delay = Math.floor(Math.random() * 3000) + 1000; // Random delay between 1 and 5 seconds
           await new Promise(resolve => setTimeout(resolve, delay));
         }
         return result;
