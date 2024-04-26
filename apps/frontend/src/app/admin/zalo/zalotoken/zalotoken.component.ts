@@ -134,9 +134,9 @@ export class ZalotokenComponent implements OnInit {
   const promises  =  this.FilterLists.map((item:any)=>
     {
       const data = {
-        oa_id: item.ZaloOaToken.oa_id,
-        app_id: item.ZaloOaToken.app_id,
-        secret_key: item.ZaloOaToken.secret_key,
+        oa_id: item.ZaloOa.oa_id,
+        app_id: item.ZaloOa.app_id,
+        secret_key: item.ZaloOa.secret_key,
         refresh_token: item.ZaloOaToken.refresh_token
       }
       this._ZalotokenService.get_refreshToken(item).subscribe((res: any) => {
