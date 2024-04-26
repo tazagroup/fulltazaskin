@@ -96,7 +96,9 @@ export class ZalodanhgiaService {
       
       await Promise.all(
         items.map(async (v:any) => {
-          const ZNS:any = await this._ZaloznstrackingService.findtrackingid(v.trackingId);          
+          const ZNS:any = await this._ZaloznstrackingService.findtrackingid(v.trackingId);   
+          console.log(ZNS);
+                 
           if (ZNS) {
             v.SDT = Phone_To_0(ZNS.SDT);
             v.CustName = ZNS.Hoten;

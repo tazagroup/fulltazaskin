@@ -21,6 +21,8 @@ export class ZnsdieutriEntity {
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   msg_id: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  trackingId: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   messageId: string;
   @Column({ type: 'bigint'})
   Paid: number;

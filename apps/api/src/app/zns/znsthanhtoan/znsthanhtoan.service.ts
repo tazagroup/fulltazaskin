@@ -113,14 +113,8 @@ export class ZnsthanhtoanService {
         if (result.error == 0) {
           data.Status = 1;
           data.message_id =result.data.message_id;
+          data.trackingId =requestData.tracking_id;
           this.update(data.id, data)
-          let dulieu: any={};
-          dulieu.SDT = data.SDT
-          dulieu.Hoten = data.CustName
-          dulieu.tracking_id = requestData.tracking_id
-          dulieu.msg_id = result.data.msg_id
-          dulieu.template_id = requestData.template_id
-          this._ZaloznstrackingService.create(dulieu)
         }
         else {
           data.Status = 2;
