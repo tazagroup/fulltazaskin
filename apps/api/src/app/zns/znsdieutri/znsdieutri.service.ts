@@ -117,8 +117,8 @@ export class ZnsdieutriService {
           dulieu.SDT = data.SDT
           dulieu.Hoten = data.CustName
           dulieu.tracking_id = requestData.tracking_id
-          dulieu.msg_id = result.data.data.msg_id
-          dulieu.template_id = result.tempDanhgiaid
+          dulieu.msg_id = result.data.msg_id
+          dulieu.template_id = requestData.template_id
           this._ZaloznstrackingService.create(dulieu)
         }
         else {
