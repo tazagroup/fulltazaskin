@@ -19,6 +19,8 @@ export class ZalodanhgiaEntity {
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   SDT: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  CustName: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   msgId: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   oaId: string;

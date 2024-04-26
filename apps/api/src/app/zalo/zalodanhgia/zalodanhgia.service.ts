@@ -95,12 +95,11 @@ export class ZalodanhgiaService {
       console.log(items);
       
       await Promise.all(
-        items.map(async (v) => {
-          const ZNS = await this._ZaloznstrackingService.findtrackingid(v.trackingId);
-          console.log(ZNS);
-          
+        items.map(async (v:any) => {
+          const ZNS:any = await this._ZaloznstrackingService.findtrackingid(v.trackingId);          
           if (ZNS) {
             v.SDT = Phone_To_0(ZNS.SDT);
+            v.CustName = ZNS.Hoten;
           }
         })
       );      
@@ -129,8 +128,8 @@ export class ZalodanhgiaService {
       url: `https://business.openapi.zalo.me/rating/get?template_id=${data.template_id}&from_time=${Batdau.getTime()}&to_time=${Ketthuc.getTime()}&offset=0&limit=1000`,
       headers: { 'access_token': data.access_token},
     };
-    try {
-      const response = await axios.request(config);      
+    try {      
+      const response = await axios.request(config);            
       if(response.data.error==0)
       {
         
@@ -149,13 +148,6 @@ export class ZalodanhgiaService {
           item.template_id = data.template_id
           item.Dulieu = v
           const result = await this.create(item)
-          const logger = {
-            Title: 'Đánh Giá Từ Khách hàng',
-            Slug: 'danhgiazalo',
-            Action: 'addnew',
-            Mota: `Thêm mới Zalo Đánh Giá ${JSON.stringify(result)}`
-          }
-          this._LoggerService.create(logger)
         });
       }
       return response.data
