@@ -24,8 +24,7 @@ export class ZalodanhgiaComponent implements OnInit {
   SearchParams: any = {
     Batdau: moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
-    star: 5,
-    pageSize: 10,
+    pageSize: 9999,
     pageNumber: 0
   };
   LIST_CHI_NHANH: any = LIST_CHI_NHANH
@@ -55,16 +54,15 @@ export class ZalodanhgiaComponent implements OnInit {
       this.ListChiNhanh = chinhanhs
       if (chinhanhs && chinhanhs.length > 0) {
         this._ZaloznsService.zaloznss$.subscribe((data: any) => {
-          console.log(data);
-          
+          console.log(data);      
           if (data) {
             data.forEach((v: any) => {
               v.Chinhanh = chinhanhs.find((c: any) => c.idVttech === v.BranchID)?.Title;
               v.TimeSend = moment(Number(v.submitDate)).toISOString();
             })
+            this.FilterLists = this.Lists = data
             console.log(data);
             
-            this.FilterLists = this.Lists = data
             this.dataSource = new MatTableDataSource(this.FilterLists);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
@@ -74,18 +72,6 @@ export class ZalodanhgiaComponent implements OnInit {
       }
 
     })
-    // this._ZaloznsService.zaloznss$.subscribe((data: any) => {
-    //   if (data) {
-    //     this.Total = data.totalCount
-    //     this.pageSizeOptions = [10, 20, data.totalCount].filter(v => v <= data.totalCount);
-    //     data.items.sort((a: any, b: any) => b.star - a.star)
-    //     data.items.forEach((v: any) => {
-    //       v.Ngaygui = moment(Number(v.submitDate)).format('HH:mm:ss DD/MM/YYYY');
-    //     }); ((a: any, b: any) => b.star - a.star)
-    //     this.FilterLists = this.Lists = data.items
-    //   }
-
-    // })
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -99,12 +85,16 @@ export class ZalodanhgiaComponent implements OnInit {
   ChangeSearchParams() {
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
+  StarToggle(item:any)
+  {
+    this.SearchParams.star==item?delete this.SearchParams.star:this.SearchParams.star=item
+    this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
+  }
   onStarClick(index: number) {
     this.SearchParams.star = index + 1
     this.SearchParams.pageNumber = 0
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
-  Reload() { }
   Allstar() {
     delete this.SearchParams.star
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
@@ -113,6 +103,9 @@ export class ZalodanhgiaComponent implements OnInit {
   CreateStart(item: any) {
     const result = Array.from({ length: item }, (_, i) => i + 1);
     return result
+  }
+  GetSoluongSao(item:any){
+    return this.FilterLists.filter((v)=>v.rate==item)?.length
   }
   GetNameChinhanh(item: any, field: any) {
     const Chinhanh = LIST_CHI_NHANH.find((v: any) => v[field] == item)

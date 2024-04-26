@@ -37,25 +37,21 @@
           <mat-option [value]="item.id" *ngFor="let item of ListChiNhanh">{{item.Title}}</mat-option>
         </mat-select>
       </mat-form-field>
-
-      <!-- <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Trạng Thái</mat-label>
-        <mat-select (selectionChange)="ChangeSearchParams()" class="w-full" [(ngModel)]="SearchParams.Status" [ngModelOptions]="{standalone: true}">
-          <mat-option [value]="item.key" *ngFor="let item of ListStatus|keyvalue">{{item.value}}</mat-option>
-        </mat-select>
-      </mat-form-field> -->
     </div>
     <div>
       <div>
         {{input.value}}
       </div>
-      <div class="flex flex-row space-x-2 items-center">
-        <span class="p-2 font-bold text-black">
+      <div class="flex flex-wrap gap-2">
+        <span *ngIf="!SearchParams.star" class="p-2 font-bold text-black">
           ({{FilterLists.length}}) Tất Cả
         </span>
-        <!-- <span class="p-2 {{GetStype(item.key)}}" *ngFor="let item of ListStatus|keyvalue">
-            ({{CountStatus(item.key)}})  {{item.value}}
-          </span> -->
+        <span class="text-xs p-2 flex flex-row rounded-lg border items-center {{SearchParams.star==item?'bg-slate-100 font-bold':''}}" 
+        (click)="StarToggle(item)" 
+        *ngFor="let item of [1,2,3,4,5]">
+            <span>({{GetSoluongSao(item)}})</span>
+            <span class="material-symbols-outlined text-yellow-500" *ngFor="let i of CreateStart(item); let index = index"> star </span>
+          </span>
       </div>
     </div>
 
@@ -71,7 +67,7 @@
         </ng-container>
         <ng-container matColumnDef="Tinhtrang">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Tình Trạng </th>
-          <td mat-cell *matCellDef="let row">
+          <td mat-cell *matCellDef="let row" class="whitespace-nowrap">
             <span class="p-2 rounded-lg text-white {{row.rate<=3?'bg-red-500':'bg-blue-500'}} p-2">
               {{row.rate<=3?'Cần Xử Lý':'Tốt'}} </span>
           </td>
