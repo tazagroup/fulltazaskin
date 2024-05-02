@@ -22,8 +22,8 @@ export class ZalodanhgiaComponent implements OnInit {
   FilterLists: any[] = []
   ListChiNhanh: any[] = []
   SearchParams: any = {
-    Batdau: moment().startOf('day').toDate(),
-    Ketthuc: moment().endOf('day').toDate(),
+    Batdau: moment().format('YYYY-MM-DD'),
+    Ketthuc: moment().format('YYYY-MM-DD'),
     pageSize: 9999,
     pageNumber: 0
   };
