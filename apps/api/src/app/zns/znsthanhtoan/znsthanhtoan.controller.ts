@@ -29,14 +29,14 @@ export class ZnsthanhtoanController {
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.Status = 0;
-    data.pageSize = 9999;
+    data.pageSize = 20;
     if(this.CheckTime() == true){
       const result = await this.findQuery(data)
     this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Step3 - Gửi ZNS Tự Động (${result.totalCount}) Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       if(result.items.length > 0){
         for (const item of result.items) {
           await this.sendzns(item);
-          const delay = Math.floor(Math.random() * 5000) + 1000; // Random delay between 1 and 5 seconds
+          const delay = Math.floor(Math.random() * 1000) + 1000; // Random delay between 1 and 5 seconds
           await new Promise(resolve => setTimeout(resolve, delay));
         }
         return result;
