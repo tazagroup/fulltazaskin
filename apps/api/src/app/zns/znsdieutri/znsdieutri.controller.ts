@@ -12,18 +12,20 @@ export class ZnsdieutriController {
   // @Interval(9000)
   @Interval(1800000)
   @Post('createzns')
-  createzns(@Body() data: any) {
+  createzns(@Body() data: any={}) {
     data.pageSize = 9999;
+    data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+    data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     return this.znsdieutriService.createzns(data);
   }
   @Post('sendzns')
   sendzns(@Body() data: any) {    
     return this.znsdieutriService.sendzns(data);
   }
-  // @Interval(10000)
+  //@Interval(10000)
   @Interval(2100000)
   @Post('sendznsauto')
-  async sendznsauto(@Body() data: any) {
+  async sendznsauto(@Body() data: any={}) {
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.Status = 0;

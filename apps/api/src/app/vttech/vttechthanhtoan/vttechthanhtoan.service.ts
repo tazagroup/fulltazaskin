@@ -52,10 +52,10 @@ export class VttechthanhtoanService {
       data: vttechthanhtoans,
     };
   }
-  async findQuery(params: any={CreatedBegin:moment().format('YYYY-MM-DD'),CreatedEnd:moment().format('YYYY-MM-DD')}) {
+  async findQuery(params:any) {
+
     console.error(params);
     const queryBuilder = this.VttechthanhtoanRepository.createQueryBuilder('vttechthanhtoan');
-
     if (params.CreatedBegin && params.CreatedEnd) {
       queryBuilder.andWhere('vttechthanhtoan.Created BETWEEN :startDate AND :endDate', {
         startDate: params.CreatedBegin,

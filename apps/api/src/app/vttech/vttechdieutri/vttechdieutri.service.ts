@@ -57,9 +57,8 @@ export class VttechdieutriService {
       data: vttechdieutris,
     };
   }
-  async findQuery(params: any={CreatedBegin:moment().format('YYYY-MM-DD'),CreatedEnd:moment().format('YYYY-MM-DD')}) {
+  async findQuery(params:any) {
     const queryBuilder = this.VttechdieutriRepository.createQueryBuilder('vttechdieutri');
-
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
       console.log(params.CreatedBegin, params.CreatedEnd);
       if(params.CreatedBegin==params.CreatedEnd){

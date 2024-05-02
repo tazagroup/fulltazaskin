@@ -19,7 +19,6 @@ export class ZnsdieutriService {
   ) { }
   async createzns(data: any) {
     const Dieutris = await this._VttechdieutriService.findQuery(data)
-    // this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Create ${Dieutris.length} Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     if (Dieutris.length > 0) {
       const uniqueDieutris = Dieutris.reduce((acc: any[], curr: any) => {
         const existingDieutri = acc.find((d: any) => d.idVttech === curr.idVttech && d.CustPhone === curr.CustPhone);        
