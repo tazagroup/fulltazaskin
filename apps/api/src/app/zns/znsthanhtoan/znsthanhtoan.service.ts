@@ -19,27 +19,30 @@ export class ZnsthanhtoanService {
     private _ZaloznstrackingService: ZaloznstrackingService,
   ) { }
   async createzns(data: any) {
-    const Thanhtoans = await this._VttechthanhtoanService.findQuery(data)
-    console.log(Thanhtoans);
-    this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Step2 - Create (${Thanhtoans.length}) Thanh Toan - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+    const Thanhtoans = await this._VttechthanhtoanService.findQuery(data);
     if (Thanhtoans.length > 0) {
-      Thanhtoans.forEach((v: any, k: any) => {
-        const item: any = {}
-        item.Dulieu = v
-        item.CustPhone = v.CustPhone
-        item.CustName = v.CustName
-        item.CustCode = v.CustCode
-        item.BranchID = v.BranchID
-        item.Created =  moment(v.Created).format('YYYY-MM-DD')
-        item.Paid = v.Paid
-        item.Code = v.Code
-        setTimeout(() => {
-          this.create(item)
-        }, k * 300);
-      });
+      let CountCreate = 0;
+      await Promise.all(Thanhtoans.map(async (v: any, k: any) => {
+        const item: any = {};
+        item.Dulieu = v;
+        item.CustPhone = v.CustPhone;
+        item.CustName = v.CustName;
+        item.CustCode = v.CustCode;
+        item.BranchID = v.BranchID;
+        item.Created = moment(v.Created).format('YYYY-MM-DD');
+        item.Paid = v.Paid;
+        item.Code = v.Code;
+        const isCreate = await this.create(item);
+        console.log(isCreate);
+        if (isCreate.error !== 1001) {
+          CountCreate = CountCreate + 1;
+        }
+      }));
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Step2 - Create (${CountCreate}) Thanh Toan - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     }
-    return Thanhtoans
+    return Thanhtoans;
   }
+
   async getTemplateData(id: any, token: any) {
     try {
       const response = await fetch(`https://business.openapi.zalo.me/template/info?template_id=${id}`, {

@@ -10,6 +10,7 @@ export class ZnsthanhtoanController {
     private readonly _TelegramService:TelegramService,
   ) {}
   @Interval(900000)
+  // @Interval(900)
   @Post('createzns')
   createzns(@Body() data: any={}) {
     data.pageSize = 9999;

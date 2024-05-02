@@ -35,7 +35,7 @@ export class ZnsdieutriService {
           ListItems.push(v);
         }
       }));
-      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step2- Create (${ListItems.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step2 - Create (${ListItems.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       ListItems.forEach((v: any, k: any) => {
         const item: any = {}
         item.idVttech = v.idVttech
