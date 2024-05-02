@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import {ZalotokenService } from './zalotoken.service';
 import { CreateZalotokenDto } from './dto/create-zalotoken.dto';
 import { UpdateZalotokenDto } from './dto/update-zalotoken.dto';
+import { Interval } from '@nestjs/schedule';
 @Controller('zalotoken')
 export class ZalotokenController {
   constructor(private readonly zalotokenService:ZalotokenService) {}
@@ -13,6 +14,11 @@ export class ZalotokenController {
   @Post('get_refreshtoken')
   getrefreshToken(@Body() data: any) {
     return this.zalotokenService.getRefreshToken(data);
+  }
+  @Interval(28800000)
+  @Get('autorefresh')
+  autorefresh() {
+    return this.zalotokenService.autorefresh();
   }
   @Post()
   create(@Body() createZalotokenDto: CreateZalotokenDto) {

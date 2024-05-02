@@ -6,6 +6,7 @@ import { UpdateZalotokenDto } from './dto/update-zalotoken.dto';
 import { ZalotokenEntity } from './entities/zalotoken.entity';
 import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 import { TelegramService } from '../../shared/telegram.service';
+import moment = require('moment');
 const axios = require('axios');
 @Injectable()
 export class ZalotokenService {
@@ -103,8 +104,15 @@ export class ZalotokenService {
 
 
   }
-
-
+  async autorefresh()
+  {
+    const ListChinhanh = await this._ChinhanhService.findAll();
+    ListChinhanh.forEach(async (v:any) => {
+      await this.getRefreshToken(v)
+    });
+    this._TelegramService.SendDulieuVttech(`[ZALO_TOKEN] - Đã Refresh Token Tự Động - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+    return ListChinhanh
+  }
   async create(CreateZalotokenDto: CreateZalotokenDto) {
     this.ZalotokenRepository.create(CreateZalotokenDto);
     return await this.ZalotokenRepository.save(CreateZalotokenDto);
