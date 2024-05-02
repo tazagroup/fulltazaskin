@@ -23,6 +23,11 @@ export class SharedService {
           return data;
       }
     } catch (error) {
+      if (error.response && error.response.status === 429) {
+        // Retry after 5 seconds
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        return this.getToken(item);
+      }
       return this._TelegramService.SendMiniAppLogdev(`Lỗi Xác Thực ${error} Vttech ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
     }
   }

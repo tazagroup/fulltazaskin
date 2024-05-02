@@ -21,8 +21,7 @@ export class ZnsthanhtoanService {
   async createzns(data: any) {
     const Thanhtoans = await this._VttechthanhtoanService.findQuery(data)
     console.log(Thanhtoans);
-    
-    this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Create ${Thanhtoans.length} Thanh Toan - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+    this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Step2 - Create (${Thanhtoans.length}) Thanh Toan - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     if (Thanhtoans.length > 0) {
       Thanhtoans.forEach((v: any, k: any) => {
         const item: any = {}

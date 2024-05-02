@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { VttechdieutriService } from './vttechdieutri.service';
 import { Interval } from '@nestjs/schedule';
 import moment = require('moment');
+import { SkipThrottle } from '@nestjs/throttler';
 @Controller('vttechdieutri')
 export class VttechdieutriController {
   constructor(private readonly vttechdieutriService: VttechdieutriService) { }
@@ -40,14 +41,17 @@ export class VttechdieutriController {
     return this.vttechdieutriService.remove(id);
   }
   @Post('getdieutri')
-  async getdieutri(@Body() data: any) {    
+  async getdieutri(@Body() data: any) {
     const getData = await this.vttechdieutriService.getdieutri(data);
     return getData;
   }
-  @Interval(1800000)
+
+
+  // @Interval(8000)
+  @Interval(9000000)
   @Get('getauto')
-  async getAuto() {    
-    const data:any= {
+  async getAuto() {
+    const data: any = {
       "Name": "Taza",
       "Password": "1b9287d492b256x7taza",
       "Type": "web",
@@ -55,7 +59,7 @@ export class VttechdieutriController {
       "DateTo": moment().format('YYYY-MM-DD'),
       "BranchID": "0",
       "PagingNumber": "1"
-  }
+    }
     const getData = await this.vttechdieutriService.getdieutri(data);
     return getData;
   }

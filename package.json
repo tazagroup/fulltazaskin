@@ -28,6 +28,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/schedule": "^4.0.0",
     "@nestjs/swagger": "^7.1.14",
+    "@nestjs/throttler": "^5.1.2",
     "@nestjs/typeorm": "^10.0.0",
     "@nrwl/angular": "14.8.8",
     "@types/bcrypt": "^5.0.2",

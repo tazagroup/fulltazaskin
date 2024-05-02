@@ -16,22 +16,28 @@ export class ZnsdieutriService {
     private _VttechdieutriService: VttechdieutriService,
     private _TelegramService: TelegramService,
     private _ChinhanhService: ChinhanhService,
-    private _ZaloznstrackingService: ZaloznstrackingService,
   ) { }
   async createzns(data: any) {
     const Dieutris = await this._VttechdieutriService.findQuery(data)
-    this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Create ${Dieutris.length} Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+    // this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Create ${Dieutris.length} Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     if (Dieutris.length > 0) {
       const uniqueDieutris = Dieutris.reduce((acc: any[], curr: any) => {
-        const existingDieutri = acc.find((d: any) => d.idVttech === curr.idVttech && d.CustPhone === curr.CustPhone);
-        console.log(existingDieutri,curr.idVttech,curr.CustPhone);
-        
+        const existingDieutri = acc.find((d: any) => d.idVttech === curr.idVttech && d.CustPhone === curr.CustPhone);        
         if (!existingDieutri) {
           acc.push(curr);
         }
         return acc;
       }, []);
-      uniqueDieutris.forEach((v: any, k: any) => {
+      const ListItems:any=[]
+      await Promise.all(uniqueDieutris.map(async (v: any) => {
+        const check = await this.findSHD({idVttech:v.ID,CustPhone:v.CustPhone});
+        console.log(check);
+        if (!check) {
+          ListItems.push(v);
+        }
+      }));
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step2- Create (${ListItems.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+      ListItems.forEach((v: any, k: any) => {
         const item: any = {}
         item.idVttech = v.idVttech
         item.idDieutri = v.id
@@ -43,8 +49,8 @@ export class ZnsdieutriService {
           this.create(item)
         }, k * 300);
       });
+      return ListItems
     }
-    return Dieutris
   }
   async getTemplateData(id: any, token: any) {
     try {
@@ -182,6 +188,8 @@ export class ZnsdieutriService {
   async findQuery(params: any) {
     const queryBuilder = this.ZnsdieutriRepository.createQueryBuilder('znsdieutri');
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
+      console.log(params.CreatedBegin, params.CreatedEnd);
+      
       queryBuilder.andWhere('znsdieutri.Created BETWEEN :startDate AND :endDate', {
         startDate: params.CreatedBegin,
         endDate: params.CreatedEnd,

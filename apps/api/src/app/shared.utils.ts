@@ -590,3 +590,13 @@ export function groupByfield(data: any[]) {
   return Object.values(convertedData);
 };
 
+
+
+//Function
+export function CombineUnique(data1:any, data2:any,field:any) {
+  const uniqueIds = new Map();
+  for (const obj of data1.concat(data2)) {
+    uniqueIds.set(obj[field], obj);
+  }
+  return Array.from(uniqueIds.values());
+}

@@ -25,6 +25,7 @@ import { VttechthanhtoanModule } from './vttech/vttechthanhtoan/vttechthanhtoan.
 import { ZaloappuudaiModule } from './zaloappuudai/zaloappuudai.module';
 import { ZnsthanhtoanModule } from './zns/znsthanhtoan/znsthanhtoan.module';
 import { ZnsdieutriModule } from './zns/znsdieutri/znsdieutri.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -39,6 +40,10 @@ import { ZnsdieutriModule } from './zns/znsdieutri/znsdieutri.module';
       synchronize: true,
       charset: "utf8mb4",
     }),
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 10,
+    }]),
     KhachhangsModule, 
     ChitietModule,
     CauhinhModule,

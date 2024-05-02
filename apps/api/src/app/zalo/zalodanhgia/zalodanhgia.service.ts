@@ -69,20 +69,14 @@ export class ZalodanhgiaService {
     const Begin = new Date(params.Batdau).getTime()
     const End = new Date(params.Ketthuc).getTime()    
     const queryBuilder = this.ZalodanhgiaRepository.createQueryBuilder('zalodanhgia');
-    const queryBuilder1 = this.ZalodanhgiaRepository.createQueryBuilder('zalodanhgia');
     if (params.Batdau && params.Ketthuc) {
       queryBuilder.andWhere('zalodanhgia.submitDate BETWEEN :startDate AND :endDate', {
         startDate:Begin,
         endDate:End,
       });
-      queryBuilder1.andWhere('zalodanhgia.submitDate BETWEEN :startDate AND :endDate', {
-        startDate:Begin,
-        endDate:End,
-      });
     }
-    if (params.hasOwnProperty("idCN")&&params.idCN!=0) {
+    if (params.hasOwnProperty("idCN")) {
       queryBuilder.andWhere('zalodanhgia.idCN = :idCN', { idCN: `${params.idCN}` });
-      queryBuilder1.andWhere('zalodanhgia.idCN = :idCN', { idCN: `${params.idCN}` });
     }
     if (params.hasOwnProperty('Status')) {
       queryBuilder.andWhere('zalodanhgia.Status LIKE :Status', { Status: `${params.Status}` });
@@ -93,9 +87,7 @@ export class ZalodanhgiaService {
     let [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10)
       .offset(params.pageNumber * params.pageSize || 0)
-      .getManyAndCount();   
-      console.log(items[0]);
-      
+      .getManyAndCount();         
       await Promise.all(
         items.map(async (v:any) => {
           const Customer:any = await this._ZnsdieutriService.findbytrackingid(v.trackingId);
@@ -105,21 +97,8 @@ export class ZalodanhgiaService {
             v.CustName = Customer.CustName;
           }
         })
-      );      
-      // await Promise.all(
-      //   items.map(async (v:any) => {
-      //     const ZNS:any = await this._ZaloznstrackingService.findtrackingid(v.trackingId);   
-      //     console.log(ZNS);
-                 
-      //     if (ZNS) {
-      //       v.SDT = Phone_To_0(ZNS.SDT);
-      //       v.CustName = ZNS.Hoten;
-      //     }
-      //   })
-      // );      
-    const [result] = await queryBuilder1.getManyAndCount();
-    const ListStatus = result.map((v: any) => ({ rate: v.rate }))
-    return { items, totalCount, ListStatus };
+      );          
+    return { items, totalCount };
   }
 
 

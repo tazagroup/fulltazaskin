@@ -9,7 +9,8 @@ export class ZnsdieutriController {
     private readonly znsdieutriService:ZnsdieutriService,
     private readonly _TelegramService:TelegramService,
   ) {}
-  @Interval(1900000)
+  // @Interval(9000)
+  @Interval(10000000)
   @Post('createzns')
   createzns(@Body() data: any) {
     data.pageSize = 9999;
@@ -19,7 +20,8 @@ export class ZnsdieutriController {
   sendzns(@Body() data: any) {    
     return this.znsdieutriService.sendzns(data);
   }
-  @Interval(2000000)
+  // @Interval(10000)
+  @Interval(11000000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any) {
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
@@ -27,8 +29,8 @@ export class ZnsdieutriController {
     data.Status = 0;
     data.pageSize = 9999;
     if(this.CheckTime() == true){
-      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Gửi Tự Động Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')} - ${JSON.stringify(data)}`);
       const result = await this.findQuery(data)
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       if(result.items.length > 0){
         for (const item of result.items) {
           await this.sendzns(item);

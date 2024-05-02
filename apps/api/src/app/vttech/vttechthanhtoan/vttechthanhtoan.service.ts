@@ -35,7 +35,7 @@ export class VttechthanhtoanService {
   async findby(data: any) {
     return await this.VttechthanhtoanRepository.findOne({ 
       where: {
-        CustPhone: data.CustPhone,
+         CustPhone: data.CustPhone,
          idVttech: data.idVttech 
         },
      });
@@ -94,7 +94,7 @@ export class VttechthanhtoanService {
 
 
   async getThanhtoan(item: any = {}) {
-    this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Bắt Đầu Lấy Dữ Liệu Thanh Toán : ${moment().format("HH:mm:ss DD/MM/YYYY")} ${JSON.stringify(item)}`);
+    this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Step1 - Bắt Đầu Lấy Dữ Liệu Thanh Toán : ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
     const result = await this._SharedService.getToken(item);
     try {
       const response = await axios.post(`https://apismsvtt.vttechsolution.com/api/Revenue/GetList`, item, {
@@ -105,9 +105,17 @@ export class VttechthanhtoanService {
         },
       });
       const data = response.data;
-      this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Đã Lấy (${JSON.stringify(data.Data.length)}) dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
-      if (data.Data.length > 0) {
-        data.Data.forEach(async (v: any, k: any) => {
+      const ListItems:any=[]
+      await Promise.all(data.Data.map(async (v: any) => {
+        const check = await this.findby({idVttech:v.ID,CustPhone:v.CustPhone});
+        console.log(check);
+        if (!check) {
+          ListItems.push(v);
+        }
+      }));
+      this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Đã Lấy (${JSON.stringify(ListItems.length)}) dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
+      if (ListItems.length > 0) {
+        ListItems.forEach(async (v: any, k: any) => {
           const item: any = {};
           item.Dulieu = v;
           item.idVttech = v.ID;
@@ -117,7 +125,7 @@ export class VttechthanhtoanService {
           await this.create(item);
         });
       }
-      return data;
+      return ListItems;
     } catch (error) {
       console.error(error);
       this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lỗi Xác Thực - ${JSON.stringify(error)} - ${JSON.stringify(item)} - ${JSON.stringify(result)}`);

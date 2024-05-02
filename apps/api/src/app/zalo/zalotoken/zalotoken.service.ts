@@ -58,7 +58,6 @@ export class ZalotokenService {
 
   async getRefreshToken(item: any) {
     console.log(item);
-    
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -87,6 +86,11 @@ export class ZalotokenService {
           return { status: 200, note: "Gia Hạn Thành Công", data: item };
         }
       else {
+        if (response.status === 429) {
+          // Add a delay before making the request again
+          await new Promise(resolve => setTimeout(resolve, 5000));
+          return this.getRefreshToken(item); // Retry the request
+        }
         item.ZaloOaToken = {};
         this._ChinhanhService.update(item.id, item);
         this._TelegramService.SendMiniAppLogdev(`Đã refresh token cho chi nhánh ${item.Title} - ${data.error}`);
@@ -96,6 +100,8 @@ export class ZalotokenService {
       // Handle error
       console.error(error);
     }
+
+
   }
 
 

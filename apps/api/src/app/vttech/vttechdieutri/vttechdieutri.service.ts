@@ -5,7 +5,7 @@ import { VttechdieutriEntity } from './entities/vttechdieutri.entity';
 import { SharedService } from '../../shared/shared.service';
 import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
-import { convertToZeroMinutesSeconds } from '../../shared.utils';
+import { CombineUnique, convertToZeroMinutesSeconds, mergeNoDup } from '../../shared.utils';
 import axios from 'axios';
 import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 @Injectable()
@@ -33,6 +33,9 @@ export class VttechdieutriService {
   async findid(id: string) {
     return await this.VttechdieutriRepository.findOne({ where: { id: id } });
   }
+  async findidVttech(id: any) {
+    return await this.VttechdieutriRepository.findOne({ where: { idVttech: id } });
+  }
   async findby(data: any) {
     return await this.VttechdieutriRepository.findOne({ 
       where: {
@@ -57,11 +60,19 @@ export class VttechdieutriService {
   async findQuery(params: any={CreatedBegin:moment().format('YYYY-MM-DD'),CreatedEnd:moment().format('YYYY-MM-DD')}) {
     const queryBuilder = this.VttechdieutriRepository.createQueryBuilder('vttechdieutri');
 
-    if (params.CreatedBegin && params.CreatedEnd) {
+    if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
+      console.log(params.CreatedBegin, params.CreatedEnd);
+      if(params.CreatedBegin==params.CreatedEnd){
+        queryBuilder.andWhere('vttechdieutri.Created = :Created', {
+          Created: params.CreatedBegin,
+        });
+      }
+      else{
       queryBuilder.andWhere('vttechdieutri.Created BETWEEN :startDate AND :endDate', {
         startDate: params.CreatedBegin,
         endDate: params.CreatedEnd,
       });
+      }
     }
     if (params.Title) {
       queryBuilder.andWhere('vttechdieutri.Title LIKE :Title', { SDT: `%${params.Title}%` });
@@ -83,8 +94,8 @@ export class VttechdieutriService {
   }
 
 
-  async getdieutri(item: any = {}) {
-    this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Bắt Đầu Lấy Dữ Liệu Điều Trị - ${moment().format("HH:mm:ss DD/MM/YYYY")} - ${JSON.stringify(item)}`);
+  async getdieutri(item: any = {}) {      
+    this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Step1 - Bắt Đầu Lấy Dữ Liệu Điều Trị - ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
     const result = await this._SharedService.getToken(item);
     try {
       const response = await axios.post(`https://apismsvtt.vttechsolution.com/api/Customer/GetTreat`, item, {
@@ -95,9 +106,17 @@ export class VttechdieutriService {
         },
       });
       const data = response.data;
-      this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Đã Lấy (${JSON.stringify(data.Data.length)}) dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
-      if (data.Data.length > 0) {
-        data.Data.forEach(async (v: any, k: any) => {
+      const ListItems:any=[]
+      await Promise.all(data.Data.map(async (v: any) => {
+        const check = await this.findidVttech(convertToZeroMinutesSeconds(v.CreatedDate).getTime());
+        console.log(check);
+        if (!check) {
+          ListItems.push(v);
+        }
+      }));
+      this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Lấy Dữ Liệu Điều Trị Thành Công (${ListItems.length}) - ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
+      if (ListItems.length > 0) {
+        ListItems.forEach(async (v: any, k: any) => {
           const item: any = {};
           item.Dulieu = v;
           item.idVttech = convertToZeroMinutesSeconds(v.CreatedDate).getTime();
@@ -111,7 +130,7 @@ export class VttechdieutriService {
           }, k * 200);
         });
       }
-      return data;
+      return ListItems;
     } catch (error) {
       console.error(error);
       this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Lỗi Xác Thực - ${JSON.stringify(error)} - ${JSON.stringify(item)} - ${JSON.stringify(result)}`);
