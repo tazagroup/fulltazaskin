@@ -109,6 +109,7 @@ export class ZnsdieutriService {
         // if (data.CustPhone == "0977272967") {
         const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
         if (!response.ok) {
+          this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi :  ${JSON.stringify(response.statusText)}`);
           throw new Error(`Error fetching data: ${response.statusText}`);
         }
         const result = await response.json();
@@ -128,8 +129,14 @@ export class ZnsdieutriService {
         return result
       }
     } catch (error) {
-      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi :  ${JSON.stringify(error)}`);
-      throw error;
+      if (error.response && error.response.status === 429) {
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi :  ${JSON.stringify(error)}`);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        return this.sendzns(data); // Retry the request
+      }
+      else {
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi :  ${JSON.stringify(error)}`);
+      }
     }
   }
   // async sendznsauto(data: any) {

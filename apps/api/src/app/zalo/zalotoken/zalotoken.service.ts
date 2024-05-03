@@ -87,17 +87,17 @@ export class ZalotokenService {
           return { status: 200, note: "Gia Hạn Thành Công", data: item };
         }
       else {
-        if (response.status === 429) {
-          // Add a delay before making the request again
-          await new Promise(resolve => setTimeout(resolve, 5000));
-          return this.getRefreshToken(item); // Retry the request
-        }
         item.ZaloOaToken = {};
         this._ChinhanhService.update(item.id, item);
         this._TelegramService.SendMiniAppLogdev(`Đã refresh token cho chi nhánh ${item.Title} - ${data.error}`);
         return { status: 400, note: "Refresh Token Không Đúng" };
       }
     } catch (error) {
+      if (error.response && error.response.status === 429) {
+        // Add a delay before making the request again
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        return this.getRefreshToken(item); // Retry the request
+      }
       // Handle error
       console.error(error);
     }
