@@ -34,6 +34,7 @@ export class ZnsdieutriController {
     if(this.CheckTime() == true){
       const result = await this.findQuery(data)
       this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${JSON.stringify(result)}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       if(result.items.length > 0){
         for (const item of result.items) {
           const result = await this.sendzns(item);
