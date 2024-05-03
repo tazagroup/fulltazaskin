@@ -30,13 +30,14 @@ export class ZnsdieutriController {
     data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.Status = 0;
     data.pageSize = 1;
-    this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Test1 - Gửi Tự Động (${data}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+    this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Test1 - Gửi Tự Động (${JSON.stringify(data)}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     if(this.CheckTime() == true){
       const result = await this.findQuery(data)
       this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       if(result.items.length > 0){
         for (const item of result.items) {
-          await this.sendzns(item);
+          const result = await this.sendzns(item);
+          this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Test2 - Gửi Tự Động (${JSON.stringify(result)}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
           const delay = Math.floor(Math.random() * 1000) + 1000; // Random delay between 1 and 5 seconds
           await new Promise(resolve => setTimeout(resolve, delay));
         }
