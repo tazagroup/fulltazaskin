@@ -35,12 +35,19 @@ export class ZnsdieutriController {
       const result = await this.findQuery(data)
       this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - test2 - Gửi Tự Động (${JSON.stringify(result)}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-      if(result.items.length > 0){
-        for (const item of result.items) {
-          this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - test3`);
-          const result = await this.sendzns(item);
+      if(result.totalCount > 0){
+        result.items.forEach(async v => {
+          this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - test3 - Gửi Tự Động (${JSON.stringify(v)}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+            const result = await this.sendzns(v);
           this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - test4 - Gửi Tự Động (${JSON.stringify(result)}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-        }
+          
+        });
+
+        // for (const item of result.items) {
+        //   this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - test3`);
+        //   const result = await this.sendzns(item);
+        //   this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - test4 - Gửi Tự Động (${JSON.stringify(result)}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        // }
         return result;
       }
     }
