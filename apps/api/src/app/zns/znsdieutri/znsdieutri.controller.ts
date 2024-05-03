@@ -34,11 +34,12 @@ export class ZnsdieutriController {
     if(this.CheckTime() == true){
       const result = await this.findQuery(data)
       this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${JSON.stringify(result)}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - test2 - Gửi Tự Động (${JSON.stringify(result)}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       if(result.items.length > 0){
         for (const item of result.items) {
+          this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - test3`);
           const result = await this.sendzns(item);
-          this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Test2 - Gửi Tự Động (${JSON.stringify(result)}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+          this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - test4 - Gửi Tự Động (${JSON.stringify(result)}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         }
         return result;
       }
