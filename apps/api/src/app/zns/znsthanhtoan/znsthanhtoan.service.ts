@@ -111,7 +111,7 @@ export class ZnsthanhtoanService {
         }
         const result = await response.json();
         console.log(result);
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${result.error} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         if (result.error == 0) {
           data.Status = 1;
           data.message_id =result.data.message_id;
