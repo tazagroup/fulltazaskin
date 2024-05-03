@@ -10,7 +10,7 @@ export class ZnsdieutriController {
     private readonly _TelegramService:TelegramService,
   ) {}
   // @Interval(9000)
-  @Interval(1800000)
+  @Interval(120000)
   @Post('createzns')
   createzns(@Body() data: any={}) {
     data.pageSize = 9999;
@@ -23,7 +23,7 @@ export class ZnsdieutriController {
     return this.znsdieutriService.sendzns(data);
   }
   //@Interval(10000)
-  @Interval(300000)
+  @Interval(120000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
