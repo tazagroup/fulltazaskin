@@ -129,14 +129,9 @@ export class ZnsdieutriService {
         return result
       }
     } catch (error) {
-      if (error.response && error.response.status === 429) {
         this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 3:  ${JSON.stringify(error)}`);
         await new Promise(resolve => setTimeout(resolve, 5000));
         return this.sendzns(data); // Retry the request
-      }
-      else {
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 4:  ${JSON.stringify(error)}`);
-      }
     }
   }
   // async sendznsauto(data: any) {
