@@ -8,6 +8,7 @@ import moment = require('moment');
 import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 import { DescErrorZalo, GenId, convertPhoneNum } from '../../shared.utils';
 import { ZaloznstrackingService } from '../../zalo/zaloznstracking/zaloznstracking.service';
+import axios from 'axios';
 @Injectable()
 export class ZnsdieutriService {
   constructor(
@@ -89,7 +90,7 @@ export class ZnsdieutriService {
       }
       else {
         const requestData = {
-         // mode: "development",
+          // mode: "development",
           phone: convertPhoneNum(data.CustPhone),
           template_id: Chinhanh.TemplateDanhgia,
           template_data: {
@@ -99,26 +100,20 @@ export class ZnsdieutriService {
           tracking_id: GenId(12, true),
         };
         const config = {
-          method: 'post',
           headers: {
             'access_token': Chinhanh.ZaloOaToken.access_token,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(requestData)
         };
         // if (data.CustPhone == "0977272967") {
-        const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
-        if (!response.ok) {
-          this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi :  ${JSON.stringify(response.statusText)}`);
-          throw new Error(`Error fetching data: ${response.statusText}`);
-        }
-        const result = await response.json();
+        const response = await axios.post(`https://business.openapi.zalo.me/message/template`, requestData, config);
+        const result = response.data;
         console.log(result);
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi :  ${result.error} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 3 :  ${result.error} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         if (result.error == 0) {
           data.Status = 1;
-          data.messageId =result.data.msg_id;
-          data.trackingId =requestData.tracking_id;
+          data.messageId = result.data.msg_id;
+          data.trackingId = requestData.tracking_id;
           this.update(data.id, data)
         }
         else {
@@ -130,12 +125,12 @@ export class ZnsdieutriService {
       }
     } catch (error) {
       if (error.response && error.response.status === 429) {
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi :  ${JSON.stringify(error)}`);
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 1 :  ${JSON.stringify(error)}`);
         await new Promise(resolve => setTimeout(resolve, 5000));
         return this.sendzns(data); // Retry the request
       }
       else {
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi :  ${JSON.stringify(error)}`);
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 2 :  ${JSON.stringify(error)}`);
       }
     }
   }
