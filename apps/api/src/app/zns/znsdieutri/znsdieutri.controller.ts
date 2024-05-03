@@ -30,6 +30,7 @@ export class ZnsdieutriController {
     data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.Status = 0;
     data.pageSize = 1;
+    this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Test1 - Gửi Tự Động (${data}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     if(this.CheckTime() == true){
       const result = await this.findQuery(data)
       this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);

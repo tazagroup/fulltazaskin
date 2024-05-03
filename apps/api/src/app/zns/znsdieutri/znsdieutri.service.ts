@@ -128,6 +128,7 @@ export class ZnsdieutriService {
         return result
       }
     } catch (error) {
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi :  ${JSON.stringify(error)}`);
       throw error;
     }
   }
