@@ -39,8 +39,6 @@ export class ZnsdieutriController {
         for (const item of result.items) {
           const result = await this.sendzns(item);
           this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Test2 - Gửi Tự Động (${JSON.stringify(result)}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-          const delay = Math.floor(Math.random() * 1000) + 1000; // Random delay between 1 and 5 seconds
-          await new Promise(resolve => setTimeout(resolve, delay));
         }
         return result;
       }
