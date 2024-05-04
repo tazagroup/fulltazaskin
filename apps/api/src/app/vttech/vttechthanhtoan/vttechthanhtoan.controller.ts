@@ -44,7 +44,7 @@ export class VttechthanhtoanController {
     const getData = await this.vttechthanhtoanService.getThanhtoan(data);
     return getData;
   }
-  @Interval(120000)
+  @Interval(1200000)
   @Get('getauto')
   async getAuto() {    
     const data:any= {
