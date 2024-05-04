@@ -32,13 +32,13 @@ export class ZnsdieutriController {
     data.pageSize = 10;
     if(this.CheckTime() == true){
       const result = await this.findQuery(data)
-      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')} ${JSON.stringify(data)}`);
       if(result.totalCount > 0){
-        result.items.forEach(async v => {
-          const result = await this.sendzns(v);
+        await Promise.all(result.items.map(async v => {
+          await this.sendzns(v);
           const delay = Math.floor(Math.random() * 1000) + 1000; // Random delay between 1 and 5 seconds
           await new Promise(resolve => setTimeout(resolve, delay));
-        });
+        }));
         return result;
       }
     }

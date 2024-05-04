@@ -129,7 +129,7 @@ export class ZnsdieutriService {
         return result
       }
     } catch (error) {
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 3:  ${JSON.stringify(error)}`);
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 3:  ${JSON.stringify(error)} ${JSON.stringify(data)}`);
         await new Promise(resolve => setTimeout(resolve, 5000));
         return this.sendzns(data); // Retry the request
     }
@@ -191,7 +191,6 @@ export class ZnsdieutriService {
     const queryBuilder = this.ZnsdieutriRepository.createQueryBuilder('znsdieutri');
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
       console.log(params.CreatedBegin, params.CreatedEnd);
-      
       queryBuilder.andWhere('znsdieutri.Created BETWEEN :startDate AND :endDate', {
         startDate: params.CreatedBegin,
         endDate: params.CreatedEnd,

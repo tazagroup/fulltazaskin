@@ -34,11 +34,12 @@ export class ZnsthanhtoanController {
       const result = await this.findQuery(data)
     this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Step3 - Gửi ZNS Tự Động (${result.totalCount}) Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       if(result.items.length > 0){
-        result.items.forEach(async v => {
+        const sendZnsPromises = result.items.map(async v => {
           const result = await this.sendzns(v);
           const delay = Math.floor(Math.random() * 1000) + 1000; // Random delay between 1 and 5 seconds
           await new Promise(resolve => setTimeout(resolve, delay));
         });
+        await Promise.all(sendZnsPromises);
         return result;
       }
     }
