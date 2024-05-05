@@ -83,7 +83,7 @@ export class ZnsdieutriService {
 
   async sendzns(data: any) {
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
-    try {
+    // try {
       if (!Chinhanh?.ZaloOaToken?.access_token) {
         this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       }
@@ -128,9 +128,11 @@ export class ZnsdieutriService {
         }
         return result
       }
-    } catch (error) {
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 3:  ${JSON.stringify(error)}`);
-    }
+    // } catch (error) {
+    //   console.log(error);
+      
+    //     this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 3:  ${JSON.stringify(error)}`);
+    // }
   }
   // async sendznsauto(data: any) {
   //   data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
