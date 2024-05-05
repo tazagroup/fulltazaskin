@@ -140,8 +140,6 @@ export class ZnsthanhtoanService {
       }
     } catch (error) {
       this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Mã Lỗi 3:  ${JSON.stringify(error)}`);
-      await new Promise(resolve => setTimeout(resolve, 5000));
-      return this.sendzns(data); // Retry the request
     }
   }
   async sendznsauto(data: any) {
