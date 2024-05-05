@@ -107,8 +107,10 @@ export class ZalotokenService {
   async autorefresh()
   {
     const ListChinhanh = await this._ChinhanhService.findAll();
-    ListChinhanh.forEach(async (v:any) => {
-      await this.getRefreshToken(v)
+    ListChinhanh.forEach(async (v:any,k:any) => {
+      setTimeout(async () => {
+        await this.getRefreshToken(v)
+      }, k*5000);
     });
     this._TelegramService.SendDulieuVttech(`[ZALO_TOKEN] - Đã Refresh Token Tự Động - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     return ListChinhanh

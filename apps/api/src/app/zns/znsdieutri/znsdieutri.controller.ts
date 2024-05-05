@@ -34,10 +34,10 @@ export class ZnsdieutriController {
       const result = await this.findQuery(data)
       this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')} ${JSON.stringify(data)}`);
       if(result.totalCount > 0){
-        await Promise.all(result.items.map(async v => {
-          await this.sendzns(v);
-          const delay = Math.floor(Math.random() * 1000) + 1000; // Random delay between 1 and 5 seconds
-          await new Promise(resolve => setTimeout(resolve, delay));
+        await Promise.all(result.items.map(async (v,k) => {
+          setTimeout(async () => {
+            await this.sendzns(v); 
+          }, k*5000);
         }));
         return result;
       }
