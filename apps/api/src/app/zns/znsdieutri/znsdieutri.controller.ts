@@ -10,7 +10,7 @@ export class ZnsdieutriController {
     private readonly _TelegramService:TelegramService,
   ) {}
   // @Interval(9000)
-  @Interval(120000)
+  @Interval(1200000)
   @Post('createzns')
   createzns(@Body() data: any={}) {
     data.pageSize = 9999;
