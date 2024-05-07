@@ -9,7 +9,7 @@ export class ZnsthanhtoanController {
     private readonly znsthanhtoanService:ZnsthanhtoanService,
     private readonly _TelegramService:TelegramService,
   ) {}
-  @Interval(1200000)
+  @Interval(1500000)
   // @Interval(900)
   @Post('createzns')
   createzns(@Body() data: any={}) {
