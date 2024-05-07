@@ -9,7 +9,7 @@ export class ZnsthanhtoanController {
     private readonly znsthanhtoanService:ZnsthanhtoanService,
     private readonly _TelegramService:TelegramService,
   ) {}
-  @Interval(1200000)
+  @Interval(120000)
   // @Interval(900)
   @Post('createzns')
   createzns(@Body() data: any={}) {
@@ -22,14 +22,14 @@ export class ZnsthanhtoanController {
   sendzns(@Body() data: any) {
     return this.znsthanhtoanService.sendzns(data);
   }
-  @Interval(1200000)
+  @Interval(120000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
   //  this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Gửi ZNS Tự Động Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.Status = 0;
-    data.pageSize = 10;
+    data.pageSize = 5;
     if(this.CheckTime() == true){
       const result = await this.findQuery(data)
     this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Step3 - Gửi ZNS Tự Động (${result.totalCount}) Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
