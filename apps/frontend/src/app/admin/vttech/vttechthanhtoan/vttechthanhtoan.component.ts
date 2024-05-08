@@ -43,6 +43,8 @@ export class VttechthanhtoanComponent implements OnInit {
     this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data:any)=>{
       if(data)
       {     
+        console.log(data);
+        
         this.Total = data.totalCount   
         this.pageSizeOptions = [10, 20, data.totalCount].filter(v => v <= data.totalCount);
         this.ListStatus = data.ListStatus   

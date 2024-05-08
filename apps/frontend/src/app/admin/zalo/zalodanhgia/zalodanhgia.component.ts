@@ -158,9 +158,10 @@ export class ZalodanhgiaComponent implements OnInit {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
       data.map((v: any, k: any) => ({
         'STT': k + 1,
-        'Ngày Đánh Giá': v.Ngaygui,
+        'Họ Tên': v.CustName,
+        'Số Điện Thoại': v.CustPhone,
+        'Ngày Đánh Giá': v.TimeSend,
         'Chi Nhánh': v.Chinhanh,
-        'Số Điện Thoại': v.SDT,
         'Số Sao': v.rate,
         'Đánh Giá': v.feedbacks?.join(","),
         'Ghi Chú': v.note

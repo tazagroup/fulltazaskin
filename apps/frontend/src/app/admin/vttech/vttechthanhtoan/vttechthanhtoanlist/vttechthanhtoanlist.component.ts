@@ -59,13 +59,15 @@ export class VttechthanhtoanlistComponent implements OnInit {
   ngOnInit(): void {
     this._ChinhanhService.getAllChinhanhs().subscribe()
     this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
-    this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {
-      if (chinhanhs && chinhanhs.length > 0) {
+    this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {      
+      if (chinhanhs?.length > 0) {
+        console.log(chinhanhs);
         this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data: any) => {
-          if (data) {
+          if (data) {            
             data.forEach((v: any) => {
-              v.Chinhanh = chinhanhs.find((c: any) => c.idVttech === v.BranchID)?.Title;
+              v.Chinhanh = chinhanhs.find((c: any) => c.idVttech == v.BranchID)?.Title;
             })
+            console.log(data);
             this.FilterLists = this.Lists = data
             this.dataSource = new MatTableDataSource(this.FilterLists);
             // this.dataSource.sortingDataAccessor = (item, property) => {
