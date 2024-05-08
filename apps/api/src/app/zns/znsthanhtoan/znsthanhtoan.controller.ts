@@ -37,7 +37,7 @@ export class ZnsthanhtoanController {
         await Promise.all(result.items.map(async (v,k) => {
           setTimeout(async () => {
             await this.sendzns(v); 
-          }, k*5000);
+          }, k*2000);
         }));
         return result;
       }

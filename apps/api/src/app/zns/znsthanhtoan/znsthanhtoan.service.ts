@@ -74,10 +74,7 @@ export class ZnsthanhtoanService {
   }
 
   async sendzns(data: any) {
-    console.log(data);
-    const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
-    console.log(Chinhanh);
-    
+    const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)    
     try {
       if (!Chinhanh?.ZaloOaToken?.access_token) {
         this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
