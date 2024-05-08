@@ -113,7 +113,6 @@ export class ZnsdieutriService {
           throw new Error(`Error fetching data: ${response.statusText}`);
         }
         const result = await response.json();
-        console.log(result);
         this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 2 :  ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         if (result.error == 0) {
           data.Status = 1;
