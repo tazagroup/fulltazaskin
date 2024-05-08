@@ -57,7 +57,7 @@ export class ZalodanhgiaComponent implements OnInit {
           console.log(data);      
           if (data) {
             data.forEach((v: any) => {
-              v.Chinhanh = chinhanhs.find((c: any) => c.idVttech === v.BranchID)?.Title;
+              v.Chinhanh = chinhanhs.find((c: any) => c.idVttech == v.BranchID)?.Title;
               v.TimeSend = moment(Number(v.submitDate)).toISOString();
             })
             this.FilterLists = this.Lists = data
