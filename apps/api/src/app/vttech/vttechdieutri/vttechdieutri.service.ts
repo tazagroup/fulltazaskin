@@ -126,7 +126,7 @@ export class VttechdieutriService {
           item.Created = moment(v.CreatedDate).format('YYYY-MM-DD');
           setTimeout(async () => {
             const result = await this.create(item);
-          }, k * 200);
+          }, k * 1000);
         });
       }
       return ListItems;

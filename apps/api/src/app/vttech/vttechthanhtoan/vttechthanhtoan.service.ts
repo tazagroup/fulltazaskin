@@ -121,8 +121,9 @@ export class VttechthanhtoanService {
           item.idVttech = v.ID;
           item.CustPhone = v.CustPhone;
           item.Created = moment(v.Created).format('YYYY-MM-DD');
-          await new Promise((resolve) => setTimeout(resolve, k * 200));
-          await this.create(item);
+          setTimeout(async () => {
+            const result = await this.create(item);
+          }, k * 1000);
         });
       }
       return ListItems;
