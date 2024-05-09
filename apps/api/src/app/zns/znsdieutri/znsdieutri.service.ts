@@ -30,7 +30,7 @@ export class ZnsdieutriService {
       const ListItems:any=[]
       await Promise.all(uniqueDieutris.map(async (v: any) => {
         const check = await this.findSHD({idVttech:v.ID,CustPhone:v.CustPhone});
-        console.log(check);
+        // console.log(check);
         if (!check) {
           ListItems.push(v);
         }
@@ -189,7 +189,6 @@ export class ZnsdieutriService {
   async findQuery(params: any) {
     const queryBuilder = this.ZnsdieutriRepository.createQueryBuilder('znsdieutri');
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
-      console.log(params.CreatedBegin, params.CreatedEnd);
       queryBuilder.andWhere('znsdieutri.Created BETWEEN :startDate AND :endDate', {
         startDate: params.CreatedBegin,
         endDate: params.CreatedEnd,
@@ -211,7 +210,7 @@ export class ZnsdieutriService {
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
-    console.log(items, totalCount);
+    // console.log(items, totalCount);
     return { items, totalCount };
   }
   async update(id: string, UpdateZnsdieutriDto: any) {

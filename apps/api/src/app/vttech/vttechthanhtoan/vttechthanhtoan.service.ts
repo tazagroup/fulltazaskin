@@ -108,7 +108,6 @@ export class VttechthanhtoanService {
       const ListItems:any=[]
       await Promise.all(data.Data.map(async (v: any) => {
         const check = await this.findby({idVttech:v.ID,CustPhone:v.CustPhone});
-        console.log(check);
         if (!check) {
           ListItems.push(v);
         }

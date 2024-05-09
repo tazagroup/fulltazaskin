@@ -33,7 +33,7 @@ export class ZnsthanhtoanService {
         item.Paid = v.Paid;
         item.Code = v.Code;
         const isCreate = await this.create(item);
-        console.log(isCreate);
+        // console.log(isCreate);
         if (isCreate.error !== 1001) {
           CountCreate = CountCreate + 1;
         }
@@ -213,7 +213,7 @@ export class ZnsthanhtoanService {
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
-    console.log(items, totalCount);
+    // console.log(items, totalCount);
     return { items, totalCount };
   }
   async update(id: string, UpdateZnsthanhtoanDto: any) {

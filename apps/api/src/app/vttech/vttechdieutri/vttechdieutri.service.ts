@@ -60,7 +60,6 @@ export class VttechdieutriService {
   async findQuery(params:any) {
     const queryBuilder = this.VttechdieutriRepository.createQueryBuilder('vttechdieutri');
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
-      console.log(params.CreatedBegin, params.CreatedEnd);
       if(params.CreatedBegin==params.CreatedEnd){
         queryBuilder.andWhere('vttechdieutri.Created = :Created', {
           Created: params.CreatedBegin,
@@ -108,7 +107,6 @@ export class VttechdieutriService {
       const ListItems:any=[]
       await Promise.all(data.Data.map(async (v: any) => {
         const check = await this.findidVttech(convertToZeroMinutesSeconds(v.CreatedDate).getTime());
-        console.log(check);
         if (!check) {
           ListItems.push(v);
         }
