@@ -78,6 +78,8 @@ export class ZnsthanhtoanService {
     try {
       if (!Chinhanh?.ZaloOaToken?.access_token) {
         this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        data.Status = 3;
+        this.update(data.id, data)
       }
       else {
         const priceProperty = Chinhanh.TemplateThanhtoan === '301891' || Chinhanh.TemplateThanhtoan === '302259' ? 'price' : 'cost';

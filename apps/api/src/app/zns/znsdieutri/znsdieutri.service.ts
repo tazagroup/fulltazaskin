@@ -89,6 +89,8 @@ export class ZnsdieutriService {
     // try {
       if (!Chinhanh?.ZaloOaToken?.access_token) {
         this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        data.Status = 3;
+        this.update(data.id, data)
       }
       else {
        let requestData:any = {}
