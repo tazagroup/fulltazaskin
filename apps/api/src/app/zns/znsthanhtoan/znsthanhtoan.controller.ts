@@ -43,6 +43,7 @@ export class ZnsthanhtoanController {
           setTimeout(async () => {
             await this.sendzns(v); 
           }, k*2000);
+          
         })
         return result;
       }

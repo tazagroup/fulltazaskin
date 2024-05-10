@@ -30,6 +30,8 @@ export class ChinhanhEntity {
   Desc: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   Brand: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
+  Congty: string;
   @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
   ZaloOa: string;
   @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
