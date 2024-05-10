@@ -29,12 +29,16 @@
             </mat-form-field>
           </div>
 
-          <div class="grid lg:grid-cols-2 grid-cols-1 gap-2">
-
+          <div class="grid lg:grid-cols-3 grid-cols-1 gap-2">
             <mat-form-field appearance="outline">
               <mat-label>Địa Chỉ</mat-label>
               <input [(ngModel)]="Detail.Address" [ngModelOptions]="{standalone: true}" matInput type="text"
                 class="w-full" placeholder="Địa Chỉ" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Công Ty</mat-label>
+              <input [(ngModel)]="Detail.Congty" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Công Ty" />
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Type</mat-label>
