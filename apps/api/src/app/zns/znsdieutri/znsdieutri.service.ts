@@ -83,21 +83,44 @@ export class ZnsdieutriService {
 
   async sendzns(data: any) {
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
+    console.log(data);
+    console.log(Chinhanh);
+    
     // try {
       if (!Chinhanh?.ZaloOaToken?.access_token) {
         this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       }
       else {
-        const requestData = {
-         // mode: "development",
-          phone: convertPhoneNum(data.CustPhone),
-          template_id: Chinhanh.TemplateDanhgia,
-          template_data: {
-            customer_name: data.CustName,
-            schedule_date: moment(data.Created).format('DD/MM/YYYY')
-          },
-          tracking_id: GenId(12, true),
-        };
+       let requestData:any = {}
+        if(Chinhanh.Congty=='tazaskin')
+          {
+            requestData = {
+              // mode: "development",
+               phone: convertPhoneNum(data.CustPhone),
+               template_id: Chinhanh.TemplateDanhgia,
+               template_data: {
+                 customer_name: data.CustName,
+                 schedule_date: moment(data.Created).format('DD/MM/YYYY')
+               },
+               tracking_id: GenId(12, true),
+             };
+             console.log(requestData);
+             
+          }
+        else{
+           requestData = {
+            // mode: "development",
+             phone: convertPhoneNum(data.CustPhone),
+             template_id: Chinhanh.TemplateDanhgia,
+             template_data: {
+              Ten_Hoc_Vien: data.CustName,
+              Ngay_Su_Dung: moment(data.Created).format('DD/MM/YYYY'),
+              Ma_hoa_don:Chinhanh.Title.replace(/Timona Academy /g, "")
+             },
+             tracking_id: GenId(12, true),
+           };
+           console.log(requestData);
+        }
         const config = {
           method: 'post',
           headers: {
@@ -126,12 +149,11 @@ export class ZnsdieutriService {
           this.update(data.id, data)
         }
         return result
-      }
     // } catch (error) {
     //   console.log(error);
       
     //     this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 3:  ${JSON.stringify(error)}`);
-    // }
+    }
   }
   // async sendznsauto(data: any) {
   //   data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');

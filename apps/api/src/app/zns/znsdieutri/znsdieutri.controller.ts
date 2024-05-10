@@ -39,12 +39,6 @@ export class ZnsdieutriController {
             await this.sendzns(v); 
           }, k*2000);
         })
-
-        // await Promise.all(result.items.map(async (v,k) => {
-        //   setTimeout(async () => {
-        //     await this.sendzns(v); 
-        //   }, k*2000);
-        // }
         return result;
       }
     }
