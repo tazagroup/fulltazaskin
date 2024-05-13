@@ -21,20 +21,22 @@ export class ZnsdieutriService {
     const Dieutris = await this._VttechdieutriService.findQuery(data)
     if (Dieutris.length > 0) {
       const uniqueDieutris = Dieutris.reduce((acc: any[], curr: any) => {
-        const existingDieutri = acc.find((d: any) => d.idVttech === curr.idVttech && d.CustPhone === curr.CustPhone);        
+        const existingDieutri = acc.find((d: any) => d.idVttech === curr.idVttech && d.CustPhone === curr.CustPhone);
         if (!existingDieutri) {
           acc.push(curr);
         }
         return acc;
       }, []);
-      const ListItems:any=[]
+      const ListItems: any = []
       await Promise.all(uniqueDieutris.map(async (v: any) => {
-        const check = await this.findSHD({idVttech:v.ID,CustPhone:v.CustPhone});
+        const check = await this.findSHD({ idVttech: v.ID, CustPhone: v.CustPhone });
         // console.log(check);
         if (!check) {
           ListItems.push(v);
         }
       }));
+      console.log(ListItems);
+
       this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step2 - Create (${ListItems.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       ListItems.forEach((v: any, k: any) => {
         const item: any = {}
@@ -43,7 +45,7 @@ export class ZnsdieutriService {
         item.CustPhone = v.CustPhone
         item.CustName = v.CustName
         item.BranchID = v.BranchID
-        item.Created =  moment(v.Created).format('YYYY-MM-DD')
+        item.Created = moment(v.Created).format('YYYY-MM-DD')
         setTimeout(() => {
           this.create(item)
         }, k * 300);
@@ -83,78 +85,72 @@ export class ZnsdieutriService {
 
   async sendzns(data: any) {
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
-    console.log(data);
-    console.log(Chinhanh);
-    
     // try {
-      if (!Chinhanh?.ZaloOaToken?.access_token) {
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-        data.Status = 3;
+    if (!Chinhanh?.ZaloOaToken?.access_token) {
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+      data.Status = 3;
+      this.update(data.id, data)
+    }
+    else {
+      let requestData: any = {}
+      if (Chinhanh.Congty == 'tazaskin') {
+        requestData = {
+          // mode: "development",
+          phone: convertPhoneNum(data.CustPhone),
+          template_id: Chinhanh.TemplateDanhgia,
+          template_data: {
+            customer_name: data.CustName,
+            schedule_date: moment(data.Created).format('DD/MM/YYYY')
+          },
+          tracking_id: GenId(12, true),
+        };
+
+      }
+      else {
+        requestData = {
+          // mode: "development",
+          phone: convertPhoneNum(data.CustPhone),
+          template_id: Chinhanh.TemplateDanhgia,
+          template_data: {
+            Ten_Hoc_Vien: data.CustName,
+            Ngay_Su_Dung: moment(data.Created).format('DD/MM/YYYY'),
+            Ma_hoa_don: Chinhanh.Title.replace(/Timona Academy /g, "")
+          },
+          tracking_id: GenId(12, true),
+        };
+      }
+      const config = {
+        method: 'post',
+        headers: {
+          'access_token': Chinhanh.ZaloOaToken.access_token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+      };
+      // if (data.CustPhone == "0977272967") {
+      const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
+      if (!response.ok) {
+        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 1 :  ${JSON.stringify(response.statusText)}`);
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+      const result = await response.json();
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 2 :  ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+      if (result.error == 0) {
+        data.Status = 1;
+        data.messageId = result.data.msg_id;
+        data.trackingId = requestData.tracking_id;
         this.update(data.id, data)
       }
       else {
-       let requestData:any = {}
-        if(Chinhanh.Congty=='tazaskin')
-          {
-            requestData = {
-              // mode: "development",
-               phone: convertPhoneNum(data.CustPhone),
-               template_id: Chinhanh.TemplateDanhgia,
-               template_data: {
-                 customer_name: data.CustName,
-                 schedule_date: moment(data.Created).format('DD/MM/YYYY')
-               },
-               tracking_id: GenId(12, true),
-             };
-             console.log(requestData);
-             
-          }
-        else{
-           requestData = {
-            // mode: "development",
-             phone: convertPhoneNum(data.CustPhone),
-             template_id: Chinhanh.TemplateDanhgia,
-             template_data: {
-              Ten_Hoc_Vien: data.CustName,
-              Ngay_Su_Dung: moment(data.Created).format('DD/MM/YYYY'),
-              Ma_hoa_don:Chinhanh.Title.replace(/Timona Academy /g, "")
-             },
-             tracking_id: GenId(12, true),
-           };
-           console.log(requestData);
-        }
-        const config = {
-          method: 'post',
-          headers: {
-            'access_token': Chinhanh.ZaloOaToken.access_token,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestData)
-        };
-        // if (data.CustPhone == "0977272967") {
-        const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
-        if (!response.ok) {
-          this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 1 :  ${JSON.stringify(response.statusText)}`);
-          throw new Error(`Error fetching data: ${response.statusText}`);
-        }
-        const result = await response.json();
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 2 :  ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-        if (result.error == 0) {
-          data.Status = 1;
-          data.messageId =result.data.msg_id;
-          data.trackingId =requestData.tracking_id;
-          this.update(data.id, data)
-        }
-        else {
-          data.Status = 2;
-          data.Statuscode = result.error;
-          this.update(data.id, data)
-        }
-        return result
-    // } catch (error) {
-    //   console.log(error);
-      
-    //     this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 3:  ${JSON.stringify(error)}`);
+        data.Status = 2;
+        data.Statuscode = result.error;
+        this.update(data.id, data)
+      }
+      return result
+      // } catch (error) {
+      //   console.log(error);
+
+      //     this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 3:  ${JSON.stringify(error)}`);
     }
   }
   // async sendznsauto(data: any) {

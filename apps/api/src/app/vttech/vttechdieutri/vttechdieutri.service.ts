@@ -111,6 +111,8 @@ export class VttechdieutriService {
           ListItems.push(v);
         }
       }));
+      console.log(ListItems);
+      
       this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Lấy Dữ Liệu Điều Trị Thành Công (${ListItems.length}) - ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
       if (ListItems.length > 0) {
         ListItems.forEach(async (v: any, k: any) => {
