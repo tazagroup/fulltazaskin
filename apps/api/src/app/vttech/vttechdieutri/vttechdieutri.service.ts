@@ -103,16 +103,14 @@ export class VttechdieutriService {
           'Cookie': result[1],
         },
       });
-      const data = response.data;
+      const data = response.data;      
       const ListItems:any=[]
       await Promise.all(data.Data.map(async (v: any) => {
         const check = await this.findidVttech(convertToZeroMinutesSeconds(v.CreatedDate).getTime());
         if (!check) {
           ListItems.push(v);
         }
-      }));
-      console.log(ListItems);
-      
+      }));      
       this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Lấy Dữ Liệu Điều Trị Thành Công (${ListItems.length}) - ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
       if (ListItems.length > 0) {
         ListItems.forEach(async (v: any, k: any) => {
