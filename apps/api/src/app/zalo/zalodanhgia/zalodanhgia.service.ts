@@ -10,6 +10,7 @@ import { ZaloznstrackingService } from '../zaloznstracking/zaloznstracking.servi
 import { error } from 'console';
 import { LoggerService } from '../../logger/logger.service';
 import { ZnsdieutriService } from '../../zns/znsdieutri/znsdieutri.service';
+import moment = require('moment');
 @Injectable()
 export class ZalodanhgiaService {
   constructor(
@@ -65,15 +66,22 @@ export class ZalodanhgiaService {
       data: zalodanhgias,
     };
   }
-  async findQuery(params: any) {
-    const Begin = new Date(params.Batdau).getTime()
-    const End = new Date(params.Ketthuc).getTime()    
+  async findQuery(params: any) {  
     const queryBuilder = this.ZalodanhgiaRepository.createQueryBuilder('zalodanhgia');
-    if (params.Batdau && params.Ketthuc) {
-      queryBuilder.andWhere('zalodanhgia.submitDate BETWEEN :startDate AND :endDate', {
-        startDate:Begin,
-        endDate:End,
-      });
+    // if (params.Batdau && params.Ketthuc) {
+    //   queryBuilder.andWhere('zalodanhgia.submitDate BETWEEN :startDate AND :endDate', {
+    //     startDate:Begin,
+    //     endDate:End,
+    //   });
+    // }
+    const Begin = moment(params.CreatedBegin).startOf('day').valueOf()
+    const End = moment(params.CreatedEnd).endOf('day').valueOf()
+    console.log(Begin,End);
+    if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
+          queryBuilder.andWhere('zalodanhgia.submitDate BETWEEN :startDate AND :endDate', {
+            startDate:  Begin,
+            endDate:  End
+          });
     }
     if (params.hasOwnProperty("idCN")) {
       queryBuilder.andWhere('zalodanhgia.idCN = :idCN', { idCN: `${params.idCN}` });
@@ -83,6 +91,9 @@ export class ZalodanhgiaService {
     }
     if (params.hasOwnProperty('star')) {
       queryBuilder.andWhere('zalodanhgia.rate = :rate', { rate: `${params.star}` });
+    }
+    if (params.hasOwnProperty('BranchID')) {
+      queryBuilder.andWhere('zalodanhgia.BranchID = :BranchID', { BranchID: `${params.BranchID}` });
     }
     let [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10)
