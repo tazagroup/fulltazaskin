@@ -22,7 +22,7 @@ export class ZnsthanhtoanController {
   sendzns(@Body() data: any) {
     return this.znsthanhtoanService.sendzns(data);
   }
- //@Interval(120000)
+ @Interval(300000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
   //  this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Gửi ZNS Tự Động Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
