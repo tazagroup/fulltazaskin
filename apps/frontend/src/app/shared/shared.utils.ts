@@ -439,3 +439,230 @@ export function flattenData(data: any) {
   return flattenedData;
 };
 
+export const ZALO_ERROR: any[] =
+  [
+    {
+      "errorcode": "0",
+      "desc": "Gửi thành công"
+    },
+    {
+      "errorcode": "-100",
+      "desc": "Xảy ra lỗi không xác định, vui lòng thử lại sau"
+    },
+    {
+      "errorcode": "-101",
+      "desc": "Ứng dụng gửi ZNS không hợp lệ"
+    },
+    {
+      "errorcode": "-102",
+      "desc": "Ứng dụng gửi ZNS không tồn tại"
+    },
+    {
+      "errorcode": "-103",
+      "desc": "Ứng dụng chưa được kích hoạt"
+    },
+    {
+      "errorcode": "-104",
+      "desc": "Secret key của ứng dụng không hợp lệ"
+    },
+    {
+      "errorcode": "-105",
+      "desc": "Ứng dụng gửi ZNS chưa đươc liên kết với OA nào"
+    },
+    {
+      "errorcode": "-106",
+      "desc": "Phương thức không được hỗ trợ"
+    },
+    {
+      "errorcode": "-107",
+      "desc": "ID thông báo không hợp lệ"
+    },
+    {
+      "errorcode": "-108",
+      "desc": "Số điện thoại không hợp lệ"
+    },
+    {
+      "errorcode": "-109",
+      "desc": "ID mẫu ZNS không hợp lệ"
+    },
+    {
+      "errorcode": "-110",
+      "desc": "Phiên bản Zalo app không được hỗ trợ. Người dùng cần cập nhật phiên bản mới nhất"
+    },
+    {
+      "errorcode": "-111",
+      "desc": "Mẫu ZNS không có dữ liệu"
+    },
+    {
+      "errorcode": "-112",
+      "desc": "Nội dung mẫu ZNS không hợp lệ"
+    },
+    {
+      "errorcode": "-1123",
+      "desc": "Không thể tạo QR code, vui lòng kiểm tra lại"
+    },
+    {
+      "errorcode": "-113",
+      "desc": "Button không hợp lệ"
+    },
+    {
+      "errorcode": "-114",
+      "desc": "Người dùng không nhận được ZNS vì các lý do: Trạng thái tài khoản, Tùy chọn nhận ZNS, Sử dụng Zalo phiên bản cũ, hoặc các lỗi nội bộ khác"
+    },
+    {
+      "errorcode": "-115",
+      "desc": "Tài khoản ZNS không đủ số dư"
+    },
+    {
+      "errorcode": "-116",
+      "desc": "Nội dung không hợp lệ"
+    },
+    {
+      "errorcode": "-117",
+      "desc": "OA hoặc ứng dụng gửi ZNS chưa được cấp quyền sử dụng mẫu ZNS này"
+    },
+    {
+      "errorcode": "-118",
+      "desc": "Tài khoản Zalo không tồn tại hoặc đã bị vô hiệu hoá"
+    },
+    {
+      "errorcode": "-119",
+      "desc": "Tài khoản không thể nhận ZNS"
+    },
+    {
+      "errorcode": "-120",
+      "desc": "OA chưa được cấp quyền sử dụng tính năng này"
+    },
+    {
+      "errorcode": "-121",
+      "desc": "Mẫu ZNS không có nội dung"
+    },
+    {
+      "errorcode": "-122",
+      "desc": "Body request không đúng định dạng JSON"
+    },
+    {
+      "errorcode": "-123",
+      "desc": "Giải mã nội dung thông báo RSA thất bại"
+    },
+    {
+      "errorcode": "-124",
+      "desc": "Mã truy cập không hợp lệ"
+    },
+    {
+      "errorcode": "-125",
+      "desc": "ID Official Account không hợp lệ"
+    },
+    {
+      "errorcode": "-126",
+      "desc": "Ví (development mode) không đủ số dư"
+    },
+    {
+      "errorcode": "-127",
+      "desc": "Template test chỉ có thể được gửi cho quản trị viên"
+    },
+    {
+      "errorcode": "-128",
+      "desc": "Mã encoding key không tồn tại"
+    },
+    {
+      "errorcode": "-129",
+      "desc": "Không thể tạo RSA key, vui lòng thử lại sau"
+    },
+    {
+      "errorcode": "-130",
+      "desc": "Nội dung mẫu ZNS vượt quá giới hạn kí tự"
+    },
+    {
+      "errorcode": "-131",
+      "desc": "Mẫu ZNS chưa được phê duyệt"
+    },
+    {
+      "errorcode": "-132",
+      "desc": "Tham số không hợp lệ"
+    },
+    {
+      "errorcode": "-133",
+      "desc": "Mẫu ZNS này không được phép gửi vào ban đêm (từ 22h-6h)"
+    },
+    {
+      "errorcode": "-134",
+      "desc": "Người dùng chưa phản hồi gợi ý nhận ZNS từ OA"
+    },
+    {
+      "errorcode": "-135",
+      "desc": "OA chưa có quyền gửi ZNS (chưa được xác thực, đang sử dụng gói miễn phí)"
+    },
+    {
+      "errorcode": "-136",
+      "desc": "Cần kết nối với ZCA để sử dụng tính năng này"
+    },
+    {
+      "errorcode": "-137",
+      "desc": "Thanh toán ZCA thất bại (ví không đủ số dư, ...)"
+    },
+    {
+      "errorcode": "-138",
+      "desc": "Ứng dụng gửi ZNS chưa có quyền sử dụng tính năng này"
+    },
+    {
+      "errorcode": "-139",
+      "desc": "Người dùng từ chối nhận loại ZNS này"
+    },
+    {
+      "errorcode": "-140",
+      "desc": "OA chưa được cấp quyền gửi ZNS hậu mãi cho người dùng này"
+    },
+    {
+      "errorcode": "-141",
+      "desc": "Người dùng từ chối nhận ZNS từ Official Account"
+    },
+    {
+      "errorcode": "-142",
+      "desc": "RSA key không tồn tại, vui lòng gọi API tạo RSA key"
+    },
+    {
+      "errorcode": "-143",
+      "desc": "RSA key đã tồn tại, vui lòng gọi API lấy RSA key"
+    },
+    {
+      "errorcode": "-144",
+      "desc": "OA đã vượt giới hạn gửi ZNS trong ngày"
+    },
+    {
+      "errorcode": "-145",
+      "desc": "OA không được phép gửi loại nội dung ZNS này"
+    },
+    {
+      "errorcode": "-146",
+      "desc": "Mẫu ZNS này đã bị vô hiệu hoá do chất lượng gửi thấp"
+    },
+    {
+      "errorcode": "-147",
+      "desc": "Mẫu ZNS đã vượt giới hạn gửi trong ngày"
+    },
+    {
+      "errorcode": "-1471",
+      "desc": "OA đã vượt giới hạn gửi tin ZNS hậu mãi cho người dùng này trong tháng."
+    },
+    {
+      "errorcode": "-148",
+      "desc": "Không tìm thấy ZNS journey token"
+    },
+    {
+      "errorcode": "-149",
+      "desc": "ZNS journey token không hợp lệ"
+    },
+    {
+      "errorcode": "-150",
+      "desc": "ZNS journey token đã hết hạn"
+    },
+    {
+      "errorcode": "-151",
+      "desc": "Không phải mẫu ZNS E2EE"
+    },
+    {
+      "errorcode": "-152",
+      "desc": "Lấy E2EE key thất bại"
+    }
+  ]

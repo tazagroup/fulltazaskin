@@ -14,7 +14,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ZnsdieutriService } from '../znsdieutri.service';
-import { Status, Style1 } from '../../shared/shared.utils';
+import { Status, Style1, ZALO_ERROR } from '../../shared/shared.utils';
 import * as moment from 'moment';
 import { ChinhanhService } from '../../admin/cauhinh/chinhanh/chinhanh.service';
 @Component({
@@ -44,17 +44,20 @@ export class ZnsdieutriadminComponent implements OnInit {
   ListChiNhanh: any[] = []
   Sitemap: any = { loc: '', priority: '' }
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
-  displayedColumns: string[] = ['CustName', 'CustPhone','Chinhanh','Created','Status'];
+  displayedColumns: string[] = ['CustName', 'CustPhone','Chinhanh','Created','Status','Detail'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   ListStatus: any = Status
   Style: any = Style1
+  ZALO_ERROR: any = ZALO_ERROR
   SearchParams: any = {
     CreatedBegin: moment().format('YYYY-MM-DD'),
     CreatedEnd: moment().format('YYYY-MM-DD'),
     pageSize:9999,
-    pageNumber:0
+    pageNumber:0,
+    Status:9999,
+    BranchID:9999
   };
   constructor(
     private dialog: MatDialog,
@@ -64,7 +67,8 @@ export class ZnsdieutriadminComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    this._ZnsdieutriService.searchZnsdieutri(this.SearchParams).subscribe()
+    this.ChangeSearchParams()
+    //this._ZnsdieutriService.searchZnsdieutri(this.SearchParams).subscribe()
       this._ChinhanhService.getAllChinhanhs().subscribe()
       this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {
         this.ListChiNhanh = chinhanhs
@@ -114,11 +118,17 @@ export class ZnsdieutriadminComponent implements OnInit {
     
   }
   ChangeSearchParams() {
-    this._ZnsdieutriService.searchZnsdieutri(this.SearchParams).subscribe()
+   this.SearchParams.BranchID==9999?delete this.SearchParams.BranchID: this.SearchParams.BranchID
+   this.SearchParams.Status==9999?delete this.SearchParams.Status: this.SearchParams.Status
+   this._ZnsdieutriService.searchZnsdieutri(this.SearchParams).subscribe()
   }
   GetStype(item:any)
   {
     return this.Style[item]
+  }
+  GetDetailcode(item:any)
+  {
+    return this.ZALO_ERROR.find((v:any)=>v.errorcode == item)?.desc
   }
   CountStatus(item: any) {
     const result = this.FilterLists.filter((v: any) => v.Status == item)

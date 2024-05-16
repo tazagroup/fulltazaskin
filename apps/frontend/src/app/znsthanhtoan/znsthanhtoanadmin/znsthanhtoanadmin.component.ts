@@ -50,7 +50,9 @@ export class ZnsthanhtoanadminComponent implements OnInit {
     CreatedBegin: moment().format('YYYY-MM-DD'),
     CreatedEnd: moment().format('YYYY-MM-DD'),
     pageSize:9999,
-    pageNumber:0
+    pageNumber:0,
+    Status:9999,
+    BranchID:9999
   };
   ListStatus: any = Status
   Style: any = Style1
@@ -64,7 +66,8 @@ export class ZnsthanhtoanadminComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe()
+    this.ChangeSearchParams()
+    //this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe()
     this._ChinhanhService.getAllChinhanhs().subscribe()
     this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {
       this.ListChiNhanh = chinhanhs
@@ -94,7 +97,10 @@ export class ZnsthanhtoanadminComponent implements OnInit {
     console.log(this.dataSource.filteredData);
     
   }
-  ChangeSearchParams() {
+  ChangeSearchParams() {    
+    this.SearchParams.BranchID==9999?delete this.SearchParams.BranchID: this.SearchParams.BranchID
+    this.SearchParams.Status==9999?delete this.SearchParams.Status: this.SearchParams.Status
+    console.log(this.SearchParams);
     this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe()
   }
   GetStype(item:any)

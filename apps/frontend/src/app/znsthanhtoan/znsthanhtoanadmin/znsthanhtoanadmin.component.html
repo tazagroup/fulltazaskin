@@ -29,14 +29,16 @@
 
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Chi Nhánh</mat-label>
-        <mat-select (selectionChange)="ChangeSearchParams()" class="w-full" [(ngModel)]="SearchParams.BrandID" [ngModelOptions]="{standalone: true}">
-          <mat-option [value]="item.id" *ngFor="let item of ListChiNhanh">{{item.Title}}</mat-option>
+        <mat-select (selectionChange)="ChangeSearchParams()" class="w-full" [(ngModel)]="SearchParams.BranchID" [ngModelOptions]="{standalone: true}">
+          <mat-option [value]="9999">Tất Cả</mat-option>
+          <mat-option [value]="item.idVttech" *ngFor="let item of ListChiNhanh">{{item.Title}}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Trạng Thái</mat-label>
         <mat-select (selectionChange)="ChangeSearchParams()" class="w-full" [(ngModel)]="SearchParams.Status" [ngModelOptions]="{standalone: true}">
+          <mat-option [value]="9999">Tất Cả</mat-option>
           <mat-option [value]="item.key" *ngFor="let item of ListStatus|keyvalue">{{item.value}}</mat-option>
         </mat-select>
       </mat-form-field>
