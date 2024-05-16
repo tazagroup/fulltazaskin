@@ -32,23 +32,24 @@ export type ChartOptions = {
 })
 export class DashboardZalodanhgiaComponent implements OnInit {
   SearchParams: any = {
-    Batdau: moment().startOf('day').add(-7, "days").toDate(),
-    Ketthuc: moment().endOf('day').toDate(),
-    pageSize: 9999,
-    pageNumber: 0
+    CreatedBegin: moment().startOf('day').add(-7, "days").format('YYYY-MM-DD'),
+    CreatedEnd: moment().format('YYYY-MM-DD'),
+    pageSize:9999,
+    pageNumber:0,
+    Status:9999,
+    BranchID:9999
   };
   Status:any={0:'Mới',1:'Đợi gửi',2:'Thành Công',3:'Chưa Có Temp OA',4:'Gửi SMS'}
   Sosao:any={1:'1 Sao',2:'2 Sao',3:'3 Sao',4:'4 Sao',5:'5 Sao'}
   Style:any={0:'!bg-blue-500',1:'!bg-yellow-500',2:'!bg-green-500',3:'!bg-red-500',4:'!bg-purple-500'}
   List:any[]=[]
   ngOnInit() {
-    this._ZalodanhgiaService.searchVttechthanhtoan(this.SearchParams).subscribe()
+    this.ChanggeData()
+   // this._ZalodanhgiaService.searchVttechthanhtoan(this.SearchParams).subscribe()
     this._ZalodanhgiaService.zalodanhgias$.subscribe((data:any) => {
       if (data) {
         this.List = data.items.map((v:any)=>({rate:v.rate,Created:moment(Number(v.submitDate)).format("DD/MM/YYYY")}))
-        this.LoadData()
-        console.log( data.items);
-        
+        this.LoadData()        
       }
     })
   }
@@ -97,15 +98,14 @@ export class DashboardZalodanhgiaComponent implements OnInit {
     };
   }
   LoadData() {
-    const daysBetween = moment(this.SearchParams.Ketthuc).diff(moment(this.SearchParams.Batdau), "days");
+    const daysBetween = moment(this.SearchParams.CreatedEnd).diff(moment(this.SearchParams.CreatedBegin), "days");
     const Days = Array.from({ length: daysBetween + 1 }, (_, k) => (k));
     const categories: any = []
     Days.forEach((v) => {
-      categories.push(moment(this.SearchParams.Batdau).add(v, 'days').format("DD/MM/YYYY"))
+      categories.push(moment(this.SearchParams.CreatedBegin).add(v, 'days').format("DD/MM/YYYY"))
     })
     let series:any=[]
     const Sosao = Array.from({ length: Object.entries(this.Sosao).length}, (_, k) => (k+1));
-    console.log(Sosao);
     
     series = Sosao.map((v: any) => ({
       name: this.Sosao[v],
@@ -154,6 +154,8 @@ export class DashboardZalodanhgiaComponent implements OnInit {
     };
   }
   ChanggeData() {
+    this.SearchParams.BranchID==9999?delete this.SearchParams.BranchID: this.SearchParams.BranchID
+    this.SearchParams.Status==9999?delete this.SearchParams.Status: this.SearchParams.Status
     this._ZalodanhgiaService.searchVttechthanhtoan(this.SearchParams).subscribe()
   }
 }

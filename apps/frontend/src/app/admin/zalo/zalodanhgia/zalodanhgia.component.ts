@@ -119,8 +119,8 @@ export class ZalodanhgiaComponent implements OnInit {
   ChoosenDate() {
     this.SearchParams.pageNumber = 0
     this.SearchParams.Batdau = moment(this.SearchParams.Batdau).startOf('day').toDate(),
-      this.SearchParams.Ketthuc = moment(this.SearchParams.Ketthuc).endOf('day').toDate(),
-      this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
+    this.SearchParams.Ketthuc = moment(this.SearchParams.Ketthuc).endOf('day').toDate(),
+    this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
   // applyFilter(event: Event) {
   //   const value = (event.target as HTMLInputElement).value;

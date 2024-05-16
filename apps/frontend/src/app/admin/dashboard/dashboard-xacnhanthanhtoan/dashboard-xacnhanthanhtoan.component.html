@@ -5,9 +5,9 @@
       <mat-form-field appearance="outline" class="lg:text-sm text-xs">
         <mat-label>Chọn Khoảng Thời Gian</mat-label>
         <mat-date-range-input [rangePicker]="rangePicker">
-          <input matStartDate placeholder="Từ Ngày" [(ngModel)]="SearchParams.Batdau"
+          <input matStartDate placeholder="Từ Ngày" [(ngModel)]="SearchParams.CreatedBegin"
             [ngModelOptions]="{standalone: true}">
-          <input matEndDate placeholder="Đến Ngày" [(ngModel)]="SearchParams.Ketthuc"
+          <input matEndDate placeholder="Đến Ngày" [(ngModel)]="SearchParams.CreatedEnd"
             [ngModelOptions]="{standalone: true}">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
