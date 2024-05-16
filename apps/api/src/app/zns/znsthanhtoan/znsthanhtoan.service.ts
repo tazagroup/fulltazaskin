@@ -194,22 +194,29 @@ export class ZnsthanhtoanService {
   async findQuery(params: any) {
     const queryBuilder = this.ZnsthanhtoanRepository.createQueryBuilder('znsthanhtoan');
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
-      queryBuilder.andWhere('znsthanhtoan.Created BETWEEN :startDate AND :endDate', {
-        startDate: params.CreatedBegin,
-        endDate: params.CreatedEnd,
-      });
-    }
-    if (params.hasOwnProperty('Batdau') && params.hasOwnProperty('Ketthuc')) {
-      queryBuilder.andWhere('znsthanhtoan.CreateAt BETWEEN :startDate AND :endDate', {
-        startDate: params.Batdau,
-        endDate: params.Ketthuc,
-      });
+      console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
+      if(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)))
+        {
+          queryBuilder.andWhere('znsthanhtoan.Created = :startDate', {
+            startDate: moment(params.CreatedBegin).format('YYYY-MM-DD')
+          });
+        }
+        else {
+          queryBuilder.andWhere('znsthanhtoan.Created BETWEEN :startDate AND :endDate', {
+            startDate:  moment(params.CreatedBegin).format('YYYY-MM-DD'),
+            endDate:  moment(params.CreatedEnd).format('YYYY-MM-DD')
+          });
+        }
+
     }
     if (params.hasOwnProperty('Title')) {
       queryBuilder.andWhere('znsthanhtoan.Title LIKE :Title', { SDT: `%${params.Title}%` });
     }
     if (params.hasOwnProperty('Status')) {
       queryBuilder.andWhere('znsthanhtoan.Status = :Status', { Status: `${params.Status}` });
+    }
+    if (params.hasOwnProperty('BranchID')) {
+      queryBuilder.andWhere('znsthanhtoan.BranchID = :BranchID', { BranchID: `${params.BranchID}` });
     }
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided

@@ -209,22 +209,29 @@ export class ZnsdieutriService {
   async findQuery(params: any) {
     const queryBuilder = this.ZnsdieutriRepository.createQueryBuilder('znsdieutri');
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
-      queryBuilder.andWhere('znsdieutri.Created BETWEEN :startDate AND :endDate', {
-        startDate: params.CreatedBegin,
-        endDate: params.CreatedEnd,
-      });
-    }
-    if (params.hasOwnProperty('Batdau') && params.hasOwnProperty('Ketthuc')) {
-      queryBuilder.andWhere('znsdieutri.CreateAt BETWEEN :startDate AND :endDate', {
-        startDate: params.Batdau,
-        endDate: params.Ketthuc,
-      });
+      console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
+      if(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)))
+        {
+          queryBuilder.andWhere('znsdieutri.Created = :startDate', {
+            startDate: moment(params.CreatedBegin).format('YYYY-MM-DD')
+          });
+        }
+        else {
+          queryBuilder.andWhere('znsdieutri.Created BETWEEN :startDate AND :endDate', {
+            startDate:  moment(params.CreatedBegin).format('YYYY-MM-DD'),
+            endDate:  moment(params.CreatedEnd).format('YYYY-MM-DD')
+          });
+        }
+
     }
     if (params.hasOwnProperty('Title')) {
       queryBuilder.andWhere('znsdieutri.Title LIKE :Title', { SDT: `%${params.Title}%` });
     }
     if (params.hasOwnProperty('Status')) {
       queryBuilder.andWhere('znsdieutri.Status = :Status', { Status: `${params.Status}` });
+    }
+    if (params.hasOwnProperty('BranchID')) {
+      queryBuilder.andWhere('znsdieutri.BranchID = :BranchID', { BranchID: `${params.BranchID}` });
     }
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
