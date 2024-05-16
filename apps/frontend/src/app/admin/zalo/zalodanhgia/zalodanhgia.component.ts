@@ -22,10 +22,12 @@ export class ZalodanhgiaComponent implements OnInit {
   FilterLists: any[] = []
   ListChiNhanh: any[] = []
   SearchParams: any = {
-    Batdau: moment().format('YYYY-MM-DD'),
-    Ketthuc: moment().format('YYYY-MM-DD'),
-    pageSize: 9999,
-    pageNumber: 0
+    CreatedBegin: moment().format('YYYY-MM-DD'),
+    CreatedEnd: moment().format('YYYY-MM-DD'),
+    pageSize:9999,
+    pageNumber:0,
+    Status:9999,
+    BranchID:9999
   };
   LIST_CHI_NHANH: any = LIST_CHI_NHANH
   PagiLength: any
@@ -48,7 +50,8 @@ export class ZalodanhgiaComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
+    this.ChangeSearchParams()
+   // this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
     this._ChinhanhService.getAllChinhanhs().subscribe()
     this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {
       this.ListChiNhanh = chinhanhs
@@ -83,6 +86,8 @@ export class ZalodanhgiaComponent implements OnInit {
     
   }
   ChangeSearchParams() {
+    this.SearchParams.BranchID==9999?delete this.SearchParams.BranchID: this.SearchParams.BranchID
+    this.SearchParams.Status==9999?delete this.SearchParams.Status: this.SearchParams.Status
     this._ZaloznsService.searchZalozns(this.SearchParams).subscribe()
   }
   StarToggle(item:any)
