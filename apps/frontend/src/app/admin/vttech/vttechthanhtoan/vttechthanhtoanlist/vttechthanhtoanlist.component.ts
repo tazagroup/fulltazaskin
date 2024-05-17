@@ -15,6 +15,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ChinhanhService } from '../../../cauhinh/chinhanh/chinhanh.service';
+import * as moment from 'moment';
+import { Status } from 'apps/frontend/src/app/shared/shared.utils';
 @Component({
   selector: 'app-vttechthanhtoanlist',
   standalone: true,
@@ -41,14 +43,20 @@ export class VttechthanhtoanlistComponent implements OnInit {
   FilterLists: any[] = []
   Sitemap: any = { loc: '', priority: '' }
   SearchParams: any = {
+    CreatedBegin: moment().format('YYYY-MM-DD'),
+    CreatedEnd: moment().format('YYYY-MM-DD'),
     pageSize:9999,
-    pageNumber:0
+    pageNumber:0,
+    Status:9999,
+    BranchID:9999
   };
+  ListStatus: any = Status
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   displayedColumns: string[] = ['CustName', 'CustPhone','Code','TypeName','Paid', 'DiscountAmount','DepositAmountUsing','TotalPaid','Chinhanh','Created'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  ListChiNhanh: any[] = []
   constructor(
     private dialog: MatDialog,
     private _Notification: NotifierService,
@@ -57,11 +65,12 @@ export class VttechthanhtoanlistComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
+    this.ChangeSearchParams()
     this._ChinhanhService.getAllChinhanhs().subscribe()
-    this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
+   // this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
     this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {      
       if (chinhanhs?.length > 0) {
-        console.log(chinhanhs);
+        this.ListChiNhanh = chinhanhs
         this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data: any) => {
           if (data) {            
             data.forEach((v: any) => {
@@ -70,15 +79,6 @@ export class VttechthanhtoanlistComponent implements OnInit {
             console.log(data);
             this.FilterLists = this.Lists = data
             this.dataSource = new MatTableDataSource(this.FilterLists);
-            // this.dataSource.sortingDataAccessor = (item, property) => {
-            //   switch (property) {
-            //     case 'Diachi': return item.Giohangs.Khachhang.Diachi;
-            //     case 'Hoten': return item.Giohangs.Khachhang.Hoten;
-            //     case 'SDT': return item.Giohangs.Khachhang.SDT;
-            //     case 'Hinhthuc': return item.Dieutri.Hinhthuc;
-            //     default: return item[property];
-            //   }
-            // };
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
           }
@@ -86,14 +86,17 @@ export class VttechthanhtoanlistComponent implements OnInit {
       }
     })
   }
+  ChangeSearchParams() {
+    this.SearchParams.BranchID==9999?delete this.SearchParams.BranchID: this.SearchParams.BranchID
+    this.SearchParams.Status==9999?delete this.SearchParams.Status: this.SearchParams.Status
+    this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
+   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-    console.log(this.dataSource.filteredData);
-    
   }
   openDialog(teamplate: TemplateRef<any>): void {
   //   const dialogRef = this.dialog.open(teamplate, {
