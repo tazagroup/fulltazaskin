@@ -17,7 +17,7 @@ export class ChitietService {
   async findAll() {
     const data = await this.ChitietRepository.find();
     const groupedData = data.reduce((acc, item) => {
-      const existingItem = acc.find((groupedItem) => groupedItem.id === item.id);
+      const existingItem = acc.find((groupedItem) => groupedItem.id == item.id);
       if (!existingItem) {
         acc.push({
           id: item.id,
@@ -54,7 +54,7 @@ export class ChitietService {
       }, []);
       const length = uniqueData.length
       // const groupedData = data.reduce((acc, item) => {
-      //   const existingItem = acc.find((groupedItem) => groupedItem.id === item.id);
+      //   const existingItem = acc.find((groupedItem) => groupedItem.id == item.id);
       //   if (!existingItem) {
       //     acc.push({
       //       id: item.id,

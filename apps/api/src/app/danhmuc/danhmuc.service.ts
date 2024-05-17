@@ -19,7 +19,7 @@ export class DanhmucService {
  nestDataByPid(data: any[], parentId: string): any[] {
     const nestedData: any[] = [];
     data.forEach((item) => {
-      if (item.pid === parentId) {
+      if (item.pid == parentId) {
         const children = this.nestDataByPid(data, item.id);
         item.Children = children;
         nestedData.push(item);
@@ -32,7 +32,7 @@ export class DanhmucService {
     // const Dichvus = await this._DichvuService.findAll();
     // Danhmucs.map((v:any) => {
     //   v.isDM = true
-    //   v.Dichvu = Dichvus.filter((dichvu) => dichvu.idDM === v.id)||[];
+    //   v.Dichvu = Dichvus.filter((dichvu) => dichvu.idDM == v.id)||[];
     // });
     // const result = this.nestDataByPid(Danhmucs, '');   
     return await this.DanhmucRepository.find();
@@ -42,7 +42,7 @@ export class DanhmucService {
   //   const Dichvus = await this._DichvuService.findAll();
   //   Danhmucs.map((v:any) => {
   //     v.isDM = true
-  //     v.Dichvu = Dichvus.filter((dichvu) => dichvu.idDM === v.id)||[];
+  //     v.Dichvu = Dichvus.filter((dichvu) => dichvu.idDM == v.id)||[];
   //   });
   //   const result = this.nestDataByPid(Danhmucs, '');   
   //   return result

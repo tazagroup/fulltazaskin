@@ -21,7 +21,7 @@ export class ZnsdieutriService {
     const Dieutris = await this._VttechdieutriService.findQuery(data)
     if (Dieutris.length > 0) {
       const uniqueDieutris = Dieutris.reduce((acc: any[], curr: any) => {
-        const existingDieutri = acc.find((d: any) => d.idVttech === curr.idVttech && d.CustPhone === curr.CustPhone);
+        const existingDieutri = acc.find((d: any) => d.idVttech == curr.idVttech && d.CustPhone == curr.CustPhone);
         if (!existingDieutri) {
           acc.push(curr);
         }
@@ -29,13 +29,13 @@ export class ZnsdieutriService {
       }, []);
       const ListItems: any = []
       await Promise.all(uniqueDieutris.map(async (v: any) => {
-        const check = await this.findSHD({ idVttech: v.ID, CustPhone: v.CustPhone });
+        const check = await this.findSHD({ idVttech: v.ID, CustPhone: v.CustPhone,Created:v.Created  });
         // console.log(check);
         if (!check) {
           ListItems.push(v);
         }
       }));
-      console.log(ListItems);
+      console.log(ListItems.length);
 
       this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step2 - Create (${ListItems.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       ListItems.forEach((v: any, k: any) => {
@@ -185,7 +185,8 @@ export class ZnsdieutriService {
     return await this.ZnsdieutriRepository.findOne({
       where: {
         idVttech: data.idVttech,
-        CustPhone: data.CustPhone
+        CustPhone: data.CustPhone,
+        Created: data.Created,
       },
     });
   }
@@ -222,7 +223,6 @@ export class ZnsdieutriService {
             endDate:  moment(params.CreatedEnd).format('YYYY-MM-DD')
           });
         }
-
     }
     if (params.hasOwnProperty('Title')) {
       queryBuilder.andWhere('znsdieutri.Title LIKE :Title', { SDT: `%${params.Title}%` });

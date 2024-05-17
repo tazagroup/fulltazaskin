@@ -82,7 +82,7 @@
 //         this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
 //       }
 //       else {
-//         const priceProperty = Chinhanh.TemplateThanhtoan === '301891' || Chinhanh.TemplateThanhtoan === '302259' ? 'price' : 'cost';
+//         const priceProperty = Chinhanh.TemplateThanhtoan == '301891' || Chinhanh.TemplateThanhtoan == '302259' ? 'price' : 'cost';
 //         const requestData = {
 //          // mode: "development",
 //           phone: convertPhoneNum(data.CustPhone),

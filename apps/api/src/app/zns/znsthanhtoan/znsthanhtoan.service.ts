@@ -34,7 +34,7 @@ export class ZnsthanhtoanService {
         item.Code = v.Code;
         const isCreate = await this.create(item);
         // console.log(isCreate);
-        if (isCreate.error !== 1001) {
+        if (isCreate.error != 1001) {
           CountCreate = CountCreate + 1;
         }
       }));
@@ -82,7 +82,7 @@ export class ZnsthanhtoanService {
         this.update(data.id, data)
       }
       else {
-        const priceProperty = Chinhanh.TemplateThanhtoan === '301891' || Chinhanh.TemplateThanhtoan === '302259' ? 'price' : 'cost';
+        const priceProperty = Chinhanh.TemplateThanhtoan == '301891' || Chinhanh.TemplateThanhtoan == '302259' ? 'price' : 'cost';
         const requestData = {
          // mode: "development",
           phone: convertPhoneNum(data.CustPhone),

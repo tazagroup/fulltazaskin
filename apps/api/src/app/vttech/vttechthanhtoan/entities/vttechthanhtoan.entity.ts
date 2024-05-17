@@ -14,6 +14,8 @@ export class VttechthanhtoanEntity {
     idVttech: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     CustPhone: string;
+    @Column({ type: 'text', collation: 'utf8_general_ci' })
+    Code: string;
     @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
     Dulieu: string
     @Column({ default: 1 })

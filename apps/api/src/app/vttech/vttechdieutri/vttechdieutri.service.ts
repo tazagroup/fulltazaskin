@@ -57,20 +57,36 @@ export class VttechdieutriService {
       data: vttechdieutris,
     };
   }
-  async findQuery(params:any) {
+  async findQuery(params:any) {    
+    console.log(params);   
     const queryBuilder = this.VttechdieutriRepository.createQueryBuilder('vttechdieutri');
+    // if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
+    //   if(params.CreatedBegin==params.CreatedEnd){
+    //     queryBuilder.andWhere('vttechdieutri.Created = :Created', {
+    //       Created: params.CreatedBegin,
+    //     });
+    //   }
+    //   else{
+    //   queryBuilder.andWhere('vttechdieutri.Created BETWEEN :startDate AND :endDate', {
+    //     startDate: params.CreatedBegin,
+    //     endDate: params.CreatedEnd,
+    //   });
+    //   }
+    // }
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
-      if(params.CreatedBegin==params.CreatedEnd){
-        queryBuilder.andWhere('vttechdieutri.Created = :Created', {
-          Created: params.CreatedBegin,
-        });
-      }
-      else{
-      queryBuilder.andWhere('vttechdieutri.Created BETWEEN :startDate AND :endDate', {
-        startDate: params.CreatedBegin,
-        endDate: params.CreatedEnd,
-      });
-      }
+      console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
+      if(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)))
+        {
+          queryBuilder.andWhere('vttechdieutri.Created = :startDate', {
+            startDate: moment(params.CreatedBegin).format('YYYY-MM-DD')
+          });
+        }
+        else {
+          queryBuilder.andWhere('vttechdieutri.Created BETWEEN :startDate AND :endDate', {
+            startDate:  moment(params.CreatedBegin).format('YYYY-MM-DD'),
+            endDate:  moment(params.CreatedEnd).format('YYYY-MM-DD')
+          });
+        }
     }
     if (params.Title) {
       queryBuilder.andWhere('vttechdieutri.Title LIKE :Title', { SDT: `%${params.Title}%` });
@@ -78,7 +94,8 @@ export class VttechdieutriService {
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
-      .getManyAndCount();  
+      .getManyAndCount();   
+      console.log(items);    
     return items;
   }
   async update(id: string, UpdateVttechdieutriDto: any) {

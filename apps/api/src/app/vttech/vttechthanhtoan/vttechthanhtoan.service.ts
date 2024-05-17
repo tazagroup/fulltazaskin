@@ -53,32 +53,53 @@ export class VttechthanhtoanService {
     };
   }
   async findQuery(params:any) {
-
-    console.error(params);
     const queryBuilder = this.VttechthanhtoanRepository.createQueryBuilder('vttechthanhtoan');
-    if (params.CreatedBegin && params.CreatedEnd) {
-      queryBuilder.andWhere('vttechthanhtoan.Created BETWEEN :startDate AND :endDate', {
-        startDate: params.CreatedBegin,
-        endDate: params.CreatedEnd,
-      });
+    // if (params.CreatedBegin && params.CreatedEnd) {
+    //   queryBuilder.andWhere('vttechthanhtoan.Created BETWEEN :startDate AND :endDate', {
+    //     startDate: params.CreatedBegin,
+    //     endDate: params.CreatedEnd,
+    //   });
+    // }
+    if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
+      console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
+      if(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)))
+        {
+          queryBuilder.andWhere('vttechthanhtoan.Created = :startDate', {
+            startDate: moment(params.CreatedBegin).format('YYYY-MM-DD')
+          });
+        }
+        else {
+          queryBuilder.andWhere('vttechthanhtoan.Created BETWEEN :startDate AND :endDate', {
+            startDate:  moment(params.CreatedBegin).format('YYYY-MM-DD'),
+            endDate:  moment(params.CreatedEnd).format('YYYY-MM-DD')
+          });
+        }
     }
-    if (params.Title) {
-      queryBuilder.andWhere('vttechthanhtoan.CustPhone LIKE :Title', { CustPhone: `%${params.CustPhone}%` });
+    if (params.hasOwnProperty('Title')) {
+      queryBuilder.andWhere('vttechthanhtoan.Title LIKE :Title', { SDT: `${params.Title}` });
     }
+    if (params.hasOwnProperty('Status')) {
+      queryBuilder.andWhere('vttechthanhtoan.Status = :Status', { Status: `${params.Status}` });
+    }
+    if (params.hasOwnProperty('BranchID')) {
+     queryBuilder.andWhere('vttechthanhtoan.Dulieu.BranchID = :BranchID', { BranchID: `${params.BranchID}` });
+    }
+
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
     const data = items.map((v: any) => (v.Dulieu))
-
-  const mergedData = Object.values(data.reduce((acc:any, obj:any) => {
-        const { CustPhone, Code, Paid } = obj;
-        if (!acc[CustPhone]) {
-            acc[CustPhone] = { ...obj };
-        } else {
-            acc[CustPhone].Paid += Paid;
-        }
-        return acc;
+    const mergedData = Object.values(data.reduce((acc, obj) => {
+      const { CustPhone, Code, Paid } = obj;
+      const key = `${CustPhone}-${Code}`;
+    
+      if (!acc[key]) {
+        acc[key] = { ...obj };
+      } else {
+        acc[key].Paid += Paid;
+      }
+      return acc;
     }, {}));
     return mergedData;
   }
@@ -107,11 +128,12 @@ export class VttechthanhtoanService {
       const data = response.data;
       const ListItems:any=[]
       await Promise.all(data.Data.map(async (v: any) => {
-        const check = await this.findby({idVttech:v.ID,CustPhone:v.CustPhone});
+        const check = await this.findby({idVttech:v.ID,CustPhone:v.CustPhone,Code:v.Code});
         if (!check) {
           ListItems.push(v);
         }
       }));
+
       this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Đã Lấy (${JSON.stringify(ListItems.length)}) dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
       if (ListItems.length > 0) {
         ListItems.forEach(async (v: any, k: any) => {
@@ -119,6 +141,7 @@ export class VttechthanhtoanService {
           item.Dulieu = v;
           item.idVttech = v.ID;
           item.CustPhone = v.CustPhone;
+          item.Code = v.Code;
           item.Created = moment(v.Created).format('YYYY-MM-DD');
           setTimeout(async () => {
             const result = await this.create(item);

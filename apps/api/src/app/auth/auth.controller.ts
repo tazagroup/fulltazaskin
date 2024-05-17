@@ -31,8 +31,8 @@ export class AuthController {
     //console.log(user,Groups);
     if (user) {
       delete user.password;
-      user['Groups'] = Groups.find((v) => v.id === user.idGroup)?.ListMenu;
-      user['Groups'] = user['Groups'].filter((v:any) => v.Checked === true);
+      user['Groups'] = Groups.find((v) => v.id == user.idGroup)?.ListMenu;
+      user['Groups'] = user['Groups'].filter((v:any) => v.Checked == true);
       return user;
     } else {
       return false;

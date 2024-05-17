@@ -59,7 +59,7 @@ export class ZaloznsService {
         data:requestData
       };
       const response = await axios.request(config)
-      if (response.data.error === 0) {
+      if (response.data.error == 0) {
         let dulieu: any={};
         dulieu.SDT = item.SDT
         dulieu.Hoten = item.CustName
@@ -109,7 +109,7 @@ export class ZaloznsService {
       const response = await axios.request(config)
       console.log("Checkloi",response);
       
-      if (response.data.error === 0) {
+      if (response.data.error == 0) {
         let dulieu: any={};
         dulieu.SDT = requestData.phone
         dulieu.Hoten = item.CustName
@@ -152,7 +152,7 @@ export class ZaloznsService {
       };
       const response = await axios.request(config)
       console.log(response.data);    
-      if (response.data.error === 0) {
+      if (response.data.error == 0) {
         let dulieu: any={};
         dulieu.SDT = item.SDT
         dulieu.Hoten = item.CustName
@@ -200,7 +200,7 @@ export class ZaloznsService {
         data:requestData
       };
       const response = await axios.request(config)
-      if (response.data.error === 0) {
+      if (response.data.error == 0) {
         let dulieu: any={};
         dulieu.SDT = requestData.phone
         dulieu.Hoten = item.CustName
@@ -223,7 +223,7 @@ export class ZaloznsService {
   
   constructRequestData(item: any, Chinhanh: any): any {
     const templateId = Chinhanh.idtemp;
-    const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+    const priceProperty = templateId == '301891' || templateId == '302259' ? 'price' : 'cost';
     return {
       phone: convertPhoneNum(item.SDT),
       template_id: templateId,
@@ -493,7 +493,7 @@ export class ZaloznsService {
     }
     // xacnhanthanhtoanhocphitimona(item: any, Chinhanh: any): any {
     //   const templateId = Chinhanh.idtemp;
-    //   const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+    //   const priceProperty = templateId == '301891' || templateId == '302259' ? 'price' : 'cost';
     //   return {
     //     phone: convertPhoneNum(item.SDT),
     //     template_id: templateId,
@@ -522,7 +522,7 @@ export class ZaloznsService {
     }
     xacnhanthanhtoantaza(item: any, Chinhanh: any): any {
       const templateId = Chinhanh.idtemp;
-      const priceProperty = templateId === '301891' || templateId === '302259' ? 'price' : 'cost';
+      const priceProperty = templateId == '301891' || templateId == '302259' ? 'price' : 'cost';
       return {
         phone: convertPhoneNum(item.SDT),
         template_id: templateId,

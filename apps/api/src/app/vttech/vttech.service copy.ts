@@ -38,7 +38,7 @@
 //       if (Array.isArray(response.data.Table1)) {
 //         const data1 = response.data.Table1;
 //         const data2 = await this._Vttech_khachhangService.findAll();
-//         const uniqueInData2 = data1.filter((item:any) => !data2.some((data1Item: any) => data1Item.SDT === item.Phone));
+//         const uniqueInData2 = data1.filter((item:any) => !data2.some((data1Item: any) => data1Item.SDT == item.Phone));
   
 //         console.error(uniqueInData2);
 //         console.error(uniqueInData2[0]);

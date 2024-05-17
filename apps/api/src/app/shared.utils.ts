@@ -453,7 +453,7 @@ export const ListTrangthailichhen: any[] = [
 export function convertPhoneNum(phoneNumber: any) {
   if (phoneNumber.startsWith("0")) {
     return phoneNumber.replace(/^0/, "84");
-  } else if (phoneNumber.length === 10) {
+  } else if (phoneNumber.length == 10) {
     return `+84${phoneNumber}`;
   } else {
     return "Invalid phone number format";

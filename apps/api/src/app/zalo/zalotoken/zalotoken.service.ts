@@ -93,7 +93,7 @@ export class ZalotokenService {
         return { status: 400, note: "Refresh Token Không Đúng" };
       }
     } catch (error) {
-      if (error.response && error.response.status === 429) {
+      if (error.response && error.response.status == 429) {
         // Add a delay before making the request again
         await new Promise(resolve => setTimeout(resolve, 5000));
         return this.getRefreshToken(item); // Retry the request

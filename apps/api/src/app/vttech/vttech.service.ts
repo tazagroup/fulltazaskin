@@ -46,7 +46,7 @@ export class VttechService {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: item && typeof item === 'object' && Object.keys(item).length > 0 ? JSON.stringify(item) : JSON.stringify({"Name": "Taza","Password": "1b9287d492b256x7taza","Type": "web"}),
+        body: item && typeof item == 'object' && Object.keys(item).length > 0 ? JSON.stringify(item) : JSON.stringify({"Name": "Taza","Password": "1b9287d492b256x7taza","Type": "web"}),
       });
       const data = await response.json();
       const cookies = await response.headers.get('set-cookie');
@@ -421,7 +421,7 @@ export class VttechService {
         if (Array.isArray(response.data)) {
           const data1 = response.data;
           const data2 = await this._Vttech_tinhtrangphongService.findAll();
-          const uniqueInData2 = data1.filter((item: { BeginTime: any; }) => !data2.some((data1Item: any) => this.Getdatetime(data1Item.Dulieu.BeginTime) === this.Getdatetime(item.BeginTime)));
+          const uniqueInData2 = data1.filter((item: { BeginTime: any; }) => !data2.some((data1Item: any) => this.Getdatetime(data1Item.Dulieu.BeginTime) == this.Getdatetime(item.BeginTime)));
           if (uniqueInData2.length > 0) {
             await Promise.all(uniqueInData2.map((v: any) => {
               const item: any = {}
@@ -479,7 +479,7 @@ export class VttechService {
       if (Array.isArray(response.data.Table)) {
         const data1 = await response.data.Table.filter((v: any) => this.Getdatetime(v.Created) > this.Getdatetime(Start) && this.Getdatetime(v.Created) < this.Getdatetime(End));
         const data2 = await this._Vttech_dieutriService.findAll();
-        const uniqueInData2 = data1.filter((item: any) => !data2.some((data1Item: any) => this.Getdatetime(data1Item.Dulieu.Created) === this.Getdatetime(item.Created)));
+        const uniqueInData2 = data1.filter((item: any) => !data2.some((data1Item: any) => this.Getdatetime(data1Item.Dulieu.Created) == this.Getdatetime(item.Created)));
         if (uniqueInData2.length > 0) {
           await Promise.all(uniqueInData2.map(async (v: any) => {
             const config = {
