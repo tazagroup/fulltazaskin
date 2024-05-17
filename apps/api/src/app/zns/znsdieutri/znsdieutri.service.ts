@@ -102,7 +102,7 @@ export class ZnsdieutriService {
             customer_name: data.CustName,
             schedule_date: moment(data.Created).format('DD/MM/YYYY')
           },
-          tracking_id: GenId(12, true),
+          tracking_id: data.CustPhone||data.CustName||GenId(12, true),
         };
 
       }
@@ -116,7 +116,7 @@ export class ZnsdieutriService {
             Ngay_Su_Dung: moment(data.Created).format('DD/MM/YYYY'),
             Ma_hoa_don: Chinhanh.Title.replace(/Timona Academy /g, "")
           },
-          tracking_id: GenId(12, true),
+          tracking_id: data.CustPhone||data.CustName||GenId(12, true),
         };
       }
       const config = {

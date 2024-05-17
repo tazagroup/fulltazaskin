@@ -93,7 +93,7 @@ export class ZnsthanhtoanService {
             [priceProperty]: parseFloat(data.Paid).toFixed(0),
             customer_name: data.CustName,
           },
-          tracking_id: GenId(12, true),
+          tracking_id: data.CustPhone||data.CustName||GenId(12, true),
         };
         const config = {
           method: 'post',

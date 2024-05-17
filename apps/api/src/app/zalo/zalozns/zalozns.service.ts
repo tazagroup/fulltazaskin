@@ -233,7 +233,7 @@ export class ZaloznsService {
         [priceProperty]: parseFloat(item.Amount).toFixed(0),
         customer_name: item.CustName,
       },
-      tracking_id: GenId(12, true),
+      tracking_id: item.SDT||item.CustName||GenId(12, true),
     };
   }
 
@@ -488,7 +488,7 @@ export class ZaloznsService {
           student_name: item.CustName,
           cost: parseFloat(item.Bill.Amount).toFixed(0),
         },
-        tracking_id: GenId(12, true),
+        tracking_id: item.SDT||item.CustName||GenId(12, true),
       };
     }
     // xacnhanthanhtoanhocphitimona(item: any, Chinhanh: any): any {
@@ -517,7 +517,7 @@ export class ZaloznsService {
           schedule_date: moment(item.CreateAt).format('DD/MM/YYYY'),
           customer_name: item.CustName,
         },
-        tracking_id: GenId(12, true),
+        tracking_id: item.SDT||item.CustName||GenId(12, true),
       };
     }
     xacnhanthanhtoantaza(item: any, Chinhanh: any): any {
@@ -532,7 +532,7 @@ export class ZaloznsService {
           [priceProperty]: parseFloat(item.Bill.Amount).toFixed(0),
           customer_name: item.CustName,
         },
-        tracking_id: GenId(12, true),
+        tracking_id: item.SDT||item.CustName||GenId(12, true),
       };
     }
 
