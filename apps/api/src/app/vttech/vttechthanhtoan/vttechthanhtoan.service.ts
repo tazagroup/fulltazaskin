@@ -82,9 +82,8 @@ export class VttechthanhtoanService {
       queryBuilder.andWhere('vttechthanhtoan.Status = :Status', { Status: `${params.Status}` });
     }
     if (params.hasOwnProperty('BranchID')) {
-     queryBuilder.andWhere('vttechthanhtoan.Dulieu.BranchID = :BranchID', { BranchID: `${params.BranchID}` });
+     queryBuilder.andWhere('vttechthanhtoan.BranchID = :BranchID', { BranchID: `${params.BranchID}` });
     }
-
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
@@ -141,6 +140,7 @@ export class VttechthanhtoanService {
           item.Dulieu = v;
           item.idVttech = v.ID;
           item.CustPhone = v.CustPhone;
+          item.BranchID = v.BranchID;
           item.Code = v.Code;
           item.Created = moment(v.Created).format('YYYY-MM-DD');
           setTimeout(async () => {
