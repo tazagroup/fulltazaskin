@@ -37,7 +37,7 @@ export class ZnsdieutriController {
         result.items.forEach(async (v,k) => {
           setTimeout(async () => {
             await this.sendzns(v); 
-          }, k*2000);
+          }, k*100);
         })
         return result;
       }
