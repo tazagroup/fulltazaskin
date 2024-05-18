@@ -29,7 +29,7 @@ export class ZnsdieutriService {
       }, []);
       const ListItems: any = []
       await Promise.all(uniqueDieutris.map(async (v: any) => {
-        const check = await this.findSHD({ idVttech: v.ID, CustPhone: v.CustPhone,Created:v.Created  });
+        const check = await this.findSHD({ idVttech: v.idVttech, CustPhone: v.CustPhone });
         // console.log(check);
         if (!check) {
           ListItems.push(v);
@@ -186,7 +186,6 @@ export class ZnsdieutriService {
       where: {
         idVttech: data.idVttech,
         CustPhone: data.CustPhone,
-        Created: data.Created,
       },
     });
   }
