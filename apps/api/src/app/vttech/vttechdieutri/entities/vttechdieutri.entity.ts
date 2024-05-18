@@ -21,6 +21,8 @@ export class VttechdieutriEntity {
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   ServiceCode: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  TimeIndex: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   CustPhone: string;
   @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
   Dulieu: string

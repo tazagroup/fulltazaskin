@@ -42,6 +42,7 @@ export class VttechdieutriService {
          CustPhone: data.CustPhone,
          idVttech: data.idVttech, 
          TabCode: data.TabCode, 
+         TimeIndex: data.TimeIndex, 
         },
      });
   }
@@ -60,19 +61,6 @@ export class VttechdieutriService {
   async findQuery(params:any) {    
     console.log(params);   
     const queryBuilder = this.VttechdieutriRepository.createQueryBuilder('vttechdieutri');
-    // if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
-    //   if(params.CreatedBegin==params.CreatedEnd){
-    //     queryBuilder.andWhere('vttechdieutri.Created = :Created', {
-    //       Created: params.CreatedBegin,
-    //     });
-    //   }
-    //   else{
-    //   queryBuilder.andWhere('vttechdieutri.Created BETWEEN :startDate AND :endDate', {
-    //     startDate: params.CreatedBegin,
-    //     endDate: params.CreatedEnd,
-    //   });
-    //   }
-    // }
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
       console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
       if(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)))
@@ -90,6 +78,12 @@ export class VttechdieutriService {
     }
     if (params.Title) {
       queryBuilder.andWhere('vttechdieutri.Title LIKE :Title', { SDT: `%${params.Title}%` });
+    }
+    if (params.hasOwnProperty('Status')) {
+      queryBuilder.andWhere('vttechdieutri.Status = :Status', { Status: `${params.Status}` });
+    }
+    if (params.hasOwnProperty('BranchID')) {
+     queryBuilder.andWhere('vttechdieutri.BranchID = :BranchID', { BranchID: `${params.BranchID}` });
     }
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
@@ -123,7 +117,13 @@ export class VttechdieutriService {
       const data = response.data;      
       const ListItems:any=[]
       await Promise.all(data.Data.map(async (v: any) => {
-        const check = await this.findidVttech(convertToZeroMinutesSeconds(v.CreatedDate).getTime());
+        const Checkdata = {
+          CustPhone: v.CustPhone,
+          idVttech: convertToZeroMinutesSeconds(v.CreatedDate).getTime(), 
+          TabCode: v.Service.TabCode, 
+          TimeIndex: v.Service.TimeIndex,
+        }
+        const check = await this.findby(Checkdata);
         if (!check) {
           ListItems.push(v);
         }
@@ -138,6 +138,7 @@ export class VttechdieutriService {
           item.CustName = v.Name;
           item.BranchID = v.BranchID;
           item.TabCode = v.Service.TabCode;
+          item.TimeIndex = v.Service.TimeIndex;
           item.Created = moment(v.CreatedDate).format('YYYY-MM-DD');
           setTimeout(async () => {
             const result = await this.create(item);
