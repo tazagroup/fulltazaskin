@@ -29,9 +29,9 @@ export class ZnsthanhtoanService {
         item.CustName = v.CustName;
         item.CustCode = v.CustCode;
         item.BranchID = v.BranchID;
+        item.idVttech = v.idVttech
         item.Created = moment(v.Created).format('YYYY-MM-DD');
         item.Paid = v.Paid;
-        item.Code = v.Code;
         const isCreate = await this.create(item);
         // console.log(isCreate);
         if (isCreate.error != 1001) {
@@ -169,15 +169,15 @@ export class ZnsthanhtoanService {
   async findSHD(data: any) {
     return await this.ZnsthanhtoanRepository.findOne({
       where: {
-        Code: data.Code,
-        CustPhone: data.CustPhone
+        CustPhone: data.CustPhone,
+        idVttech:data.idVttech
       },
     });
   }
   async findslug(Code: any) {
-    return await this.ZnsthanhtoanRepository.findOne({
-      where: { Code: Code },
-    });
+    // return await this.ZnsthanhtoanRepository.findOne({
+    //   where: { Code: Code },
+    // });
   }
   async findPagination(page: number, perPage: number) {
     const skip = (page - 1) * perPage;
