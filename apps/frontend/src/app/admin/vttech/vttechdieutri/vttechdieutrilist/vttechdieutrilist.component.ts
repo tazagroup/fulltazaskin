@@ -49,6 +49,7 @@ export class VttechdieutrilistComponent implements OnInit {
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  ListChiNhanh: any[] = []
   constructor(
     private dialog: MatDialog,
     private _Notification: NotifierService,
@@ -57,28 +58,30 @@ export class VttechdieutrilistComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
+    this.ChangeSearchParams()
     this._ChinhanhService.getAllChinhanhs().subscribe(() => {
       this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {
-        this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe((data) => {
+        this.ListChiNhanh = chinhanhs
+        this._VttechdieutriService.vttechdieutris$.subscribe((data:any) => {
           data.forEach((v: any) => {  
             v.Chinhanh = chinhanhs.find((c: any) => c.idVttech === v.BranchID)?.Title;
            })
          this.FilterLists = this.Lists = data.map((v: any) => ({ ...v, ...v.Dulieu }))          
           this.dataSource = new MatTableDataSource(this.FilterLists);
-          this.dataSource.sortingDataAccessor = (item, property) => {
-            switch (property) {
-              case 'Diachi':
-                return item.Giohangs.Khachhang.Diachi;
-              case 'Hoten':
-                return item.Giohangs.Khachhang.Hoten;
-              case 'SDT':
-                return item.Giohangs.Khachhang.SDT;
-              case 'Hinhthuc':
-                return item.Thanhtoan.Hinhthuc;
-              default:
-                return item[property];
-            }
-          };
+          // this.dataSource.sortingDataAccessor = (item, property) => {
+          //   switch (property) {
+          //     case 'Diachi':
+          //       return item.Giohangs.Khachhang.Diachi;
+          //     case 'Hoten':
+          //       return item.Giohangs.Khachhang.Hoten;
+          //     case 'SDT':
+          //       return item.Giohangs.Khachhang.SDT;
+          //     case 'Hinhthuc':
+          //       return item.Thanhtoan.Hinhthuc;
+          //     default:
+          //       return item[property];
+          //   }
+          // };
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         });
@@ -87,6 +90,11 @@ export class VttechdieutrilistComponent implements OnInit {
   }
 
 
+  ChangeSearchParams() {
+    this.SearchParams.BranchID==9999?delete this.SearchParams.BranchID: this.SearchParams.BranchID
+    this.SearchParams.Status==9999?delete this.SearchParams.Status: this.SearchParams.Status
+    this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
+   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
