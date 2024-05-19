@@ -21,7 +21,7 @@ export class ZnsdieutriService {
     const Dieutris = await this._VttechdieutriService.findQuery(data)
     if (Dieutris.length > 0) {
       const uniqueDieutris = Dieutris.reduce((acc: any[], curr: any) => {
-        const existingDieutri = acc.find((d: any) => d.idVttech == curr.idVttech && d.CustPhone == curr.CustPhone);
+        const existingDieutri = acc.find((d: any) => d.Created == curr.Created && d.CustPhone == curr.CustPhone);
         if (!existingDieutri) {
           acc.push(curr);
         }
