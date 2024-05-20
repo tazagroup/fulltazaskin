@@ -26,7 +26,7 @@ export class AppController {
   }
   @Get('getversion')
   getversion(@Req() req: Request) {
-    return '1.1'
+    return '1.2'
   }
   
   // @Sse('notifications')
