@@ -21,24 +21,24 @@ export class ZnsdieutriService {
     const Dieutris = await this._VttechdieutriService.findQuery(data)
     if (Dieutris.length > 0) {
       const uniqueDieutris = Dieutris.reduce((acc: any[], curr: any) => {
-        const existingDieutri = acc.find((d: any) => d.Created == curr.Created && d.CustPhone == curr.CustPhone);
+        const existingDieutri = acc.find((d: any) => moment(d.Created).isSame(moment(curr.Created)) && d.CustPhone == curr.CustPhone);
         if (!existingDieutri) {
           acc.push(curr);
         }
         return acc;
       }, []);
-      const ListItems: any = []
-      await Promise.all(uniqueDieutris.map(async (v: any) => {
-        const check = await this.findSHD({ Created: v.Created, CustPhone: v.CustPhone });
-        // console.log(check);
-        if (!check) {
-          ListItems.push(v);
-        }
-      }));
-      console.log(ListItems.length);
-
-      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step2 - Create (${ListItems.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
-      ListItems.forEach((v: any, k: any) => {
+      
+      // const ListItems: any = []
+      // await Promise.all(uniqueDieutris.map(async (v: any) => {
+      //   const check = await this.findSHD({ Created: v.Created, CustPhone: v.CustPhone });
+      //   // console.log(check);
+      //   if (!check) {
+      //     ListItems.push(v);
+      //   }
+      // }));
+      // console.log(ListItems.length);
+      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step2 - Create (${uniqueDieutris.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+      uniqueDieutris.forEach((v: any, k: any) => {
         const item: any = {}
         item.idVttech = v.idVttech
         item.idDieutri = v.id
@@ -50,7 +50,7 @@ export class ZnsdieutriService {
           this.create(item)
         }, k * 300);
       });
-      return ListItems
+      return uniqueDieutris
     }
   }
   async getTemplateData(id: any, token: any) {
