@@ -20,13 +20,21 @@ export class ZnsdieutriService {
   async createzns(data: any) {
     const Dieutris = await this._VttechdieutriService.findQuery(data)
     if (Dieutris.length > 0) {
-      const uniqueDieutris = Dieutris.reduce((acc: any[], curr: any) => {
-        const existingDieutri = acc.find((d: any) => moment(d.Created).isSame(moment(curr.Created)) && d.CustPhone == curr.CustPhone);
-        if (!existingDieutri) {
-          acc.push(curr);
-        }
-        return acc;
-      }, []);
+      const uniqueDieutris = Dieutris.filter((obj, index, self) =>
+        self.findIndex(other => moment(other.Created).isSame(moment(obj.Created)) && other.CustPhone == obj.CustPhone) === index
+      );
+      console.log(uniqueDieutris.length);
+      
+      
+      // const uniqueDieutris = Dieutris.reduce((acc: any[], curr: any) => {
+      //   const existingDieutri = acc.find((d: any) => moment(d.Created).isSame(moment(curr.Created)) && d.CustPhone == curr.CustPhone);
+      //   console.log(existingDieutri);
+        
+      //   if (!existingDieutri) {
+      //     acc.push(curr);
+      //   }
+      //   return acc;
+      // }, []);
       
       // const ListItems: any = []
       // await Promise.all(uniqueDieutris.map(async (v: any) => {
@@ -36,7 +44,7 @@ export class ZnsdieutriService {
       //     ListItems.push(v);
       //   }
       // }));
-      // console.log(ListItems.length);
+      //console.log(ListItems.length);
       this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step2 - Create (${uniqueDieutris.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       uniqueDieutris.forEach((v: any, k: any) => {
         const item: any = {}

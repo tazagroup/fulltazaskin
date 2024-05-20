@@ -88,8 +88,7 @@ export class VttechdieutriService {
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
-      .getManyAndCount();   
-      console.log(items);    
+      .getManyAndCount();     
     return items;
   }
   async update(id: string, UpdateVttechdieutriDto: any) {

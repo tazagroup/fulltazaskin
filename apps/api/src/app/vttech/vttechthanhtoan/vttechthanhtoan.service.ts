@@ -54,12 +54,6 @@ export class VttechthanhtoanService {
   }
   async findQuery(params:any) {
     const queryBuilder = this.VttechthanhtoanRepository.createQueryBuilder('vttechthanhtoan');
-    // if (params.CreatedBegin && params.CreatedEnd) {
-    //   queryBuilder.andWhere('vttechthanhtoan.Created BETWEEN :startDate AND :endDate', {
-    //     startDate: params.CreatedBegin,
-    //     endDate: params.CreatedEnd,
-    //   });
-    // }
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
       console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
       if(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)))
