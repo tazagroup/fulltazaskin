@@ -24,6 +24,10 @@ export class AppController {
     const cookie = req.cookies['.AspNetCore.Session'];
     return cookie ? `Cookie: ${cookie}` : 'No cookie found';
   }
+  @Get('getversion')
+  getversion(@Req() req: Request) {
+    return '1.1'
+  }
   
   // @Sse('notifications')
   // @Get('/notifications')
