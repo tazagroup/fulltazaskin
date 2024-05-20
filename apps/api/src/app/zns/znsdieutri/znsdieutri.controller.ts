@@ -3,11 +3,13 @@ import {ZnsdieutriService } from './znsdieutri.service';
 import { Interval } from '@nestjs/schedule';
 import moment = require('moment');
 import { TelegramService } from '../../shared/telegram.service';
+import { LoggerService } from '../../logger/logger.service';
 @Controller('znsdieutri')
 export class ZnsdieutriController {
   constructor(
     private readonly znsdieutriService:ZnsdieutriService,
     private readonly _TelegramService:TelegramService,
+    private readonly _LoggerService:LoggerService,
   ) {}
   // @Interval(9000)
   @Interval(1500000)
@@ -23,7 +25,7 @@ export class ZnsdieutriController {
     return this.znsdieutriService.sendzns(data);
   }
   //@Interval(10000)
-  //@Interval(60000)
+  @Interval(60000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
@@ -32,7 +34,13 @@ export class ZnsdieutriController {
     data.pageSize =  data.pageSize||10;
     if(this.CheckTime() == true){
       const result = await this.findQuery(data)
-      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')} ${JSON.stringify(data)}`);
+      const logger ={
+        Title:'ZNS Điều Trị',
+        Slug:'dieutri',
+        Action:'send',
+        Mota:`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')} ${JSON.stringify(data)}`}
+      this._LoggerService.create(logger)
+    //  this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')} ${JSON.stringify(data)}`);
       if(result.totalCount > 0){
         result.items.forEach(async (v,k) => {
           setTimeout(async () => {
@@ -44,7 +52,13 @@ export class ZnsdieutriController {
     }
     else  
     {
-      this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Không thể gửi tin nhắn vào thời gian này - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+      const logger ={
+        Title:'ZNS Điều Trị',
+        Slug:'dieutri',
+        Action:'send_error',
+        Mota:`[ZNS_DIEUTRI] - Không thể gửi tin nhắn vào thời gian này - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+      this._LoggerService.create(logger)
+      // this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Không thể gửi tin nhắn vào thời gian này - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     }
 
   }

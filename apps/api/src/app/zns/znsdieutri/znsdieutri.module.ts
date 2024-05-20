@@ -8,12 +8,14 @@ import { VttechdieutriModule } from '../../vttech/vttechdieutri/vttechdieutri.mo
 import { TelegramService } from '../../shared/telegram.service';
 import { ChinhanhModule } from '../../cauhinh/chinhanh/chinhanh.module';
 import { ZaloznstrackingModule } from '../../zalo/zaloznstracking/zaloznstracking.module';
+import { LoggerModule } from '../../logger/logger.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([ZnsdieutriEntity]),
     VttechdieutriModule,
     ChinhanhModule,
-    ZaloznstrackingModule
+    ZaloznstrackingModule,
+    LoggerModule
   ],
   controllers: [ZnsdieutriController],
   providers: [ZnsdieutriService,TelegramService],
