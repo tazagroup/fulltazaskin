@@ -25,7 +25,7 @@ export class AppController {
     return cookie ? `Cookie: ${cookie}` : 'No cookie found';
   }
   @Get('getversion')
-  getversion(@Req() req: Request) {
+  getversion() {
     return '1.4'
   }
   
