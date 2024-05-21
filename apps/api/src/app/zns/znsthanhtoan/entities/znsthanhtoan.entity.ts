@@ -11,6 +11,8 @@ export class ZnsthanhtoanEntity {
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   CustCode: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
+  Code: string;
+  @Column({ type: 'text', collation: 'utf8_general_ci' })
   BranchID: string;
   @Column({ type: 'text', collation: 'utf8_general_ci' })
   idVttech: string;

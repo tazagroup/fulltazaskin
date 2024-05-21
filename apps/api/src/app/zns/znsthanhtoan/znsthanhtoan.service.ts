@@ -29,6 +29,7 @@ export class ZnsthanhtoanService {
         item.CustName = v.CustName;
         item.CustCode = v.CustCode;
         item.BranchID = v.BranchID;
+        item.Code = v.Code;
         item.idVttech = v.idVttech
         item.Created = moment(v.Created).format('YYYY-MM-DD');
         item.Paid = v.Paid;
@@ -170,7 +171,7 @@ export class ZnsthanhtoanService {
     return await this.ZnsthanhtoanRepository.findOne({
       where: {
         CustPhone: data.CustPhone,
-        idVttech:data.idVttech
+        Code:data.Code
       },
     });
   }
