@@ -225,6 +225,7 @@ export class ZnsdieutriService {
       where: {
         Created: data.Created,
         CustPhone: data.CustPhone,
+        BranchID:data.BranchID
       },
     });
   }
