@@ -25,7 +25,7 @@ export class ZnsdieutriService {
     const Dieutris = await this._VttechdieutriService.findQuery(data)
     if (Dieutris.length > 0) {
       const uniqueDieutris = Dieutris.filter((obj, index, self) =>
-        self.findIndex(other => moment(other.Created).isSame(moment(obj.Created)) && other.CustPhone == obj.CustPhone) === index
+        self.findIndex(other => moment(other.Created).isSame(moment(obj.Created)) && other.CustPhone == obj.CustPhone && other.BranchID==obj.BranchID) === index
       );
       console.log(uniqueDieutris[0]);
       console.log(uniqueDieutris.length);
