@@ -85,7 +85,7 @@ export class VttechthanhtoanService {
     const data = items.map((v: any) => (v.Dulieu))
     const mergedData = Object.values(data.reduce((acc, obj) => {
       const { CustPhone, Code, Paid } = obj;
-      const key = `${CustPhone}-${Code}`;
+      const key = `${CustPhone}_${Code}`;
     
       if (!acc[key]) {
         acc[key] = { ...obj };
