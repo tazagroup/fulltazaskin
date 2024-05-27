@@ -54,6 +54,8 @@
           <span class="p-2 {{GetStype(item.key)}}" *ngFor="let item of ListStatus|keyvalue">
             ({{CountStatus(item.key)}})  {{item.value}}
           </span>
+
+        <span class="material-symbols-outlined" (click)="FillDup()">content_copy</span>
       </div>
     </div>
 

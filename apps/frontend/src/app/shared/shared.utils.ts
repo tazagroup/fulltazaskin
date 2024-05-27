@@ -373,6 +373,17 @@ export function mergeNoDup(arr1: any, arr2: any, key: any) {
   }, {});
   return Object.values(uniqueItems);
 }
+
+export function findDuplicateOccurrences(arr:any) {
+  const idCounts = arr.reduce((counts:any, obj:any) => {
+    counts[obj.Code] = (counts[obj.Code] || 0) + 1;
+    return counts;
+  }, {});
+
+  return arr.filter((obj:any) => idCounts[obj.Code] > 1);
+}
+
+
 export function dateVNPAY(date: Date): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');

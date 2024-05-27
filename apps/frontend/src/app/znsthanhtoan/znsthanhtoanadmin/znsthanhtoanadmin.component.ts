@@ -16,11 +16,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ZnsthanhtoanService } from '../znsthanhtoan.service';
 import * as moment from 'moment';
 import { ChinhanhService } from '../../admin/cauhinh/chinhanh/chinhanh.service';
-import { Status, Style, Style1 } from '../../shared/shared.utils';
+import { Status, Style, Style1, findDuplicateOccurrences } from '../../shared/shared.utils';
 @Component({
   selector: 'app-znsthanhtoanadmin',
   standalone: true,
-  imports:[
+  imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -32,61 +32,84 @@ import { Status, Style, Style1 } from '../../shared/shared.utils';
     MatDialogModule,
     MaterialModule,
     RouterLink,
-    RouterOutlet
+    RouterOutlet,
   ],
   templateUrl: './znsthanhtoanadmin.component.html',
-  styleUrls: ['./znsthanhtoanadmin.component.css']
+  styleUrls: ['./znsthanhtoanadmin.component.css'],
 })
 export class ZnsthanhtoanadminComponent implements OnInit {
   Detail: any = {};
-  Lists: any[] = []
-  FilterLists: any[] = []
-  ListChiNhanh: any[] = []
-  Sitemap: any = { loc: '', priority: '' }
+  Lists: any[] = [];
+  FilterLists: any[] = [];
+  ListChiNhanh: any[] = [];
+  Sitemap: any = { loc: '', priority: '' };
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
-  displayedColumns: string[] = ['CustName', 'CustPhone','Code','Paid','Chinhanh','Created','Status'];
+  displayedColumns: string[] = [
+    'CustName',
+    'CustPhone',
+    'Code',
+    'Paid',
+    'Chinhanh',
+    'Created',
+    'Status',
+  ];
   dataSource!: MatTableDataSource<any>;
   SearchParams: any = {
     CreatedBegin: moment().format('YYYY-MM-DD'),
     CreatedEnd: moment().format('YYYY-MM-DD'),
+<<<<<<< HEAD
     pageSize:9999,
     pageNumber:0,
     Status:9999,
     BranchID:9999
+=======
+    pageSize: 9999,
+    pageNumber: 0,
+>>>>>>> 29486b2 (update)
   };
-  ListStatus: any = Status
-  Style: any = Style1
+  ListStatus: any = Status;
+  Style: any = Style1;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
     private dialog: MatDialog,
     private _Notification: NotifierService,
     private _ZnsthanhtoanService: ZnsthanhtoanService,
-    private _ChinhanhService: ChinhanhService,
-  ) {
-  }
+    private _ChinhanhService: ChinhanhService
+  ) {}
   ngOnInit(): void {
+<<<<<<< HEAD
     this.ChangeSearchParams()
     //this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe()
     this._ChinhanhService.getAllChinhanhs().subscribe()
+=======
+    this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe();
+    this._ChinhanhService.getAllChinhanhs().subscribe();
+>>>>>>> 29486b2 (update)
     this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {
-      this.ListChiNhanh = chinhanhs
+      this.ListChiNhanh = chinhanhs;
       if (chinhanhs && chinhanhs.length > 0) {
         this._ZnsthanhtoanService.znsthanhtoans$.subscribe((data: any) => {
           if (data) {
             data.forEach((v: any) => {
-              v.Chinhanh = chinhanhs.find((c: any) => c.idVttech === v.BranchID)?.Title;
-            })
-            this.FilterLists = this.Lists = data
+              v.Chinhanh = chinhanhs.find(
+                (c: any) => c.idVttech === v.BranchID
+              )?.Title;
+            });
+            this.FilterLists = this.Lists = data;
             this.dataSource = new MatTableDataSource(this.FilterLists);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
           }
-
-        })
+        });
       }
-
-    })
+    });
+  }
+  FillDup() {   
+    this.FilterLists = findDuplicateOccurrences(this.Lists);   
+    this.dataSource = new MatTableDataSource(this.FilterLists);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -95,30 +118,32 @@ export class ZnsthanhtoanadminComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
     console.log(this.dataSource.filteredData);
-    
   }
+<<<<<<< HEAD
   ChangeSearchParams() {    
     this.SearchParams.BranchID==9999?delete this.SearchParams.BranchID: this.SearchParams.BranchID
     this.SearchParams.Status==9999?delete this.SearchParams.Status: this.SearchParams.Status
     console.log(this.SearchParams);
     this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe()
+=======
+  ChangeSearchParams() {
+    this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe();
+>>>>>>> 29486b2 (update)
   }
-  GetStype(item:any)
-  {
-    return this.Style[item]
+  GetStype(item: any) {
+    return this.Style[item];
   }
   CountStatus(item: any) {
-    const result = this.FilterLists.filter((v: any) => v.Status == item)
-    return result.length
+    const result = this.FilterLists.filter((v: any) => v.Status == item);
+    return result.length;
   }
   openDialog(teamplate: TemplateRef<any>): void {
-  //   const dialogRef = this.dialog.open(teamplate, {
-  //   });
-  //   dialogRef.afterClosed().subscribe((result) => {
-  //     if (result) {
-  //       this.VttechthanhtoanService.createRedirect(this.Detail).subscribe((data)=>this._Notification.notify('success','Thêm mới thành công'))
-  //     }
-  //   });
+    //   const dialogRef = this.dialog.open(teamplate, {
+    //   });
+    //   dialogRef.afterClosed().subscribe((result) => {
+    //     if (result) {
+    //       this.VttechthanhtoanService.createRedirect(this.Detail).subscribe((data)=>this._Notification.notify('success','Thêm mới thành công'))
+    //     }
+    //   });
   }
-
 }
