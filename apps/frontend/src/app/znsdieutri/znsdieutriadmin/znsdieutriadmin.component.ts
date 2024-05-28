@@ -14,7 +14,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ZnsdieutriService } from '../znsdieutri.service';
-import { Status, Style1, ZALO_ERROR } from '../../shared/shared.utils';
+import { Status, Style1, ZALO_ERROR, findDuplicateOccurrences } from '../../shared/shared.utils';
 import * as moment from 'moment';
 import { ChinhanhService } from '../../admin/cauhinh/chinhanh/chinhanh.service';
 @Component({
@@ -116,6 +116,12 @@ export class ZnsdieutriadminComponent implements OnInit {
     }
     console.log(this.dataSource.filteredData);
     
+  }
+  FillDup() {   
+    this.FilterLists = findDuplicateOccurrences(this.Lists,'CustPhone');   
+    this.dataSource = new MatTableDataSource(this.FilterLists);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
   ChangeSearchParams() {
    this.SearchParams.BranchID==9999?delete this.SearchParams.BranchID: this.SearchParams.BranchID

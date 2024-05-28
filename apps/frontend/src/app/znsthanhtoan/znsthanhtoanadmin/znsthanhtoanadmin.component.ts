@@ -96,7 +96,7 @@ export class ZnsthanhtoanadminComponent implements OnInit {
     });
   }
   FillDup() {   
-    this.FilterLists = findDuplicateOccurrences(this.Lists);   
+    this.FilterLists = findDuplicateOccurrences(this.Lists,'Code');   
     this.dataSource = new MatTableDataSource(this.FilterLists);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

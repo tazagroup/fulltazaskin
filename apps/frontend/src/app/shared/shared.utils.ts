@@ -374,13 +374,13 @@ export function mergeNoDup(arr1: any, arr2: any, key: any) {
   return Object.values(uniqueItems);
 }
 
-export function findDuplicateOccurrences(arr:any) {
+export function findDuplicateOccurrences(arr:any,field:any) {
   const idCounts = arr.reduce((counts:any, obj:any) => {
-    counts[obj.Code] = (counts[obj.Code] || 0) + 1;
+    counts[obj[field]] = (counts[obj[field]] || 0) + 1;
     return counts;
   }, {});
 
-  return arr.filter((obj:any) => idCounts[obj.Code] > 1);
+  return arr.filter((obj:any) => idCounts[obj[field]] > 1);
 }
 
 
