@@ -171,6 +171,7 @@ export class ZnsthanhtoanService {
     return await this.ZnsthanhtoanRepository.findOne({
       where: {
         CustPhone: data.CustPhone,
+        CustCode: data.CustCode,
         Code:data.Code
       },
     });

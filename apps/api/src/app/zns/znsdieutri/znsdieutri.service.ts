@@ -21,7 +21,7 @@ export class ZnsdieutriService {
   ) { }
   async createzns(data: any) {
     console.log(data);
-    
+
     const Dieutris = await this._VttechdieutriService.findQuery(data)
     if (Dieutris.length > 0) {
       const uniqueDieutris = Dieutris.filter((obj, index, self) =>
@@ -32,13 +32,13 @@ export class ZnsdieutriService {
       // const uniqueDieutris = Dieutris.reduce((acc: any[], curr: any) => {
       //   const existingDieutri = acc.find((d: any) => moment(d.Created).isSame(moment(curr.Created)) && d.CustPhone == curr.CustPhone);
       //   console.log(existingDieutri);
-        
+
       //   if (!existingDieutri) {
       //     acc.push(curr);
       //   }
       //   return acc;
       // }, []);
-      
+
       // const ListItems: any = []
       // await Promise.all(uniqueDieutris.map(async (v: any) => {
       //   const check = await this.findSHD({ Created: v.Created, CustPhone: v.CustPhone });
@@ -65,7 +65,7 @@ export class ZnsdieutriService {
         item.Created = moment(v.Created).format('YYYY-MM-DD')
         setTimeout(() => {
           this.create(item)
-        }, k * 300);
+        }, k * 1000);
       });
       return uniqueDieutris
     }
@@ -112,7 +112,7 @@ export class ZnsdieutriService {
         Status:'error_token',
         Mota:`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
       this._LoggerService.create(logger)
-    
+
       data.Status = 3;
       this.update(data.id, data)
     }
@@ -197,7 +197,7 @@ export class ZnsdieutriService {
   //   data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
   //   data.Status?data.Status = data.Status:0;
   //   const result = await this.findQuery(data)
-  //   return result 
+  //   return result
   // }
   async create(data: any) {
     const check = await this.findSHD(data)
