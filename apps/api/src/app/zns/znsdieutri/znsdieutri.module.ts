@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ZnsdieutriEntity } from './entities/znsdieutri.entity';
 import { VttechdieutriService } from '../../vttech/vttechdieutri/vttechdieutri.service';
 import { VttechdieutriModule } from '../../vttech/vttechdieutri/vttechdieutri.module';
-import { TelegramService } from '../../shared/telegram.service';
 import { ChinhanhModule } from '../../cauhinh/chinhanh/chinhanh.module';
 import { ZaloznstrackingModule } from '../../zalo/zaloznstracking/zaloznstracking.module';
 import { LoggerModule } from '../../logger/logger.module';
@@ -18,7 +17,7 @@ import { LoggerModule } from '../../logger/logger.module';
     LoggerModule
   ],
   controllers: [ZnsdieutriController],
-  providers: [ZnsdieutriService,TelegramService],
+  providers: [ZnsdieutriService],
   exports: [ZnsdieutriService]
 })
 export class ZnsdieutriModule {}

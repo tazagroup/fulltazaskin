@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { ZnsdieutriEntity } from './entities/znsdieutri.entity';
 import { VttechdieutriService } from '../../vttech/vttechdieutri/vttechdieutri.service';
-import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
 import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 import { DescErrorZalo, GenId, convertPhoneNum } from '../../shared.utils';
@@ -15,7 +14,6 @@ export class ZnsdieutriService {
     @InjectRepository(ZnsdieutriEntity)
     private ZnsdieutriRepository: Repository<ZnsdieutriEntity>,
     private _VttechdieutriService: VttechdieutriService,
-    private _TelegramService: TelegramService,
     private _ChinhanhService: ChinhanhService,
     private _LoggerService: LoggerService,
   ) { }
@@ -48,7 +46,6 @@ export class ZnsdieutriService {
       //   }
       // }));
       //console.log(ListItems.length);
-    //  this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step2 - Create (${uniqueDieutris.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
         const logger ={
           Title:'ZNS Điều Trị',
           Slug:'dieutri',
@@ -104,7 +101,6 @@ export class ZnsdieutriService {
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
     // try {
     if (!Chinhanh?.ZaloOaToken?.access_token) {
-     // this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       const logger ={
         Title:'ZNS Điều Trị',
         Slug:'dieutri',
@@ -162,7 +158,6 @@ export class ZnsdieutriService {
           Status:'error',
           Mota:`[ZNS_DIEUTRI] - Mã Lỗi 1 :  ${JSON.stringify(response.statusText)}`}
         this._LoggerService.create(logger)
-       // this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 1 :  ${JSON.stringify(response.statusText)}`);
         throw new Error(`Error fetching data: ${response.statusText}`);
       }
       const result = await response.json();
@@ -173,7 +168,6 @@ export class ZnsdieutriService {
         Status:'error',
         Mota:`[ZNS_DIEUTRI] - Mã Lỗi 2 :  ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
       this._LoggerService.create(logger)
-     // this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 2 :  ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
       if (result.error == 0) {
         data.Status = 1;
         data.messageId = result.data.msg_id;
@@ -189,7 +183,6 @@ export class ZnsdieutriService {
       // } catch (error) {
       //   console.log(error);
 
-      //     this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Mã Lỗi 3:  ${JSON.stringify(error)}`);
     }
   }
   // async sendznsauto(data: any) {

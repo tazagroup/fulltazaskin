@@ -1,5 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import {VttechlichhenService } from './vttechlichhen.service';
+import { Interval } from '@nestjs/schedule';
+import moment = require('moment');
 @Controller('vttechlichhen')
 export class VttechlichhenController {
   constructor(private readonly vttechlichhenService:VttechlichhenService) {}
@@ -8,10 +10,10 @@ export class VttechlichhenController {
   create(@Body() data: any) {
     return this.vttechlichhenService.create(data);
   }
-  @Get()
-  async findAll() {
-    return this.vttechlichhenService.findAll();
-  }
+  // @Get()
+  // async findAll() {
+  //   return this.vttechlichhenService.findAll();
+  // }
   @Get('findbycode/:code')
   async findbycode(@Param('code') CustCode: string) {
     return await this.vttechlichhenService.findbycode(CustCode);
@@ -20,8 +22,8 @@ export class VttechlichhenController {
   async findslug(@Param('slug') slug: string) {
     return await this.vttechlichhenService.findslug(slug);
   }
-  @Get('pagination')
-  async findPagination(@Query('page') page: number,@Query('perPage') perPage: number){
+  @Get()
+  async findPagination(@Query('page') page: number,@Query('limit') perPage: number){
        return await this.vttechlichhenService.findPagination(page,perPage);
     }
   @Post('search')
@@ -37,15 +39,26 @@ export class VttechlichhenController {
   remove(@Param('id') id: string) {
     return this.vttechlichhenService.remove(id);
   }
+  @Interval(14400000)
   @Post('getlichhen')
   async getLichhen(@Body() data: any) {
-  //   const datamau = {
-  //     "DateFrom": "2019-02-01",
-  //     "DateTo": "2019-02-28",
-  //     "BranchID": "0",
-  //     "DataType": "new",
-  //     "PagingNumber": "1"
-  // }
-    return await this.vttechlichhenService.getLichhen(data);
+    let datamau = data;
+    if(!data)
+    {
+      datamau = {
+        "Name": "Taza",
+        "Password": "1b9287d492b256x7taza",
+        "Type": "web",
+        "DateFrom": moment().format('YYYY-MM-DD'),
+        "DateTo": moment().format('YYYY-MM-DD'),
+        "BranchID": "0",
+        "PagingNumber": "1"
+     }
+     console.log(datamau);
+    }
+    const result = await this.vttechlichhenService.getLichhen(datamau);
+    console.log(result);
+
+    return result
   }
 }

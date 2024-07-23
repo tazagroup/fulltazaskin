@@ -2,13 +2,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import {ZnsdieutriService } from './znsdieutri.service';
 import { Interval } from '@nestjs/schedule';
 import moment = require('moment');
-import { TelegramService } from '../../shared/telegram.service';
 import { LoggerService } from '../../logger/logger.service';
 @Controller('znsdieutri')
 export class ZnsdieutriController {
   constructor(
     private readonly znsdieutriService:ZnsdieutriService,
-    private readonly _TelegramService:TelegramService,
     private readonly _LoggerService:LoggerService,
   ) {}
   // @Interval(9000)
@@ -21,7 +19,7 @@ export class ZnsdieutriController {
     return this.znsdieutriService.createzns(data);
   }
   @Post('sendzns')
-  sendzns(@Body() data: any) {    
+  sendzns(@Body() data: any) {
     return this.znsdieutriService.sendzns(data);
   }
   //@Interval(10000)
@@ -40,17 +38,16 @@ export class ZnsdieutriController {
         Action:'send',
         Mota:`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')} ${JSON.stringify(data)}`}
       this._LoggerService.create(logger)
-    //  this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Step3 - Gửi Tự Động (${result.totalCount}) Điều Trị - ${moment().format('HH:mm:ss DD/MM/YYYY')} ${JSON.stringify(data)}`);
       if(result.totalCount > 0){
         result.items.forEach(async (v,k) => {
           setTimeout(async () => {
-            await this.sendzns(v); 
+            await this.sendzns(v);
           }, k*100);
         })
         return result;
       }
     }
-    else  
+    else
     {
       const logger ={
         Title:'ZNS Điều Trị',
@@ -58,7 +55,6 @@ export class ZnsdieutriController {
         Action:'send_error',
         Mota:`[ZNS_DIEUTRI] - Không thể gửi tin nhắn vào thời gian này - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
       this._LoggerService.create(logger)
-      // this._TelegramService.SendMiniAppLogdev(`[ZNS_DIEUTRI] - Không thể gửi tin nhắn vào thời gian này - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     }
 
   }
