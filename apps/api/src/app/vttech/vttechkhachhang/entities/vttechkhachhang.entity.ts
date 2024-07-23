@@ -28,6 +28,8 @@ export class VttechkhachhangEntity {
     Ordering: number;
     @Column({ default: 0 })
     Status: number;
+    @Column()
+    CreatedDate: Date;
     @CreateDateColumn()
     CreateAt: Date;
     @UpdateDateColumn()

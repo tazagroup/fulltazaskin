@@ -15,7 +15,7 @@ export class VttechthanhtoanService {
     private _TelegramService: TelegramService,
   ) { }
   async create(data: any) {
-    const check = await this.findby(data)    
+    const check = await this.findby(data)
     if(!check) {
       this.VttechthanhtoanRepository.create(data);
       return await this.VttechthanhtoanRepository.save(data);
@@ -33,10 +33,10 @@ export class VttechthanhtoanService {
     return await this.VttechthanhtoanRepository.findOne({ where: { id: id } });
   }
   async findby(data: any) {
-    return await this.VttechthanhtoanRepository.findOne({ 
+    return await this.VttechthanhtoanRepository.findOne({
       where: {
          CustPhone: data.CustPhone,
-         idVttech: data.idVttech 
+         idVttech: data.idVttech
         },
      });
   }
@@ -86,7 +86,7 @@ export class VttechthanhtoanService {
     const mergedData = Object.values(data.reduce((acc, obj) => {
       const { CustPhone,CustCode, Code, Paid } = obj;
       const key = `${CustPhone}_${Code}_${CustCode}`;
-    
+
       if (!acc[key]) {
         acc[key] = { ...obj };
       } else {

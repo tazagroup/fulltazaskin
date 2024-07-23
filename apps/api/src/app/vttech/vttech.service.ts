@@ -36,9 +36,9 @@ export class VttechService {
       this.XsrfToken = data.Content.XsrfToken
     })
   }
-  async getToken(item: any) { 
+  async getToken(item: any) {
     console.log(item);
-    
+
     try {
       const response:any = await fetch('https://apismsvtt.vttechsolution.com/api/Client/Autho', {
         method: 'POST',
@@ -52,7 +52,7 @@ export class VttechService {
       const cookies = await response.headers.get('set-cookie');
       console.log(cookies);
       console.log(response.headers);
-      
+
       return cookies
       switch (data.Status) {
         case 1:
@@ -65,7 +65,7 @@ export class VttechService {
      return  this._TelegramService.SendMiniAppLogdev(`Lỗi Xác Thực ${error} Vttech ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
     }
   }
-  
+
   async getAllKhachhang(data: any) {
     const formattedBegin = moment(new Date(data.begin)).format("DD-MM-YYYY");
     const formattedEnd = moment(new Date(data.end)).format("DD-MM-YYYY");
@@ -167,7 +167,7 @@ export class VttechService {
 
           })
           console.log(response.data.Table);
-          
+
           return response.data.Table
         }
       } catch (error) {
@@ -181,7 +181,7 @@ export class VttechService {
 
   async GetLieutrinh(SDT: any) {
     console.log(SDT);
-    
+
     const result = await this.GetKHBySDT(SDT)
     if (result?.Table?.length > 0) {
       let config = {
@@ -225,12 +225,12 @@ export class VttechService {
     try {
       const response = await axios.request(config);
       // const result = response.data.Table.map((v:any)=>({
-      //   ServiceName:v.ServiceName, 
-      //   BranchName:v.BranchName, 
+      //   ServiceName:v.ServiceName,
+      //   BranchName:v.BranchName,
       //   BranchCode:v.BranchCode,
       //   TimeToTreatment:v.TimeToTreatment,
       //   Treat_Index:v.Treat_Index
-      // }));  
+      // }));
 
       const result = response.data.map((v: any) => (
         {
@@ -292,12 +292,12 @@ export class VttechService {
     // try {
     //   const response = await axios.request(config);
     //   // const result = response.data.Table.map((v:any)=>({
-    //   //   ServiceName:v.ServiceName, 
-    //   //   BranchName:v.BranchName, 
+    //   //   ServiceName:v.ServiceName,
+    //   //   BranchName:v.BranchName,
     //   //   BranchCode:v.BranchCode,
     //   //   TimeToTreatment:v.TimeToTreatment,
     //   //   Treat_Index:v.Treat_Index
-    //   // }));  
+    //   // }));
     //   return response.data
     // } catch (error) {
     //   console.log(error);
@@ -587,7 +587,7 @@ export class VttechService {
     const checkTime = now.hour() >= 8 && now.hour() <= 21;
     return checkTime
   }
-  // SendCamon(data: any) {   
+  // SendCamon(data: any) {
   //   const now = moment();
   //   const compareTime = moment(data.Created).add(3, 'hours');
   //   now.isAfter(compareTime)

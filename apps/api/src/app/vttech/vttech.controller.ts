@@ -5,7 +5,6 @@ import { UpdateVttechDto } from './dto/update-vttech.dto';
 import { CauhinhchungService } from '../cauhinh/cauhinhchung/cauhinhchung.service';
 import { TelegramService } from '../shared/telegram.service';
 import { Vttech_khachhangService } from './vttech_khachhang/vttech_khachhang.service';
-import { Response,Request } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 @Controller('vttech')
 export class VttechController {
@@ -80,7 +79,7 @@ export class VttechController {
     console.log('Lieu trinh',SDT);
     const result = await this.vttechService.GetLieutrinh(SDT);
     console.log(result);
-    
+
     return result
   }
   @ApiTags('Vttech')

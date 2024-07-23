@@ -36,22 +36,22 @@ export class ZaloznsController {
   @Get('alltemp/:id')
   async getallteamplate(@Param('id') id: string) {
     const ZaloTokenPromise = await this._ZalotokenService.findid(id)
-    const [Zalotoken] = await Promise.all([ZaloTokenPromise])    
+    const [Zalotoken] = await Promise.all([ZaloTokenPromise])
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
       url: 'https://business.openapi.zalo.me/template/all?offset=0&limit=100&status=1',
-      headers: { 
+      headers: {
         'access_token': Zalotoken.Token['access_token']
       }
     };
    try {
-      const response = await axios.request(config);   
+      const response = await axios.request(config);
       response.data['token']= Zalotoken.Token['access_token']
       return response.data;
     } catch (error) {
       console.error(error);
-    }    
+    }
   }
   @Get('tempdetail')
   async getteamplatedetail(@Query('id') id: any,@Query('token') token: any) {
@@ -59,16 +59,16 @@ export class ZaloznsController {
       method: 'get',
       maxBodyLength: Infinity,
       url: `https://business.openapi.zalo.me/template/info?template_id=${id}`,
-      headers: { 
+      headers: {
         'access_token': token
       }
     };
     try {
-      const response = await axios.request(config); 
+      const response = await axios.request(config);
       return response.data;
     } catch (error) {
       console.log(error);
-    }    
+    }
   }
   @Post()
   create(@Body() createZaloznsDto: any) {

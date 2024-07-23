@@ -26,6 +26,8 @@ import { ZaloappuudaiModule } from './zaloappuudai/zaloappuudai.module';
 import { ZnsthanhtoanModule } from './zns/znsthanhtoan/znsthanhtoan.module';
 import { ZnsdieutriModule } from './zns/znsdieutri/znsdieutri.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ZalominiappModule } from './zalominiapp/zalominiapp.module';
+import { CauhinhchungModule } from './cauhinh/cauhinhchung/cauhinhchung.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -44,7 +46,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
       ttl: 60000,
       limit: 50,
     }]),
-    KhachhangsModule, 
+    CauhinhchungModule,
+    KhachhangsModule,
     ChitietModule,
     CauhinhModule,
     ZaloModule,
@@ -64,7 +67,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     LoggerModule,
     ZaloappuudaiModule,
     ZnsthanhtoanModule,
-    ZnsdieutriModule
+    ZnsdieutriModule,
   ],
   controllers: [AppController],
   providers: [AppService],

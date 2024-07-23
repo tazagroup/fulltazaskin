@@ -5,8 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { VttechkhachhangEntity } from './entities/vttechkhachhang.entity';
 import { TelegramService } from '../../shared/telegram.service';
 import { SharedService } from '../../shared/shared.service';
+import { LoggerModule } from '../../logger/logger.module';
 @Module({
-  imports: [TypeOrmModule.forFeature([VttechkhachhangEntity])],
+  imports: [TypeOrmModule.forFeature([VttechkhachhangEntity]),
+  LoggerModule
+],
   controllers: [VttechkhachhangController],
   providers: [VttechkhachhangService,TelegramService,SharedService]
 })

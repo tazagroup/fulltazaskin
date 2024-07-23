@@ -5,6 +5,8 @@ import { VttechkhachhangEntity } from './entities/vttechkhachhang.entity';
 import { SharedService } from '../../shared/shared.service';
 import { TelegramService } from '../../shared/telegram.service';
 import axios from 'axios';
+import moment = require('moment');
+import { LoggerService } from '../../logger/logger.service';
 @Injectable()
 export class VttechkhachhangService {
   constructor(
@@ -12,9 +14,10 @@ export class VttechkhachhangService {
     private VttechkhachhangRepository: Repository<VttechkhachhangEntity>,
     private _SharedService: SharedService,
     private _TelegramService: TelegramService,
+    private _LoggerService: LoggerService,
   ) { }
   async create(data: any) {
-    const check = await this.findby(data)
+    const check = await this.findsdt(data)
     if(!check) {
       this.VttechkhachhangRepository.create(data);
       return await this.VttechkhachhangRepository.save(data);
@@ -31,12 +34,12 @@ export class VttechkhachhangService {
   async findid(id: string) {
     return await this.VttechkhachhangRepository.findOne({ where: { id: id } });
   }
-  async findby(data: any) {
-    return await this.VttechkhachhangRepository.findOne({ 
-      where: {
-         SDT: data.SDT,
-         idVttech: data.idVttech 
-        },
+  async findsdt(SDT: any) {
+    return await this.VttechkhachhangRepository.findOne({
+      where: [
+        { SDT: SDT },
+        { SDT2: SDT },
+      ],
      });
   }
   async findPagination(page: number, perPage: number) {
@@ -81,7 +84,7 @@ export class VttechkhachhangService {
     return { deleted: true };
   }
 
-   
+
   async getKhachhang(item: any = {}) {
     const result = await this._SharedService.getToken(item);
     try {
@@ -94,18 +97,6 @@ export class VttechkhachhangService {
       });
       const data = response.data;
       if (data.Data.length > 0) {
-        // await Promise.all(data.Data.map(async (v: any, k: any) => {
-        //   const item: any = {};
-        //   item.Dulieu = v;
-        //   item.idVttech = v.ID;
-        //   item.Code = v.Code;
-        //   item.BranchID = v.BranchID;
-        //   item.Name = v.Name;
-        //   item.SDT = v.Phone;
-        //   item.SDT2 = v.Phone2;
-        //   await new Promise((resolve) => setTimeout(resolve, k * 200));
-        //   await this.create(item);
-        // }));
         data.Data.map(async (v: any, k: any) => {
           const item: any = {};
           item.Dulieu = v;
@@ -118,11 +109,21 @@ export class VttechkhachhangService {
           await new Promise((resolve) => setTimeout(resolve, k * 200));
           await this.create(item);
         });
-        this._TelegramService.SendMiniAppLogdev(`[VTTECH_KHACHHANG] - Hoàn Thành Đồng Bộ Dữ Liệu - ${data.Data.length}`);
+        const logger ={
+          Title:'Vttech Khách Hàng',
+          Slug:'vttechkhachhang',
+          Action:'create',
+          Mota:`[VTTECH_KHACHHANG] - Hoàn Thành Đồng Bộ Dữ Liệu - ${data.Data.length} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+       this._LoggerService.create(logger)
       }
       return data;
     } catch (error) {
-      this._TelegramService.SendMiniAppLogdev(`[VTTECH_KHACHHANG] - Lỗi Xác Thực - ${JSON.stringify(error.status)} - ${JSON.stringify(item)}`);
+      const logger ={
+        Title:'Vttech Khách Hàng',
+        Slug:'vttechkhachhang',
+        Action:'create',
+        Mota:`[VTTECH_KHACHHANG] - Lỗi Xác Thực - ${JSON.stringify(error.status)} - ${JSON.stringify(item)}`}
+     this._LoggerService.create(logger)
     }
   }
 

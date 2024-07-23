@@ -40,13 +40,13 @@ export class VttechthanhtoanController {
     return this.vttechthanhtoanService.remove(id);
   }
   @Post('getthanhtoan')
-  async getThanhtoan(@Body() data: any) {    
+  async getThanhtoan(@Body() data: any) {
     const getData = await this.vttechthanhtoanService.getThanhtoan(data);
     return getData;
   }
   @Interval(1200000)
   @Get('getauto')
-  async getAuto() {    
+  async getAuto() {
     const data:any= {
       "Name": "Taza",
       "Password": "1b9287d492b256x7taza",
@@ -55,7 +55,7 @@ export class VttechthanhtoanController {
       "DateTo": moment().format('YYYY-MM-DD'),
       "BranchID": "0",
       "PagingNumber": "1"
-  }
+    }
     const getData = await this.vttechthanhtoanService.getThanhtoan(data);
     return getData;
   }
