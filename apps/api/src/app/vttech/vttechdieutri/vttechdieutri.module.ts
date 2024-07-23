@@ -6,10 +6,12 @@ import { VttechdieutriEntity } from './entities/vttechdieutri.entity';
 import { SharedService } from '../../shared/shared.service';
 import { TelegramService } from '../../shared/telegram.service';
 import { ChinhanhModule } from '../../cauhinh/chinhanh/chinhanh.module';
+import { LoggerModule } from '../../logger/logger.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([VttechdieutriEntity]),
-    ChinhanhModule
+    ChinhanhModule,
+    LoggerModule
   ],
   controllers: [VttechdieutriController],
   providers: [VttechdieutriService,SharedService,TelegramService],

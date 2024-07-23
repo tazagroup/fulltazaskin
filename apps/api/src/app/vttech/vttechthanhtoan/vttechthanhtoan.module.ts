@@ -5,8 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { VttechthanhtoanEntity } from './entities/vttechthanhtoan.entity';
 import { TelegramService } from '../../shared/telegram.service';
 import { SharedService } from '../../shared/shared.service';
+import { LoggerModule } from '../../logger/logger.module';
 @Module({
-  imports: [TypeOrmModule.forFeature([VttechthanhtoanEntity])],
+  imports: [TypeOrmModule.forFeature([VttechthanhtoanEntity]),
+  LoggerModule
+],
   controllers: [VttechthanhtoanController],
   providers: [VttechthanhtoanService,TelegramService,SharedService],
   exports: [VttechthanhtoanService]

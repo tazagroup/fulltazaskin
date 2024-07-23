@@ -2,14 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { VttechlichhenEntity } from './entities/vttechlichhen.entity';
+import axios from 'axios';
+import { SharedService } from '../../shared/shared.service';
+import { LoggerService } from '../../logger/logger.service';
+import moment = require('moment');
 @Injectable()
 export class VttechlichhenService {
   constructor(
     @InjectRepository(VttechlichhenEntity)
-    private VttechlichhenRepository: Repository<VttechlichhenEntity>
+    private VttechlichhenRepository: Repository<VttechlichhenEntity>,
+    private _SharedService: SharedService,
+    private _LoggerService: LoggerService,
   ) { }
   async create(data: any) {
-    const check = await this.findSDT(data)
+    const check = await this.findcheck(data)
     if(!check) {
       this.VttechlichhenRepository.create(data);
       return await this.VttechlichhenRepository.save(data);
@@ -23,26 +29,25 @@ export class VttechlichhenService {
   async findAll() {
     return await this.VttechlichhenRepository.find();
   }
-  async findid(id: string) {
-    return await this.VttechlichhenRepository.findOne({ where: { id: id } });
+  async findbycode(CustCode: string) {
+    return await this.VttechlichhenRepository.findAndCount({ where: { CustCode: CustCode } });
   }
-  async findSDT(data: any) {
+  async findcheck(data: any) {
     return await this.VttechlichhenRepository.findOne({
       where: {
-        SDT: data.SDT,
-        Code: data.Code,
-        Type: data.Type,
+        VttechID:data.VttechID,
+        CustCode: data.CustCode,
       },
     });
   }
-  async findslug(SDT: any) {
+  async findslug(CustID: any) {
     return await this.VttechlichhenRepository.findOne({
-      where: { SDT: SDT },
+      where: { CustID: CustID },
     });
   }
-  async findAllslug(SDT: any) {
+  async findAllslug(CustID: any) {
     return await this.VttechlichhenRepository.find({
-      where: { SDT: SDT },
+      where: { CustID: CustID },
     });
   }
   async findPagination(page: number, perPage: number) {
@@ -85,5 +90,52 @@ export class VttechlichhenService {
     console.error(id)
     await this.VttechlichhenRepository.delete(id);
     return { deleted: true };
+  }
+  async getLichhen(item: any = {}) {
+    const result = await this._SharedService.getToken(item);
+    try {
+      const response = await axios.post('https://apismsvtt.vttechsolution.com/api/Appointment/GetList', item, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${result[0].Token}`,
+          'Cookie': result[1],
+        },
+      });
+      const data = response.data;
+      if (data.Data.length > 0) {
+        data.Data.map(async (v: any, k: any) => {
+          const item: any = {};
+          item.Dulieu = v;
+          item.VttechID = v.ID;
+          item.Code = v.Code;
+          item.CustID = v.CustID;
+          item.CustCode = v.CustCode;
+          item.CustName = v.CustName;
+          item.DateFrom = v.DateFrom;
+          item.CreatedDate = v.CreatedDate;
+          item.StatusID = v.StatusID;
+          item.StatusName = v.StatusName;
+          item.BranchID = v.BranchID;
+          item.BranchName = v.BranchName;
+          item.Content = v.Content;
+          await new Promise((resolve) => setTimeout(resolve, k * 200));
+          await this.create(item);
+        });
+        const logger ={
+          Title:'Vttech Lịch Hẹn',
+          Slug:'vttechlichhen',
+          Action:'create',
+          Mota:`[VTTECH_LICHHEN] - Hoàn Thành Đồng Bộ Dữ Liệu - ${data.Data.length} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+       this._LoggerService.create(logger)
+      }
+      return data;
+    } catch (error) {
+      const logger ={
+        Title:'Vttech Lịch Hẹn',
+        Slug:'vttechlichhen',
+        Action:'create',
+        Mota:`[VTTECH_LICHHEN] - Lỗi Xác Thực - ${JSON.stringify(error.status)} - ${JSON.stringify(item)}`}
+     this._LoggerService.create(logger)
+    }
   }
 }

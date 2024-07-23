@@ -12,9 +12,9 @@ export class VttechlichhenController {
   async findAll() {
     return this.vttechlichhenService.findAll();
   }
-  @Get('findid/:id')
-  async findOne(@Param('id') id: string) {
-    return await this.vttechlichhenService.findid(id);
+  @Get('findbycode/:code')
+  async findbycode(@Param('code') CustCode: string) {
+    return await this.vttechlichhenService.findbycode(CustCode);
   }
   @Get('findslug/:slug')
   async findslug(@Param('slug') slug: string) {
@@ -36,5 +36,16 @@ export class VttechlichhenController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.vttechlichhenService.remove(id);
+  }
+  @Post('getlichhen')
+  async getLichhen(@Body() data: any) {
+  //   const datamau = {
+  //     "DateFrom": "2019-02-01",
+  //     "DateTo": "2019-02-28",
+  //     "BranchID": "0",
+  //     "DataType": "new",
+  //     "PagingNumber": "1"
+  // }
+    return await this.vttechlichhenService.getLichhen(data);
   }
 }

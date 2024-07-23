@@ -2,9 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { TelegramService } from './telegram.service';
 import moment = require('moment');
 import axios from 'axios';
+import { LoggerService } from '../logger/logger.service';
 @Injectable()
 export class SharedService {
-  constructor(private _TelegramService:TelegramService) {}
+  constructor(
+    private _LoggerService:LoggerService,
+  ) {}
   async getToken(item: any) {
     try {
       const response = await axios.post('https://apismsvtt.vttechsolution.com/api/Client/Autho', item && typeof item == 'object' && Object.keys(item).length > 0 ? item : {"Name": "Taza","Password": "1b9287d492b256x7taza","Type": "web"}, {
@@ -19,7 +22,12 @@ export class SharedService {
         case 1:
           return [data, cookies];
         default:
-          this._TelegramService.SendMiniAppLogdev(`Lỗi Xác Thực ${JSON.stringify(item)} Vttech ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
+        const logger ={
+          Title:'Get Token',
+          Slug:'gettoken',
+          Action:'get',
+          Mota:`Lỗi Xác Thực ${JSON.stringify(item)} Vttech ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
+         this._LoggerService.create(logger)
           return data;
       }
     } catch (error) {
@@ -28,7 +36,14 @@ export class SharedService {
         await new Promise(resolve => setTimeout(resolve, 5000));
         return this.getToken(item);
       }
-      return this._TelegramService.SendMiniAppLogdev(`Lỗi Xác Thực ${error} Vttech ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
+      const logger ={
+        Title:'Get Token',
+        Slug:'gettoken',
+        Action:'get',
+        Mota:`Lỗi Xác Thực ${error} Vttech ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
+       this._LoggerService.create(logger)
+      return `Lỗi Xác Thực ${error} Vttech ${moment().format("HH:mm:ss DD/MM/YYYY")}`
+
     }
   }
 }
