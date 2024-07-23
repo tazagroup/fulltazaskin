@@ -3,7 +3,6 @@ import { VttechthanhtoanService } from './vttechthanhtoan.service';
 import { VttechthanhtoanController } from './vttechthanhtoan.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VttechthanhtoanEntity } from './entities/vttechthanhtoan.entity';
-import { TelegramService } from '../../shared/telegram.service';
 import { SharedService } from '../../shared/shared.service';
 import { LoggerModule } from '../../logger/logger.module';
 @Module({
@@ -11,7 +10,7 @@ import { LoggerModule } from '../../logger/logger.module';
   LoggerModule
 ],
   controllers: [VttechthanhtoanController],
-  providers: [VttechthanhtoanService,TelegramService,SharedService],
+  providers: [VttechthanhtoanService,SharedService],
   exports: [VttechthanhtoanService]
 })
 export class VttechthanhtoanModule {}

@@ -4,7 +4,6 @@ import { VttechdieutriController } from './vttechdieutri.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VttechdieutriEntity } from './entities/vttechdieutri.entity';
 import { SharedService } from '../../shared/shared.service';
-import { TelegramService } from '../../shared/telegram.service';
 import { ChinhanhModule } from '../../cauhinh/chinhanh/chinhanh.module';
 import { LoggerModule } from '../../logger/logger.module';
 @Module({
@@ -14,7 +13,7 @@ import { LoggerModule } from '../../logger/logger.module';
     LoggerModule
   ],
   controllers: [VttechdieutriController],
-  providers: [VttechdieutriService,SharedService,TelegramService],
+  providers: [VttechdieutriService,SharedService],
   exports: [VttechdieutriService]
 })
 export class VttechdieutriModule {}

@@ -3,16 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { VttechthanhtoanEntity } from './entities/vttechthanhtoan.entity';
 import { SharedService } from '../../shared/shared.service';
-import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
 import axios from 'axios';
+import { LoggerService } from '../../logger/logger.service';
 @Injectable()
 export class VttechthanhtoanService {
   constructor(
     @InjectRepository(VttechthanhtoanEntity)
     private VttechthanhtoanRepository: Repository<VttechthanhtoanEntity>,
     private _SharedService: SharedService,
-    private _TelegramService: TelegramService,
+    private _LoggerService: LoggerService,
   ) { }
   async create(data: any) {
     const check = await this.findby(data)
@@ -108,7 +108,12 @@ export class VttechthanhtoanService {
 
 
   async getThanhtoan(item: any = {}) {
-    this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Step1 - Bắt Đầu Lấy Dữ Liệu Thanh Toán : ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
+    const logger ={
+      Title:'Vttech Thanh Toán',
+      Slug:'vttechthanhtoan',
+      Action:'create',
+      Mota:`[VTTECH_THANHTOAN] - Step1 - Bắt Đầu Lấy Dữ Liệu Thanh Toán : ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
+   this._LoggerService.create(logger)
     const result = await this._SharedService.getToken(item);
     try {
       const response = await axios.post(`https://apismsvtt.vttechsolution.com/api/Revenue/GetList`, item, {
@@ -126,8 +131,13 @@ export class VttechthanhtoanService {
           ListItems.push(v);
         }
       }));
+      const logger ={
+        Title:'Vttech Thanh Toán',
+        Slug:'vttechthanhtoan',
+        Action:'create',
+        Mota:`[VTTECH_THANHTOAN] - Đã Lấy (${JSON.stringify(ListItems.length)}) dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
+     this._LoggerService.create(logger)
 
-      this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Đã Lấy (${JSON.stringify(ListItems.length)}) dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
       if (ListItems.length > 0) {
         ListItems.forEach(async (v: any, k: any) => {
           const item: any = {};
@@ -145,7 +155,12 @@ export class VttechthanhtoanService {
       return ListItems;
     } catch (error) {
       console.error(error);
-      this._TelegramService.SendMiniAppLogdev(`[VTTECH_THANHTOAN] - Lỗi Xác Thực - ${JSON.stringify(error)} - ${JSON.stringify(item)} - ${JSON.stringify(result)}`);
+      const logger ={
+        Title:'Vttech Thanh Toán',
+        Slug:'vttechthanhtoan',
+        Action:'create',
+        Mota:`[VTTECH_THANHTOAN] - Lỗi Xác Thực - ${JSON.stringify(error)} - ${JSON.stringify(item)} - ${JSON.stringify(result)}`}
+     this._LoggerService.create(logger)
       return error;
     }
   }

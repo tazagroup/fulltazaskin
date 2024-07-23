@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { VttechkhachhangEntity } from './entities/vttechkhachhang.entity';
 import { SharedService } from '../../shared/shared.service';
-import { TelegramService } from '../../shared/telegram.service';
 import axios from 'axios';
 import moment = require('moment');
 import { LoggerService } from '../../logger/logger.service';
@@ -13,7 +12,6 @@ export class VttechkhachhangService {
     @InjectRepository(VttechkhachhangEntity)
     private VttechkhachhangRepository: Repository<VttechkhachhangEntity>,
     private _SharedService: SharedService,
-    private _TelegramService: TelegramService,
     private _LoggerService: LoggerService,
   ) { }
   async create(data: any) {

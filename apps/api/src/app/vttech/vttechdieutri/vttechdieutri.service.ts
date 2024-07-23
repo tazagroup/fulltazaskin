@@ -3,22 +3,22 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { VttechdieutriEntity } from './entities/vttechdieutri.entity';
 import { SharedService } from '../../shared/shared.service';
-import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
 import { CombineUnique, convertToZeroMinutesSeconds, mergeNoDup } from '../../shared.utils';
 import axios from 'axios';
 import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
+import { LoggerService } from '../../logger/logger.service';
 @Injectable()
 export class VttechdieutriService {
   constructor(
     @InjectRepository(VttechdieutriEntity)
     private VttechdieutriRepository: Repository<VttechdieutriEntity>,
     private _SharedService: SharedService,
-    private _TelegramService: TelegramService,
     private _ChinhanhService: ChinhanhService,
+    private _LoggerService: LoggerService,
   ) { }
   async create(data: any) {
-    const check = await this.findby(data)    
+    const check = await this.findby(data)
     if(!check) {
       this.VttechdieutriRepository.create(data);
       return await this.VttechdieutriRepository.save(data);
@@ -37,12 +37,12 @@ export class VttechdieutriService {
     return await this.VttechdieutriRepository.findOne({ where: { idVttech: id } });
   }
   async findby(data: any) {
-    return await this.VttechdieutriRepository.findOne({ 
+    return await this.VttechdieutriRepository.findOne({
       where: {
          CustPhone: data.CustPhone,
-         idVttech: data.idVttech, 
-         TabCode: data.TabCode, 
-         TimeIndex: data.TimeIndex, 
+         idVttech: data.idVttech,
+         TabCode: data.TabCode,
+         TimeIndex: data.TimeIndex,
         },
      });
   }
@@ -58,8 +58,8 @@ export class VttechdieutriService {
       data: vttechdieutris,
     };
   }
-  async findQuery(params:any) {    
-    console.log(params);   
+  async findQuery(params:any) {
+    console.log(params);
     const queryBuilder = this.VttechdieutriRepository.createQueryBuilder('vttechdieutri');
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
       console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
@@ -88,7 +88,7 @@ export class VttechdieutriService {
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
-      .getManyAndCount();     
+      .getManyAndCount();
     return items;
   }
   async update(id: string, UpdateVttechdieutriDto: any) {
@@ -102,8 +102,13 @@ export class VttechdieutriService {
   }
 
 
-  async getdieutri(item: any = {}) {      
-    this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Step1 - Bắt Đầu Lấy Dữ Liệu Điều Trị - ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
+  async getdieutri(item: any = {}) {
+    const logger ={
+      Title:'Vttech Điều Trị',
+      Slug:'vttechdieutri',
+      Action:'create',
+      Mota:`[VTTECH_DIEUTRI] - Step1 - Bắt Đầu Lấy Dữ Liệu Điều Trị - ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
+   this._LoggerService.create(logger)
     const result = await this._SharedService.getToken(item);
     try {
       const response = await axios.post(`https://apismsvtt.vttechsolution.com/api/Customer/GetTreat`, item, {
@@ -113,21 +118,26 @@ export class VttechdieutriService {
           'Cookie': result[1],
         },
       });
-      const data = response.data;      
+      const data = response.data;
       const ListItems:any=[]
       await Promise.all(data.Data.map(async (v: any) => {
         const Checkdata = {
           CustPhone: v.CustPhone,
-          idVttech: convertToZeroMinutesSeconds(v.CreatedDate).getTime(), 
-          TabCode: v.Service.TabCode, 
+          idVttech: convertToZeroMinutesSeconds(v.CreatedDate).getTime(),
+          TabCode: v.Service.TabCode,
           TimeIndex: v.Service.TimeIndex,
         }
         const check = await this.findby(Checkdata);
         if (!check) {
           ListItems.push(v);
         }
-      }));      
-      this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Lấy Dữ Liệu Điều Trị Thành Công (${ListItems.length}) - ${moment().format("HH:mm:ss DD/MM/YYYY")}`);
+      }));
+      const logger ={
+        Title:'Vttech Điều Trị',
+        Slug:'vttechdieutri',
+        Action:'create',
+        Mota:`[VTTECH_DIEUTRI] - Lấy Dữ Liệu Điều Trị Thành Công (${ListItems.length}) - ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
+     this._LoggerService.create(logger)
       if (ListItems.length > 0) {
         ListItems.forEach(async (v: any, k: any) => {
           const item: any = {};
@@ -147,7 +157,12 @@ export class VttechdieutriService {
       return ListItems;
     } catch (error) {
       console.error(error);
-      this._TelegramService.SendMiniAppLogdev(`[VTTECH_DIEUTRI] - Lỗi Xác Thực - ${JSON.stringify(error)} - ${JSON.stringify(item)} - ${JSON.stringify(result)}`);
+      const logger ={
+        Title:'Vttech Điều Trị',
+        Slug:'vttechdieutri',
+        Action:'create',
+        Mota:`[VTTECH_DIEUTRI] - Lỗi Xác Thực - ${JSON.stringify(error)} - ${JSON.stringify(item)} - ${JSON.stringify(result)}`}
+     this._LoggerService.create(logger)
       return error;
     }
   }
