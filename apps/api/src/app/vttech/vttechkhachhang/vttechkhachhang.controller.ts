@@ -26,8 +26,12 @@ export class VttechkhachhangController {
   @Get('findsdt/:sdt')
   async findsdt(@Param('sdt') sdt: string) {
     const result = await this.vttechkhachhangService.findsdt(sdt);
-    console.log(result);
-    return result
+    if (result) {
+      return result;
+    } else {
+      throw new Error(`Không tìm thấy khách hàng với sđt ${sdt}`);
+    }
+
   }
   @Get('pagination')
   async findPagination(@Query('page') page: number, @Query('perPage') perPage: number) {
