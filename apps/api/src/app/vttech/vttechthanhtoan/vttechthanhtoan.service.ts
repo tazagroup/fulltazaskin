@@ -146,6 +146,7 @@ export class VttechthanhtoanService {
           item.Dulieu = v;
           item.idVttech = v.ID;
           item.CustPhone = v.CustPhone;
+          item.CustCode = v.CustCode;
           item.BranchID = v.BranchID;
           item.Code = v.Code;
           item.Created = moment(v.Created).format('YYYY-MM-DD');
