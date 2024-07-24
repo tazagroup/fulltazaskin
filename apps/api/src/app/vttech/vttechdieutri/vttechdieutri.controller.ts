@@ -12,8 +12,19 @@ export class VttechdieutriController {
     return this.vttechdieutriService.create(data);
   }
   @Get()
-  async findAll() {
-    return await this.vttechdieutriService.findAll();
+  async findPagination(@Query('page') page: number, @Query('perpage') perPage: number) {
+    const data = await this.vttechdieutriService.findPagination(page, perPage);
+    data.data.forEach(async (v: any) => {
+      v.CustCode = v.Dulieu.Code
+      await this.vttechdieutriService.update(v.id, v)
+      //v.CreatedDate = v.Dulieu.CreatedDate.split("T")[0]
+     // await this.vttechthanhtoanService.update(v.id, v)
+    });
+    return data
+  }
+  @Get('findbycode/:code')
+  async findbycode(@Param('code') CustCode: string) {
+    return await this.vttechdieutriService.findbycode(CustCode);
   }
   @Get('findid/:id')
   async findOne(@Param('id') id: string) {
@@ -22,10 +33,6 @@ export class VttechdieutriController {
   @Get('findby/:slug')
   async findslug(@Param('slug') slug: string) {
     return await this.vttechdieutriService.findby(slug);
-  }
-  @Get('pagination')
-  async findPagination(@Query('page') page: number, @Query('perPage') perPage: number) {
-    return await this.vttechdieutriService.findPagination(page, perPage);
   }
   @Post('search')
   async findQuery(@Body() SearchParams: any) {

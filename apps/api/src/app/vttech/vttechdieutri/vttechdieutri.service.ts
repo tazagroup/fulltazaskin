@@ -46,6 +46,9 @@ export class VttechdieutriService {
         },
      });
   }
+  async findbycode(CustCode: string) {
+    return await this.VttechdieutriRepository.findAndCount({ where: { CustCode: CustCode } });
+  }
   async findPagination(page: number, perPage: number) {
     const skip = (page - 1) * perPage;
     const totalItems = await this.VttechdieutriRepository.count();
