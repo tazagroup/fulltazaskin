@@ -32,7 +32,6 @@ export class VttechkhachhangController {
     } else {
       throw new Error(`Không tìm thấy khách hàng với sđt ${sdt}`);
     }
-
   }
   @Get('pagination')
   async findPagination(@Query('page') page: number, @Query('perPage') perPage: number) {

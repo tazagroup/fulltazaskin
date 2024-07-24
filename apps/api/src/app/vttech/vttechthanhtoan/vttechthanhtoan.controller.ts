@@ -11,21 +11,30 @@ export class VttechthanhtoanController {
     return this.vttechthanhtoanService.create(data);
   }
   @Get()
-  async findAll() {
-    return await this.vttechthanhtoanService.findAll();
+  async findPagination(@Query('page') page: number, @Query('perpage') perPage: number) {
+    const data = await this.vttechthanhtoanService.findPagination(page, perPage);
+    data.data.forEach(async (v: any) => {
+      v.CustCode = v.Dulieu.CustCode
+      await this.vttechthanhtoanService.update(v.id, v)
+      //v.CreatedDate = v.Dulieu.CreatedDate.split("T")[0]
+     // await this.vttechthanhtoanService.update(v.id, v)
+    });
+    return data
+
   }
   @Get('findid/:id')
   async findOne(@Param('id') id: string) {
     return await this.vttechthanhtoanService.findid(id);
   }
+  @Get('findbycode/:code')
+  async findbycode(@Param('code') CustCode: string) {
+    return await this.vttechthanhtoanService.findbycode(CustCode);
+  }
   @Get('findby/:slug')
   async findslug(@Param('slug') slug: string) {
     return await this.vttechthanhtoanService.findby(slug);
   }
-  @Get('pagination')
-  async findPagination(@Query('page') page: number, @Query('perPage') perPage: number) {
-    return await this.vttechthanhtoanService.findPagination(page, perPage);
-  }
+
   @Post('search')
   async findQuery(@Body() SearchParams: any) {
     return await this.vttechthanhtoanService.findQuery(SearchParams);
@@ -39,11 +48,11 @@ export class VttechthanhtoanController {
   remove(@Param('id') id: string) {
     return this.vttechthanhtoanService.remove(id);
   }
-  @Post('getthanhtoan')
-  async getThanhtoan(@Body() data: any) {
-    const getData = await this.vttechthanhtoanService.getThanhtoan(data);
-    return getData;
-  }
+  // @Post('getthanhtoan')
+  // async getThanhtoan(@Body() data: any) {
+  //   const getData = await this.vttechthanhtoanService.getThanhtoan(data);
+  //   return getData;
+  // }
   @Interval(1200000)
   @Get('getauto')
   async getAuto() {
@@ -58,5 +67,26 @@ export class VttechthanhtoanController {
     }
     const getData = await this.vttechthanhtoanService.getThanhtoan(data);
     return getData;
+  }
+
+  @Post('getthanhtoan')
+  async getthanhtoan(@Body() data: any) {
+    let datamau = data;
+    if(!data)
+    {
+      datamau = {
+        "Name": "Taza",
+        "Password": "1b9287d492b256x7taza",
+        "Type": "web",
+        "DateFrom": moment().format('YYYY-MM-DD'),
+        "DateTo": moment().format('YYYY-MM-DD'),
+        "BranchID": "0",
+        "PagingNumber": "1"
+      }
+     console.log(datamau);
+    }
+    const result = await this.vttechthanhtoanService.getThanhtoan(datamau);
+    console.log(result);
+    return result
   }
 }

@@ -58,7 +58,6 @@ export class VttechlichhenController {
     }
     const result = await this.vttechlichhenService.getLichhen(datamau);
     console.log(result);
-
     return result
   }
 }

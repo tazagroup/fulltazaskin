@@ -25,7 +25,9 @@ export class VttechthanhtoanService {
     }
 
   }
-
+  async findbycode(CustCode: string) {
+    return await this.VttechthanhtoanRepository.findAndCount({ where: { CustCode: CustCode } });
+  }
   async findAll() {
     return await this.VttechthanhtoanRepository.find();
   }

@@ -15,6 +15,8 @@ export class VttechthanhtoanEntity {
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     CustPhone: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
+    CustCode: string;
+    @Column({ type: 'text', collation: 'utf8_general_ci' })
     Code: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     BranchID: string;
