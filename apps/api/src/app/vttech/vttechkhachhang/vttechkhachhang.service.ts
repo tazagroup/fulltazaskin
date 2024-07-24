@@ -15,7 +15,7 @@ export class VttechkhachhangService {
     private _LoggerService: LoggerService,
   ) { }
   async create(data: any) {
-    const check = await this.findsdt(data)
+    const check = await this.findsdt(data.SDT)
     if(!check) {
       this.VttechkhachhangRepository.create(data);
       return await this.VttechkhachhangRepository.save(data);
