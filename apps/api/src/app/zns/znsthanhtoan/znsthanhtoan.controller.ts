@@ -15,7 +15,10 @@ export class ZnsthanhtoanController {
     data.pageSize =  9999;
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+    console.log("created ZNS Thanh Toán",moment().format('YYYY-MM-DD'));
     return this.znsthanhtoanService.createzns(data);
+
+
   }
   @Post('sendzns')
   sendzns(@Body() data: any) {
