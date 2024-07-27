@@ -52,7 +52,7 @@ export class VttechlichhenController {
      }
     }
     const result = await this.vttechlichhenService.getLichhen(datamau);
-    console.log('getlichhen',moment().format('YYYY-MM-DD'));
+    console.error('getlichhen',moment().format('YYYY-MM-DD'));
     return result
   }
 }

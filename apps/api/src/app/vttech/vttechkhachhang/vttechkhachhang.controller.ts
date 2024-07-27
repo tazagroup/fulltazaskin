@@ -65,7 +65,7 @@ export class VttechkhachhangController {
         "DateTo": moment().format('YYYY-MM-DD'),
       }
     }
-    console.log('getkhachhang',moment().format('YYYY-MM-DD'));
+    console.error('getkhachhang',moment().format('YYYY-MM-DD'));
     return await this.vttechkhachhangService.getKhachhang(data);
   }
 }

@@ -61,7 +61,7 @@ export class VttechthanhtoanController {
       "PagingNumber": "1"
     }
     const getData = await this.vttechthanhtoanService.getThanhtoan(data);
-  console.log('GetThanhtoan',moment().format('YYYY-MM-DD'));
+  console.error('GetThanhtoan',moment().format('YYYY-MM-DD'));
     return getData;
   }
 
@@ -79,7 +79,6 @@ export class VttechthanhtoanController {
         "BranchID": "0",
         "PagingNumber": "1"
       }
-     console.log(datamau);
     }
     const result = await this.vttechthanhtoanService.getThanhtoan(datamau);
     return result

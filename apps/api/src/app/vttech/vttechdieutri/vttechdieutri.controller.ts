@@ -67,7 +67,7 @@ export class VttechdieutriController {
       "BranchID": "0",
       "PagingNumber": "1"
     }
-    console.log('getdieutri',moment().format('YYYY-MM-DD'));
+    console.error('getdieutri',moment().format('YYYY-MM-DD'));
     const getData = await this.vttechdieutriService.getdieutri(data);
     return getData;
   }
