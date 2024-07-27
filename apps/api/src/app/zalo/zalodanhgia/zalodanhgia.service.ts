@@ -40,7 +40,7 @@ export class ZalodanhgiaService {
     //     v.BranchID = LIST_CHI_NHANH.find((v1)=>v1.id==v.idCN)?.idVttech
     //     this.update(v.id,v)
     //     console.log(v.BranchID);
-        
+
     // });
   }
   async findid(id: string) {
@@ -66,7 +66,7 @@ export class ZalodanhgiaService {
       data: zalodanhgias,
     };
   }
-  async findQuery(params: any) {  
+  async findQuery(params: any) {
     const queryBuilder = this.ZalodanhgiaRepository.createQueryBuilder('zalodanhgia');
     // if (params.Batdau && params.Ketthuc) {
     //   queryBuilder.andWhere('zalodanhgia.submitDate BETWEEN :startDate AND :endDate', {
@@ -98,17 +98,17 @@ export class ZalodanhgiaService {
     let [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10)
       .offset(params.pageNumber * params.pageSize || 0)
-      .getManyAndCount();         
+      .getManyAndCount();
       await Promise.all(
         items.map(async (v:any) => {
           const Customer:any = await this._ZnsdieutriService.findbytrackingid(v.trackingId);
-          console.log(Customer);    
+          console.log(Customer);
           if (Customer) {
             v.CustPhone = Phone_To_0(Customer.CustPhone);
             v.CustName = Customer.CustName;
           }
         })
-      );          
+      );
     return { items, totalCount };
   }
 
@@ -123,7 +123,7 @@ export class ZalodanhgiaService {
     await this.ZalodanhgiaRepository.delete(id);
     return { deleted: true };
   }
-  async getDanhgia(data:any) {        
+  async getDanhgia(data:any) {
     const Batdau = new Date(data.begin)
     const Ketthuc = new Date(data.end)
     const config = {
@@ -132,11 +132,11 @@ export class ZalodanhgiaService {
       url: `https://business.openapi.zalo.me/rating/get?template_id=${data.template_id}&from_time=${Batdau.getTime()}&to_time=${Ketthuc.getTime()}&offset=0&limit=1000`,
       headers: { 'access_token': data.access_token},
     };
-    try {      
-      const response = await axios.request(config);            
+    try {
+      const response = await axios.request(config);
       if(response.data.error==0)
       {
-        
+
         response.data.data.data.forEach(async (v:any) => {
           let item:any = {}
           item.idCN = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id||v.iddanhgiatimona==data.template_id)?.id
@@ -148,7 +148,7 @@ export class ZalodanhgiaService {
           item.msgId = v.msgId
           item.rate = v.rate
           item.submitDate = v.submitDate
-          item.note = v.note
+          item.note = v?.note
           item.template_id = data.template_id
           item.Dulieu = v
           const result = await this.create(item)

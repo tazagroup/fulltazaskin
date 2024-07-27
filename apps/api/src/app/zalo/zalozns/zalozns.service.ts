@@ -33,7 +33,7 @@ export class ZaloznsService {
   ) {
     this._CauhinhchungService.findslug('zalotoken').then((data: any) => {
       this.Accesstoken = data.Content.Accesstoken
-      // console.error(this.Accesstoken); 
+      // console.error(this.Accesstoken);
     })
   }
 
@@ -72,9 +72,9 @@ export class ZaloznsService {
         if(this.CheckTime())
         {
       // const smsResponse = await this.sendFallbackSMS(item);
-         return { 
-         status: 'sms', 
-         Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, 
+         return {
+         status: 'sms',
+         Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`,
          data: JSON.stringify(response.data) };
         //  return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, data: JSON.stringify(smsResponse.data) };
         }
@@ -108,7 +108,7 @@ export class ZaloznsService {
       };
       const response = await axios.request(config)
       console.log("Checkloi",response);
-      
+
       if (response.data.error == 0) {
         let dulieu: any={};
         dulieu.SDT = requestData.phone
@@ -151,7 +151,7 @@ export class ZaloznsService {
         data:requestData
       };
       const response = await axios.request(config)
-      console.log(response.data);    
+      console.log(response.data);
       if (response.data.error == 0) {
         let dulieu: any={};
         dulieu.SDT = item.SDT
@@ -165,7 +165,7 @@ export class ZaloznsService {
         if(this.CheckTime())
         {
         //const smsResponse = await this.sendFallbackSMSTimona(item);
-         return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`, 
+         return { status: 'sms', Title: `Thanh Toán Lỗi ZNS :${item.InvoiceNum} Gửi SMS`,
          data: JSON.stringify(response.data) };
         }
       }
@@ -188,7 +188,7 @@ export class ZaloznsService {
       else
       {
       const requestData = this.danhgiadichvutimona(item, Chinhanh);
-      console.log(requestData);  
+      console.log(requestData);
       const config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -220,7 +220,7 @@ export class ZaloznsService {
       throw error; // Rethrow for proper error propagation
     }
   }
-  
+
   constructRequestData(item: any, Chinhanh: any): any {
     const templateId = Chinhanh.idtemp;
     const priceProperty = templateId == '301891' || templateId == '302259' ? 'price' : 'cost';
@@ -268,7 +268,7 @@ export class ZaloznsService {
   }
   async sendzns(item: any) {
       console.log(item);
-      this._TelegramService.SendMiniAppLogdev(JSON.stringify(item)) 
+      this._TelegramService.SendMiniAppLogdev(JSON.stringify(item))
       const accessToken = item.token;
       delete item.token
       let config = {
@@ -286,7 +286,7 @@ export class ZaloznsService {
         throw new Error(`Error fetching data: ${response.statusText}`);
       }
       const data = await response.json();
-      return data  
+      return data
   }
   async createzns(req: any) {
     const result: any = {}
@@ -295,8 +295,8 @@ export class ZaloznsService {
     if (req.body.event_name == 'user_feedback') {
       result.star = req.body.message.star
       let item: Zalodanhgia;
-      item.note = req.body.message.note
-      item.rate = req.body.message.rate
+      item.note = req?.body?.message?.note
+      item.rate = req?.body?.message?.rate
       item.submitDate = req.body.message.submit_time
       item.feedbacks = req.body.message.feedbacks
       item.trackingId = req.body.message.tracking_id
@@ -478,7 +478,7 @@ export class ZaloznsService {
       };
     }
     xacnhanthanhtoantimona(item: any, Chinhanh: any): any {
-      const templateId = Chinhanh.idxacnhantimona;      
+      const templateId = Chinhanh.idxacnhantimona;
       return {
         phone: convertPhoneNum(item.SDT),
         template_id: templateId,
@@ -508,7 +508,7 @@ export class ZaloznsService {
     // }
     danhgiadichvutaza(item: any, Chinhanh: any): any {
       console.log('SendZNS',item);
-      
+
       const templateId = Chinhanh.idtempdanhgia;
       return {
         phone: convertPhoneNum(item.SDT),
