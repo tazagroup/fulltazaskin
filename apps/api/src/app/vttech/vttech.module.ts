@@ -1,16 +1,12 @@
 import { Module } from '@nestjs/common';
 import { VttechService } from './vttech.service';
 import { VttechController } from './vttech.controller';
-import { Vttech_khachhangModule } from './vttech_khachhang/vttech_khachhang.module';
-import { TelegramService } from '../shared/telegram.service';
+
 import { CauhinhchungModule } from '../cauhinh/cauhinhchung/cauhinhchung.module';
-import { Vttech_tinhtrangphongModule } from './vttech_tinhtrangphong/vttech_tinhtrangphong.module';
-import { Vttech_dieutriModule } from './vttech_dieutri/vttech_dieutri.module';
 import { ZaloznsModule } from '../zalo/zalozns/zalozns.module';
 import { LoggerModule } from '../logger/logger.module';
 import { VttechthanhtoanModule } from './vttechthanhtoan/vttechthanhtoan.module';
-import { Vttech_thanhtoanModule } from './vttech_thanhtoan/vttech_thanhtoan.module';
-import { VttechpaymentModule } from './vttech_payment/vttech_payment.module';
+
 import { VttechlichhenModule } from './vttechlichhen/vttechlichhen.module';
 import { VttechlichsuthanhtoanModule } from './vttechlichsuthanhtoan/vttechlichsuthanhtoan.module';
 import { VttechlieutrinhModule } from './vttechlieutrinh/vttechlieutrinh.module';
@@ -18,23 +14,18 @@ import { VttechdieutriModule } from './vttechdieutri/vttechdieutri.module';
 import { VttechkhachhangModule } from './vttechkhachhang/vttechkhachhang.module';
 @Module({
   imports: [
-    Vttech_khachhangModule,
     CauhinhchungModule,
-    Vttech_tinhtrangphongModule,
-    Vttech_dieutriModule,
     ZaloznsModule,
-    LoggerModule, 
+    LoggerModule,
     VttechthanhtoanModule,
-    Vttech_thanhtoanModule,
-    VttechpaymentModule,
     VttechlichhenModule,
     VttechlichsuthanhtoanModule,
     VttechlieutrinhModule,
     VttechdieutriModule,
-    VttechkhachhangModule
+    VttechkhachhangModule,
   ],
   controllers: [VttechController],
-  providers: [VttechService,TelegramService],
+  providers: [VttechService],
 
 })
 export class VttechModule {}

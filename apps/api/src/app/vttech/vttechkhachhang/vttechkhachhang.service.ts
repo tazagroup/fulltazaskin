@@ -104,6 +104,7 @@ export class VttechkhachhangService {
           item.Name = v.Name;
           item.SDT = v.Phone;
           item.SDT2 = v.Phone2;
+          item.CreatedDate =v.CreatedDate.split("T")[0]
           await new Promise((resolve) => setTimeout(resolve, k * 200));
           await this.create(item);
         });

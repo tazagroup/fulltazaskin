@@ -3,18 +3,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { ZnsthanhtoanEntity } from './entities/znsthanhtoan.entity';
 import { VttechthanhtoanService } from '../../vttech/vttechthanhtoan/vttechthanhtoan.service';
-import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
 import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 import { DescErrorZalo, GenId, convertPhoneNum } from '../../shared.utils';
 import { ZaloznstrackingService } from '../../zalo/zaloznstracking/zaloznstracking.service';
+import { LoggerService } from '../../logger/logger.service';
 @Injectable()
 export class ZnsthanhtoanService {
   constructor(
     @InjectRepository(ZnsthanhtoanEntity)
     private ZnsthanhtoanRepository: Repository<ZnsthanhtoanEntity>,
     private _VttechthanhtoanService: VttechthanhtoanService,
-    private _TelegramService: TelegramService,
+    private _LoggerService:LoggerService,
     private _ChinhanhService: ChinhanhService,
     private _ZaloznstrackingService: ZaloznstrackingService,
   ) { }
@@ -39,7 +39,12 @@ export class ZnsthanhtoanService {
           CountCreate = CountCreate + 1;
         }
       }));
-      this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Step2 - Create (${CountCreate}) Thanh Toan - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+      const logger ={
+        Title:'Vttech ZNS Thanh Toán',
+        Slug:'vttechznsthanhtoan',
+        Action:'send',
+        Mota:`[ZNS_THANHTOAN] - Step2 - Create (${CountCreate}) Thanh Toan - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+     this._LoggerService.create(logger)
     }
     return Thanhtoans;
   }
@@ -75,10 +80,15 @@ export class ZnsthanhtoanService {
   }
 
   async sendzns(data: any) {
-    const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)    
+    const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
     try {
       if (!Chinhanh?.ZaloOaToken?.access_token) {
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        const logger ={
+          Title:'Vttech ZNS Thanh Toán',
+          Slug:'vttechznsthanhtoan',
+          Action:'error',
+          Mota:`[ZNS_THANHTOAN] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+       this._LoggerService.create(logger)
         data.Status = 3;
         this.update(data.id, data)
       }
@@ -110,7 +120,12 @@ export class ZnsthanhtoanService {
           throw new Error(`Error fetching data: ${response.statusText}`);
         }
         const result = await response.json();
-        this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+        const logger ={
+          Title:'Vttech ZNS Thanh Toán',
+          Slug:'vttechznsthanhtoan',
+          Action:'error',
+          Mota:`[ZNS_THANHTOAN] - ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+       this._LoggerService.create(logger)
         if (result.error == 0) {
           data.Status = 1;
           data.message_id =result.data.message_id;
@@ -120,17 +135,17 @@ export class ZnsthanhtoanService {
         else {
           data.Status = 2;
           data.Statuscode = result.error;
-          // const resultsms = await this.sendsms({
-          //   "Brandname": "TAZA",
-          //   "Message": `${data.CustName} da thanh toan so tien ${data.Paid} co ma hoa don la ${data.Code}. Taza cam on quy khach`,
-          //   "Phonenumber": data.CustPhone,
-          //   "user": "ctytaza2",
-          //   "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
-          //   "messageId": data.CustPhone + (new Date()).getTime()
-          // })
-          // console.log(resultsms);
-          // data.SMSCode = resultsms.data.status;
-          // data.messageId =resultsms.data.messageId;
+          const resultsms = await this.sendsms({
+            "Brandname": "TAZA",
+            "Message": `${data.CustName} da thanh toan so tien ${data.Paid} co ma hoa don la ${data.Code}. Taza cam on quy khach`,
+            "Phonenumber": data.CustPhone,
+            "user": "ctytaza2",
+            "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
+            "messageId": data.CustPhone + (new Date()).getTime()
+          })
+          console.log(resultsms);
+          data.SMSCode = resultsms.data.status;
+          data.messageId =resultsms.data.messageId;
           this.update(data.id, data)
         }
 
@@ -138,7 +153,12 @@ export class ZnsthanhtoanService {
         // }
       }
     } catch (error) {
-      this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Mã Lỗi 3:  ${JSON.stringify(error)}`);
+      const logger ={
+        Title:'Vttech ZNS Thanh Toán',
+        Slug:'vttechznsthanhtoan',
+        Action:'send',
+        Mota:`[ZNS_THANHTOAN] - Mã Lỗi 3:  ${JSON.stringify(error)}`}
+     this._LoggerService.create(logger)
     }
   }
   async sendznsauto(data: any) {
@@ -147,7 +167,7 @@ export class ZnsthanhtoanService {
     data.Status?data.Status = data.Status:0;
     const result = await this.findQuery(data)
     return result
-    
+
   }
   async create(data: any) {
     const check = await this.findSHD(data)

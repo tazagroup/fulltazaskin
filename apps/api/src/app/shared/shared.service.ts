@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { TelegramService } from './telegram.service';
 import moment = require('moment');
 import axios from 'axios';
 import { LoggerService } from '../logger/logger.service';

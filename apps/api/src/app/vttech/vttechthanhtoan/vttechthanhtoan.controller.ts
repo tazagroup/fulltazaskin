@@ -60,7 +60,7 @@ export class VttechthanhtoanController {
       "Name": "Taza",
       "Password": "1b9287d492b256x7taza",
       "Type": "web",
-      "DateFrom": moment().format('YYYY-MM-DD'),
+      "DateFrom": moment().subtract(1, 'day').format('YYYY-MM-DD'),
       "DateTo": moment().format('YYYY-MM-DD'),
       "BranchID": "0",
       "PagingNumber": "1"

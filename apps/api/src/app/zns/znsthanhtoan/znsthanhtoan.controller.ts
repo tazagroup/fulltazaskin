@@ -2,12 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import {ZnsthanhtoanService } from './znsthanhtoan.service';
 import { Interval } from '@nestjs/schedule';
 import moment = require('moment');
-import { TelegramService } from '../../shared/telegram.service';
+import { LoggerService } from '../../logger/logger.service';
 @Controller('znsthanhtoan')
 export class ZnsthanhtoanController {
   constructor(
     private readonly znsthanhtoanService:ZnsthanhtoanService,
-    private readonly _TelegramService:TelegramService,
+    private readonly _LoggerService:LoggerService,
   ) {}
   @Interval(1500000)
   // @Interval(900)
@@ -22,28 +22,33 @@ export class ZnsthanhtoanController {
   sendzns(@Body() data: any) {
     return this.znsthanhtoanService.sendzns(data);
   }
- // @Interval(300000)
+  //@Interval(300000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
-  //  this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Gửi ZNS Tự Động Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.Status = 0;
     data.pageSize =  9999;
     if(this.CheckTime() == true){
       const result = await this.findQuery(data)
-    this._TelegramService.SendMiniAppLogdev(`[ZNS_THANHTOAN] - Step3 - Gửi ZNS Tự Động (${result.totalCount}) Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+      const logger ={
+        Title:'Vttech ZNS Thanh Toán',
+        Slug:'vttechznsthanhtoan',
+        Action:'send',
+        Mota:`[ZNS_THANHTOAN] - Step3 - Gửi ZNS Tự Động (${result.totalCount}) Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+     this._LoggerService.create(logger)
+
       if(result.items.length > 0){
         // await Promise.all(result.items.map(async (v,k) => {
         //   setTimeout(async () => {
-        //     await this.sendzns(v); 
+        //     await this.sendzns(v);
         //   }, k*2000);
         // }));
         result.items.forEach(async (v,k) => {
           setTimeout(async () => {
-            await this.sendzns(v); 
+            await this.sendzns(v);
           }, k*1000);
-          
+
         })
         return result;
       }
