@@ -10,7 +10,6 @@ export class ZnsthanhtoanController {
     private readonly _LoggerService:LoggerService,
   ) {}
   @Interval(1500000)
-  // @Interval(900)
   @Post('createzns')
   createzns(@Body() data: any={}) {
     data.pageSize =  9999;

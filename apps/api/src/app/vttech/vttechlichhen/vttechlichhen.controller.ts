@@ -10,10 +10,6 @@ export class VttechlichhenController {
   create(@Body() data: any) {
     return this.vttechlichhenService.create(data);
   }
-  // @Get()
-  // async findAll() {
-  //   return this.vttechlichhenService.findAll();
-  // }
   @Get('findbycode/:code')
   async findbycode(@Param('code') CustCode: string) {
     return await this.vttechlichhenService.findbycode(CustCode);
@@ -54,10 +50,9 @@ export class VttechlichhenController {
         "BranchID": "0",
         "PagingNumber": "1"
      }
-     console.log(datamau);
     }
     const result = await this.vttechlichhenService.getLichhen(datamau);
-    console.log(result);
+    console.log('getlichhen',moment().format('YYYY-MM-DD'));
     return result
   }
 }

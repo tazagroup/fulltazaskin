@@ -9,7 +9,6 @@ export class ZnsdieutriController {
     private readonly znsdieutriService:ZnsdieutriService,
     private readonly _LoggerService:LoggerService,
   ) {}
-  // @Interval(9000)
   @Interval(1500000)
   @Post('createzns')
   createzns(@Body() data: any={}) {

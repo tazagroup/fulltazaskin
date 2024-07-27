@@ -48,11 +48,6 @@ export class VttechthanhtoanController {
   remove(@Param('id') id: string) {
     return this.vttechthanhtoanService.remove(id);
   }
-  // @Post('getthanhtoan')
-  // async getThanhtoan(@Body() data: any) {
-  //   const getData = await this.vttechthanhtoanService.getThanhtoan(data);
-  //   return getData;
-  // }
   @Interval(1200000)
   @Get('getauto')
   async getAuto() {
@@ -66,6 +61,7 @@ export class VttechthanhtoanController {
       "PagingNumber": "1"
     }
     const getData = await this.vttechthanhtoanService.getThanhtoan(data);
+  console.log('GetThanhtoan',moment().format('YYYY-MM-DD'));
     return getData;
   }
 
@@ -86,7 +82,6 @@ export class VttechthanhtoanController {
      console.log(datamau);
     }
     const result = await this.vttechthanhtoanService.getThanhtoan(datamau);
-    console.log(result);
     return result
   }
 }

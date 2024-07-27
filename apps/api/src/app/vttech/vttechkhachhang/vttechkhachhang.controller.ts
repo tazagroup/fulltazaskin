@@ -50,7 +50,7 @@ export class VttechkhachhangController {
   remove(@Param('id') id: string) {
     return this.vttechkhachhangService.remove(id);
   }
-  // @Interval(1800000)
+  @Interval(1800000)
   @Post('getkhachhang')
   async getKhachhang(@Body() data: any) {
     let datamau = data;
@@ -64,8 +64,8 @@ export class VttechkhachhangController {
         "DateFrom": moment().format('YYYY-MM-DD'),
         "DateTo": moment().format('YYYY-MM-DD'),
       }
-      console.log(datamau);
     }
+    console.log('getkhachhang',moment().format('YYYY-MM-DD'));
     return await this.vttechkhachhangService.getKhachhang(data);
   }
 }

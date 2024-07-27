@@ -8,6 +8,7 @@ import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 import { DescErrorZalo, GenId, convertPhoneNum } from '../../shared.utils';
 import { ZaloznstrackingService } from '../../zalo/zaloznstracking/zaloznstracking.service';
 import { LoggerService } from '../../logger/logger.service';
+import axios from 'axios';
 @Injectable()
 export class ZnsdieutriService {
   constructor(
@@ -23,7 +24,7 @@ export class ZnsdieutriService {
     const Dieutris = await this._VttechdieutriService.findQuery(data)
     if (Dieutris.length > 0) {
       const uniqueDieutris = Dieutris.filter((obj, index, self) =>
-        self.findIndex(other => moment(other.Created).isSame(moment(obj.Created)) && other.CustPhone == obj.CustPhone && other.BranchID==obj.BranchID) === index
+        self.findIndex(other => moment(other.Created).isSame(moment(obj.Created)) && other.CustPhone == obj.CustPhone && other.BranchID == obj.BranchID) === index
       );
       console.log(uniqueDieutris[0]);
       console.log(uniqueDieutris.length);
@@ -46,13 +47,14 @@ export class ZnsdieutriService {
       //   }
       // }));
       //console.log(ListItems.length);
-        const logger ={
-          Title:'ZNS Điều Trị',
-          Slug:'dieutri',
-          Action:'create',
-          Mota:`[ZNS_DIEUTRI] - Step2 - Create (${uniqueDieutris.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
-        this._LoggerService.create(logger)
-    uniqueDieutris.forEach((v: any, k: any) => {
+      const logger = {
+        Title: 'ZNS Điều Trị',
+        Slug: 'dieutri',
+        Action: 'create',
+        Mota: `[ZNS_DIEUTRI] - Step2 - Create (${uniqueDieutris.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`
+      }
+      this._LoggerService.create(logger)
+      uniqueDieutris.forEach((v: any, k: any) => {
         const item: any = {}
         item.idVttech = v.idVttech
         item.idDieutri = v.id
@@ -101,12 +103,13 @@ export class ZnsdieutriService {
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
     // try {
     if (!Chinhanh?.ZaloOaToken?.access_token) {
-      const logger ={
-        Title:'ZNS Điều Trị',
-        Slug:'dieutri',
-        Action:'send',
-        Status:'error_token',
-        Mota:`[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+      const logger = {
+        Title: 'ZNS Điều Trị',
+        Slug: 'dieutri',
+        Action: 'send',
+        Status: 'error_token',
+        Mota: `[ZNS_DIEUTRI] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`
+      }
       this._LoggerService.create(logger)
 
       data.Status = 3;
@@ -123,7 +126,7 @@ export class ZnsdieutriService {
             customer_name: data.CustName,
             schedule_date: moment(data.Created).format('DD/MM/YYYY')
           },
-          tracking_id: data.CustPhone||data.CustName||GenId(12, true),
+          tracking_id: data.CustPhone || data.CustName || GenId(12, true),
         };
 
       }
@@ -137,36 +140,36 @@ export class ZnsdieutriService {
             Ngay_Su_Dung: moment(data.Created).format('DD/MM/YYYY'),
             Ma_hoa_don: Chinhanh.Title.replace(/Timona Academy /g, "")
           },
-          tracking_id: data.CustPhone||data.CustName||GenId(12, true),
+          tracking_id: data.CustPhone || data.CustName || GenId(12, true),
         };
       }
-      const config = {
-        method: 'post',
-        headers: {
-          'access_token': Chinhanh.ZaloOaToken.access_token,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData)
-      };
       // if (data.CustPhone == "0977272967") {
-      const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
-      if (!response.ok) {
-        const logger ={
-          Title:'ZNS Điều Trị',
-          Slug:'dieutri',
-          Action:'send',
-          Status:'error',
-          Mota:`[ZNS_DIEUTRI] - Mã Lỗi 1 :  ${JSON.stringify(response.statusText)}`}
+      const response = await axios.post('https://business.openapi.zalo.me/message/template', JSON.stringify(requestData),
+        {
+          headers: {
+            'access_token': Chinhanh.ZaloOaToken.access_token,
+            'Content-Type': 'application/json',
+          }
+        });
+      if (response.status !== 200) {
+        const logger = {
+          Title: 'ZNS Điều Trị',
+          Slug: 'dieutri',
+          Action: 'send',
+          Status: 'error',
+          Mota: `[ZNS_DIEUTRI] - Mã Lỗi 1 :  ${JSON.stringify(response.statusText)}`
+        }
         this._LoggerService.create(logger)
         throw new Error(`Error fetching data: ${response.statusText}`);
       }
-      const result = await response.json();
-      const logger ={
-        Title:'ZNS Điều Trị',
-        Slug:'dieutri',
-        Action:'send',
-        Status:'error',
-        Mota:`[ZNS_DIEUTRI] - Mã Lỗi 2 :  ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+      const result = await response.data;
+      const logger = {
+        Title: 'ZNS Điều Trị',
+        Slug: 'dieutri',
+        Action: 'send',
+        Status: 'error',
+        Mota: `[ZNS_DIEUTRI] - Mã Lỗi 2 :  ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`
+      }
       this._LoggerService.create(logger)
       if (result.error == 0) {
         data.Status = 1;
@@ -218,7 +221,7 @@ export class ZnsdieutriService {
       where: {
         Created: data.Created,
         CustPhone: data.CustPhone,
-        BranchID:data.BranchID
+        BranchID: data.BranchID
       },
     });
   }
@@ -243,18 +246,17 @@ export class ZnsdieutriService {
     const queryBuilder = this.ZnsdieutriRepository.createQueryBuilder('znsdieutri');
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
       console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
-      if(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)))
-        {
-          queryBuilder.andWhere('znsdieutri.Created = :startDate', {
-            startDate: moment(params.CreatedBegin).format('YYYY-MM-DD')
-          });
-        }
-        else {
-          queryBuilder.andWhere('znsdieutri.Created BETWEEN :startDate AND :endDate', {
-            startDate:  moment(params.CreatedBegin).format('YYYY-MM-DD'),
-            endDate:  moment(params.CreatedEnd).format('YYYY-MM-DD')
-          });
-        }
+      if (moment(params.CreatedBegin).isSame(moment(params.CreatedEnd))) {
+        queryBuilder.andWhere('znsdieutri.Created = :startDate', {
+          startDate: moment(params.CreatedBegin).format('YYYY-MM-DD')
+        });
+      }
+      else {
+        queryBuilder.andWhere('znsdieutri.Created BETWEEN :startDate AND :endDate', {
+          startDate: moment(params.CreatedBegin).format('YYYY-MM-DD'),
+          endDate: moment(params.CreatedEnd).format('YYYY-MM-DD')
+        });
+      }
     }
     if (params.hasOwnProperty('Title')) {
       queryBuilder.andWhere('znsdieutri.Title LIKE :Title', { SDT: `%${params.Title}%` });
