@@ -45,14 +45,15 @@ export class VttechlichhenController {
         "Name": "Taza",
         "Password": "1b9287d492b256x7taza",
         "Type": "web",
-        "DateFrom": moment().format('YYYY-MM-DD'),
-        "DateTo": moment().format('YYYY-MM-DD'),
+        "DateFrom": moment().subtract(1, 'day').format('YYYY-MM-DD'),
+        "DateTo": moment().add(1, 'days').format('YYYY-MM-DD'),
         "BranchID": "0",
         "PagingNumber": "1"
      }
     }
     const result = await this.vttechlichhenService.getLichhen(datamau);
-    console.error('getlichhen',moment().format('YYYY-MM-DD'));
+    console.error('Getlichhen DateFrom',moment().subtract(1, 'day').format('YYYY-MM-DD'));
+    console.error('Getlichhen DateTo',moment().add(1, 'days').format('YYYY-MM-DD'));
     return result
   }
 }

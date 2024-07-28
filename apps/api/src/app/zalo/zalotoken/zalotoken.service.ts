@@ -16,14 +16,14 @@ export class ZalotokenService {
     private _ChinhanhService: ChinhanhService,
     private _TelegramService: TelegramService
   ) { }
-  
+
   async getAccessToken(item: any) {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
       url: 'https://oauth.zaloapp.com/v4/oa/access_token',
-      headers: { 
-        'Content-Type': 'application/x-www-form-urlencoded', 
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
         'secret_key': item.ZaloOa.secret_key,
       },
       data : {
@@ -50,7 +50,7 @@ export class ZalotokenService {
             this._ChinhanhService.update(item.id, item);
             this._TelegramService.SendMiniAppLogdev(`Đã cập nhật lại token cho chi nhánh ${item.Title} - ${data.error}`);
             return { status: 400, note: "Autho Code Hết Hạn" };
-          } 
+          }
         } catch (error) {
           // Handle error
           console.error(error);
@@ -63,8 +63,8 @@ export class ZalotokenService {
       method: 'post',
       maxBodyLength: Infinity,
       url: 'https://oauth.zaloapp.com/v4/oa/access_token',
-      headers: { 
-        'Content-Type': 'application/x-www-form-urlencoded', 
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
         'secret_key': item.ZaloOa.secret_key,
       },
       data : {
