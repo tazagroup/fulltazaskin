@@ -297,11 +297,12 @@ export class ZaloznsService {
       let item: Zalodanhgia;
       item.note = req?.body?.message?.note
       item.rate = req?.body?.message?.rate
-      item.submitDate = req.body.message.submit_time
-      item.feedbacks = req.body.message.feedbacks
-      item.trackingId = req.body.message.tracking_id
-      item.oaId = req.body.oa_id
+      item.submitDate = req?.body?.message?.submit_time
+      item.feedbacks = req?.body?.message?.feedbacks
+      item.trackingId = req?.body?.message?.tracking_id
+      item.oaId = req?.body?.oa_id
       this._ZalodanhgiaService.create(item)
+      console.error(req.body);
     }
     this.ZaloznsRepository.create(result);
     return await this.ZaloznsRepository.save(result);
