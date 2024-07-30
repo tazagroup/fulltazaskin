@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Call Example</title>
+</head>
+<body>
+    <div id="result"></div>
+    <script>
+        function Update(date)
+        {
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        const raw = JSON.stringify({
+            "Name": "Taza",
+            "Password": "1b9287d492b256x7taza",
+            "Type": "web",
+            "BranchID": "0",
+            "PagingNumber": "1",
+            "DateFrom": date,
+            "DateTo": date
+        });
+
+        const requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch("http://localhost:3333/vttechthanhtoan/getthanhtoan", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                    // Update the div with the result
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.innerHTML += `\n <li> ${date}: - ${result.length} </li>`;
+                    console.log(result);
+                })
+            .catch(error => console.error(error));
+        }
+function timestampToDateString(timestamp) {
+  const date = new Date(timestamp);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0 nên cần cộng thêm 1
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+function addDaysToDate(startDate, numberOfDays) {
+  const result = [];
+  let currentDate = new Date(startDate);
+
+  for (let i = 0; i < numberOfDays; i++) {
+    result.push(new Date(currentDate));
+   const date =  currentDate.setDate(currentDate.getDate() + 1);
+   const formattedDate = timestampToDateString(date);
+   console.log(formattedDate); // Output: 2019-01-01
+    setTimeout(() => {
+        Update(formattedDate)
+    }, i*10000);
+  }
+
+  return result;
+}
+
+// Example usage:
+const startDate = '2023-04-02';
+const daysToAdd =366; // Add one year's worth of days
+
+const dates = addDaysToDate(startDate, daysToAdd);
+    </script>
+</body>
+</html>

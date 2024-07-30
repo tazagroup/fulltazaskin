@@ -28,7 +28,10 @@ export class VttechthanhtoanController {
   }
   @Get('findbycode/:code')
   async findbycode(@Param('code') CustCode: string) {
-    return await this.vttechthanhtoanService.findbycode(CustCode);
+    const result = await this.vttechthanhtoanService.findbycode(CustCode);
+    console.log(result);
+   // return result
+    return result[0].map((v:any)=>({...v.Dulieu}))
   }
   @Get('findby/:slug')
   async findslug(@Param('slug') slug: string) {
