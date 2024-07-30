@@ -40,7 +40,6 @@ export class VttechdieutriService {
     return await this.VttechdieutriRepository.findOne({
       where: {
          CustPhone: data.CustPhone,
-         idVttech: data.idVttech,
          TabCode: data.TabCode,
          TimeIndex: data.TimeIndex,
         },
@@ -125,8 +124,7 @@ export class VttechdieutriService {
       const ListItems:any=[]
       await Promise.all(data.Data.map(async (v: any) => {
         const Checkdata = {
-          CustPhone: v.CustPhone,
-          idVttech: convertToZeroMinutesSeconds(v.CreatedDate).getTime(),
+          CustPhone: v.Code,
           TabCode: v.Service.TabCode,
           TimeIndex: v.Service.TimeIndex,
         }
