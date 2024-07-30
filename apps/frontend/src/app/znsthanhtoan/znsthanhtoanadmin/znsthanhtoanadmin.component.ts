@@ -16,7 +16,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ZnsthanhtoanService } from '../znsthanhtoan.service';
 import * as moment from 'moment';
 import { ChinhanhService } from '../../admin/cauhinh/chinhanh/chinhanh.service';
-import { Status, Style, Style1, findDuplicateOccurrences } from '../../shared/shared.utils';
+import { Status, Style, Style1, findDuplicateOccurrences, mergeNoDup } from '../../shared/shared.utils';
 @Component({
   selector: 'app-znsthanhtoanadmin',
   standalone: true,
@@ -64,6 +64,7 @@ export class ZnsthanhtoanadminComponent implements OnInit {
   };
   ListStatus: any = Status;
   Style: any = Style1;
+  isDelete:boolean =false
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
@@ -95,11 +96,20 @@ export class ZnsthanhtoanadminComponent implements OnInit {
       }
     });
   }
-  FillDup() {   
-    this.FilterLists = findDuplicateOccurrences(this.Lists,'Code');   
+  FillDup() {
+    this.isDelete = true
+    this.FilterLists = findDuplicateOccurrences(this.Lists,'Code');
+    this.FilterLists = mergeNoDup(this.FilterLists,this.FilterLists,'Code')
     this.dataSource = new MatTableDataSource(this.FilterLists);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    console.log(this.FilterLists);
+  }
+  RemoveDup() {
+    this.FilterLists.forEach((v:any) => {
+      this._ZnsthanhtoanService.DeleteZnsthanhtoan(v.id).subscribe(()=>{ this.isDelete = false});
+    });
+
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -109,7 +119,7 @@ export class ZnsthanhtoanadminComponent implements OnInit {
     }
     console.log(this.dataSource.filteredData);
   }
-  ChangeSearchParams() {    
+  ChangeSearchParams() {
     this.SearchParams.BranchID==9999?delete this.SearchParams.BranchID: this.SearchParams.BranchID
     this.SearchParams.Status==9999?delete this.SearchParams.Status: this.SearchParams.Status
     console.log(this.SearchParams);

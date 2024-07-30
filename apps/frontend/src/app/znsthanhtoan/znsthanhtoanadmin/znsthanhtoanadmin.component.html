@@ -5,7 +5,7 @@
       </div>
   </mat-drawer>
   <mat-drawer-content class="!flex flex-col space-y-2 flex-auto min-w-0 relative bg-white p-4">
-    
+
     <div class="grid lg:grid-cols-4 grid-cols-2 gap-2">
       <mat-form-field appearance="outline">
         <mat-label>Tìm Kiếm</mat-label>
@@ -54,8 +54,12 @@
           <span class="p-2 {{GetStype(item.key)}}" *ngFor="let item of ListStatus|keyvalue">
             ({{CountStatus(item.key)}})  {{item.value}}
           </span>
-
-        <span class="material-symbols-outlined" (click)="FillDup()">content_copy</span>
+          <button mat-icon-button>
+             <span class="material-symbols-outlined text-blue-500" (click)="FillDup()">content_copy</span>
+            </button>
+              <button mat-icon-button *ngIf="isDelete">
+                <span class="material-symbols-outlined text-blue-500" (click)="RemoveDup()">delete</span>
+            </button>
       </div>
     </div>
 
@@ -91,13 +95,13 @@
         </ng-container>
         <ng-container matColumnDef="Status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-          <td mat-cell *matCellDef="let row"> 
+          <td mat-cell *matCellDef="let row">
             <span class="p-2 rounded-lg {{GetStype(row.Status)}}">
-            {{ListStatus[row.Status]}} 
+            {{ListStatus[row.Status]}}
             </span>
           </td>
         </ng-container>
-    
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <!-- <tr class="mat-row" *matNoDataRow>
