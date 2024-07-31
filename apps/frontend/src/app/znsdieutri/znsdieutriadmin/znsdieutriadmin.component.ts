@@ -14,7 +14,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ZnsdieutriService } from '../znsdieutri.service';
-import { Status, Style1, ZALO_ERROR, findDuplicateOccurrences } from '../../shared/shared.utils';
+import { Status, Style1, ZALO_ERROR, findDuplicateOccurrences, mergeNoDup } from '../../shared/shared.utils';
 import * as moment from 'moment';
 import { ChinhanhService } from '../../admin/cauhinh/chinhanh/chinhanh.service';
 @Component({
@@ -59,6 +59,7 @@ export class ZnsdieutriadminComponent implements OnInit {
     Status:9999,
     BranchID:9999
   };
+  isDelete:boolean =false
   constructor(
     private dialog: MatDialog,
     private _Notification: NotifierService,
@@ -75,7 +76,7 @@ export class ZnsdieutriadminComponent implements OnInit {
         if (chinhanhs && chinhanhs.length > 0) {
           this._ZnsdieutriService.znsdieutris$.subscribe((data: any) => {
             if (data) {
-              console.log(data);             
+              console.log(data);
               data.forEach((v: any) => {
                 v.Chinhanh = chinhanhs.find((c: any) => c.idVttech === v.BranchID)?.Title;
               })
@@ -87,7 +88,7 @@ export class ZnsdieutriadminComponent implements OnInit {
 
           })
         }
-  
+
       })
 
     // this._ZnsdieutriService.getAllZnsdieutris().subscribe((data)=>{
@@ -115,13 +116,22 @@ export class ZnsdieutriadminComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
     console.log(this.dataSource.filteredData);
-    
+
   }
-  FillDup() {   
-    this.FilterLists = findDuplicateOccurrences(this.Lists,'CustPhone');   
+  FillDup() {
+    this.isDelete = true
+    this.FilterLists = findDuplicateOccurrences(this.Lists,'CustPhone');
+   console.log(this.FilterLists);
+    this.FilterLists = mergeNoDup(this.FilterLists,this.FilterLists,'CustPhone')
+    console.log(this.FilterLists);
     this.dataSource = new MatTableDataSource(this.FilterLists);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+  RemoveDup() {
+    this.FilterLists.forEach((v:any) => {
+     this._ZnsdieutriService.DeleteZnsdieutri(v.id).subscribe(()=>{ this.isDelete = false});
+    });
   }
   ChangeSearchParams() {
    this.SearchParams.BranchID==9999?delete this.SearchParams.BranchID: this.SearchParams.BranchID

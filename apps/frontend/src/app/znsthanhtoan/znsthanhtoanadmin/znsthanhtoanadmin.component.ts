@@ -109,7 +109,6 @@ export class ZnsthanhtoanadminComponent implements OnInit {
     this.FilterLists.forEach((v:any) => {
       this._ZnsthanhtoanService.DeleteZnsthanhtoan(v.id).subscribe(()=>{ this.isDelete = false});
     });
-
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
