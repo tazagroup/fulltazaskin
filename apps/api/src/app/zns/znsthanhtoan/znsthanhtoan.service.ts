@@ -158,7 +158,7 @@ export class ZnsthanhtoanService {
             console.error(resultsms);
             data.SMSCode = resultsms.data.status;
             data.messageId =resultsms.data.messageId;
-            data.SMSData = resultsms
+            data.SMSData = resultsms.data
             this.update(data.id, data)
           }
 
@@ -225,10 +225,9 @@ export class ZnsthanhtoanService {
                   "pass": "$2a$10$/DpS3IgI1AmG0gmwXmqPLOnmaCzKVh1h.BUZ6Td4ZVEl29O7zWgbu",
                   "messageId": data.CustPhone + (new Date()).getTime()
                 })
-                console.error(resultsms);
                 data.SMSCode = resultsms.data.status;
                 data.messageId =resultsms.data.messageId;
-                data.SMSData = resultsms
+                data.SMSData = resultsms.data
                 this.update(data.id, data)
               }
 
