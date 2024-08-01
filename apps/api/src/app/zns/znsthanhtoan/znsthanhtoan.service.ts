@@ -158,9 +158,7 @@ export class ZnsthanhtoanService {
             console.error(resultsms);
             data.SMSCode = resultsms.data.status;
             data.messageId =resultsms.data.messageId;
-            data.SMSData.status = resultsms.data.statusDescription;
-            data.SMSData.code = resultsms.data.status;
-            data.SMSData.messageId = resultsms.data.messageId;
+            data.SMSData = resultsms
             this.update(data.id, data)
           }
 
@@ -230,9 +228,7 @@ export class ZnsthanhtoanService {
                 console.error(resultsms);
                 data.SMSCode = resultsms.data.status;
                 data.messageId =resultsms.data.messageId;
-                data.SMSData.status = resultsms.data.statusDescription;
-                data.SMSData.code = resultsms.data.status;
-                data.SMSData.messageId = resultsms.data.messageId;
+                data.SMSData = resultsms
                 this.update(data.id, data)
               }
 
