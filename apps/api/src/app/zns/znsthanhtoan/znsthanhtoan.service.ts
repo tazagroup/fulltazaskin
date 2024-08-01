@@ -165,7 +165,7 @@ export class ZnsthanhtoanService {
           return result
           // }
          }
-         else if(data.Congty="Timona")
+         else if(data.Congty=="Timona")
          {
               const requestData = {
                // mode: "development",
