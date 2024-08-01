@@ -33,7 +33,7 @@ import { ZnsdieutriadminComponent } from '../../znsdieutri/znsdieutriadmin/znsdi
         path: '', component: MainpageComponent,
         children: [
           { path: 'dashboard', loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardModule)},
-          { path: 'khach-hang', loadChildren: () => import('../khachhang/khachhang.module').then(m => m.KhachhangModule)},
+         // { path: 'khach-hang', loadChildren: () => import('../khachhang/khachhang.module').then(m => m.KhachhangModule)},
           { path: 'dich-vu', loadChildren: () => import('../dichvu/dichvu.module').then(m => m.DanhmucModule)},
           { path: 'cau-hinh', loadChildren: () => import('../cauhinh/cauhinh.module').then(m => m.CauhinhModule)},
           { path: 'danh-muc', loadChildren: () => import('../danhmuc/danhmuc.module').then(m => m.DanhmucModule)},
@@ -47,7 +47,7 @@ import { ZnsdieutriadminComponent } from '../../znsdieutri/znsdieutriadmin/znsdi
           { path: 'vttechthanhtoan', loadChildren: () => import('../vttech/vttechthanhtoan/vttechthanhtoan.module').then(m => m.VttechthanhtoanModule)},
           { path: 'vttechkhachhang', loadChildren: () => import('../vttech/vttechkhachhang/vttechkhachhang.module').then(m => m.VttechkhachhangModule)},
           { path: 'vttechdieutri', loadChildren: () => import('../vttech/vttechdieutri/vttechdieutri.module').then(m => m.VttechdieutriModule)},
-          { path: 'sms', loadChildren: () => import('../baocao/sms/sms.module').then(m => m.SmsModule)},
+         // { path: 'sms', loadChildren: () => import('../baocao/sms/sms.module').then(m => m.SmsModule)},
           { path: 'logger', loadChildren: () => import('../logger/logger.module').then(m => m.LoggerModule)},
           {path: 'listthanhtoan', component: VttechthanhtoanlistComponent},
           {path: 'listdieutri', component: VttechdieutrilistComponent},

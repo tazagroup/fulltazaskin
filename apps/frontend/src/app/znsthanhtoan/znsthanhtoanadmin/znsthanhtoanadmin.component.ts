@@ -51,7 +51,8 @@ export class ZnsthanhtoanadminComponent implements OnInit {
     'Paid',
     'Chinhanh',
     'Created',
-    'Status',
+    'ZNS',
+    'SMS',
   ];
   dataSource!: MatTableDataSource<any>;
   SearchParams: any = {
@@ -82,6 +83,7 @@ export class ZnsthanhtoanadminComponent implements OnInit {
       if (chinhanhs && chinhanhs.length > 0) {
         this._ZnsthanhtoanService.znsthanhtoans$.subscribe((data: any) => {
           if (data) {
+            console.log(data);
             data.forEach((v: any) => {
               v.Chinhanh = chinhanhs.find(
                 (c: any) => c.idVttech === v.BranchID
@@ -99,13 +101,13 @@ export class ZnsthanhtoanadminComponent implements OnInit {
   FillDup() {
     this.isDelete = true
     this.FilterLists = findDuplicateOccurrences(this.Lists,'Code');
-    this.FilterLists = mergeNoDup(this.FilterLists,this.FilterLists,'Code')
     this.dataSource = new MatTableDataSource(this.FilterLists);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     console.log(this.FilterLists);
   }
   RemoveDup() {
+    this.FilterLists = mergeNoDup(this.FilterLists,this.FilterLists,'Code')
     this.FilterLists.forEach((v:any) => {
       this._ZnsthanhtoanService.DeleteZnsthanhtoan(v.id).subscribe(()=>{ this.isDelete = false});
     });

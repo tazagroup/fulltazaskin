@@ -17,6 +17,7 @@ import { ZnsdieutriService } from '../znsdieutri.service';
 import { Status, Style1, ZALO_ERROR, findDuplicateOccurrences, mergeNoDup } from '../../shared/shared.utils';
 import * as moment from 'moment';
 import { ChinhanhService } from '../../admin/cauhinh/chinhanh/chinhanh.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-znsdieutriadmin',
   standalone: true,
@@ -32,7 +33,8 @@ import { ChinhanhService } from '../../admin/cauhinh/chinhanh/chinhanh.service';
     MatDialogModule,
     MaterialModule,
     RouterLink,
-    RouterOutlet
+    RouterOutlet,
+    MatTooltipModule
   ],
   templateUrl: './znsdieutriadmin.component.html',
   styleUrls: ['./znsdieutriadmin.component.css']
@@ -121,14 +123,12 @@ export class ZnsdieutriadminComponent implements OnInit {
   FillDup() {
     this.isDelete = true
     this.FilterLists = findDuplicateOccurrences(this.Lists,'CustPhone');
-   console.log(this.FilterLists);
-    this.FilterLists = mergeNoDup(this.FilterLists,this.FilterLists,'CustPhone')
-    console.log(this.FilterLists);
     this.dataSource = new MatTableDataSource(this.FilterLists);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
   RemoveDup() {
+    this.FilterLists = mergeNoDup(this.FilterLists,this.FilterLists,'CustPhone')
     this.FilterLists.forEach((v:any) => {
      this._ZnsdieutriService.DeleteZnsdieutri(v.id).subscribe(()=>{ this.isDelete = false});
     });
