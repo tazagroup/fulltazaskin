@@ -220,8 +220,8 @@ export class ZnsthanhtoanService {
                 data.Status = 2;
                 data.Statuscode = result.error;
                 const resultsms = await this.sendsms({
-                  "Brandname": "TAZA",
-                  "Message": `${data.CustName} da thanh toan so tien ${data.Paid} co ma hoa don la ${data.Code}. Taza cam on quy khach`,
+                  "Brandname": "TIMONA",
+                  "Message": `Cam on quy khach ${data.CustName} da thanh toan so tien ${data.Paid} co ma hoa don la ${data.Code}. TIMONA cam on quy khach`,
                   "Phonenumber": data.CustPhone,
                   "user": "ctytimona2",
                   "pass": "$2a$10$/DpS3IgI1AmG0gmwXmqPLOnmaCzKVh1h.BUZ6Td4ZVEl29O7zWgbu",
