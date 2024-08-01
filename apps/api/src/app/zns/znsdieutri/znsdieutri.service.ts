@@ -130,7 +130,7 @@ export class ZnsdieutriService {
         };
 
       }
-      else {
+      else if (Chinhanh.Congty == 'timona'){
         requestData = {
           // mode: "development",
           phone: convertPhoneNum(data.CustPhone),
@@ -160,6 +160,10 @@ export class ZnsdieutriService {
           Mota: `[ZNS_DIEUTRI] - Mã Lỗi 1 :  ${JSON.stringify(response.statusText)}`
         }
         this._LoggerService.create(logger)
+        data.ZNSData.status = "error"
+        data.ZNSData.code = response?.status
+        data.ZNSData.error = response?.statusText
+        this.update(data.id, data)
         throw new Error(`Error fetching data: ${response.statusText}`);
       }
       const result = await response.data;
@@ -175,11 +179,15 @@ export class ZnsdieutriService {
         data.Status = 1;
         data.messageId = result.data.msg_id;
         data.trackingId = requestData.tracking_id;
+        data.ZNSData.status = "success";
+        data.ZNSData.code =result.error
         this.update(data.id, data)
       }
       else {
         data.Status = 2;
         data.Statuscode = result.error;
+        data.ZNSData.status = "error";
+        data.ZNSData.code =result.error
         this.update(data.id, data)
       }
       return result

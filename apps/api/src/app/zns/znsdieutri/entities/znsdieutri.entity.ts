@@ -36,6 +36,10 @@ export class ZnsdieutriEntity {
   Status: number;
   @Column()
   Statuscode: number;
+  @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
+  SMSData: string;
+  @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
+  ZNSData: string;
   @Column()
   SMSCode: number;
   @Column()

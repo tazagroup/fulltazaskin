@@ -80,8 +80,11 @@ export class ZnsthanhtoanService {
   }
 
   async sendzns(data: any) {
+
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
     try {
+
+
       if (!Chinhanh?.ZaloOaToken?.access_token) {
         const logger ={
           Title:'Vttech ZNS Thanh Toán',
@@ -93,6 +96,7 @@ export class ZnsthanhtoanService {
         this.update(data.id, data)
       }
       else {
+
         const priceProperty = Chinhanh.TemplateThanhtoan == '301891' || Chinhanh.TemplateThanhtoan == '302259' ? 'price' : 'cost';
         const requestData = {
          // mode: "development",
@@ -126,12 +130,15 @@ export class ZnsthanhtoanService {
           Action:'error',
           Mota:`[ZNS_THANHTOAN] - ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
        this._LoggerService.create(logger)
-        if (result.error == 0) {
+
+
+       if (result.error == 0) {
           data.Status = 1;
           data.message_id =result.data.message_id;
           data.trackingId =requestData.tracking_id;
           this.update(data.id, data)
         }
+
         else {
           data.Status = 2;
           data.Statuscode = result.error;
@@ -152,6 +159,8 @@ export class ZnsthanhtoanService {
         return result
         // }
       }
+
+
     } catch (error) {
       const logger ={
         Title:'Vttech ZNS Thanh Toán',
@@ -160,6 +169,8 @@ export class ZnsthanhtoanService {
         Mota:`[ZNS_THANHTOAN] - Mã Lỗi 3:  ${JSON.stringify(error)}`}
      this._LoggerService.create(logger)
     }
+
+
   }
   async sendznsauto(data: any) {
     data.CreatedBegin?data.CreatedBegin = data.CreatedBegin:moment().format('YYYY-MM-DD');
