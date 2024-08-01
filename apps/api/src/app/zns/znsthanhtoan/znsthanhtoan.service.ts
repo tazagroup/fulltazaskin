@@ -34,7 +34,7 @@ export class ZnsthanhtoanService {
         item.Created = moment(v.Created).format('YYYY-MM-DD');
         item.Paid = v.Paid;
         const isCreate = await this.create(item);
-        // console.log(isCreate);
+        // console.error(isCreate);
         if (isCreate.error != 1001) {
           CountCreate = CountCreate + 1;
         }
@@ -60,7 +60,7 @@ export class ZnsthanhtoanService {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
   async sendsms(data: any) {
@@ -80,84 +80,164 @@ export class ZnsthanhtoanService {
   }
 
   async sendzns(data: any) {
-
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
     try {
-
-
       if (!Chinhanh?.ZaloOaToken?.access_token) {
         const logger ={
           Title:'Vttech ZNS Thanh Toán',
           Slug:'vttechznsthanhtoan',
           Action:'error',
           Mota:`[ZNS_THANHTOAN] - ${data.BranchID} - ${Chinhanh?.Title} - Chưa Có Token - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
-       this._LoggerService.create(logger)
+        this._LoggerService.create(logger)
         data.Status = 3;
         this.update(data.id, data)
       }
       else {
+        if(data.Congty=="tazaskin")
+        {
+          const priceProperty = Chinhanh.TemplateThanhtoan == '301891' || Chinhanh.TemplateThanhtoan == '302259' ? 'price' : 'cost';
+          const requestData = {
+           // mode: "development",
+            phone: convertPhoneNum(data.CustPhone),
+            template_id: Chinhanh.TemplateThanhtoan,
+            template_data: {
+              order_code: data.Code,
+              note: moment(data.Created).format('DD/MM/YYYY'),
+              [priceProperty]: parseFloat(data.Paid).toFixed(0),
+              customer_name: data.CustName,
+            },
+            tracking_id: data.CustPhone||data.CustName||GenId(12, true),
+          };
+          const config = {
+            method: 'post',
+            headers: {
+              'access_token': Chinhanh.ZaloOaToken.access_token,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData)
+          };
+          // if (data.CustPhone == "0977272967") {
+          const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
+          if (!response.ok) {
+            data.Status = 9;
+            data.ZNSData.status = 'error';
+            data.ZNSData.code = response.statusText;
+            this.update(data.id, data)
+            throw new Error(`Error fetching data: ${response.statusText}`);
+          }
+          const result = await response.json();
+          const logger ={
+            Title:'Vttech ZNS Thanh Toán',
+            Slug:'vttechznsthanhtoan',
+            Action:'error',
+            Mota:`[ZNS_THANHTOAN] - ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+         this._LoggerService.create(logger)
 
-        const priceProperty = Chinhanh.TemplateThanhtoan == '301891' || Chinhanh.TemplateThanhtoan == '302259' ? 'price' : 'cost';
-        const requestData = {
-         // mode: "development",
-          phone: convertPhoneNum(data.CustPhone),
-          template_id: Chinhanh.TemplateThanhtoan,
-          template_data: {
-            order_code: data.Code,
-            note: moment(data.Created).format('DD/MM/YYYY'),
-            [priceProperty]: parseFloat(data.Paid).toFixed(0),
-            customer_name: data.CustName,
-          },
-          tracking_id: data.CustPhone||data.CustName||GenId(12, true),
-        };
-        const config = {
-          method: 'post',
-          headers: {
-            'access_token': Chinhanh.ZaloOaToken.access_token,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestData)
-        };
-        // if (data.CustPhone == "0977272967") {
-        const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
-        if (!response.ok) {
-          throw new Error(`Error fetching data: ${response.statusText}`);
-        }
-        const result = await response.json();
-        const logger ={
-          Title:'Vttech ZNS Thanh Toán',
-          Slug:'vttechznsthanhtoan',
-          Action:'error',
-          Mota:`[ZNS_THANHTOAN] - ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
-       this._LoggerService.create(logger)
+         if (result.error == 0) {
+            data.Status = 1;
+            data.message_id =result.data.message_id;
+            data.trackingId =requestData.tracking_id;
+            data.ZNSData.status = 'success';
+            data.ZNSData.code = result.error;
+            data.ZNSData.message_id = result.data.message_id;
+            data.ZNSData.trackingId = requestData.tracking_id;
+            this.update(data.id, data)
+          }
 
+          else {
+            data.Status = 2;
+            data.Statuscode = result.error;
+            const resultsms = await this.sendsms({
+              "Brandname": "TAZA",
+              "Message": `${data.CustName} da thanh toan so tien ${data.Paid} co ma hoa don la ${data.Code}. Taza cam on quy khach`,
+              "Phonenumber": data.CustPhone,
+              "user": "ctytaza2",
+              "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
+              "messageId": data.CustPhone + (new Date()).getTime()
+            })
+            console.error(resultsms);
+            data.SMSCode = resultsms.data.status;
+            data.messageId =resultsms.data.messageId;
+            data.SMSData.status = resultsms.data.statusDescription;
+            data.SMSData.code = resultsms.data.status;
+            data.SMSData.messageId = resultsms.data.messageId;
+            this.update(data.id, data)
+          }
 
-       if (result.error == 0) {
-          data.Status = 1;
-          data.message_id =result.data.message_id;
-          data.trackingId =requestData.tracking_id;
-          this.update(data.id, data)
-        }
+          return result
+          // }
+         }
+         else if(data.Congty="Timona")
+         {
+              const requestData = {
+               // mode: "development",
+                phone: convertPhoneNum(data.CustPhone),
+                template_id: Chinhanh.TemplateThanhtoan,
+                template_data: {
+                  order_code: data.Code,
+                  date: moment(data.Created).format('DD/MM/YYYY'),
+                  cost: parseFloat(data.Paid).toFixed(0),
+                  student_name: data.CustName,
+                },
+                tracking_id: data.CustPhone||data.CustName||GenId(12, true),
+              };
+              const config = {
+                method: 'post',
+                headers: {
+                  'access_token': Chinhanh.ZaloOaToken.access_token,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+              };
+              const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
+              if (!response.ok) {
+                data.Status = 9;
+                data.ZNSData.status = 'error';
+                data.ZNSData.code = response.statusText;
+                this.update(data.id, data)
+                throw new Error(`Error fetching data: ${response.statusText}`);
+              }
+              const result = await response.json();
+              const logger ={
+                Title:'Vttech ZNS Thanh Toán',
+                Slug:'vttechznsthanhtoan',
+                Action:'error',
+                Mota:`[ZNS_THANHTOAN] - ${JSON.stringify(result)} - ${DescErrorZalo(result.error)} - ${Chinhanh.Title} - ${data.CustName} - ${data.CustPhone} - ${data.Code} - ${data.Paid} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+             this._LoggerService.create(logger)
 
-        else {
-          data.Status = 2;
-          data.Statuscode = result.error;
-          const resultsms = await this.sendsms({
-            "Brandname": "TAZA",
-            "Message": `${data.CustName} da thanh toan so tien ${data.Paid} co ma hoa don la ${data.Code}. Taza cam on quy khach`,
-            "Phonenumber": data.CustPhone,
-            "user": "ctytaza2",
-            "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
-            "messageId": data.CustPhone + (new Date()).getTime()
-          })
-          console.log(resultsms);
-          data.SMSCode = resultsms.data.status;
-          data.messageId =resultsms.data.messageId;
-          this.update(data.id, data)
-        }
+             if (result.error == 0) {
+                data.Status = 1;
+                data.message_id =result.data.message_id;
+                data.trackingId =requestData.tracking_id;
+                data.ZNSData.status = 'success';
+                data.ZNSData.code = result.error;
+                data.ZNSData.message_id = result.data.message_id;
+                data.ZNSData.trackingId = requestData.tracking_id;
+                this.update(data.id, data)
+              }
 
-        return result
-        // }
+              else {
+                data.Status = 2;
+                data.Statuscode = result.error;
+                const resultsms = await this.sendsms({
+                  "Brandname": "TAZA",
+                  "Message": `${data.CustName} da thanh toan so tien ${data.Paid} co ma hoa don la ${data.Code}. Taza cam on quy khach`,
+                  "Phonenumber": data.CustPhone,
+                  "user": "ctytimona2",
+                  "pass": "$2a$10$/DpS3IgI1AmG0gmwXmqPLOnmaCzKVh1h.BUZ6Td4ZVEl29O7zWgbu",
+                  "messageId": data.CustPhone + (new Date()).getTime()
+                })
+                console.error(resultsms);
+                data.SMSCode = resultsms.data.status;
+                data.messageId =resultsms.data.messageId;
+                data.SMSData.status = resultsms.data.statusDescription;
+                data.SMSData.code = resultsms.data.status;
+                data.SMSData.messageId = resultsms.data.messageId;
+                this.update(data.id, data)
+              }
+
+              return result
+         }
       }
 
 
@@ -227,7 +307,7 @@ export class ZnsthanhtoanService {
   async findQuery(params: any) {
     const queryBuilder = this.ZnsthanhtoanRepository.createQueryBuilder('znsthanhtoan');
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
-      console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
+      console.error(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
       if(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)))
         {
           queryBuilder.andWhere('znsthanhtoan.Created = :startDate', {
@@ -255,7 +335,7 @@ export class ZnsthanhtoanService {
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
-    // console.log(items, totalCount);
+    // console.error(items, totalCount);
     return { items, totalCount };
   }
   async update(id: string, UpdateZnsthanhtoanDto: any) {

@@ -24,7 +24,7 @@ export class ZnsthanhtoanController {
   sendzns(@Body() data: any) {
     return this.znsthanhtoanService.sendzns(data);
   }
-  //@Interval(300000)
+  @Interval(300000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');

@@ -196,13 +196,6 @@ export class ZnsdieutriService {
 
     }
   }
-  // async sendznsauto(data: any) {
-  //   data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
-  //   data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
-  //   data.Status?data.Status = data.Status:0;
-  //   const result = await this.findQuery(data)
-  //   return result
-  // }
   async create(data: any) {
     const check = await this.findSHD(data)
     if (!check) {
