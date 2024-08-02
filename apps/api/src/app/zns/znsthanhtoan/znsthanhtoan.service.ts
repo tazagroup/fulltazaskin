@@ -301,7 +301,7 @@ export class ZnsthanhtoanService {
   }
   async findQuery(params: any) {
     const queryBuilder = this.ZnsthanhtoanRepository.createQueryBuilder('znsthanhtoan');
-    if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('createdEnd')) {
+    if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
       if(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)))
         {
           queryBuilder.andWhere('znsthanhtoan.Created = :startDate', {
