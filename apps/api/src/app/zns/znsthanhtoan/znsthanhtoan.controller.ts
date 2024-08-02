@@ -27,8 +27,8 @@ export class ZnsthanhtoanController {
   @Interval(300000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
-    data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
-    data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+    data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+    data.createdEnd = data.createdEnd ? moment(data.createdEnd).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
     data.Status = 0;
     data.pageSize =  9999;
     if(this.CheckTime() == true){
@@ -41,14 +41,9 @@ export class ZnsthanhtoanController {
      this._LoggerService.create(logger)
 
       if(result.items.length > 0){
-        // await Promise.all(result.items.map(async (v,k) => {
-        //   setTimeout(async () => {
-        //     await this.sendzns(v);
-        //   }, k*2000);
-        // }));
         result.items.forEach(async (v,k) => {
           setTimeout(async () => {
-            await this.sendzns(v);
+           await this.sendzns(v);
           }, k*1000);
 
         })
