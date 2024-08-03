@@ -81,6 +81,8 @@ export class ZnsthanhtoanService {
 
   async sendzns(data: any) {
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
+    console.error(Chinhanh)
+
     try {
       if (!Chinhanh?.ZaloOaToken?.access_token) {
         const logger ={
