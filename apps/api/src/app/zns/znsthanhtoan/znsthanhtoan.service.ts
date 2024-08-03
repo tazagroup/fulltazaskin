@@ -93,7 +93,7 @@ export class ZnsthanhtoanService {
         this.update(data.id, data)
       }
       else {
-        if(data.Congty=="tazaskin")
+        if(Chinhanh.Congty=="tazaskin")
         {
           const priceProperty = Chinhanh.TemplateThanhtoan == '301891' || Chinhanh.TemplateThanhtoan == '302259' ? 'price' : 'cost';
           const requestData = {
@@ -165,7 +165,7 @@ export class ZnsthanhtoanService {
           return result
           // }
          }
-         else if(data.Congty=="Timona")
+         else if(Chinhanh.Congty=="Timona")
          {
               const requestData = {
                // mode: "development",
