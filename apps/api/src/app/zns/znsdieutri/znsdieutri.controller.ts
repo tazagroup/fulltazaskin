@@ -29,7 +29,7 @@ export class ZnsdieutriController {
     data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.Status = 0;
     data.pageSize =  9999;
-    if(this.CheckTime() == true){
+    // if(this.CheckTime() == true){
       const result = await this.findQuery(data)
       const logger ={
         Title:'ZNS Điều Trị',
@@ -44,7 +44,7 @@ export class ZnsdieutriController {
           }, k*100);
         })
         return result;
-      }
+      // }
     }
     else
     {
