@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import {ZnsthanhtoanService } from './znsthanhtoan.service';
-import { Interval } from '@nestjs/schedule';
+import { Cron, Interval } from '@nestjs/schedule';
 import moment = require('moment');
 import { LoggerService } from '../../logger/logger.service';
 @Controller('znsthanhtoan')
@@ -24,9 +24,49 @@ export class ZnsthanhtoanController {
   sendzns(@Body() data: any) {
     return this.znsthanhtoanService.sendzns(data);
   }
+  @Get('gettime')
+  gettime() {
+    console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
+
+  }
   @Interval(300000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
+    data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+    data.createdEnd = data.createdEnd ? moment(data.createdEnd).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+    data.Status = 0;
+    data.pageSize =  9999;
+    if(this.CheckTime() == true){
+      const result = await this.findQuery(data)
+      const logger ={
+        Title:'Vttech ZNS Thanh Toán',
+        Slug:'vttechznsthanhtoan',
+        Action:'send',
+        Mota:`[ZNS_THANHTOAN] - Step3 - Gửi ZNS Tự Động (${result.totalCount}) Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+     this._LoggerService.create(logger)
+
+      if(result.items.length > 0){
+        result.items.forEach(async (v,k) => {
+          setTimeout(async () => {
+           await this.sendzns(v);
+          }, k*1000);
+
+        })
+        return result;
+      }
+    }
+    else  return "Không thể gửi tin nhắn vào thời gian này";
+  }
+  @Cron('00 45 21 * * *')
+  @Post('sendznsauto')
+  async sendznsautoCron(@Body() data: any={}) {
+    console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
+    const logger ={
+      Title:'Vttech ZNS Thanh Toán',
+      Slug:'vttechznsthanhtoan',
+      Action:'send',
+      Mota:`[ZNS_THANHTOAN] - Lenh Cuoi Ngay - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+   this._LoggerService.create(logger)
     data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
     data.createdEnd = data.createdEnd ? moment(data.createdEnd).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
     data.Status = 0;
