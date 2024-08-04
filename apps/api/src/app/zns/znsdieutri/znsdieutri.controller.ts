@@ -14,7 +14,7 @@ export class ZnsdieutriController {
   createzns(@Body() data: any={}) {
     data.pageSize =  9999;
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
-    data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+    data.createdEnd?data.createdEnd = moment(data.createdEnd).add(1, 'day').format('YYYY-MM-DD'):moment().add(1, 'day').format('YYYY-MM-DD');
     return this.znsdieutriService.createzns(data);
   }
   @Post('sendzns')
