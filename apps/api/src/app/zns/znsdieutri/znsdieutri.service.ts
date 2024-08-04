@@ -255,7 +255,7 @@ export class ZnsdieutriService {
       else {
         queryBuilder.andWhere('znsdieutri.Created BETWEEN :startDate AND :endDate', {
           startDate: moment(params.CreatedBegin).format('YYYY-MM-DD'),
-          endDate: moment(params.CreatedEnd).format('YYYY-MM-DD')
+          endDate: moment(params.CreatedEnd).add(1, 'day').format('YYYY-MM-DD')
         });
       }
     }
