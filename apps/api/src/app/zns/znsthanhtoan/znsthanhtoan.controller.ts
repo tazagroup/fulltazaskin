@@ -60,7 +60,7 @@ export class ZnsthanhtoanController {
   @Cron('00 45 21 * * *')
   @Post('sendznsauto')
   async sendznsautoCron(@Body() data: any={}) {
-    console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
+    console.error("Lenh Cuoi Ngay",moment().format('YYYY-MM-DD HH:mm:ss'));
     const logger ={
       Title:'Vttech ZNS Thanh Toán',
       Slug:'vttechznsthanhtoan',
