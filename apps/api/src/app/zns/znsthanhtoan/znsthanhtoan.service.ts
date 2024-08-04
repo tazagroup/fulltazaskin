@@ -81,10 +81,7 @@ export class ZnsthanhtoanService {
 
   async sendzns(data: any) {
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
-    console.error(Chinhanh)
-
-    try {
-      if (!Chinhanh?.ZaloOaToken?.access_token) {
+    if (!Chinhanh?.ZaloOaToken?.access_token) {
         const logger ={
           Title:'Vttech ZNS Thanh Toán',
           Slug:'vttechznsthanhtoan',
@@ -236,18 +233,6 @@ export class ZnsthanhtoanService {
               return result
          }
       }
-
-
-    } catch (error) {
-      const logger ={
-        Title:'Vttech ZNS Thanh Toán',
-        Slug:'vttechznsthanhtoan',
-        Action:'send',
-        Mota:`[ZNS_THANHTOAN] - Mã Lỗi 3:  ${JSON.stringify(error)}`}
-     this._LoggerService.create(logger)
-    }
-
-
   }
   async sendznsauto(data: any) {
     data.CreatedBegin?data.CreatedBegin = data.CreatedBegin:moment().format('YYYY-MM-DD');
