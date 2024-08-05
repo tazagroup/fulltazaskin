@@ -44,17 +44,17 @@ export class ZnsdieutriController {
           }, k*100);
         })
         return result;
-      // }
-    }
-    else
-    {
-      const logger ={
-        Title:'ZNS Điều Trị',
-        Slug:'dieutri',
-        Action:'send_error',
-        Mota:`[ZNS_DIEUTRI] - Không thể gửi tin nhắn vào thời gian này - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
-      this._LoggerService.create(logger)
-    }
+     }
+    // }
+    // else
+    // {
+    //   const logger ={
+    //     Title:'ZNS Điều Trị',
+    //     Slug:'dieutri',
+    //     Action:'send_error',
+    //     Mota:`[ZNS_DIEUTRI] - Không thể gửi tin nhắn vào thời gian này - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+    //   this._LoggerService.create(logger)
+    // }
 
   }
   @Post()
