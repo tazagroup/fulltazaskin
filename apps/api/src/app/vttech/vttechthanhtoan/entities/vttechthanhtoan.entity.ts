@@ -26,6 +26,8 @@ export class VttechthanhtoanEntity {
     Ordering: number;
     @Column({ default: 0 })
     Status: number;
+    @Column({ default: 0 })
+    State: number;
     @Column()
     Created: Date;
     @CreateDateColumn()

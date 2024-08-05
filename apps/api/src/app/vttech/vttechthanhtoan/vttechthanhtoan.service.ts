@@ -26,7 +26,7 @@ export class VttechthanhtoanService {
 
   }
   async findbycode(CustCode: string) {
-    return await this.VttechthanhtoanRepository.findAndCount({ where: { CustCode: CustCode } });
+    return await this.VttechthanhtoanRepository.findAndCount({ where: { CustCode: CustCode,State:1 } });
   }
   async findAll() {
     return await this.VttechthanhtoanRepository.find();

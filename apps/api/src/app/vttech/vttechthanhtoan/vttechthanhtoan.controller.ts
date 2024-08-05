@@ -13,13 +13,20 @@ export class VttechthanhtoanController {
   @Get()
   async findPagination(@Query('page') page: number, @Query('perpage') perPage: number) {
     const data = await this.vttechthanhtoanService.findPagination(page, perPage);
-    data.data.forEach(async (v: any) => {
-      v.CustCode = v.Dulieu.CustCode
-      await this.vttechthanhtoanService.update(v.id, v)
-      //v.CreatedDate = v.Dulieu.CreatedDate.split("T")[0]
-     // await this.vttechthanhtoanService.update(v.id, v)
-    });
-    return data
+    // data.data.forEach(async (v: any, k: any) => {
+    //   //  v.CustCode = v.Dulieu.CustCode
+    //   if (v.State != 0) {
+    //     setTimeout(async () => {
+    //       v.State = v?.Dulieu?.State
+    //       await this.vttechthanhtoanService.update(v.id, v)
+    //       console.log(k);
+
+    //     }, k * 1000);
+    //   }
+    //   //v.CreatedDate = v.Dulieu.CreatedDate.split("T")[0]
+    //   // await this.vttechthanhtoanService.update(v.id, v)
+    // });
+    return data.totalItems
 
   }
   @Get('findid/:id')
@@ -30,8 +37,8 @@ export class VttechthanhtoanController {
   async findbycode(@Param('code') CustCode: string) {
     const result = await this.vttechthanhtoanService.findbycode(CustCode);
     console.log(result);
-   // return result
-    return result[0].map((v:any)=>({...v.Dulieu}))
+    // return result
+    return result[0].map((v: any) => ({ ...v.Dulieu }))
   }
   @Get('findby/:slug')
   async findslug(@Param('slug') slug: string) {
@@ -54,7 +61,7 @@ export class VttechthanhtoanController {
   @Interval(1200000)
   @Get('getauto')
   async getAuto() {
-    const data:any= {
+    const data: any = {
       "Name": "Taza",
       "Password": "1b9287d492b256x7taza",
       "Type": "web",
@@ -64,16 +71,15 @@ export class VttechthanhtoanController {
       "PagingNumber": "1"
     }
     const getData = await this.vttechthanhtoanService.getThanhtoan(data);
-  console.error('GetThanhtoan DateFrom',moment().subtract(1, 'day').format('YYYY-MM-DD HH:mm:ss'));
-  console.error('GetThanhtoan DateTo',moment().add(1, 'days').format('YYYY-MM-DD HH:mm:ss'));
+    console.error('GetThanhtoan DateFrom', moment().subtract(1, 'day').format('YYYY-MM-DD HH:mm:ss'));
+    console.error('GetThanhtoan DateTo', moment().add(1, 'days').format('YYYY-MM-DD HH:mm:ss'));
     return getData;
   }
 
   @Post('getthanhtoan')
   async getthanhtoan(@Body() data: any) {
     let datamau = data;
-    if(!data)
-    {
+    if (!data) {
       datamau = {
         "Name": "Taza",
         "Password": "1b9287d492b256x7taza",
