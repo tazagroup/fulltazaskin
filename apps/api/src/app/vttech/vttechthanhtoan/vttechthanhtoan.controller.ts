@@ -15,14 +15,13 @@ export class VttechthanhtoanController {
     const data = await this.vttechthanhtoanService.findPagination(page, perPage);
     // data.data.forEach(async (v: any, k: any) => {
     //   //  v.CustCode = v.Dulieu.CustCode
-    //   if (v.State != 0) {
-    //     setTimeout(async () => {
+    //   console.log('K',k);
+    //     setTimeout(() => {
     //       v.State = v?.Dulieu?.State
-    //       await this.vttechthanhtoanService.update(v.id, v)
+    //       this.vttechthanhtoanService.update(v.id, v)
     //       console.log(k);
 
-    //     }, k * 1000);
-    //   }
+    //     }, k * 10);
     //   //v.CreatedDate = v.Dulieu.CreatedDate.split("T")[0]
     //   // await this.vttechthanhtoanService.update(v.id, v)
     // });
