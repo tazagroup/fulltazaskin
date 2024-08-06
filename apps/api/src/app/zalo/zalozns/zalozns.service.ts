@@ -10,7 +10,7 @@ import axios from 'axios';
 import { SmsService } from '../../sms/sms.service';
 import { TelegramService } from '../../shared/telegram.service';
 import { ZalodanhgiaService } from '../zalodanhgia/zalodanhgia.service';
-import Zalodanhgia from '../zalodanhgia/zalodanhgia';
+// import Zalodanhgia from '../zalodanhgia/zalodanhgia';
 import { ZaloznstrackingService } from '../zaloznstracking/zaloznstracking.service';
 import { LoggerService } from '../../logger/logger.service';
 interface ZaloResponse {
@@ -266,35 +266,35 @@ export class ZaloznsService {
     // this._LoggerService.create(logger)
     // return response;
   }
-  // async sendzns(item: any) {
-  //     console.log(item);
-  //     this._TelegramService.SendMiniAppLogdev(JSON.stringify(item))
-  //     const accessToken = item.token;
-  //     delete item.token
-  //     let config = {
-  //       method: 'post',
-  //       maxBodyLength: Infinity,
-  //       url: 'https://business.openapi.zalo.me/message/template',
-  //       headers: {
-  //         'access_token': accessToken,
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify(item)
-  //     };
-  //     const response = await fetch(config.url,config)
-  //     if (!response.ok) {
-  //       throw new Error(`Error fetching data: ${response.statusText}`);
-  //     }
-  //     const data = await response.json();
-  //     return data
-  // }
+  async sendzns(item: any) {
+      console.log(item);
+      this._TelegramService.SendMiniAppLogdev(JSON.stringify(item))
+      const accessToken = item.token;
+      delete item.token
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://business.openapi.zalo.me/message/template',
+        headers: {
+          'access_token': accessToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(item)
+      };
+      const response = await fetch(config.url,config)
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+      const data = await response.json();
+      return data
+  }
   async createzns(req: any) {
     const result: any = {}
     result.event_name = req.body.event_name
     result.ResponWebHook = req.body
     if (req.body.event_name == 'user_feedback') {
       result.star = req.body.message.star
-      let item: Zalodanhgia;
+      let item: any;
      // item.note = req?.body?.message?.note
       item.rate = req?.body?.message?.rate
       item.submitDate = req?.body?.message?.submit_time
