@@ -137,20 +137,20 @@ export class ZalodanhgiaService {
       if(response.data.error==0)
       {
 
-        response.data.data.data.forEach(async (v:any) => {
+        response.data.data.data.forEach(async (danhgia:any) => {
           let item:any = {}
           item.idCN = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id||v.iddanhgiatimona==data.template_id)?.id
           item.BranchID = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id||v.iddanhgiatimona==data.template_id)?.idVttech
           item.Chinhanh = LIST_CHI_NHANH.find((v)=>v.idtempdanhgia==data.template_id||v.iddanhgiatimona==data.template_id)?.Title
-          item.trackingId = v.trackingId
-          item.oaId = v.oaId
-          item.feedbacks = v.feedbacks
-          item.msgId = v.msgId
-          item.rate = v.rate
-          item.submitDate = v.submitDate
+          item.trackingId = danhgia.trackingId
+          item.oaId = danhgia.oaId
+          item.feedbacks = danhgia.feedbacks
+          item.msgId = danhgia.msgId
+          item.rate = danhgia.rate
+          item.submitDate = danhgia.submitDate
          // item.note = v?.note
           item.template_id = data.template_id
-          item.Dulieu = v
+          item.Dulieu = danhgia
           const result = await this.create(item)
         });
       }

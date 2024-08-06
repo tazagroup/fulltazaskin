@@ -284,7 +284,7 @@ export class ZaloznsService {
       const response = await fetch(config.url,config)
 
 
-      
+
       if (!response.ok) {
         throw new Error(`Error fetching data: ${response.statusText}`);
       }
@@ -297,8 +297,8 @@ export class ZaloznsService {
     result.ResponWebHook = req.body
     if (req.body.event_name == 'user_feedback') {
       result.star = req.body.message.star
-      let item: any;
-     // item.note = req?.body?.message?.note
+      let item: any={};
+      item.note = req?.body?.message?.note
       item.rate = req?.body?.message?.rate
       item.submitDate = req?.body?.message?.submit_time
       item.feedbacks = req?.body?.message?.feedbacks
