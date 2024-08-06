@@ -25,11 +25,11 @@ export class ZnsdieutriController {
   @Interval(120000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
-    data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
-    data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+    data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).subtract(1, 'day').format('YYYY-MM-DD'):moment().subtract(1, 'day').format('YYYY-MM-DD');
+    data.createdEnd?data.createdEnd = moment(data.createdEnd).add(1, 'day').format('YYYY-MM-DD'):moment().add(1, 'day').format('YYYY-MM-DD');
     data.Status = 0;
     data.pageSize =  9999;
-    // if(this.CheckTime() == true){
+    if(this.CheckTime() == true){
       const result = await this.findQuery(data)
       const logger ={
         Title:'ZNS Điều Trị',
@@ -45,16 +45,16 @@ export class ZnsdieutriController {
         })
         return result;
      }
-    // }
-    // else
-    // {
-    //   const logger ={
-    //     Title:'ZNS Điều Trị',
-    //     Slug:'dieutri',
-    //     Action:'send_error',
-    //     Mota:`[ZNS_DIEUTRI] - Không thể gửi tin nhắn vào thời gian này - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
-    //   this._LoggerService.create(logger)
-    // }
+    }
+    else
+    {
+      const logger ={
+        Title:'ZNS Điều Trị',
+        Slug:'dieutri',
+        Action:'send_error',
+        Mota:`[ZNS_DIEUTRI] - Không thể gửi tin nhắn vào thời gian này - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+      this._LoggerService.create(logger)
+    }
 
   }
   @Post()
@@ -87,7 +87,7 @@ export class ZnsdieutriController {
   }
   CheckTime() {
     const now = moment();
-    const checkTime = now.hour() >= 8 && now.hour() <= 21;
+    const checkTime = now.hour() >= 8 && now.hour() <= 22;
     return checkTime
   }
 }

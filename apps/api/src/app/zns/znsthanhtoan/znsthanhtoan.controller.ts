@@ -32,12 +32,14 @@ export class ZnsthanhtoanController {
   @Interval(120000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
-    data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+    data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).subtract(1, 'day').format('YYYY-MM-DD') : moment().subtract(1, 'day').format('YYYY-MM-DD');
     data.createdEnd = data.createdEnd ? moment(data.createdEnd).add(1, 'day').format('YYYY-MM-DD') : moment().add(1, 'day').format('YYYY-MM-DD');
     data.Status = 0;
     data.pageSize =  9999;
-    // if(this.CheckTime() == true){
+    if(this.CheckTime() == true){
       const result = await this.findQuery(data)
+        console.log(data);
+
       const logger ={
         Title:'Vttech ZNS Thanh Toán',
         Slug:'vttechznsthanhtoan',
@@ -54,8 +56,8 @@ export class ZnsthanhtoanController {
         })
         return result;
       }
-    // }
-    // else  return "Không thể gửi tin nhắn vào thời gian này";
+    }
+    else  return "Không thể gửi tin nhắn vào thời gian này";
   }
   @Cron('00 45 21 * * *')
   @Post('sendznsauto')
@@ -71,7 +73,7 @@ export class ZnsthanhtoanController {
     data.createdEnd = data.createdEnd ? moment(data.createdEnd).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
     data.Status = 0;
     data.pageSize =  9999;
-    // if(this.CheckTime() == true){
+    if(this.CheckTime() == true){
       const result = await this.findQuery(data)
       const logger1 ={
         Title:'Vttech ZNS Thanh Toán',
@@ -89,8 +91,8 @@ export class ZnsthanhtoanController {
         })
         return result;
       }
-    // }
-    // else  return "Không thể gửi tin nhắn vào thời gian này";
+    }
+    else  return "Không thể gửi tin nhắn vào thời gian này";
   }
   // sendznsauto(@Body() data: any) {
   //   return this.znsthanhtoanService.sendznsauto(data);
@@ -125,7 +127,7 @@ export class ZnsthanhtoanController {
   }
   CheckTime() {
     const now = moment();
-    const checkTime = now.hour() >= 8 && now.hour() <= 21;
+    const checkTime = now.hour() >= 8 && now.hour() <= 22;
     return checkTime
   }
 }
