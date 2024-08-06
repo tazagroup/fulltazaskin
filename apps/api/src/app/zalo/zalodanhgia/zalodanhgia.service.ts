@@ -148,7 +148,7 @@ export class ZalodanhgiaService {
           item.msgId = v.msgId
           item.rate = v.rate
           item.submitDate = v.submitDate
-          item.note = v?.note
+         // item.note = v?.note
           item.template_id = data.template_id
           item.Dulieu = v
           const result = await this.create(item)

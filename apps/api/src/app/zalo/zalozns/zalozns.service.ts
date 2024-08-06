@@ -295,7 +295,7 @@ export class ZaloznsService {
     if (req.body.event_name == 'user_feedback') {
       result.star = req.body.message.star
       let item: Zalodanhgia;
-      item.note = req?.body?.message?.note
+     // item.note = req?.body?.message?.note
       item.rate = req?.body?.message?.rate
       item.submitDate = req?.body?.message?.submit_time
       item.feedbacks = req?.body?.message?.feedbacks
