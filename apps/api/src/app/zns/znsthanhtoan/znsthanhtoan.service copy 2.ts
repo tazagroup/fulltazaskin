@@ -8,7 +8,6 @@ import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 import { DescErrorZalo, GenId, convertPhoneNum } from '../../shared.utils';
 import { ZaloznstrackingService } from '../../zalo/zaloznstracking/zaloznstracking.service';
 import { LoggerService } from '../../logger/logger.service';
-import axios from 'axios';
 @Injectable()
 export class ZnsthanhtoanService {
   constructor(
@@ -94,7 +93,7 @@ export class ZnsthanhtoanService {
       }
       else {
         if(Chinhanh.Congty=="tazaskin")
-      {
+        {
           const priceProperty = Chinhanh.TemplateThanhtoan == '301891' || Chinhanh.TemplateThanhtoan == '302259' ? 'price' : 'cost';
           const requestData = {
            // mode: "development",
@@ -110,25 +109,22 @@ export class ZnsthanhtoanService {
           };
           const config = {
             method: 'post',
-            url: 'https://business.openapi.zalo.me/message/template',
             headers: {
               'access_token': Chinhanh.ZaloOaToken.access_token,
               'Content-Type': 'application/json',
             },
-            data: JSON.stringify(requestData)
+            body: JSON.stringify(requestData)
           };
           // if (data.CustPhone == "0977272967") {
-          //const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
-          const response = await axios.request(config);
-
-          if (response.status !== 200) {
+          const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
+          if (!response.ok) {
             data.Status = 9;
             data.ZNSData.status = 'error';
             data.ZNSData.code = response.statusText;
             this.update(data.id, data)
             throw new Error(`Error fetching data: ${response.statusText}`);
           }
-          const result = await response.data;
+          const result = await response.json();
           const logger ={
             Title:'Vttech ZNS Thanh Toán',
             Slug:'vttechznsthanhtoan',
@@ -184,35 +180,21 @@ export class ZnsthanhtoanService {
               };
               const config = {
                 method: 'post',
-                url: 'https://business.openapi.zalo.me/message/template',
                 headers: {
                   'access_token': Chinhanh.ZaloOaToken.access_token,
                   'Content-Type': 'application/json',
                 },
-                data: JSON.stringify(requestData)
+                body: JSON.stringify(requestData)
               };
-              // if (data.CustPhone == "0977272967") {
-              //const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
-              const response = await axios.request(config);
-
-              if (response.status !== 200) {
-              // const config = {
-              //   method: 'post',
-              //   headers: {
-              //     'access_token': Chinhanh.ZaloOaToken.access_token,
-              //     'Content-Type': 'application/json',
-              //   },
-              //   body: JSON.stringify(requestData)
-              // };
-              // const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
-              // if (!response.ok) {
+              const response = await fetch(`https://business.openapi.zalo.me/message/template`, config);
+              if (!response.ok) {
                 data.Status = 9;
                 data.ZNSData.status = 'error';
                 data.ZNSData.code = response.statusText;
                 this.update(data.id, data)
                 throw new Error(`Error fetching data: ${response.statusText}`);
               }
-              const result = await response.data();
+              const result = await response.json();
               const logger ={
                 Title:'Vttech ZNS Thanh Toán',
                 Slug:'vttechznsthanhtoan',
