@@ -305,7 +305,6 @@ export class ZaloznsService {
       item.trackingId = req?.body?.message?.tracking_id
       item.oaId = req?.body?.oa_id
       this._ZalodanhgiaService.create(item)
-      console.error(req.body);
     }
     this.ZaloznsRepository.create(result);
     return await this.ZaloznsRepository.save(result);
