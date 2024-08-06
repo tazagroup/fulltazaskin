@@ -5,6 +5,7 @@ import { VttechlichsuthanhtoanEntity } from './entities/vttechlichsuthanhtoan.en
 import moment = require('moment');
 import { SharedService } from '../../shared/shared.service';
 import { TelegramService } from '../../shared/telegram.service';
+import axios from 'axios';
 @Injectable()
 export class VttechlichsuthanhtoanService {
   constructor(
@@ -32,18 +33,31 @@ export class VttechlichsuthanhtoanService {
     console.log(data);
     const Token = await this._SharedService.getToken(data)
     try {
-      const response = await fetch(`https://apismsvtt.vttechsolution.com/api/Revenue/GetListByBranch`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'withCredentials': 'true',
-          credentials: 'include',
-          'Authorization': `Bearer ${Token[0].Token}`, 
+      // const response = await fetch(`https://apismsvtt.vttechsolution.com/api/Revenue/GetListByBranch`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'withCredentials': 'true',
+      //     credentials: 'include',
+      //     'Authorization': `Bearer ${Token[0].Token}`,
+      //     'Cookie': Token[1],
+      //   },
+      //   body: JSON.stringify(data)
+      // });
+
+      const config = {
+        method: 'post',
+        url: 'https://apismsvtt.vttechsolution.com/api/Revenue/GetListByBranch',
+        headers: {
+          'Content-Type': 'application/json',
+          'withCredentials': true,
+          'Authorization': `Bearer ${Token[0].Token}`,
           'Cookie': Token[1],
         },
-        body: JSON.stringify(data)
-      });
-      const result = await response.json();      
+        data: data, // Data goes directly in the Axios config
+      };
+      const response = await axios.request(config)
+      const result = await response.data;
       return result
       // const Lichsuthuchi = data.Master;
       // Lichsuthuchi.filter((v:any)=>v.VoucherType==-1 || v.VoucherType==-3 || v.VoucherType==-5);

@@ -282,6 +282,9 @@ export class ZaloznsService {
         body: JSON.stringify(item)
       };
       const response = await fetch(config.url,config)
+
+
+      
       if (!response.ok) {
         throw new Error(`Error fetching data: ${response.statusText}`);
       }

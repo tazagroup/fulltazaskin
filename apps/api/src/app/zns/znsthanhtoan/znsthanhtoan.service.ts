@@ -212,7 +212,7 @@ export class ZnsthanhtoanService {
                 this.update(data.id, data)
                 throw new Error(`Error fetching data: ${response.statusText}`);
               }
-              const result = await response.data();
+              const result = await response.data;
               const logger ={
                 Title:'Vttech ZNS Thanh Toán',
                 Slug:'vttechznsthanhtoan',
