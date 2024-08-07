@@ -268,12 +268,18 @@ export class ZnsdieutriService {
     if (params.hasOwnProperty('BranchID')) {
       queryBuilder.andWhere('znsdieutri.BranchID = :BranchID', { BranchID: `${params.BranchID}` });
     }
-    const [items, totalCount] = await queryBuilder
+    const [result, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
-    // console.log(items, totalCount);
-    return { items, totalCount };
+      if (params.hasOwnProperty('Dashboard')&& params.Dashboard==true) {
+        const items = result.map((v)=>({Status:v.Status,Created:v.Created}))
+        return { items, totalCount };
+      }
+      {
+      const items = result
+      return { items, totalCount };
+      }
   }
   async update(id: string, UpdateZnsdieutriDto: any) {
     this.ZnsdieutriRepository.save(UpdateZnsdieutriDto);

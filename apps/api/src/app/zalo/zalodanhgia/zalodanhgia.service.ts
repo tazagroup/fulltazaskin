@@ -95,21 +95,28 @@ export class ZalodanhgiaService {
     if (params.hasOwnProperty('BranchID')) {
       queryBuilder.andWhere('zalodanhgia.BranchID = :BranchID', { BranchID: `${params.BranchID}` });
     }
-    let [items, totalCount] = await queryBuilder
+    let [result, totalCount] = await queryBuilder
       .limit(params.pageSize || 10)
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
       await Promise.all(
-        items.map(async (v:any) => {
+        result.map(async (v:any) => {
           const Customer:any = await this._ZnsdieutriService.findbytrackingid(v.trackingId);
-          console.log(Customer);
           if (Customer) {
             v.CustPhone = Phone_To_0(Customer.CustPhone);
             v.CustName = Customer.CustName;
           }
         })
       );
-    return { items, totalCount };
+      if (params.hasOwnProperty('Dashboard')&& params.Dashboard==true) {
+        const items = result.map((v)=>({rate:v.rate,submitDate:v.submitDate}))
+        return { items, totalCount };
+      }
+      {
+      const items = result
+      return { items, totalCount };
+      }
+
   }
 
 
