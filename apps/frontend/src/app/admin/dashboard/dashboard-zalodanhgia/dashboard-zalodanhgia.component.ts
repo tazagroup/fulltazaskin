@@ -37,7 +37,8 @@ export class DashboardZalodanhgiaComponent implements OnInit {
     pageSize:9999,
     pageNumber:0,
     Status:9999,
-    BranchID:9999
+    BranchID:9999,
+    Dashboard:true
   };
   Status:any={0:'Mới',1:'Đợi gửi',2:'Thành Công',3:'Chưa Có Temp OA',4:'Gửi SMS'}
   Sosao:any={1:'1 Sao',2:'2 Sao',3:'3 Sao',4:'4 Sao',5:'5 Sao'}
@@ -49,7 +50,9 @@ export class DashboardZalodanhgiaComponent implements OnInit {
     this._ZalodanhgiaService.zalodanhgias$.subscribe((data:any) => {
       if (data) {
         this.List = data.items.map((v:any)=>({rate:v.rate,Created:moment(Number(v.submitDate)).format("DD/MM/YYYY")}))
-        this.LoadData()        
+        console.log(this.List);
+
+        this.LoadData()
       }
     })
   }
@@ -70,7 +73,7 @@ export class DashboardZalodanhgiaComponent implements OnInit {
       zoom: {
         enabled: true
       }
-    },  
+    },
       responsive: [
         {
           breakpoint: 480,
@@ -106,13 +109,17 @@ export class DashboardZalodanhgiaComponent implements OnInit {
     })
     let series:any=[]
     const Sosao = Array.from({ length: Object.entries(this.Sosao).length}, (_, k) => (k+1));
-    
+
     series = Sosao.map((v: any) => ({
       name: this.Sosao[v],
       data: categories.map((v1: any) =>
         this.List.filter((v2: any) => v2.Created === v1 && v2.rate === v).length
       ),
     }));
+
+    // console.log(categories);
+    // console.log(series);
+
     // this.chartOptions.xaxis.categories = categories
     // this.chartOptions.series = series
     this.chartOptions = {
@@ -127,7 +134,7 @@ export class DashboardZalodanhgiaComponent implements OnInit {
       zoom: {
         enabled: true
       }
-    },  
+    },
       responsive: [
         {
           breakpoint: 480,

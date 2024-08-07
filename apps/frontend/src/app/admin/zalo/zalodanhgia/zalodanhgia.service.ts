@@ -16,16 +16,16 @@ export class ZalodanhgiaService {
   }
   constructor(private http: HttpClient) { }
 
-  GetFromZalo(data:any) {    
+  GetFromZalo(data:any) {
     return this.http.post(environment.APIURL + '/zalodanhgia/getdanhgia',data).pipe(
-      map((data: any) => { 
+      map((data: any) => {
            return data
       })
     );
   }
   getAllZalodanhgias() {
     return this.http.get(environment.APIURL + '/zalodanhgia').pipe(
-      map((data: any) => { 
+      map((data: any) => {
         this._zalodanhgias.next(data);
         return data;
       })
@@ -33,7 +33,15 @@ export class ZalodanhgiaService {
   }
   searchVttechthanhtoan(SearchParams:any) {
     return this.http.post(environment.APIURL + `/zalodanhgia/search`,SearchParams).pipe(
-      map((data: any) => { 
+      map((data: any) => {
+        this._zalodanhgias.next(data);
+        return data;
+      })
+    );
+  }
+  searchVttechthanhtoanDashboard(SearchParams:any) {
+    return this.http.post(environment.APIURL + `/zalodanhgia/searchdashboard`,SearchParams).pipe(
+      map((data: any) => {
         this._zalodanhgias.next(data);
         return data;
       })

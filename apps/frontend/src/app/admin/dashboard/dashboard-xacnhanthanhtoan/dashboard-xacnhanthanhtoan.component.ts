@@ -45,7 +45,8 @@ export class DashboardXacnhanthanhtoanComponent implements OnInit {
     pageSize:9999,
     pageNumber:0,
     Status:9999,
-    BranchID:9999
+    BranchID:9999,
+    Dashboard:true
   };
   Status:any={0:'Mới',1:'Thành Công',2:'Gửi SMS'}
   Style:any={0:'!bg-blue-500',1:'!bg-green-500',2:'!bg-purple-500'}
@@ -54,10 +55,9 @@ export class DashboardXacnhanthanhtoanComponent implements OnInit {
   _ZnsthanhtoanService: ZnsthanhtoanService = inject(ZnsthanhtoanService)
   ngOnInit() {
     this.ChanggeData()
-    // this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe()
     this._ZnsthanhtoanService.znsthanhtoans$.subscribe((data:any) => {
       if (data) {
-        this.List = data.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))
+        this.List = data.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}));
         this.LoadData()
       }
     })
@@ -78,7 +78,7 @@ export class DashboardXacnhanthanhtoanComponent implements OnInit {
       zoom: {
         enabled: true
       }
-    },  
+    },
       responsive: [
         {
           breakpoint: 480,
@@ -114,6 +114,8 @@ export class DashboardXacnhanthanhtoanComponent implements OnInit {
     })
     let series:any=[]
     const Initseries = Array.from({ length: Object.entries(this.Status).length}, (_, k) => (k));
+    console.log(categories);
+
     series = Initseries.map((v: any) => ({
       name: this.Status[v],
       data: categories.map((v1: any) =>
@@ -134,7 +136,7 @@ export class DashboardXacnhanthanhtoanComponent implements OnInit {
       zoom: {
         enabled: true
       }
-    },  
+    },
       responsive: [
         {
           breakpoint: 480,

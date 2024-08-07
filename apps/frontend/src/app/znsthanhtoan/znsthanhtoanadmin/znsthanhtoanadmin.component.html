@@ -115,14 +115,14 @@
         <ng-container matColumnDef="SMS">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> SMS Status </th>
           <td mat-cell *matCellDef="let row">
-            <span class="p-2 rounded-lg">
-              <span class="p-2 rounded-lg">
-                {{row?.SMSData?.status}}
-          </span>
-          <span class="p-2 rounded-lg">
-                {{row?.SMSData?.error}}
-          </span>
-            </span>
+            <div class="p-2 rounded-lg">
+              <span class="text-blue-500 font-bold">
+                {{row?.SMSData?.statusDescription}}
+              </span>
+                <span>
+                      {{row?.SMSData?.message}}
+                </span>
+            </div>
           </td>
         </ng-container>
 

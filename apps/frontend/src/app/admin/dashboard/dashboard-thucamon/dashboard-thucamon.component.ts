@@ -38,7 +38,8 @@ export class DashboardThucamonComponent implements OnInit {
     pageSize:9999,
     pageNumber:0,
     Status:9999,
-    BranchID:9999
+    BranchID:9999,
+    Dashboard:true
   };
   Status:any={0:'Mới',1:'Thành Công',2:'Gửi SMS'}
   Style:any={0:'!bg-blue-500',1:'!bg-green-500',2:'!bg-purple-500'}
@@ -48,9 +49,9 @@ export class DashboardThucamonComponent implements OnInit {
   ngOnInit() {
     this.ChanggeData()
     // this._ZnsdieutriService.searchZnsdieutri(this.SearchParams).subscribe()
-    this._ZnsdieutriService.znsdieutris$.subscribe((data:any) => {      
-      if (data) {        
-        this.List = data.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))        
+    this._ZnsdieutriService.znsdieutris$.subscribe((data:any) => {
+      if (data) {
+        this.List = data.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))
        this.LoadData()
       }
     })
@@ -71,7 +72,7 @@ export class DashboardThucamonComponent implements OnInit {
       zoom: {
         enabled: true
       }
-    },  
+    },
       responsive: [
         {
           breakpoint: 480,
@@ -112,7 +113,7 @@ export class DashboardThucamonComponent implements OnInit {
       data: categories.map((v1: any) =>
         this.List.filter((v2: any) => v2.Created === v1 && v2.Status === v).length
       ),
-    }));    
+    }));
     // this.chartOptions.xaxis.categories = categories
     // this.chartOptions.series = series
     this.chartOptions = {
@@ -127,7 +128,7 @@ export class DashboardThucamonComponent implements OnInit {
       zoom: {
         enabled: true
       }
-    },  
+    },
       responsive: [
         {
           breakpoint: 480,
@@ -153,7 +154,7 @@ export class DashboardThucamonComponent implements OnInit {
       }
     };
   }
-  ChanggeData() {    
+  ChanggeData() {
     this.SearchParams.BranchID==9999?delete this.SearchParams.BranchID: this.SearchParams.BranchID
     this.SearchParams.Status==9999?delete this.SearchParams.Status: this.SearchParams.Status
     this._ZnsdieutriService.searchZnsdieutri(this.SearchParams).subscribe()
