@@ -9,7 +9,7 @@ export class ZnsdieutriController {
     private readonly znsdieutriService:ZnsdieutriService,
     private readonly _LoggerService:LoggerService,
   ) {}
-  @Interval(1080000)
+  @Interval(660000)
   @Post('createzns')
   createzns(@Body() data: any={}) {
     data.pageSize =  9999;
@@ -22,7 +22,7 @@ export class ZnsdieutriController {
     return this.znsdieutriService.sendzns(data);
   }
   //@Interval(10000)
-  @Interval(120000)
+  @Interval(720000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).subtract(1, 'day').format('YYYY-MM-DD'):moment().subtract(1, 'day').format('YYYY-MM-DD');

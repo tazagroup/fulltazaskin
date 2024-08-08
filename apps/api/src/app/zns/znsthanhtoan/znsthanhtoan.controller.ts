@@ -9,7 +9,7 @@ export class ZnsthanhtoanController {
     private readonly znsthanhtoanService:ZnsthanhtoanService,
     private readonly _LoggerService:LoggerService,
   ) {}
-  @Interval(1140000)
+  @Interval(840000)
   @Post('createzns')
   createzns(@Body() data: any={}) {
     data.pageSize =  9999;
@@ -27,7 +27,7 @@ export class ZnsthanhtoanController {
     console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
 
   }
-  @Interval(120000)
+  @Interval(900000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).subtract(1, 'day').format('YYYY-MM-DD') : moment().subtract(1, 'day').format('YYYY-MM-DD');
