@@ -258,6 +258,11 @@ export class ZnsthanhtoanService {
 
                     return result
               }
+              else
+              {
+                data.Status = 8;
+                this.update(data.id, data)
+              }
       }
   }
   async sendznsauto(data: any) {

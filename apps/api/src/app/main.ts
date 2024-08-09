@@ -7,8 +7,8 @@ async function bootstrap() {
   const port = process.env.PORT || 3333;
   app.use(compression);
   app.enableCors();
-  app.use(bodyParser.json({ limit: '1000mb' }));
-  app.use(bodyParser.urlencoded({ limit: '1000mb', extended: true }));
+  app.use(bodyParser.json({ limit: '10mb' }));
+  app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
   // const config = new DocumentBuilder()
   //   .setTitle('Median')
   //   .setDescription('The Median API description')
