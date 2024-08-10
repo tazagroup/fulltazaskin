@@ -9,6 +9,7 @@ import { DescErrorZalo, GenId, convertPhoneNum } from '../../shared.utils';
 import { ZaloznstrackingService } from '../../zalo/zaloznstracking/zaloznstracking.service';
 import { LoggerService } from '../../logger/logger.service';
 import axios from 'axios';
+import { RediscacheService } from '../../rediscache.service';
 @Injectable()
 export class ZnsdieutriService {
   constructor(
@@ -17,6 +18,7 @@ export class ZnsdieutriService {
     private _VttechdieutriService: VttechdieutriService,
     private _ChinhanhService: ChinhanhService,
     private _LoggerService: LoggerService,
+    private _RediscacheService: RediscacheService,
   ) { }
   async createzns(data: any) {
     console.log(data);
@@ -273,11 +275,12 @@ export class ZnsdieutriService {
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
       if (params.hasOwnProperty('Dashboard')&& params.Dashboard==true) {
-        const items = result.map((v)=>({Status:v.Status,Created:v.Created}))
+        const item = result.map((v)=>({Status:v.Status,Created:v.Created}))
+        const items = await this._RediscacheService.getDataWithCache('znsdieutri', item)
         return { items, totalCount };
-      }
+       }
       {
-      const items = result
+      const items = await this._RediscacheService.getDataWithCache('znsdieutri', result)
       return { items, totalCount };
       }
   }

@@ -9,6 +9,7 @@ import { TelegramService } from '../../shared/telegram.service';
 import { ChinhanhModule } from '../../cauhinh/chinhanh/chinhanh.module';
 import { ZaloznstrackingModule } from '../../zalo/zaloznstracking/zaloznstracking.module';
 import { LoggerModule } from '../../logger/logger.module';
+import { RediscacheService } from '../../rediscache.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([ZnsthanhtoanEntity]),
@@ -18,7 +19,7 @@ import { LoggerModule } from '../../logger/logger.module';
     LoggerModule
   ],
   controllers: [ZnsthanhtoanController],
-  providers: [ZnsthanhtoanService,TelegramService]
+  providers: [ZnsthanhtoanService,TelegramService,RediscacheService]
 })
 export class ZnsthanhtoanModule {}
 

@@ -25,9 +25,10 @@ import { VttechthanhtoanModule } from './vttech/vttechthanhtoan/vttechthanhtoan.
 import { ZaloappuudaiModule } from './zaloappuudai/zaloappuudai.module';
 import { ZnsthanhtoanModule } from './zns/znsthanhtoan/znsthanhtoan.module';
 import { ZnsdieutriModule } from './zns/znsdieutri/znsdieutri.module';
-import { ThrottlerModule } from '@nestjs/throttler';
-import { ZalominiappModule } from './zalominiapp/zalominiapp.module';
+import { ThrottlerModule } from '@nestjs/throttler'
 import { CauhinhchungModule } from './cauhinh/cauhinhchung/cauhinhchung.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -46,6 +47,9 @@ import { CauhinhchungModule } from './cauhinh/cauhinhchung/cauhinhchung.module';
       ttl: 60000,
       limit: 50,
     }]),
+    CacheModule.register({
+      isGlobal: true, // Sử dụng bộ nhớ cache toàn cục
+    }),
     CauhinhchungModule,
     KhachhangsModule,
     ChitietModule,
@@ -70,6 +74,12 @@ import { CauhinhchungModule } from './cauhinh/cauhinhchung/cauhinhchung.module';
     ZnsdieutriModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
+  ],
 })
 export class AppModule {}

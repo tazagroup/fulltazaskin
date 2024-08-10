@@ -8,6 +8,7 @@ import { VttechdieutriModule } from '../../vttech/vttechdieutri/vttechdieutri.mo
 import { ChinhanhModule } from '../../cauhinh/chinhanh/chinhanh.module';
 import { ZaloznstrackingModule } from '../../zalo/zaloznstracking/zaloznstracking.module';
 import { LoggerModule } from '../../logger/logger.module';
+import { RediscacheService } from '../../rediscache.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([ZnsdieutriEntity]),
@@ -17,7 +18,7 @@ import { LoggerModule } from '../../logger/logger.module';
     LoggerModule
   ],
   controllers: [ZnsdieutriController],
-  providers: [ZnsdieutriService],
+  providers: [ZnsdieutriService,RediscacheService],
   exports: [ZnsdieutriService]
 })
 export class ZnsdieutriModule {}

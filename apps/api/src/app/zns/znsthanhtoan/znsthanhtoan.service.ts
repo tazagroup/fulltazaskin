@@ -6,9 +6,9 @@ import { VttechthanhtoanService } from '../../vttech/vttechthanhtoan/vttechthanh
 import moment = require('moment');
 import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
 import { DescErrorZalo, GenId, convertPhoneNum } from '../../shared.utils';
-import { ZaloznstrackingService } from '../../zalo/zaloznstracking/zaloznstracking.service';
 import { LoggerService } from '../../logger/logger.service';
 import axios from 'axios';
+import { RediscacheService } from '../../rediscache.service';
 @Injectable()
 export class ZnsthanhtoanService {
   constructor(
@@ -17,7 +17,7 @@ export class ZnsthanhtoanService {
     private _VttechthanhtoanService: VttechthanhtoanService,
     private _LoggerService:LoggerService,
     private _ChinhanhService: ChinhanhService,
-    private _ZaloznstrackingService: ZaloznstrackingService,
+    private _RediscacheService: RediscacheService,
   ) { }
   async createzns(data: any) {
     const Thanhtoans = await this._VttechthanhtoanService.findQuery(data);
@@ -349,11 +349,12 @@ export class ZnsthanhtoanService {
       .getManyAndCount();
     // console.error(items, totalCount);
     if (params.hasOwnProperty('Dashboard')&& params.Dashboard==true) {
-      const items = result.map((v)=>({Status:v.Status,Created:v.Created}))
+      const item = result.map((v)=>({Status:v.Status,Created:v.Created}))
+      const items = await this._RediscacheService.getDataWithCache('znsthanhtoan', item)
       return { items, totalCount };
-    }
+     }
     {
-    const items = result
+    const items = await this._RediscacheService.getDataWithCache('znsthanhtoan', result)
     return { items, totalCount };
     }
   }
