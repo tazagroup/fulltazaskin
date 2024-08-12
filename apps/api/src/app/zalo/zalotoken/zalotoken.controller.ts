@@ -15,7 +15,7 @@ export class ZalotokenController {
   getrefreshToken(@Body() data: any) {
     return this.zalotokenService.getRefreshToken(data);
   }
-  @Interval(28800000)
+  ///@Interval(28800000)
   @Get('autorefresh')
   autorefresh() {
     return this.zalotokenService.autorefresh();

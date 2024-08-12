@@ -5,8 +5,8 @@ import { CreateZalotokenDto } from './dto/create-zalotoken.dto';
 import { UpdateZalotokenDto } from './dto/update-zalotoken.dto';
 import { ZalotokenEntity } from './entities/zalotoken.entity';
 import { ChinhanhService } from '../../cauhinh/chinhanh/chinhanh.service';
-import { TelegramService } from '../../shared/telegram.service';
 import moment = require('moment');
+import { LoggerService } from '../../logger/logger.service';
 const axios = require('axios');
 @Injectable()
 export class ZalotokenService {
@@ -14,7 +14,7 @@ export class ZalotokenService {
     @InjectRepository(ZalotokenEntity)
     private ZalotokenRepository: Repository<ZalotokenEntity>,
     private _ChinhanhService: ChinhanhService,
-    private _TelegramService: TelegramService
+    private _LoggerService: LoggerService,
   ) { }
 
   async getAccessToken(item: any) {
@@ -42,13 +42,26 @@ export class ZalotokenService {
                 item.ZaloOaToken.AuthenAt = new Date();
                 item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
                 this._ChinhanhService.update(item.id, item);
-                this._TelegramService.SendMiniAppLogdev(`Đã cập nhật lại token cho chi nhánh ${item.Title}`);
+                const logger ={
+                  Title:'ZNS Token',
+                  Slug:'dieutri',
+                  Action:'send',
+                  Status:'error_token',
+                  Mota:`[ZALO_TOKEN] - Đã cập nhật lại token cho chi nhánh - ${item.Title} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+                this._LoggerService.create(logger)
+
                 return { status: 200, note: "Xác Thực Thành Công", data: item };
             }
           else {
             item.ZaloOaToken = {};
             this._ChinhanhService.update(item.id, item);
-            this._TelegramService.SendMiniAppLogdev(`Đã cập nhật lại token cho chi nhánh ${item.Title} - ${data.error}`);
+            const logger ={
+              Title:'ZNS Token',
+              Slug:'dieutri',
+              Action:'send',
+              Status:'error_token',
+              Mota:`[ZALO_TOKEN] - Đã cập nhật lại token cho chi nhánh ${item.Title} - ${data.error} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+            this._LoggerService.create(logger)
             return { status: 400, note: "Autho Code Hết Hạn" };
           }
         } catch (error) {
@@ -83,13 +96,25 @@ export class ZalotokenService {
           item.ZaloOaToken.AuthenAt = new Date();
           item.ZaloOaToken.AuthenEnd = new Date(item.ZaloOaToken.AuthenAt.getTime() + 90000 * 1000);
           this._ChinhanhService.update(item.id, item);
-          this._TelegramService.SendMiniAppLogdev(`Đã refresh token cho chi nhánh ${item.Title}`);
+          const logger ={
+            Title:'ZNS Token',
+            Slug:'dieutri',
+            Action:'send',
+            Status:'error_token',
+            Mota:`[ZALO_TOKEN] - Đã refresh token cho chi nhánh ${item.Title} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+          this._LoggerService.create(logger)
           return { status: 200, note: "Gia Hạn Thành Công", data: item };
         }
       else {
         item.ZaloOaToken = {};
         this._ChinhanhService.update(item.id, item);
-        this._TelegramService.SendMiniAppLogdev(`Đã refresh token cho chi nhánh ${item.Title} - ${data.error}`);
+        const logger ={
+          Title:'ZNS Token',
+          Slug:'dieutri',
+          Action:'send',
+          Status:'error_token',
+          Mota:`[ZALO_TOKEN] - Đã refresh token cho chi nhánh ${item.Title} - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+        this._LoggerService.create(logger)
         return { status: 400, note: "Refresh Token Không Đúng" };
       }
     } catch (error) {
@@ -112,7 +137,13 @@ export class ZalotokenService {
         await this.getRefreshToken(v)
       }, k*5000);
     });
-    this._TelegramService.SendDulieuVttech(`[ZALO_TOKEN] - Đã Refresh Token Tự Động - ${moment().format('HH:mm:ss DD/MM/YYYY')}`);
+    const logger ={
+      Title:'ZNS Token',
+      Slug:'dieutri',
+      Action:'send',
+      Status:'error_token',
+      Mota:`[ZALO_TOKEN] - Đã Refresh Token Tự Động - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+    this._LoggerService.create(logger)
     return ListChinhanh
   }
   async create(CreateZalotokenDto: CreateZalotokenDto) {

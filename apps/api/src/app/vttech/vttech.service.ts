@@ -22,8 +22,8 @@ export class VttechService {
     private _LoggerService: LoggerService,
   ) {
     this._CauhinhchungService.findslug('vttechtoken').then((data: any) => {
-      this.Cookie = data.Content.Cookie
-      this.XsrfToken = data.Content.XsrfToken
+      this.Cookie = data?.Content?.Cookie
+      this.XsrfToken = data?.Content?.XsrfToken
     })
   }
   async getToken(item: any) {

@@ -32,7 +32,7 @@ export class ZaloznsService {
     private _LoggerService: LoggerService,
   ) {
     this._CauhinhchungService.findslug('zalotoken').then((data: any) => {
-      this.Accesstoken = data.Content.Accesstoken
+      this.Accesstoken = data?.Content?.Accesstoken
       // console.error(this.Accesstoken);
     })
   }

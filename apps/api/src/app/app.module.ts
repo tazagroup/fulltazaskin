@@ -38,7 +38,7 @@ import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
       port: 3306,
       username: 'tazaspac_chikiet',
       password: '@Hikiet88',
-      database: 'tazaspac_zalotazaskin',
+      database: 'tazaspac_zns',
       autoLoadEntities: true,
       synchronize: true,
       charset: "utf8mb4",
