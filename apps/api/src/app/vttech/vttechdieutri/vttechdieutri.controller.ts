@@ -55,7 +55,7 @@ export class VttechdieutriController {
 
 
   // @Interval(8000)
-  ///@Interval(600000)
+  @Interval(600000)
   @Get('getauto')
   async getAuto() {
     const data: any = {
