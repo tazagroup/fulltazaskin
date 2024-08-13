@@ -29,7 +29,6 @@ import { ThrottlerModule } from '@nestjs/throttler'
 import { CauhinhchungModule } from './cauhinh/cauhinhchung/cauhinhchung.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
-import * as redisStore from 'cache-manager-redis-store';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -39,7 +38,7 @@ import * as redisStore from 'cache-manager-redis-store';
       port: 3306,
       username: 'tazaspac_chikiet',
       password: '@Hikiet88',
-      database: 'tazaspac_zns',
+      database: 'tazaspac_zalotazaskin',
       autoLoadEntities: true,
       synchronize: true,
       charset: "utf8mb4",
@@ -48,12 +47,7 @@ import * as redisStore from 'cache-manager-redis-store';
       ttl: 60000,
       limit: 50,
     }]),
-    CacheModule.register({
-      isGlobal: true,
-      store: '/home/tazaspac/redis/redis.sock',
-      host: 'localhost',
-      port: 6379,
-    }),
+    CacheModule.register({isGlobal: true}),
     CauhinhchungModule,
     KhachhangsModule,
     ChitietModule,

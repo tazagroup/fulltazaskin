@@ -35,7 +35,7 @@ export class VttechlichhenController {
   remove(@Param('id') id: string) {
     return this.vttechlichhenService.remove(id);
   }
-  @Interval(14400000)
+  ///@Interval(14400000)
   @Post('getlichhen')
   async getLichhen(@Body() data: any) {
     let datamau = data;
