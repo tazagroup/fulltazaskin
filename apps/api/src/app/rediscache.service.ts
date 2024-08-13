@@ -12,8 +12,7 @@ export class RediscacheService {
   }
   async getDataWithCache(key: string,data:any): Promise<any> {
     const cachedData = await this.redis.get(key);
-    console.log(cachedData);
-
+    console.error(cachedData);
     if (cachedData) {
       return cachedData;
     }
