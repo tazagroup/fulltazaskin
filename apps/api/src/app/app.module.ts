@@ -29,6 +29,7 @@ import { ThrottlerModule } from '@nestjs/throttler'
 import { CauhinhchungModule } from './cauhinh/cauhinhchung/cauhinhchung.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -48,7 +49,10 @@ import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
       limit: 50,
     }]),
     CacheModule.register({
-      isGlobal: true, // Sử dụng bộ nhớ cache toàn cục
+      isGlobal: true,
+      store: '/home/tazaspac/redis/redis.sock',
+      host: 'localhost',
+      port: 6379,
     }),
     CauhinhchungModule,
     KhachhangsModule,
