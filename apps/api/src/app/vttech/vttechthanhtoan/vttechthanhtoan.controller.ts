@@ -57,7 +57,7 @@ export class VttechthanhtoanController {
   remove(@Param('id') id: string) {
     return this.vttechthanhtoanService.remove(id);
   }
-  ///@Interval(780000)
+  @Interval(780000)
   @Get('getauto')
   async getAuto() {
     const data: any = {

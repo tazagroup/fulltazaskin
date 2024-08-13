@@ -9,7 +9,7 @@ export class ZnsdieutriController {
     private readonly znsdieutriService:ZnsdieutriService,
     private readonly _LoggerService:LoggerService,
   ) {}
-  ///@Interval(660000)
+  @Interval(660000)
   @Post('createzns')
   createzns(@Body() data: any={}) {
     data.pageSize =  9999;

@@ -9,7 +9,7 @@ export class ZnsthanhtoanController {
     private readonly znsthanhtoanService:ZnsthanhtoanService,
     private readonly _LoggerService:LoggerService,
   ) {}
-  ///@Interval(840000)
+  @Interval(840000)
   @Post('createzns')
   createzns(@Body() data: any={}) {
     data.pageSize =  9999;
