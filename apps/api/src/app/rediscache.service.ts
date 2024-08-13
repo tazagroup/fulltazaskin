@@ -8,7 +8,8 @@ export class RediscacheService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
-    this.redis = new Redis('/home/tazaspac/redis/redis.sock');
+    this.redis = new Redis();
+    // this.redis = new Redis('/home/tazaspac/redis/redis.sock');
   }
   async getDataWithCache(key: string,data:any): Promise<any> {
     const cachedData = await this.redis.get(key);
