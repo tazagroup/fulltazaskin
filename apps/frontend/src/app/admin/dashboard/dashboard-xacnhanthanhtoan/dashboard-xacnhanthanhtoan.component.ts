@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDateRangePicker, MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
@@ -39,6 +39,7 @@ export type ChartOptions = {
   styleUrls: ['./dashboard-xacnhanthanhtoan.component.css']
 })
 export class DashboardXacnhanthanhtoanComponent implements OnInit {
+  @Input() Delay:any=0
   SearchParams: any = {
     CreatedBegin: moment().startOf('day').add(-7, "days").format('YYYY-MM-DD'),
     CreatedEnd: moment().format('YYYY-MM-DD'),
@@ -54,13 +55,15 @@ export class DashboardXacnhanthanhtoanComponent implements OnInit {
   ListChiNhanh = LIST_CHI_NHANH
   _ZnsthanhtoanService: ZnsthanhtoanService = inject(ZnsthanhtoanService)
   ngOnInit() {
-    this.ChanggeData()
-    this._ZnsthanhtoanService.znsthanhtoans$.subscribe((data:any) => {
-      if (data) {
-        this.List = data.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}));
-        this.LoadData()
-      }
-    })
+    setTimeout(() => {
+      this.ChanggeData()
+      this._ZnsthanhtoanService.znsthanhtoans$.subscribe((data:any) => {
+        if (data) {
+          this.List = data.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}));
+          this.LoadData()
+        }
+      })
+    }, this.Delay);
   }
   ChoosenDate() { }
   @ViewChild("chart") chart!: ChartComponent;

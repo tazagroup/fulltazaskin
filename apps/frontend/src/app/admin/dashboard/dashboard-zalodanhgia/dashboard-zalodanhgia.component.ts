@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDateRangePicker, MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
@@ -31,6 +31,7 @@ export type ChartOptions = {
   styleUrls: ['./dashboard-zalodanhgia.component.css']
 })
 export class DashboardZalodanhgiaComponent implements OnInit {
+  @Input() Delay:any=0
   SearchParams: any = {
     CreatedBegin: moment().startOf('day').add(-7, "days").format('YYYY-MM-DD'),
     CreatedEnd: moment().format('YYYY-MM-DD'),
@@ -45,16 +46,18 @@ export class DashboardZalodanhgiaComponent implements OnInit {
   Style:any={0:'!bg-blue-500',1:'!bg-yellow-500',2:'!bg-green-500',3:'!bg-red-500',4:'!bg-purple-500'}
   List:any[]=[]
   ngOnInit() {
-    this.ChanggeData()
-   // this._ZalodanhgiaService.searchVttechthanhtoan(this.SearchParams).subscribe()
-    this._ZalodanhgiaService.zalodanhgias$.subscribe((data:any) => {
-      if (data) {
-        this.List = data.items.map((v:any)=>({rate:v.rate,Created:moment(Number(v.submitDate)).format("DD/MM/YYYY")}))
-        console.log(this.List);
+    setTimeout(() => {
+      this.ChanggeData()
+      // this._ZalodanhgiaService.searchVttechthanhtoan(this.SearchParams).subscribe()
+       this._ZalodanhgiaService.zalodanhgias$.subscribe((data:any) => {
+         if (data) {
+           this.List = data.items.map((v:any)=>({rate:v.rate,Created:moment(Number(v.submitDate)).format("DD/MM/YYYY")}))
+           console.log(this.List);
 
-        this.LoadData()
-      }
-    })
+           this.LoadData()
+         }
+       })
+    }, this.Delay);
   }
   ChoosenDate() { }
   _ZalodanhgiaService: ZalodanhgiaService = inject(ZalodanhgiaService)

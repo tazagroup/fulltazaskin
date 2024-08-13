@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDateRangePicker, MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
@@ -32,6 +32,7 @@ export type ChartOptions = {
   styleUrls: ['./dashboard-thucamon.component.css']
 })
 export class DashboardThucamonComponent implements OnInit {
+  @Input() Delay:any=0
   SearchParams: any = {
     CreatedBegin: moment().startOf('day').add(-7, "days").format('YYYY-MM-DD'),
     CreatedEnd: moment().format('YYYY-MM-DD'),
@@ -47,14 +48,16 @@ export class DashboardThucamonComponent implements OnInit {
   // _VttechdieutriService: VttechdieutriService = inject(VttechdieutriService)
   _ZnsdieutriService: ZnsdieutriService = inject(ZnsdieutriService)
   ngOnInit() {
-    this.ChanggeData()
-    // this._ZnsdieutriService.searchZnsdieutri(this.SearchParams).subscribe()
-    this._ZnsdieutriService.znsdieutris$.subscribe((data:any) => {
-      if (data) {
-        this.List = data.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))
-       this.LoadData()
-      }
-    })
+    setTimeout(() => {
+      this.ChanggeData()
+      // this._ZnsdieutriService.searchZnsdieutri(this.SearchParams).subscribe()
+      this._ZnsdieutriService.znsdieutris$.subscribe((data:any) => {
+        if (data) {
+          this.List = data.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))
+         this.LoadData()
+        }
+      })
+    }, this.Delay);
   }
   ChoosenDate() { }
   @ViewChild("chart") chart!: ChartComponent;

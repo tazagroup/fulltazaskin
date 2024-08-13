@@ -51,6 +51,7 @@ export class ZnsthanhtoanadminComponent implements OnInit {
     'Paid',
     'Chinhanh',
     'Created',
+    'Status',
     'ZNS',
     'SMS',
   ];
@@ -123,7 +124,6 @@ export class ZnsthanhtoanadminComponent implements OnInit {
   ChangeSearchParams() {
     this.SearchParams.BranchID==9999?delete this.SearchParams.BranchID: this.SearchParams.BranchID
     this.SearchParams.Status==9999?delete this.SearchParams.Status: this.SearchParams.Status
-    console.log(this.SearchParams);
     this._ZnsthanhtoanService.searchZnsthanhtoan(this.SearchParams).subscribe()
   }
   GetStype(item: any) {
