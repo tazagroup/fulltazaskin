@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { ZnsthanhtoanService } from '../../../znsthanhtoan/znsthanhtoan.service';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -33,7 +34,8 @@ export type ChartOptions = {
     MatButtonModule,
     MatSelectModule,
     MatOptionModule,
-    CommonModule
+    CommonModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './dashboard-xacnhanthanhtoan.component.html',
   styleUrls: ['./dashboard-xacnhanthanhtoan.component.css']
@@ -53,12 +55,14 @@ export class DashboardXacnhanthanhtoanComponent implements OnInit {
   Style:any={0:'!bg-blue-500',1:'!bg-green-500',2:'!bg-purple-500'}
   List:any[]=[]
   ListChiNhanh = LIST_CHI_NHANH
+  isLoading:boolean=true
   _ZnsthanhtoanService: ZnsthanhtoanService = inject(ZnsthanhtoanService)
   ngOnInit() {
     setTimeout(() => {
       this.ChanggeData()
       this._ZnsthanhtoanService.znsthanhtoans$.subscribe((data:any) => {
         if (data) {
+         this.isLoading=false
           this.List = data.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}));
           this.LoadData()
         }

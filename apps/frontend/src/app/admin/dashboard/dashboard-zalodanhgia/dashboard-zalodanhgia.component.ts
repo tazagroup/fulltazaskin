@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import * as moment from 'moment';
 import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexFill, ApexLegend, ApexPlotOptions, ApexResponsive, ApexXAxis, ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { ZalodanhgiaService } from '../../zalo/zalodanhgia/zalodanhgia.service';
+import { CommonModule } from '@angular/common';
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -20,6 +21,7 @@ export type ChartOptions = {
   selector: 'app-dashboard-zalodanhgia',
   standalone: true,
   imports: [
+    CommonModule,
     NgApexchartsModule,
     MatDatepickerModule,
     MatInputModule,
@@ -45,15 +47,16 @@ export class DashboardZalodanhgiaComponent implements OnInit {
   Sosao:any={1:'1 Sao',2:'2 Sao',3:'3 Sao',4:'4 Sao',5:'5 Sao'}
   Style:any={0:'!bg-blue-500',1:'!bg-yellow-500',2:'!bg-green-500',3:'!bg-red-500',4:'!bg-purple-500'}
   List:any[]=[]
+  isLoading:boolean=true
   ngOnInit() {
     setTimeout(() => {
       this.ChanggeData()
       // this._ZalodanhgiaService.searchVttechthanhtoan(this.SearchParams).subscribe()
        this._ZalodanhgiaService.zalodanhgias$.subscribe((data:any) => {
          if (data) {
+           this.isLoading=false
            this.List = data.items.map((v:any)=>({rate:v.rate,Created:moment(Number(v.submitDate)).format("DD/MM/YYYY")}))
            console.log(this.List);
-
            this.LoadData()
          }
        })

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,7 +27,8 @@ export type ChartOptions = {
     MatInputModule,
     ReactiveFormsModule,
     FormsModule,
-    MatButtonModule
+    MatButtonModule,
+    CommonModule
   ],
   templateUrl: './dashboard-thucamon.component.html',
   styleUrls: ['./dashboard-thucamon.component.css']
@@ -47,12 +49,14 @@ export class DashboardThucamonComponent implements OnInit {
   List:any[]=[]
   // _VttechdieutriService: VttechdieutriService = inject(VttechdieutriService)
   _ZnsdieutriService: ZnsdieutriService = inject(ZnsdieutriService)
+  isLoading:boolean = true
   ngOnInit() {
     setTimeout(() => {
       this.ChanggeData()
       // this._ZnsdieutriService.searchZnsdieutri(this.SearchParams).subscribe()
       this._ZnsdieutriService.znsdieutris$.subscribe((data:any) => {
         if (data) {
+          this.isLoading = false
           this.List = data.map((v:any)=>({Status:v.Status,Created:moment(v.Created).format("DD/MM/YYYY")}))
          this.LoadData()
         }
