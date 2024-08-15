@@ -52,8 +52,8 @@ export class VttechlichhenController {
      }
     }
     const result = await this.vttechlichhenService.getLichhen(datamau);
-    console.error('Getlichhen DateFrom',moment().subtract(1, 'day').format('YYYY-MM-DD'));
-    console.error('Getlichhen DateTo',moment().add(1, 'days').format('YYYY-MM-DD'));
+    // console.error('Getlichhen DateFrom',moment().subtract(1, 'day').format('YYYY-MM-DD'));
+    // console.error('Getlichhen DateTo',moment().add(1, 'days').format('YYYY-MM-DD'));
     return result
   }
 }

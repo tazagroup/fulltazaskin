@@ -71,8 +71,8 @@ export class VttechthanhtoanController {
       "PagingNumber": "1"
     }
     const getData = await this.vttechthanhtoanService.getThanhtoan(data);
-    console.error('GetThanhtoan DateFrom', moment().subtract(1, 'day').format('YYYY-MM-DD HH:mm:ss'));
-    console.error('GetThanhtoan DateTo', moment().add(1, 'days').format('YYYY-MM-DD HH:mm:ss'));
+    // console.error('GetThanhtoan DateFrom', moment().subtract(1, 'day').format('YYYY-MM-DD HH:mm:ss'));
+    // console.error('GetThanhtoan DateTo', moment().add(1, 'days').format('YYYY-MM-DD HH:mm:ss'));
     return getData;
   }
 
