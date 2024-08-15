@@ -12,11 +12,10 @@ export class ZnsthanhtoanController {
   @Interval(1200000)
   @Post('createzns')
   createzns(@Body() data: any={}) {
-    console.error('Tạo ZNS Thanh Toán 1',moment().format('YYYY-MM-DD HH:mm:ss'));
+    console.error('Tạo ZNS Thanh Toán 2',moment().format('YYYY-MM-DD HH:mm:ss'));
     data.pageSize =  9999;
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
-    console.log("created ZNS Thanh Toán",moment().format('YYYY-MM-DD'));
     return this.znsthanhtoanService.createzns(data);
   }
   @Post('sendzns')
@@ -62,7 +61,7 @@ export class ZnsthanhtoanController {
   @Cron('00 45 21 * * *')
   @Post('sendznsauto')
   async sendznsautoCron(@Body() data: any={}) {
-    console.error("Lenh Cuoi Ngay",moment().format('YYYY-MM-DD HH:mm:ss'));
+    console.error('Gửi ZNS Thanh Toán Auto Cuối Ngày 4',moment().format('YYYY-MM-DD HH:mm:ss'));
     const logger ={
       Title:'Vttech ZNS Thanh Toán',
       Slug:'vttechznsthanhtoan',

@@ -26,7 +26,7 @@ export class ZnsdieutriController {
   @Interval(2400000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
-    console.error('Create Diều Trị 2',moment().format('YYYY-MM-DD HH:mm:ss'));
+    console.error('ZNS Điều Trị Auto 3',moment().format('YYYY-MM-DD HH:mm:ss'));
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).subtract(1, 'day').format('YYYY-MM-DD'):moment().subtract(1, 'day').format('YYYY-MM-DD');
     data.createdEnd?data.createdEnd = moment(data.createdEnd).add(1, 'day').format('YYYY-MM-DD'):moment().add(1, 'day').format('YYYY-MM-DD');
     data.Status = 0;
