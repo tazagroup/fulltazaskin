@@ -9,9 +9,10 @@ export class ZnsdieutriController {
     private readonly znsdieutriService:ZnsdieutriService,
     private readonly _LoggerService:LoggerService,
   ) {}
-  @Interval(660000)
+  @Interval(2100000)
   @Post('createzns')
   createzns(@Body() data: any={}) {
+    console.error('Create Diều Trị 2',moment().format('YYYY-MM-DD HH:mm:ss'));
     data.pageSize =  9999;
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     data.createdEnd?data.createdEnd = moment(data.createdEnd).add(1, 'day').format('YYYY-MM-DD'):moment().add(1, 'day').format('YYYY-MM-DD');
@@ -22,9 +23,10 @@ export class ZnsdieutriController {
     return this.znsdieutriService.sendzns(data);
   }
   //@Interval(10000)
-  @Interval(720000)
+  @Interval(2400000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
+    console.error('Create Diều Trị 2',moment().format('YYYY-MM-DD HH:mm:ss'));
     data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).subtract(1, 'day').format('YYYY-MM-DD'):moment().subtract(1, 'day').format('YYYY-MM-DD');
     data.createdEnd?data.createdEnd = moment(data.createdEnd).add(1, 'day').format('YYYY-MM-DD'):moment().add(1, 'day').format('YYYY-MM-DD');
     data.Status = 0;

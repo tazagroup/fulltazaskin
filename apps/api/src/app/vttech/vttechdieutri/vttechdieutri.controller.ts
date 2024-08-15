@@ -53,9 +53,10 @@ export class VttechdieutriController {
     return getData;
   }
   // @Interval(8000)
-  @Interval(600000)
+  @Interval(1800000)
   @Get('getauto')
   async getAuto() {
+    console.error('Get Diều Trị 1',moment().format('YYYY-MM-DD HH:mm:ss'));
     const data: any = {
       "Name": "Taza",
       "Password": "1b9287d492b256x7taza",
