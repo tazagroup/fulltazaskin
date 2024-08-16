@@ -58,39 +58,40 @@ export class ZnsthanhtoanController {
     else  return "Không thể gửi tin nhắn vào thời gian này";
   }
   @Cron('00 45 21 * * *')
-  @Post('sendznsauto')
+  @Post('thanhtoanenday')
   async sendznsautoCron(@Body() data: any={}) {
     console.error('Gửi ZNS Thanh Toán Auto Cuối Ngày 4',moment().format('YYYY-MM-DD HH:mm:ss'));
-    const logger ={
-      Title:'Vttech ZNS Thanh Toán',
-      Slug:'vttechznsthanhtoan',
-      Action:'send',
-      Mota:`[ZNS_THANHTOAN] - Lenh Cuoi Ngay - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
-   this._LoggerService.create(logger)
-    data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
-    data.createdEnd = data.createdEnd ? moment(data.createdEnd).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
-    data.Status = 0;
-    data.pageSize =  9999;
-    if(this.CheckTime() == true){
-      const result = await this.findQuery(data)
-      const logger1 ={
-        Title:'Vttech ZNS Thanh Toán',
-        Slug:'vttechznsthanhtoan',
-        Action:'send',
-        Mota:`[ZNS_THANHTOAN] - Step3Auto - Gửi ZNS Tự Động (${result.totalCount}) Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
-     this._LoggerService.create(logger1)
+    this.sendznsauto()
+  //   const logger ={
+  //     Title:'Vttech ZNS Thanh Toán',
+  //     Slug:'vttechznsthanhtoan',
+  //     Action:'send',
+  //     Mota:`[ZNS_THANHTOAN] - Lenh Cuoi Ngay - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+  //  this._LoggerService.create(logger)
+  //   data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+  //   data.createdEnd = data.createdEnd ? moment(data.createdEnd).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+  //   data.Status = 0;
+  //   data.pageSize =  9999;
+  //   if(this.CheckTime() == true){
+  //     const result = await this.findQuery(data)
+  //     const logger1 ={
+  //       Title:'Vttech ZNS Thanh Toán',
+  //       Slug:'vttechznsthanhtoan',
+  //       Action:'send',
+  //       Mota:`[ZNS_THANHTOAN] - Step3Auto - Gửi ZNS Tự Động (${result.totalCount}) Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+  //    this._LoggerService.create(logger1)
 
-      if(result.items.length > 0){
-        result.items.forEach(async (v,k) => {
-          setTimeout(async () => {
-           await this.sendzns(v);
-          }, k*1000);
+  //     if(result.items.length > 0){
+  //       result.items.forEach(async (v,k) => {
+  //         setTimeout(async () => {
+  //          await this.sendzns(v);
+  //         }, k*1000);
 
-        })
-        return result;
-      }
-    }
-    else  return "Không thể gửi tin nhắn vào thời gian này";
+  //       })
+  //       return result;
+  //     }
+  //   }
+  //   else  return "Không thể gửi tin nhắn vào thời gian này";
   }
   // sendznsauto(@Body() data: any) {
   //   return this.znsthanhtoanService.sendznsauto(data);

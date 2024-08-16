@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import {ZnsdieutriService } from './znsdieutri.service';
-import { Interval } from '@nestjs/schedule';
+import { Cron, Interval } from '@nestjs/schedule';
 import moment = require('moment');
 import { LoggerService } from '../../logger/logger.service';
 @Controller('znsdieutri')
@@ -57,8 +57,15 @@ export class ZnsdieutriController {
         Mota:`[ZNS_DIEUTRI] - Không thể gửi tin nhắn vào thời gian này - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
       this._LoggerService.create(logger)
     }
-
   }
+
+  @Cron('00 50 21 * * *')
+  @Post('dieutriendday')
+  async sendznsautoCron(@Body() data: any={}) {
+    console.error('Gửi ZNS Điều TRị Auto Cuối Ngày 4',moment().format('YYYY-MM-DD HH:mm:ss'));
+    this.sendznsauto()
+  }
+
   @Post()
   create(@Body() data: any) {
     return this.znsdieutriService.create(data);
