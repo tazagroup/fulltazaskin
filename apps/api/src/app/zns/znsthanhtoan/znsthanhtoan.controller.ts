@@ -31,32 +31,31 @@ export class ZnsthanhtoanController {
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     console.error('Gửi ZNS Thanh Toán Auto 3',moment().format('YYYY-MM-DD HH:mm:ss'));
-    // data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).subtract(1, 'day').format('YYYY-MM-DD') : moment().subtract(1, 'day').format('YYYY-MM-DD');
-    // data.createdEnd = data.createdEnd ? moment(data.createdEnd).add(1, 'day').format('YYYY-MM-DD') : moment().add(1, 'day').format('YYYY-MM-DD');
-    // data.Status = 0;
-    // data.pageSize =  9999;
-    // if(this.CheckTime() == true){
-    //  // console.log('sendznsauto running2');
-    //   const result = await this.findQuery(data)
-    //   const logger ={
-    //     Title:'Vttech ZNS Thanh Toán',
-    //     Slug:'vttechznsthanhtoan',
-    //     Action:'send',
-    //     Mota:`[ZNS_THANHTOAN] - Step3 - Gửi ZNS Tự Động (${result.totalCount}) Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
-    //  this._LoggerService.create(logger)
+    data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).subtract(1, 'day').format('YYYY-MM-DD') : moment().subtract(1, 'day').format('YYYY-MM-DD');
+    data.createdEnd = data.createdEnd ? moment(data.createdEnd).add(1, 'day').format('YYYY-MM-DD') : moment().add(1, 'day').format('YYYY-MM-DD');
+    data.Status = 0;
+    data.pageSize =  9999;
+    if(this.CheckTime() == true){
+      const result = await this.findQuery(data)
+      const logger ={
+        Title:'Vttech ZNS Thanh Toán',
+        Slug:'vttechznsthanhtoan',
+        Action:'send',
+        Mota:`[ZNS_THANHTOAN] - Step3 - Gửi ZNS Tự Động (${result.totalCount}) Thanh Toán - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
+     this._LoggerService.create(logger)
 
-    //   if(result.items.length > 0){
-    //     //console.log('sendznsauto running3');
-    //     result.items.forEach(async (v,k) => {
-    //       setTimeout(async () => {
-    //        await this.sendzns(v);
-    //       }, k*1000);
+      if(result.items.length > 0){
+        //console.log('sendznsauto running3');
+        result.items.forEach(async (v,k) => {
+          setTimeout(async () => {
+           await this.sendzns(v);
+          }, k*1000);
 
-    //     })
-    //     return result;
-    //   }
-    // }
-    // else  return "Không thể gửi tin nhắn vào thời gian này";
+        })
+        return result;
+      }
+    }
+    else  return "Không thể gửi tin nhắn vào thời gian này";
   }
   @Cron('00 45 21 * * *')
   @Post('sendznsauto')

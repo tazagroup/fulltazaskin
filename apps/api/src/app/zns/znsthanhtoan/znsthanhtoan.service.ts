@@ -79,7 +79,18 @@ export class ZnsthanhtoanService {
   //     return error;
   //   }
   // }
-
+  async sendsms(data: any) {
+    try {
+      const response = await axios.post('https://sms.cmctelecom.vn/SMS_CMCTelecom/api/sms/sendutf', data, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
   async sendzns(data: any) {
     //console.log('sendznsauto running4');
     const Chinhanh: any = await this._ChinhanhService.findbyidVttech(data.BranchID)
@@ -152,18 +163,18 @@ export class ZnsthanhtoanService {
                 else {
                   data.Status = 2;
                   data.Statuscode = result.error;
-                  // const resultsms = await this.sendsms({
-                  //   "Brandname": "TAZA",
-                  //   "Message": `${data.CustName} da thanh toan so tien ${data.Paid} co ma hoa don la ${data.Code}. Cam on quy khach`,
-                  //   "Phonenumber": data.CustPhone,
-                  //   "user": "ctytaza2",
-                  //   "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
-                  //   "messageId": data.CustPhone + (new Date()).getTime()
-                  // })
-                  // console.error(resultsms);
-                  // data.SMSCode = resultsms.data.status;
-                  // data.messageId =resultsms.data.messageId;
-                  // data.SMSData = resultsms.data
+                  const resultsms = await this.sendsms({
+                    "Brandname": "TAZA",
+                    "Message": `${data.CustName} da thanh toan so tien ${data.Paid} co ma hoa don la ${data.Code}. Cam on quy khach`,
+                    "Phonenumber": data.CustPhone,
+                    "user": "ctytaza2",
+                    "pass": "$2a$10$QjKAPJ9qq.RuS3jfUID2FeuGdpuSL1Rl9ugQUvy.O5PuKSlp8z95S",
+                    "messageId": data.CustPhone + (new Date()).getTime()
+                  })
+                  console.error(resultsms);
+                  data.SMSCode = resultsms.data.status;
+                  data.messageId =resultsms.data.messageId;
+                  data.SMSData = resultsms.data
                   this.update(data.id, data)
                   const logger ={
                     Title:'Vttech ZNS Thanh Toán',
@@ -242,17 +253,17 @@ export class ZnsthanhtoanService {
                     else {
                       data.Status = 2;
                       data.Statuscode = result.error;
-                      // const resultsms = await this.sendsms({
-                      //   "Brandname": "TIMONA",
-                      //   "Message": `${data.CustName} da thanh toan so tien ${data.Paid} co ma hoa don la ${data.Code}. Cam on quy khach`,
-                      //   "Phonenumber": data.CustPhone,
-                      //   "user": "ctytimona2",
-                      //   "pass": "$2a$10$/DpS3IgI1AmG0gmwXmqPLOnmaCzKVh1h.BUZ6Td4ZVEl29O7zWgbu",
-                      //   "messageId": data.CustPhone + (new Date()).getTime()
-                      // })
-                      // data.SMSCode = resultsms.data.status;
-                      // data.messageId =resultsms.data.messageId;
-                      // data.SMSData = resultsms.data
+                      const resultsms = await this.sendsms({
+                        "Brandname": "TIMONA",
+                        "Message": `${data.CustName} da thanh toan so tien ${data.Paid} co ma hoa don la ${data.Code}. Cam on quy khach`,
+                        "Phonenumber": data.CustPhone,
+                        "user": "ctytimona2",
+                        "pass": "$2a$10$/DpS3IgI1AmG0gmwXmqPLOnmaCzKVh1h.BUZ6Td4ZVEl29O7zWgbu",
+                        "messageId": data.CustPhone + (new Date()).getTime()
+                      })
+                      data.SMSCode = resultsms.data.status;
+                      data.messageId =resultsms.data.messageId;
+                      data.SMSData = resultsms.data
                       this.update(data.id, data)
                     }
 
