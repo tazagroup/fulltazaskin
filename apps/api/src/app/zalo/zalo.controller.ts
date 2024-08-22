@@ -29,6 +29,12 @@ export class ZaloController {
   searchBooks(@Query('query') query: string) {
     return this.zaloService.searchzalo(query);
   }
+  @Get('getinfo/:sdt')
+  getInfo(@Param('sdt') sdt: string) {
+    console.log(sdt);
+    return sdt
+   // return this.zalominiappService.findAll();
+  }
   @Get('pagina')
   findPagina(@Query('page') page: number, @Query('limit') limit: number) {
     //console.error();
@@ -39,7 +45,7 @@ export class ZaloController {
     return this.zaloService.findslug(slug);
   }
   @Get('findid/:id')
-  findid(@Param('id') id: any) {    
+  findid(@Param('id') id: any) {
     return this.zaloService.findid(id);
   }
   @Patch(':id')

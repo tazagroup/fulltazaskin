@@ -23,7 +23,7 @@ export class ZalominiappController {
     return this.zalominiappService.create(createZalominiappDto);
   }
 
-  @Get()
+ @Get()
   findAll() {
     return this.zalominiappService.findAll();
   }
@@ -52,7 +52,12 @@ export class ZalominiappController {
   findOne(@Param('id') id: string) {
     return this.zalominiappService.findOne(+id);
   }
+  @Get('getinfo/:sdt')
+  getInfo(@Param('sdt') sdt: string) {
+    console.log(sdt);
 
+    return this.zalominiappService.findAll();
+  }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateZalominiappDto: UpdateZalominiappDto) {
     return this.zalominiappService.update(+id, updateZalominiappDto);
