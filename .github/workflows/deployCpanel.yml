@@ -25,4 +25,4 @@ jobs:
           username: tazaspac@tazagroup.vn
           password: '@Taza#Group*2020'
           local-dir: ./dist/apps/api/  # <-- Specify the local "build" folder
-          server-dir: /tazaskinclinic/api/dist/  # Destination on server
+          server-dir: /tazaskinclinic/auto/dist/  # Destination on server
