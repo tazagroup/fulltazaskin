@@ -27,7 +27,7 @@ export class ZnsthanhtoanController {
     console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
 
   }
-  @Interval(1440000)
+  //@Interval(1440000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     console.error('Gửi ZNS Thanh Toán Auto 3',moment().format('YYYY-MM-DD HH:mm:ss'));
