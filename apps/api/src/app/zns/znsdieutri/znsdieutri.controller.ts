@@ -23,7 +23,7 @@ export class ZnsdieutriController {
     return this.znsdieutriService.sendzns(data);
   }
   //@Interval(10000)
-  //@Interval(1800000)
+  @Interval(1800000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     console.error('ZNS Điều Trị Auto 3',moment().format('YYYY-MM-DD HH:mm:ss'));
