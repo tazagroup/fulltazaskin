@@ -52,7 +52,7 @@ export class VttechdieutriController {
     return getData;
   }
   // @Interval(8000)
- @Interval(1560000)
+ //@Interval(1560000)
   @Get('getauto')
   async getAuto() {
     console.error('Get Diều Trị 1',moment().format('YYYY-MM-DD HH:mm:ss'));

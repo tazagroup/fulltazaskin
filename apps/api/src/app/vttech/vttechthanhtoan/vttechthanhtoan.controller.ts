@@ -57,7 +57,7 @@ export class VttechthanhtoanController {
   remove(@Param('id') id: string) {
     return this.vttechthanhtoanService.remove(id);
   }
-  @Interval(1200000)
+  //@Interval(1200000)
   @Get('getauto')
   async getAuto() {
     console.error('Get Thanh Toán 1',moment().format('YYYY-MM-DD HH:mm:ss'));
@@ -84,8 +84,8 @@ export class VttechthanhtoanController {
         "Name": "Taza",
         "Password": "1b9287d492b256x7taza",
         "Type": "web",
-        "DateFrom": moment().format('YYYY-MM-DD'),
-        "DateTo": moment().format('YYYY-MM-DD'),
+        "DateFrom": moment().subtract(1, 'day').format('YYYY-MM-DD'),
+        "DateTo": moment().add(1, 'days').format('YYYY-MM-DD'),
         "BranchID": "0",
         "PagingNumber": "1"
       }
