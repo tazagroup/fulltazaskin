@@ -59,7 +59,7 @@ export class ZnsdieutriController {
     }
   }
 
-  @Cron('00 50 21 * * *')
+  //@Cron('00 50 21 * * *')
   @Post('dieutriendday')
   async sendznsautoCron(@Body() data: any={}) {
     console.error('Gửi ZNS Điều TRị Auto Cuối Ngày 4',moment().format('YYYY-MM-DD HH:mm:ss'));
