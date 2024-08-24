@@ -21,11 +21,23 @@ export class ZnsthanhtoanService {
   ) { }
   async createzns(data: any) {
     const Thanhtoans = await this._VttechthanhtoanService.findQuery(data);
-    if (Thanhtoans.length > 0) {
+    const mergedData = Object.values(Thanhtoans.reduce((acc, obj) => {
+      const { CustPhone,CustCode, Code, Paid,TabCode } = obj;
+      const key = `${CustPhone}_${TabCode}_${Code}_${CustCode}`;
+      if (!acc[key]) {
+        acc[key] = { ...obj };
+      } else {
+        acc[key].Paid += Paid;
+      }
+      return acc;
+    }, {}));
+
+    if (mergedData.length > 0) {
       let CountCreate = 0;
-      await Promise.all(Thanhtoans.map(async (v: any, k: any) => {
+      await Promise.all(mergedData.map(async (v: any, k: any) => {
         const item: any = {};
         item.Dulieu = v;
+        item.TabCode = v.TabCode;
         item.CustPhone = v.CustPhone;
         item.CustName = v.CustName;
         item.CustCode = v.CustCode;
@@ -47,7 +59,7 @@ export class ZnsthanhtoanService {
         Mota:`[ZNS_THANHTOAN] - Step2 - Create (${CountCreate}) Thanh Toan - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
      this._LoggerService.create(logger)
     }
-    return Thanhtoans;
+    return mergedData;
   }
 
   // async getTemplateData(id: any, token: any) {

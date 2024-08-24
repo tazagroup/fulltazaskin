@@ -38,7 +38,8 @@ export class VttechthanhtoanService {
     return await this.VttechthanhtoanRepository.findOne({
       where: {
          CustPhone: data.CustPhone,
-         idVttech: data.idVttech
+         idVttech: data.idVttech,
+         TabCode: data.TabCode
         },
      });
   }
@@ -57,7 +58,7 @@ export class VttechthanhtoanService {
   async findQuery(params:any) {
     const queryBuilder = this.VttechthanhtoanRepository.createQueryBuilder('vttechthanhtoan');
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
-      console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
+     // console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
       if(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)))
         {
           queryBuilder.andWhere('vttechthanhtoan.Created = :startDate', {
@@ -84,19 +85,21 @@ export class VttechthanhtoanService {
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
-    const data = items.map((v: any) => (v.Dulieu))
-    const mergedData = Object.values(data.reduce((acc, obj) => {
-      const { CustPhone,CustCode, Code, Paid } = obj;
-      const key = `${CustPhone}_${Code}_${CustCode}`;
+    const data = items.map((v: any) => ({id:v.id,...v.Dulieu}))
+    return data
+    // const mergedData = Object.values(data.reduce((acc, obj) => {
+    //   const { CustPhone,CustCode, Code, Paid } = obj;
+    //   const key = `${CustPhone}_${Code}_${CustCode}`;
 
-      if (!acc[key]) {
-        acc[key] = { ...obj };
-      } else {
-        acc[key].Paid += Paid;
-      }
-      return acc;
-    }, {}));
-    return mergedData;
+    //   if (!acc[key]) {
+    //     acc[key] = { ...obj };
+    //   } else {
+    //     acc[key].Paid += Paid;
+    //   }
+    //   return acc;
+    // }, {}));
+    // return mergedData;
+
   }
   async update(id: string, UpdateVttechthanhtoanDto: any) {
     this.VttechthanhtoanRepository.save(UpdateVttechthanhtoanDto);
@@ -128,7 +131,8 @@ export class VttechthanhtoanService {
       const data = response.data;
       const ListItems:any=[]
       await Promise.all(data.Data.map(async (v: any) => {
-        const check = await this.findby({idVttech:v.ID,CustPhone:v.CustPhone,Code:v.Code});
+        const check = await this.findby(v);
+        // const check = await this.findby({idVttech:v.ID,CustPhone:v.CustPhone,Code:v.Code});
         if (!check) {
           ListItems.push(v);
         }
