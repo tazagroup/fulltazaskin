@@ -19,8 +19,7 @@ export class VttechdieutriComponent implements OnInit {
   SearchParams: any = {
     Batdau:moment().startOf('day').toDate(),
     Ketthuc: moment().endOf('day').toDate(),
-    pageSize: 20,
-    pageNumber: 0
+    pageSize: 9999,
   };
   Lists: any[] = []
   FilterLists: any[] = []
@@ -47,7 +46,6 @@ export class VttechdieutriComponent implements OnInit {
       if (data) {
         console.log(data);
         this.Total = data.totalCount
-        this.pageSizeOptions = [10, 20, data.totalCount].filter(v => v <= data.totalCount);
         this.ListStatus = data.ListStatus
         this.FilterLists = this.Lists = data.items
       }
@@ -70,7 +68,7 @@ export class VttechdieutriComponent implements OnInit {
   }
   SendZNS(item: any) {
     console.log(item);
-    
+
     this._VttechdieutriService.SendZns(item).subscribe()
   }
   async SendAllZNS(items: any) {

@@ -103,7 +103,7 @@
       </div>
     </div>
     <div class="relative border-t flex flex-col">
-      <mat-paginator (page)="onPageChange($event)" [length]="Total"  [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5,10,50,Total]"></mat-paginator>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>

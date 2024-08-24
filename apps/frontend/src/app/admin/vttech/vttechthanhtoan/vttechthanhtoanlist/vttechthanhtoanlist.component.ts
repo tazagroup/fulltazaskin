@@ -16,7 +16,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ChinhanhService } from '../../../cauhinh/chinhanh/chinhanh.service';
 import * as moment from 'moment';
-import { Status } from 'apps/frontend/src/app/shared/shared.utils';
+import { findDuplicateOccurrences, mergeNoDup, Status } from 'apps/frontend/src/app/shared/shared.utils';
 @Component({
   selector: 'app-vttechthanhtoanlist',
   standalone: true,
@@ -50,9 +50,10 @@ export class VttechthanhtoanlistComponent implements OnInit {
     Status:9999,
     BranchID:9999
   };
+  isDelete:boolean =false
   ListStatus: any = Status
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
-  displayedColumns: string[] = ['CustName', 'CustPhone','Code','TypeName','Paid', 'DiscountAmount','DepositAmountUsing','TotalPaid','Chinhanh','Created'];
+  displayedColumns: string[] = ['CustName', 'CustPhone','Tabcode','Code','TypeName','Paid', 'DiscountAmount','DepositAmountUsing','TotalPaid','Chinhanh','Created'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -68,15 +69,15 @@ export class VttechthanhtoanlistComponent implements OnInit {
     this.ChangeSearchParams()
     this._ChinhanhService.getAllChinhanhs().subscribe()
    // this._VttechthanhtoanService.searchVttechthanhtoan(this.SearchParams).subscribe()
-    this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {      
+    this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {
       if (chinhanhs?.length > 0) {
         this.ListChiNhanh = chinhanhs
         this._VttechthanhtoanService.vttechthanhtoans$.subscribe((data: any) => {
-          if (data) {            
+          if (data) {
             data.forEach((v: any) => {
               v.Chinhanh = chinhanhs.find((c: any) => c.idVttech == v.BranchID)?.Title;
+              v.Checkdup =`${v.CustPhone}_${v.TabCode}_${v.Code}_${v.CustCode}`;
             })
-            console.log(data);
             this.FilterLists = this.Lists = data
             this.dataSource = new MatTableDataSource(this.FilterLists);
             this.dataSource.paginator = this.paginator;
@@ -107,5 +108,27 @@ export class VttechthanhtoanlistComponent implements OnInit {
   //     }
   //   });
   }
+  FillDup() {
+    this.isDelete = !this.isDelete
+    if(this.isDelete)
+    {
+      this.FilterLists = findDuplicateOccurrences(this.Lists,'Checkdup');
+    } else {
+      this.FilterLists = this.Lists
+    }
+    console.log(this.FilterLists);
+    this.dataSource = new MatTableDataSource(this.FilterLists);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+  RemoveDup() {
+    console.log("remove");
 
+    this.FilterLists = mergeNoDup(this.FilterLists,this.FilterLists,'Checkdup')
+    console.log(this.FilterLists);
+
+    this.FilterLists.forEach((v:any) => {
+     this._VttechthanhtoanService.DeleteVttechthanhtoan(v.id).subscribe(()=>{ this.isDelete = false});
+    });
+  }
 }

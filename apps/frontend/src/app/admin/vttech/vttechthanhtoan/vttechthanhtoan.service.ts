@@ -21,7 +21,7 @@ export class VttechthanhtoanService {
   constructor(private http: HttpClient) { }
   getAllthanhtoans() {
     return this.http.get(environment.APIURL + '/vttechthanhtoan').pipe(
-      map((data: any) => { 
+      map((data: any) => {
         this._thanhtoans.next(data);
         return data;
       })
@@ -29,7 +29,7 @@ export class VttechthanhtoanService {
   }
   // getAllAPIVttech() {
   //   return this.http.get(environment.APIURL + '/vttechthanhtoan/apirealtime').pipe(
-  //     map((data: any) => { 
+  //     map((data: any) => {
   //       this._vttechthanhtoans.next(data);
   //       return data;
   //     })
@@ -37,14 +37,14 @@ export class VttechthanhtoanService {
   // }
   LoadServer(data:any) {
     return this.http.post(environment.APIURL + '/vttechthanhtoan/getapi',data).pipe(
-      map((data: any) => { 
-        console.log(data);   
+      map((data: any) => {
+        console.log(data);
       })
     );
   }
   getAllVttechthanhtoans() {
     return this.http.get(environment.APIURL + '/vttechthanhtoan').pipe(
-      map((data: any) => { 
+      map((data: any) => {
         this._vttechthanhtoans.next(data);
         return data;
       })
@@ -52,7 +52,7 @@ export class VttechthanhtoanService {
   }
   searchVttechthanhtoan(SearchParams:any) {
     return this.http.post(environment.APIURL + `/vttechthanhtoan/search`,SearchParams).pipe(
-      map((data: any) => { 
+      map((data: any) => {
         this._vttechthanhtoans.next(data);
         return data;
       })
@@ -60,7 +60,7 @@ export class VttechthanhtoanService {
   }
   searchOld(SearchParams:any) {
     return this.http.post(environment.APIURL + `/vttechthanhtoan/search`,SearchParams).pipe(
-      map((data: any) => { 
+      map((data: any) => {
         return data;
       })
     );
@@ -93,7 +93,7 @@ export class VttechthanhtoanService {
   SendZns(data: any) {
     return this.http.post(environment.APIURL + '/vttechthanhtoan/sendzns', data).pipe(
           map((result) => {
-            console.log(result); 
+            console.log(result);
             return result;
           })
         )
