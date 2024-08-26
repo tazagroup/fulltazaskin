@@ -42,6 +42,7 @@ export class VttechdieutriService {
          CustPhone: data.CustPhone,
          TabCode: data.TabCode,
          TimeIndex: data.TimeIndex,
+         Created:data.Created
         },
      });
   }
@@ -61,10 +62,10 @@ export class VttechdieutriService {
     };
   }
   async findQuery(params:any) {
-    console.log(params);
+    //console.log(params);
     const queryBuilder = this.VttechdieutriRepository.createQueryBuilder('vttechdieutri');
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
-      console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
+    //  console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
       if(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)))
         {
           queryBuilder.andWhere('vttechdieutri.Created = :startDate', {
@@ -78,6 +79,7 @@ export class VttechdieutriService {
           });
         }
     }
+    JSON.stringify
     if (params.Title) {
       queryBuilder.andWhere('vttechdieutri.Title LIKE :Title', { SDT: `%${params.Title}%` });
     }
@@ -121,26 +123,10 @@ export class VttechdieutriService {
         },
       });
       const data = response.data;
-      const ListItems:any=[]
-      await Promise.all(data.Data.map(async (v: any) => {
-        const Checkdata = {
-          CustPhone: v.Code,
-          TabCode: v.Service.TabCode,
-          TimeIndex: v.Service.TimeIndex,
-        }
-        const check = await this.findby(Checkdata);
-        if (!check) {
-          ListItems.push(v);
-        }
-      }));
-      const logger ={
-        Title:'Vttech Điều Trị',
-        Slug:'vttechdieutri',
-        Action:'create',
-        Mota:`[VTTECH_DIEUTRI] - Lấy Dữ Liệu Điều Trị Thành Công (${ListItems.length}) - ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
-     this._LoggerService.create(logger)
-      if (ListItems.length > 0) {
-        ListItems.forEach(async (v: any, k: any) => {
+      if (data.Data.length > 0) {
+        console.log(data.Data.length);
+      let CountCreate=0
+      await Promise.all(data.Data.map(async (v: any, k: any) => {
           const item: any = {};
           item.Dulieu = v;
           item.idVttech = convertToZeroMinutesSeconds(v.CreatedDate).getTime();
@@ -150,12 +136,37 @@ export class VttechdieutriService {
           item.TabCode = v.Service.TabCode;
           item.TimeIndex = v.Service.TimeIndex;
           item.Created = moment(v.CreatedDate).format('YYYY-MM-DD');
-          setTimeout(async () => {
-            const result = await this.create(item);
-          }, k * 1000);
-        });
-      }
-      return ListItems;
+          const isCreate = await this.create(item);
+          if (isCreate.error != 1001) {
+            CountCreate = CountCreate + 1;
+          }
+      }));
+      return CountCreate;
+    }
+
+    //   const logger ={
+    //     Title:'Vttech Điều Trị',
+    //     Slug:'vttechdieutri',
+    //     Action:'create',
+    //     Mota:`[VTTECH_DIEUTRI] - Lấy Dữ Liệu Điều Trị Thành Công (${ListItems.length}) - ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
+    //  this._LoggerService.create(logger)
+    //   if (ListItems.length > 0) {
+    //     ListItems.forEach(async (v: any, k: any) => {
+    //       const item: any = {};
+    //       item.Dulieu = v;
+    //       item.idVttech = convertToZeroMinutesSeconds(v.CreatedDate).getTime();
+    //       item.CustPhone = v.Phone;
+    //       item.CustName = v.Name;
+    //       item.BranchID = v.BranchID;
+    //       item.TabCode = v.Service.TabCode;
+    //       item.TimeIndex = v.Service.TimeIndex;
+    //       item.Created = moment(v.CreatedDate).format('YYYY-MM-DD');
+    //       setTimeout(async () => {
+    //         const result = await this.create(item);
+    //       }, k * 1000);
+    //     });
+    //   }
+    //   return ListItems;
     } catch (error) {
       console.error(error);
       const logger ={
@@ -167,5 +178,69 @@ export class VttechdieutriService {
       return error;
     }
   }
+  // async getdieutri(item: any = {}) {
+  //   const logger ={
+  //     Title:'Vttech Điều Trị',
+  //     Slug:'vttechdieutri',
+  //     Action:'create',
+  //     Mota:`[VTTECH_DIEUTRI] - Step1 - Bắt Đầu Lấy Dữ Liệu Điều Trị - ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
+  //  this._LoggerService.create(logger)
+  //   const result = await this._SharedService.getToken(item);
+  //   try {
+  //     const response = await axios.post(`https://apismsvtt.vttechsolution.com/api/Customer/GetTreat`, item, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${result[0].Token}`,
+  //         'Cookie': result[1],
+  //       },
+  //     });
+  //     const data = response.data;
+  //     const ListItems:any=[]
+  //     await Promise.all(data.Data.map(async (v: any) => {
+  //       const Checkdata = {
+  //         CustPhone: v.Code,
+  //         TabCode: v.Service.TabCode,
+  //         TimeIndex: v.Service.TimeIndex,
+  //         Created:moment(v.CreatedDate).format('YYYY-MM-DD')
+  //       }
+  //       const check = await this.findby(v);
+  //       if (!check) {
+  //         ListItems.push(v);
+  //       }
+  //     }));
+  //     const logger ={
+  //       Title:'Vttech Điều Trị',
+  //       Slug:'vttechdieutri',
+  //       Action:'create',
+  //       Mota:`[VTTECH_DIEUTRI] - Lấy Dữ Liệu Điều Trị Thành Công (${ListItems.length}) - ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
+  //    this._LoggerService.create(logger)
+  //     if (ListItems.length > 0) {
+  //       ListItems.forEach(async (v: any, k: any) => {
+  //         const item: any = {};
+  //         item.Dulieu = v;
+  //         item.idVttech = convertToZeroMinutesSeconds(v.CreatedDate).getTime();
+  //         item.CustPhone = v.Phone;
+  //         item.CustName = v.Name;
+  //         item.BranchID = v.BranchID;
+  //         item.TabCode = v.Service.TabCode;
+  //         item.TimeIndex = v.Service.TimeIndex;
+  //         item.Created = moment(v.CreatedDate).format('YYYY-MM-DD');
+  //         setTimeout(async () => {
+  //           const result = await this.create(item);
+  //         }, k * 1000);
+  //       });
+  //     }
+  //     return ListItems;
+  //   } catch (error) {
+  //     console.error(error);
+  //     const logger ={
+  //       Title:'Vttech Điều Trị',
+  //       Slug:'vttechdieutri',
+  //       Action:'create',
+  //       Mota:`[VTTECH_DIEUTRI] - Lỗi Xác Thực - ${JSON.stringify(error)} - ${JSON.stringify(item)} - ${JSON.stringify(result)}`}
+  //    this._LoggerService.create(logger)
+  //     return error;
+  //   }
+  // }
 
 }

@@ -31,7 +31,7 @@ export class ZnsthanhtoanService {
       }
       return acc;
     }, {}));
-    console.log(mergedData);
+    console.log(mergedData.length);
 
 
     if (mergedData.length > 0) {

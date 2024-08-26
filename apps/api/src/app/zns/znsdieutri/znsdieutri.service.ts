@@ -21,14 +21,13 @@ export class ZnsdieutriService {
     private _RediscacheService: RediscacheService,
   ) { }
   async createzns(data: any) {
-    console.log(data);
-
     const Dieutris = await this._VttechdieutriService.findQuery(data)
+    console.error(Dieutris.length);
+
     if (Dieutris.length > 0) {
       const uniqueDieutris = Dieutris.filter((obj, index, self) =>
         self.findIndex(other => moment(other.Created).isSame(moment(obj.Created)) && other.CustPhone == obj.CustPhone && other.BranchID == obj.BranchID) == index
       );
-      console.log(uniqueDieutris[0]);
       console.log(uniqueDieutris.length);
       // const uniqueDieutris = Dieutris.reduce((acc: any[], curr: any) => {
       //   const existingDieutri = acc.find((d: any) => moment(d.Created).isSame(moment(curr.Created)) && d.CustPhone == curr.CustPhone);
@@ -56,6 +55,7 @@ export class ZnsdieutriService {
         Mota: `[ZNS_DIEUTRI] - Step2 - Create (${uniqueDieutris.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`
       }
       this._LoggerService.create(logger)
+
       uniqueDieutris.forEach((v: any, k: any) => {
         const item: any = {}
         item.idVttech = v.idVttech
@@ -248,7 +248,7 @@ export class ZnsdieutriService {
   async findQuery(params: any) {
     const queryBuilder = this.ZnsdieutriRepository.createQueryBuilder('znsdieutri');
     if (params.hasOwnProperty('CreatedBegin') && params.hasOwnProperty('CreatedEnd')) {
-      console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
+      // console.log(moment(params.CreatedBegin).isSame(moment(params.CreatedEnd)));
       if (moment(params.CreatedBegin).isSame(moment(params.CreatedEnd))) {
         queryBuilder.andWhere('znsdieutri.Created = :startDate', {
           startDate: moment(params.CreatedBegin).format('YYYY-MM-DD')
