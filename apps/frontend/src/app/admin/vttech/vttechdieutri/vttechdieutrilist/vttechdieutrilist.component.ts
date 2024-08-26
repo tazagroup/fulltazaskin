@@ -15,6 +15,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ChinhanhService } from '../../../cauhinh/chinhanh/chinhanh.service';
+import * as moment from 'moment';
 @Component({
   selector: 'app-vttechdieutrilist',
   standalone: true,
@@ -42,8 +43,12 @@ export class VttechdieutrilistComponent implements OnInit {
   Sitemap: any = { loc: '', priority: '' }
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   SearchParams: any = {
+    CreatedBegin: moment().format('YYYY-MM-DD'),
+    CreatedEnd: moment().format('YYYY-MM-DD'),
     pageSize:9999,
-    pageNumber:0
+    pageNumber:0,
+    Status:9999,
+    BranchID:9999
   };
   displayedColumns: string[] = ['Code','Name', 'Phone','Treat','Chinhanh','Created'];
   dataSource!: MatTableDataSource<any>;
@@ -63,10 +68,10 @@ export class VttechdieutrilistComponent implements OnInit {
       this._ChinhanhService.chinhanhs$.subscribe((chinhanhs: any) => {
         this.ListChiNhanh = chinhanhs
         this._VttechdieutriService.vttechdieutris$.subscribe((data:any) => {
-          data.forEach((v: any) => {  
+          data.forEach((v: any) => {
             v.Chinhanh = chinhanhs.find((c: any) => c.idVttech === v.BranchID)?.Title;
            })
-         this.FilterLists = this.Lists = data.map((v: any) => ({ ...v, ...v.Dulieu }))          
+         this.FilterLists = this.Lists = data.map((v: any) => ({ ...v, ...v.Dulieu }))
           this.dataSource = new MatTableDataSource(this.FilterLists);
           // this.dataSource.sortingDataAccessor = (item, property) => {
           //   switch (property) {
@@ -98,7 +103,7 @@ export class VttechdieutrilistComponent implements OnInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();    
+    this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }

@@ -121,6 +121,9 @@ export class VttechthanhtoanlistComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+  FillDupKhach() {
+       this.FilterLists = findDuplicateOccurrences(this.Lists,'CustPhone');
+  }
   RemoveDup() {
     console.log("remove");
 
@@ -130,5 +133,9 @@ export class VttechthanhtoanlistComponent implements OnInit {
     this.FilterLists.forEach((v:any) => {
      this._VttechthanhtoanService.DeleteVttechthanhtoan(v.id).subscribe(()=>{ this.isDelete = false});
     });
+  }
+  SumToTal(items:any[],field:any)
+  {
+   return items.reduce((acc, obj) => acc + obj[field], 0)||0;
   }
 }

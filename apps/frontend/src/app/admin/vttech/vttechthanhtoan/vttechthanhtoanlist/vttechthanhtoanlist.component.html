@@ -50,6 +50,10 @@
           <span class="p-2 font-bold text-black">
             ({{FilterLists.length}}) Tất Cả
           </span>
+          <button mat-icon-button matTooltip="Lọc Khách">
+            <span class="material-symbols-outlined text-blue-500" (click)="FillDupKhach()">content_copy</span>
+
+          </button>
           <button mat-icon-button>
             <span class="material-symbols-outlined text-blue-500" (click)="FillDup()">content_copy</span>
           </button>
@@ -84,19 +88,27 @@
             <td mat-cell *matCellDef="let row"> {{row.TypeName}} </td>
           </ng-container>
           <ng-container matColumnDef="Paid">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Paid </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Paid
+              {{SumToTal(Lists,'Paid')| number:'1.0-0'}}
+            </th>
             <td mat-cell *matCellDef="let row"> {{row.Paid| number:'1.0-0'}}đ </td>
           </ng-container>
           <ng-container matColumnDef="DiscountAmount">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> DiscountAmount </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> DiscountAmount
+              {{SumToTal(Lists,'DiscountAmount')| number:'1.0-0'}}
+            </th>
             <td mat-cell *matCellDef="let row"> {{row.DiscountAmount| number:'1.0-0'}}đ </td>
           </ng-container>
           <ng-container matColumnDef="DepositAmountUsing">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> DepositAmountUsing </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> DepositAmountUsing
+              {{SumToTal(Lists,'DepositAmountUsing')| number:'1.0-0'}}
+            </th>
             <td mat-cell *matCellDef="let row"> {{row.DepositAmountUsing| number:'1.0-0'}}đ </td>
           </ng-container>
           <ng-container matColumnDef="TotalPaid">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> TotalPaid </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> TotalPaid
+              {{SumToTal(Lists,'TotalPaid')| number:'1.0-0'}}
+            </th>
             <td mat-cell *matCellDef="let row"> {{row.TotalPaid| number:'1.0-0'}}đ </td>
           </ng-container>
           <ng-container matColumnDef="Chinhanh">
