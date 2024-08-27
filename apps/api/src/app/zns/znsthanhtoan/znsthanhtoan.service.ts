@@ -21,9 +21,10 @@ export class ZnsthanhtoanService {
   ) { }
   async createzns(data: any) {
     const Thanhtoans = await this._VttechthanhtoanService.findQuery(data);
+    console.log(Thanhtoans[0]);
     const mergedData = Object.values(Thanhtoans.reduce((acc, obj) => {
-      const { CustPhone,CustCode, Code, Paid,TabCode } = obj;
-      const key = `${CustPhone}_${TabCode}_${Code}_${CustCode}`;
+      const { CustPhone,CustCode, Code, Paid,Created } = obj;
+      const key = `${CustPhone}_${moment(Created).valueOf()}_${CustCode}`;
       if (!acc[key]) {
         acc[key] = { ...obj };
       } else {
@@ -31,11 +32,9 @@ export class ZnsthanhtoanService {
       }
       return acc;
     }, {}));
-    console.log(mergedData.length);
 
-
+    let CountCreate = 0;
     if (mergedData.length > 0) {
-      let CountCreate = 0;
       await Promise.all(mergedData.map(async (v: any, k: any) => {
         const item: any = {};
         item.Dulieu = v;
@@ -61,7 +60,7 @@ export class ZnsthanhtoanService {
         Mota:`[ZNS_THANHTOAN] - Step2 - Create (${CountCreate}) Thanh Toan - ${moment().format('HH:mm:ss DD/MM/YYYY')}`}
      this._LoggerService.create(logger)
     }
-    return mergedData;
+    return CountCreate;
   }
 
   // async getTemplateData(id: any, token: any) {

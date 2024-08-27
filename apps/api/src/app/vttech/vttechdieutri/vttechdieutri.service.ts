@@ -107,6 +107,8 @@ export class VttechdieutriService {
 
 
   async getdieutri(item: any = {}) {
+    console.log(item);
+
     const logger ={
       Title:'Vttech Điều Trị',
       Slug:'vttechdieutri',
@@ -123,9 +125,9 @@ export class VttechdieutriService {
         },
       });
       const data = response.data;
+      let CountCreate=0
       if (data.Data.length > 0) {
         console.log(data.Data.length);
-      let CountCreate=0
       await Promise.all(data.Data.map(async (v: any, k: any) => {
           const item: any = {};
           item.Dulieu = v;
@@ -141,8 +143,8 @@ export class VttechdieutriService {
             CountCreate = CountCreate + 1;
           }
       }));
-      return CountCreate;
     }
+    return CountCreate;
 
     //   const logger ={
     //     Title:'Vttech Điều Trị',

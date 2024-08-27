@@ -85,7 +85,7 @@ export class VttechthanhtoanService {
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
-    const data = items.map((v: any) => ({id:v.id,...v.Dulieu}))
+    const data = items.map((v: any) => ({id:v.id,...v.Dulieu,Created:v.Created}))
     return data
     // const mergedData = Object.values(data.reduce((acc, obj) => {
     //   const { CustPhone,CustCode, Code, Paid } = obj;
@@ -129,37 +129,63 @@ export class VttechthanhtoanService {
         },
       });
       const data = response.data;
-      const ListItems:any=[]
-      await Promise.all(data.Data.map(async (v: any) => {
-        const check = await this.findby(v);
-        // const check = await this.findby({idVttech:v.ID,CustPhone:v.CustPhone,Code:v.Code});
-        if (!check) {
-          ListItems.push(v);
-        }
-      }));
       const logger ={
         Title:'Vttech Thanh Toán',
         Slug:'vttechthanhtoan',
         Action:'create',
-        Mota:`[VTTECH_THANHTOAN] - Đã Lấy (${JSON.stringify(ListItems.length)}) dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
+        Mota:`[VTTECH_THANHTOAN] - Đã Lấy (${JSON.stringify(data.Data.length)}) dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
      this._LoggerService.create(logger)
+      let CountCreate=0
+      if (data.Data.length > 0) {
+        console.log(data.Data.length);
+      await Promise.all(data.Data.map(async (v: any, k: any) => {
+        const item: any = {};
+        item.Dulieu = v;
+        item.idVttech = v.ID;
+        item.CustPhone = v.CustPhone;
+        item.CustCode = v.CustCode;
+        item.BranchID = v.BranchID;
+        item.Code = v.Code;
+        item.Created = moment(v.Created).format('YYYY-MM-DD')
+          const isCreate = await this.create(item);
+          if (isCreate.error != 1001) {
+            CountCreate = CountCreate + 1;
+          }
+      }));
+    }
+    return CountCreate;
 
-      if (ListItems.length > 0) {
-        ListItems.forEach(async (v: any, k: any) => {
-          const item: any = {};
-          item.Dulieu = v;
-          item.idVttech = v.ID;
-          item.CustPhone = v.CustPhone;
-          item.CustCode = v.CustCode;
-          item.BranchID = v.BranchID;
-          item.Code = v.Code;
-          item.Created = moment(v.Created).format('YYYY-MM-DD');
-          setTimeout(async () => {
-            const result = await this.create(item);
-          }, k * 1000);
-        });
-      }
-      return ListItems;
+    //   const ListItems:any=[]
+    //   await Promise.all(data.Data.map(async (v: any) => {
+    //     const check = await this.findby(v);
+    //     // const check = await this.findby({idVttech:v.ID,CustPhone:v.CustPhone,Code:v.Code});
+    //     if (!check) {
+    //       ListItems.push(v);
+    //     }
+    //   }));
+    //   const logger ={
+    //     Title:'Vttech Thanh Toán',
+    //     Slug:'vttechthanhtoan',
+    //     Action:'create',
+    //     Mota:`[VTTECH_THANHTOAN] - Đã Lấy (${JSON.stringify(ListItems.length)}) dữ liệu : ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
+    //  this._LoggerService.create(logger)
+
+      // if (ListItems.length > 0) {
+      //   ListItems.forEach(async (v: any, k: any) => {
+      //     const item: any = {};
+      //     item.Dulieu = v;
+      //     item.idVttech = v.ID;
+      //     item.CustPhone = v.CustPhone;
+      //     item.CustCode = v.CustCode;
+      //     item.BranchID = v.BranchID;
+      //     item.Code = v.Code;
+      //     item.Created = moment(v.Created).format('YYYY-MM-DD');
+      //     setTimeout(async () => {
+      //       const result = await this.create(item);
+      //     }, k * 1000);
+      //   });
+      // }
+      // return ListItems;
     } catch (error) {
       console.error(error);
       const logger ={
