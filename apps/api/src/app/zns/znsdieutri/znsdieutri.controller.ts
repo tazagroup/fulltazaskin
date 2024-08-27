@@ -9,7 +9,7 @@ export class ZnsdieutriController {
     private readonly znsdieutriService:ZnsdieutriService,
     private readonly _LoggerService:LoggerService,
   ) {}
-  @Interval((24)*60*1000)
+  @Interval((40)*60*1000)
   @Post('createzns')
   createzns(@Body() data: any={}) {
     console.error('Create Diều Trị 2',moment().format('YYYY-MM-DD HH:mm:ss'));

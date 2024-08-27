@@ -9,7 +9,7 @@ export class ZnsthanhtoanController {
     private readonly znsthanhtoanService:ZnsthanhtoanService,
     private readonly _LoggerService:LoggerService,
   ) {}
-  @Interval(26*60*1000)
+  @Interval(45*60*1000)
   @Post('createzns')
   createzns(@Body() data: any={}) {
     console.error('Tạo ZNS Thanh Toán 2',moment().format('YYYY-MM-DD HH:mm:ss'));

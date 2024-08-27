@@ -57,7 +57,7 @@ export class VttechthanhtoanController {
   remove(@Param('id') id: string) {
     return this.vttechthanhtoanService.remove(id);
   }
-  @Interval(22*60*1000)
+  @Interval(35*60*1000)
   @Get('getauto')
   async getAuto() {
     console.error('Get Thanh Toán 1',moment().format('YYYY-MM-DD HH:mm:ss'));
