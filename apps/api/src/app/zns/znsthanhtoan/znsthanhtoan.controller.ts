@@ -31,8 +31,8 @@ export class ZnsthanhtoanController {
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     console.error('Gửi ZNS Thanh Toán Auto 3',moment().format('YYYY-MM-DD HH:mm:ss'));
-    data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).subtract(1, 'day').format('YYYY-MM-DD') : moment().subtract(1, 'day').format('YYYY-MM-DD');
-    data.createdEnd = data.createdEnd ? moment(data.createdEnd).add(1, 'day').format('YYYY-MM-DD') : moment().add(1, 'day').format('YYYY-MM-DD');
+    data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+    data.createdEnd = data.createdEnd ? moment(data.createdEnd).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
     data.Status = 0;
     data.pageSize =  9999;
     if(this.CheckTime() == true){
