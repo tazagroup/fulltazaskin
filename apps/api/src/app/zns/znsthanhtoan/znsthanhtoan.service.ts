@@ -24,7 +24,7 @@ export class ZnsthanhtoanService {
     console.log(Thanhtoans[0]);
     const mergedData = Object.values(Thanhtoans.reduce((acc, obj) => {
       const { CustPhone,CustCode, Code, Paid,Created } = obj;
-      const key = `${CustPhone}_${moment(Created).valueOf()}_${CustCode}`;
+      const key = `${CustPhone}_${moment(Created).valueOf()}_${Code}_${CustCode}`;
       if (!acc[key]) {
         acc[key] = { ...obj };
       } else {
