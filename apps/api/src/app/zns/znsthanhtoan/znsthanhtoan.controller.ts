@@ -15,7 +15,7 @@ export class ZnsthanhtoanController {
     console.error('Tạo ZNS Thanh Toán 2',moment().format('YYYY-MM-DD HH:mm:ss'));
     data.pageSize =  9999;
     data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
-    data.createdEnd = moment(data.CreatedEnd).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
+    data.CreatedEnd = moment(data.CreatedEnd).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
     // data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     // data.createdEnd?data.createdEnd = moment(data.CreatedEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     return this.znsthanhtoanService.createzns(data);
