@@ -9,7 +9,7 @@ export class ZnsthanhtoanController {
     private readonly znsthanhtoanService:ZnsthanhtoanService,
     private readonly _LoggerService:LoggerService,
   ) {}
-  @Interval(12*60*1000)
+  @Interval(36*60*1000)
   @Post('createzns')
   createzns(@Body() data: any={}) {
     console.error('Tạo ZNS Thanh Toán 2',moment().format('YYYY-MM-DD HH:mm:ss'));
@@ -29,7 +29,7 @@ export class ZnsthanhtoanController {
     console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
 
   }
-  //@Interval(1440000)
+  @Interval(40*60*1000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     console.error('Gửi ZNS Thanh Toán Auto 3',moment().format('YYYY-MM-DD HH:mm:ss'));
@@ -61,7 +61,7 @@ export class ZnsthanhtoanController {
     }
     else  return "Không thể gửi tin nhắn vào thời gian này";
   }
-  //@Cron('00 45 21 * * *')
+  @Cron('00 45 21 * * *')
   @Post('thanhtoanenday')
   async sendznsautoCron(@Body() data: any={}) {
     console.error('Gửi ZNS Thanh Toán Auto Cuối Ngày 4',moment().format('YYYY-MM-DD HH:mm:ss'));
