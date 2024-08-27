@@ -15,9 +15,9 @@ export class ZnsthanhtoanController {
     console.error('Tạo ZNS Thanh Toán 2',moment().format('YYYY-MM-DD HH:mm:ss'));
     data.pageSize =  9999;
     data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
-    data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
+    data.createdEnd = moment(data.CreatedEnd).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
     // data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
-    // data.createdEnd?data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+    // data.createdEnd?data.createdEnd = moment(data.CreatedEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     return this.znsthanhtoanService.createzns(data);
   }
   @Post('sendzns')
@@ -34,9 +34,9 @@ export class ZnsthanhtoanController {
   async sendznsauto(@Body() data: any={}) {
     console.error('Gửi ZNS Thanh Toán Auto 3',moment().format('YYYY-MM-DD HH:mm:ss'));
     data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
-    data.createdEnd = moment(data.createdEnd).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
+    data.createdEnd = moment(data.CreatedEnd).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
     // data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
-    // data.createdEnd = data.createdEnd ? moment(data.createdEnd).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+    // data.createdEnd = data.createdEnd ? moment(data.CreatedEnd).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
     data.Status = 0;
     data.pageSize =  9999;
     if(this.CheckTime() == true){
