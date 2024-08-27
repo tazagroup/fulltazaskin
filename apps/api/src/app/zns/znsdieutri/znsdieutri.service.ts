@@ -21,6 +21,7 @@ export class ZnsdieutriService {
     private _RediscacheService: RediscacheService,
   ) { }
   async createzns(data: any) {
+    console.error(data);
     const Dieutris = await this._VttechdieutriService.findQuery(data)
     console.error(Dieutris.length);
 
