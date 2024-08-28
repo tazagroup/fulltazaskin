@@ -13,6 +13,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
+import { VttechdieutrilistComponent } from '../vttechdieutri/vttechdieutrilist/vttechdieutrilist.component';
+import { VttechkhachhanglistComponent } from './vttechkhachhanglist/vttechkhachhanglist.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -29,13 +31,13 @@ import { MatTableModule } from '@angular/material/table';
     MatPaginatorModule,
     MatTableModule,
     RouterModule.forChild([
-      { path: 'vttech', component: VttechkhachhangComponent},
+      { path: 'vttech', component: VttechkhachhanglistComponent},
       // {
       //   path: '', component: VttechkhachhangComponent,
       //   // children: [{
       //   //   path: ':id', component: VttechkhachhangDetailComponent
       //   // }]
-    
+
       // }
     ])
   ],

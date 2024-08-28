@@ -120,6 +120,8 @@ export class VttechthanhtoanlistComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.FilterLists);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    console.log(this.FilterLists);
+
   }
   FillDupKhach() {
        this.FilterLists = findDuplicateOccurrences(this.Lists,'CustPhone');

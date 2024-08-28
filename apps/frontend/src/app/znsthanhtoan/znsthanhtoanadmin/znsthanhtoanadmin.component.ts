@@ -92,6 +92,14 @@ export class ZnsthanhtoanadminComponent implements OnInit {
             });
             this.FilterLists = this.Lists = data;
             this.dataSource = new MatTableDataSource(this.FilterLists);
+            console.log(this.FilterLists);
+            this.dataSource.sortingDataAccessor = (item, property) => {
+              switch(property) {
+                case 'ZNS': return item.ZNSData.status;
+                case 'SMS': return item.SMSData.status;
+                default: return item[property];
+              }
+            };
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
           }
@@ -99,13 +107,18 @@ export class ZnsthanhtoanadminComponent implements OnInit {
       }
     });
   }
+
   FillDup() {
-    this.isDelete = true
-    this.FilterLists = findDuplicateOccurrences(this.Lists,'Code');
+    this.isDelete = !this.isDelete
+    if(this.isDelete)
+    {
+      this.FilterLists = findDuplicateOccurrences(this.Lists,'Code');
+    } else {
+      this.FilterLists = this.Lists
+    }
     this.dataSource = new MatTableDataSource(this.FilterLists);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    console.log(this.FilterLists);
   }
   RemoveDup() {
     this.FilterLists = mergeNoDup(this.FilterLists,this.FilterLists,'Code')

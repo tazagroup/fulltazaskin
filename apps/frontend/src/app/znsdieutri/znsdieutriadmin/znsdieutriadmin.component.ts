@@ -92,24 +92,6 @@ export class ZnsdieutriadminComponent implements OnInit {
         }
 
       })
-
-    // this._ZnsdieutriService.getAllZnsdieutris().subscribe((data)=>{
-    //   console.log(data);
-    //   this.FilterLists = this.Lists = data
-    //   this.dataSource = new MatTableDataSource(data);
-    //   this.dataSource.sortingDataAccessor = (item, property) => {
-    //     switch(property) {
-    //       case 'Diachi': return item.Giohangs.Khachhang.Diachi;
-    //       case 'Hoten': return item.Giohangs.Khachhang.Hoten;
-    //       case 'SDT': return item.Giohangs.Khachhang.SDT;
-    //       case 'Hinhthuc': return item.Dieutri.Hinhthuc;
-    //       default: return item[property];
-    //     }
-    //   };
-    //   this.dataSource.paginator = this.paginator;
-    //   this.dataSource.sort = this.sort;
-    // })
-
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -121,8 +103,13 @@ export class ZnsdieutriadminComponent implements OnInit {
 
   }
   FillDup() {
-    this.isDelete = true
-    this.FilterLists = findDuplicateOccurrences(this.Lists,'CustPhone');
+    this.isDelete = !this.isDelete
+    if(this.isDelete)
+    {
+      this.FilterLists = findDuplicateOccurrences(this.Lists,'CustPhone');
+    } else {
+      this.FilterLists = this.Lists
+    }
     this.dataSource = new MatTableDataSource(this.FilterLists);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

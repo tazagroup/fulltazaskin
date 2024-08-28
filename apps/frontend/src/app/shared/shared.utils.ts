@@ -4,7 +4,7 @@ export const Style:any={0:'text-white bg-blue-500',1:'text-white bg-green-500',2
 export const Style1:any={0:'font-bold text-blue-500',1:'font-bold text-green-500',2:'font-bold text-purple-500'}
 export function GetImage(data:any) {
   if(data)
-  {   
+  {
   //  const checkdomain =  data?.toLowerCase().includes('hderma')
    const checkhttp =  data?.toLowerCase().includes('http')
    const result = checkhttp?data:`${environment.ImageURL+data}`
@@ -23,7 +23,7 @@ export interface SearchParams {
   take?: number;
   skip?: number;
 }
-export const LIST_CHI_NHANH:any[] = 
+export const LIST_CHI_NHANH:any[] =
 [
   {
     id: '268b7a06-d2c5-4c98-af1d-334144ae280f',
@@ -380,7 +380,7 @@ export function findDuplicateOccurrences(arr:any,field:any) {
     return counts;
   }, {});
 
-  return arr.filter((obj:any) => idCounts[obj[field]] > 1);
+  return arr.filter((obj:any) => idCounts[obj[field]] >1);
 }
 
 

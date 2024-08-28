@@ -1,3 +1,247 @@
-<p>
-  vttechkhachhanglist works!
-</p>
+<mat-drawer-container class="example-container w-full h-full p-8" autosize>
+  <mat-drawer #drawer mode="side" class="!flex flex-col flex-auto min-w-0 relative h-full w-2/3" position="end">
+      <div class="relative flex flex-col h-full w-full overflow-auto">
+          <!-- <router-outlet></router-outlet> -->
+      </div>
+  </mat-drawer>
+  <mat-drawer-content class="!flex flex-col space-y-3 flex-auto min-w-0 relative bg-white p-4">
+    <div class="grid lg:grid-cols-3 grid-cols-2 gap-2">
+      <mat-form-field appearance="outline">
+        <mat-label>Tìm Kiếm</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Tìm Kiếm" #input>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Chọn Khoảng Thời Gian</mat-label>
+        <mat-date-range-input [rangePicker]="rangePicker">
+          <input matStartDate placeholder="Từ Ngày" [(ngModel)]="SearchParams.CreatedBegin"
+            [ngModelOptions]="{standalone: true}">
+          <input matEndDate placeholder="Đến Ngày" [(ngModel)]="SearchParams.CreatedEnd"
+            [ngModelOptions]="{standalone: true}">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker #rangePicker>
+          <mat-date-range-picker-actions>
+            <button mat-button matDateRangePickerCancel>Huỷ</button>
+            <button mat-raised-button color="primary" matDateRangePickerApply (click)="ChangeSearchParams()">Đồng
+              ý</button>
+          </mat-date-range-picker-actions>
+        </mat-date-range-picker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Chi Nhánh</mat-label>
+        <mat-select (selectionChange)="ChangeSearchParams()" class="w-full" [(ngModel)]="SearchParams.BranchID"
+          [ngModelOptions]="{standalone: true}">
+          <mat-option [value]="9999">Tất Cả</mat-option>
+          <mat-option [value]="item.idVttech" *ngFor="let item of ListChiNhanh">{{item.Title}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Trạng Thái</mat-label>
+        <mat-select (selectionChange)="ChangeSearchParams()" class="w-full" [(ngModel)]="SearchParams.Status"
+          [ngModelOptions]="{standalone: true}">
+          <mat-option [value]="9999">Tất Cả</mat-option>
+          <mat-option [value]="item.key" *ngFor="let item of ListStatus|keyvalue">{{item.value}}</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+      <div class="col-span-1 flex flex-row space-x-2 items-center">
+        <span class="p-2 font-bold text-black">
+          ({{FilterLists.length}}) Tất Cả
+        </span>
+        <button mat-icon-button matTooltip="Lọc Khách">
+          <span class="material-symbols-outlined text-blue-500" (click)="FillDupKhach()">content_copy</span>
+
+        </button>
+        <button mat-icon-button>
+          <span class="material-symbols-outlined text-blue-500" (click)="FillDup()">content_copy</span>
+        </button>
+        <button mat-icon-button *ngIf="isDelete">
+          <span class="material-symbols-outlined text-blue-500" (click)="RemoveDup()">delete</span>
+        </button>
+      </div>
+
+    </div>
+
+
+    <div class="w-full flex flex-col space-y-2 overflow-auto">
+      <table class="border w-full" mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="Code">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
+          <td mat-cell *matCellDef="let row"> {{row.Code}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+          <td mat-cell *matCellDef="let row"> {{row.Name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Phone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
+          <td mat-cell *matCellDef="let row"> {{row.Phone}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Phone2">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone2 </th>
+          <td mat-cell *matCellDef="let row"> {{row.Phone2}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Birthday">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Birthday </th>
+          <td mat-cell *matCellDef="let row"> {{row.Birthday|date:'dd/MM/yyyy'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Gender">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>
+          <td mat-cell *matCellDef="let row"> {{row.Gender}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Address">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+          <td mat-cell *matCellDef="let row"> {{row.Address}} </td>
+        </ng-container>
+        <ng-container matColumnDef="CustomerSource">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> CustomerSource </th>
+          <td mat-cell *matCellDef="let row"> {{row.CustomerSource}} </td>
+        </ng-container>
+        <ng-container matColumnDef="CustomerGroup">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> CustomerGroup </th>
+          <td mat-cell *matCellDef="let row"> {{row.CustomerGroup}} </td>
+        </ng-container>
+        <ng-container matColumnDef="CreatedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> CreatedDate </th>
+          <td mat-cell *matCellDef="let row"> {{row.CreatedDate |date:'HH:mm:ss dd/MM/yyyy'}} </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="CustPhone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> CustPhone </th>
+          <td mat-cell *matCellDef="let row"> {{row.CustPhone}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Tabcode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Tabcode </th>
+          <td mat-cell *matCellDef="let row"> {{row.TabCode}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Code">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
+          <td mat-cell *matCellDef="let row"> {{row.Code}} </td>
+        </ng-container>
+        <ng-container matColumnDef="TypeName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> TypeName </th>
+          <td mat-cell *matCellDef="let row"> {{row.TypeName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Paid">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Paid
+            {{SumToTal(Lists,'Paid')| number:'1.0-0'}}
+          </th>
+          <td mat-cell *matCellDef="let row"> {{row.Paid| number:'1.0-0'}}đ </td>
+        </ng-container>
+        <ng-container matColumnDef="DiscountAmount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> DiscountAmount
+            {{SumToTal(Lists,'DiscountAmount')| number:'1.0-0'}}
+          </th>
+          <td mat-cell *matCellDef="let row"> {{row.DiscountAmount| number:'1.0-0'}}đ </td>
+        </ng-container>
+        <ng-container matColumnDef="DepositAmountUsing">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> DepositAmountUsing
+            {{SumToTal(Lists,'DepositAmountUsing')| number:'1.0-0'}}
+          </th>
+          <td mat-cell *matCellDef="let row"> {{row.DepositAmountUsing| number:'1.0-0'}}đ </td>
+        </ng-container>
+        <ng-container matColumnDef="TotalPaid">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> TotalPaid
+            {{SumToTal(Lists,'TotalPaid')| number:'1.0-0'}}
+          </th>
+          <td mat-cell *matCellDef="let row"> {{row.TotalPaid| number:'1.0-0'}}đ </td>
+        </ng-container>
+        <ng-container matColumnDef="Chinhanh">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Chi Nhánh </th>
+          <td mat-cell *matCellDef="let row"> {{row.Chinhanh}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Created">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Created </th>
+          <td mat-cell *matCellDef="let row"> {{row.Created|date:'dd/MM/yyyy'}} </td>
+        </ng-container> -->
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">Không Tìm Thấy "{{input.value}}"</td>
+        </tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 50, FilterLists.length]" pageSize="10"></mat-paginator>
+    </div>
+
+
+
+
+      <!-- <div class="relative border-b-2 flex flex-col">
+          <div class="flex flex-row space-x-2 justify-between items-center p-2">
+            <div class="flex flex-row space-x-2 items-center">
+                <span class="material-symbols-outlined text-xl" matTooltip="Tạo mới">add_circle</span>
+            </div>
+            <mat-form-field appearance="outline" class="w-full text-xs">
+                  <mat-label>Tiêu Đề</mat-label>
+                  <input matInput (keyup)="applyFilter($event)" class="w-full" placeholder="Mô Tả">
+                  <span matPrefix class="material-symbols-outlined mr-2">search</span>
+            </mat-form-field>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <span class="material-symbols-outlined">more_vert</span>
+             </button>
+              <mat-menu #menu="matMenu">
+                    <button mat-menu-item>
+                        <div class="flex flex-row space-x-2 items-center justify-center">
+                            <span class="material-symbols-outlined text-xl" matTooltip="Tùy Chỉnh">tune</span>
+                            <span class="text-sm">Cấu Hình</span>
+                        </div>
+                    </button>
+                    <button mat-menu-item>
+                        <div class="flex flex-row space-x-2 items-center justify-center">
+                            <span class="material-symbols-outlined text-xl" matTooltip="Lấy Mẫu">file_download</span>
+                            <span class="text-sm">Download</span>
+                        </div>
+                    </button>
+                    <button mat-menu-item>
+                        <div class="flex flex-row space-x-2 items-center justify-center">
+                            <span class="material-symbols-outlined text-xl" matTooltip="Upload File">file_upload</span>
+                            <span class="text-sm">Upload</span>
+                        </div>
+                    </button>
+                </mat-menu>
+          </div>
+        </div>
+      <div class="relative flex flex-col h-full w-full overflow-auto">
+          <div class="flex flex-col">
+              <div [routerLink]="[item.id]" routerLinkActive="router-link-active" (click)="drawer.open()"
+                  class="flex flex-row justify-between items-center p-4 hover:bg-gray-200"
+                  *ngFor="let item of FilterLists; let i = index">
+                  <div class="flex flex-row space-x-2 items-center justify-between w-full">
+                      <div class="flex flex-col space-y-2">
+                          <span>{{item.Tieude}} </span>
+                          <span class="text-xs italic">Oldlink : {{item.Oldlink}}</span>
+                          <span class="text-xs italic">Newlink : {{item.Newlink}}</span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div> -->
+  </mat-drawer-content>
+</mat-drawer-container>
+<ng-template #dialogTemplate>
+  <div class="min-w-[672px]">
+  <div mat-dialog-title>Thêm Mới</div>
+  <div mat-dialog-content>
+      <div class="flex flex-col w-full space-y-4 p-4">
+          <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Tiêu Đề</mat-label>
+          <input matInput [(ngModel)]="Detail.Tieude" [ngModelOptions]="{standalone: true}" placeholder="Tiêu Đề">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Oldlink</mat-label>
+          <input matInput [(ngModel)]="Detail.Oldlink" [ngModelOptions]="{standalone: true}" placeholder="Oldlink">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Newlink</mat-label>
+          <input matInput [(ngModel)]="Detail.Newlink" [ngModelOptions]="{standalone: true}" placeholder="Newlink">
+          </mat-form-field>
+          </div>
+  </div>
+  <div mat-dialog-actions class="justify-center">
+      <button mat-button class="bg-red-400 hover:bg-red-600 text-white" mat-dialog-close="false">Huỷ</button>
+      <button mat-button class="bg-blue-400 hover:bg-blue-600 text-white" mat-dialog-close="true">Đồng Ý</button>
+  </div>
+</div>
+</ng-template>

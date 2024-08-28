@@ -38,10 +38,10 @@ import { VttechdieutrilistComponent } from './vttechdieutrilist/vttechdieutrilis
       { path: 'vttech', component: VttechdieutrilistComponent},
       { path: 'zns', component: ZnsdieutriadminComponent},
       // {
-      //   path: '', component: VttechdieutrilistComponent,    
+      //   path: '', component: VttechdieutrilistComponent,
       // }
       // {
-      //   path: '', component: VttechdieutriComponent,    
+      //   path: '', component: VttechdieutriComponent,
       // }
     ])
   ],
