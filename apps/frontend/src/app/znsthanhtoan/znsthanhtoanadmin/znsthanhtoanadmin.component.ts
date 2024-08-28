@@ -120,6 +120,12 @@ export class ZnsthanhtoanadminComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+  FillDupPhone() {
+    this.FilterLists = findDuplicateOccurrences(this.Lists,'CustPhone');
+    this.dataSource = new MatTableDataSource(this.FilterLists);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
   RemoveDup() {
     this.FilterLists = mergeNoDup(this.FilterLists,this.FilterLists,'Code')
     this.FilterLists.forEach((v:any) => {
