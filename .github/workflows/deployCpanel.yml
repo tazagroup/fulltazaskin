@@ -26,4 +26,3 @@ jobs:
           password: '@Taza#Group*2020'
           local-dir: ./dist/apps/frontend/  # <-- Specify the local "build" folder
           server-dir: /tazaskinclinic/zalo/  # Destination on server
-          
