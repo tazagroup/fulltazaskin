@@ -16,6 +16,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ChinhanhService } from '../../../cauhinh/chinhanh/chinhanh.service';
 import * as moment from 'moment';
+import { findDuplicateOccurrences, mergeNoDup } from 'apps/frontend/src/app/shared/shared.utils';
 @Component({
   selector: 'app-vttechdieutrilist',
   standalone: true,
@@ -41,6 +42,7 @@ export class VttechdieutrilistComponent implements OnInit {
   Lists: any[] = []
   FilterLists: any[] = []
   Sitemap: any = { loc: '', priority: '' }
+  isDelete:boolean = false
   @ViewChild('drawer', { static: true }) drawer!: MatDrawer;
   SearchParams: any = {
     CreatedBegin: moment().format('YYYY-MM-DD'),
@@ -117,5 +119,35 @@ export class VttechdieutrilistComponent implements OnInit {
   //     }
   //   });
   }
+  FillDup() {
+    this.isDelete = !this.isDelete
+    if(this.isDelete)
+    {
+      this.FilterLists = findDuplicateOccurrences(this.Lists,'Phone');
+    } else {
+      this.FilterLists = this.Lists
+    }
+    console.log(this.FilterLists);
+    this.dataSource = new MatTableDataSource(this.FilterLists);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    console.log(this.FilterLists);
 
+  }
+  FillDupKhach() {
+    this.FilterLists = findDuplicateOccurrences(this.Lists,'Phone2');
+    this.dataSource = new MatTableDataSource(this.FilterLists);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+  RemoveDup() {
+    console.log("remove");
+
+    this.FilterLists = mergeNoDup(this.FilterLists,this.FilterLists,'Checkdup')
+    console.log(this.FilterLists);
+
+    this.FilterLists.forEach((v:any) => {
+     this._VttechdieutriService.DeleteVttechdieutri(v.id).subscribe(()=>{ this.isDelete = false});
+    });
+  }
 }
