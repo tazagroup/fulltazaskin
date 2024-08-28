@@ -10,7 +10,6 @@
         {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
         const raw = JSON.stringify({
             "Name": "Taza",
             "Password": "1b9287d492b256x7taza",
@@ -31,6 +30,8 @@
         fetch("http://localhost:3333/vttechkhachhang/getkhachhang", requestOptions)
             .then(response => response.json())
             .then(result => {
+                console.log(result);
+
                     // Update the div with the result
                     const resultDiv = document.getElementById('result');
                     resultDiv.innerHTML += `\n <li> ${date}: - ${result.TotalDatas} </li>`;
@@ -63,7 +64,7 @@ function addDaysToDate(startDate, numberOfDays) {
 }
 
 // Example usage:
-const startDate = '2024-03-11';
+const startDate = '2019-01-01';
 const daysToAdd =366; // Add one year's worth of days
 
 const dates = addDaysToDate(startDate, daysToAdd);

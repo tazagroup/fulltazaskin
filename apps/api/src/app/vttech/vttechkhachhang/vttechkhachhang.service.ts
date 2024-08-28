@@ -55,10 +55,10 @@ export class VttechkhachhangService {
   async findQuery(params: any) {
     console.error(params);
     const queryBuilder = this.VttechkhachhangRepository.createQueryBuilder('vttechkhachhang');
-    if (params.Batdau && params.Ketthuc) {
-      queryBuilder.andWhere('vttechkhachhang.CreateAt BETWEEN :startDate AND :endDate', {
-        startDate: params.Batdau,
-        endDate: params.Ketthuc,
+    if (params.CreatedBegin && params.CreatedEnd) {
+      queryBuilder.andWhere('vttechkhachhang.CreatedDate BETWEEN :startDate AND :endDate', {
+        startDate: params.CreatedBegin,
+        endDate: params.CreatedEnd,
       });
     }
     if (params.Title) {
@@ -68,9 +68,9 @@ export class VttechkhachhangService {
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
-    console.log(items, totalCount);
-
-    return { items, totalCount };
+   console.log(items, totalCount);
+    const result = items.map((v:any)=>({id:v.id,...v.Dulieu}))
+    return result;
   }
   async update(id: string, UpdateVttechkhachhangDto: any) {
     this.VttechkhachhangRepository.save(UpdateVttechkhachhangDto);

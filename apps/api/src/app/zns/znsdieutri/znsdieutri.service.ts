@@ -23,7 +23,8 @@ export class ZnsdieutriService {
   async createzns(data: any) {
     console.error(data);
     const Dieutris = await this._VttechdieutriService.findQuery(data)
-    console.error(Dieutris.length);
+    // console.error(Dieutris.length);
+    console.log('UNIDIEUTRI1',Dieutris[0]);
     if (Dieutris.length > 0) {
       const uniqueDieutris = Dieutris.filter((obj, index, self) =>
         self.findIndex(other => moment(other.Created).isSame(moment(obj.Created)) && other.CustPhone == obj.CustPhone && other.BranchID == obj.BranchID) == index
@@ -36,37 +37,25 @@ export class ZnsdieutriService {
         Mota: `[ZNS_DIEUTRI] - Step2 - Create (${uniqueDieutris.length}) Dieu Tri - ${moment().format('HH:mm:ss DD/MM/YYYY')}`
       }
       this._LoggerService.create(logger)
-
-
-      // uniqueDieutris.forEach((v: any, k: any) => {
-      //   const item: any = {}
-      //   item.idVttech = v.idVttech
-      //   item.idDieutri = v.id
-      //   item.CustPhone = v.CustPhone
-      //   item.CustName = v.CustName
-      //   item.BranchID = v.BranchID
-      //   item.Created = moment(v.Created).format('YYYY-MM-DD')
-      //   setTimeout(() => {
-      //     this.create(item)
-      //   }, k * 1000);
-      // });
-      // return uniqueDieutris.length
-
       let CountCreate=0
       if (uniqueDieutris.length > 0) {
-        console.log(uniqueDieutris.length);
+        console.log('UNIDIEUTRI',uniqueDieutris[0]);
+
       await Promise.all(uniqueDieutris.map(async (v: any, k: any) => {
         const item: any = {}
         item.idVttech = v.idVttech
         item.idDieutri = v.id
         item.CustPhone = v.CustPhone
+        item.CustCode = v.CustCode
         item.CustName = v.CustName
         item.BranchID = v.BranchID
-        item.Created = moment(v.Created).format('YYYY-MM-DD')
-          const isCreate = await this.create(item);
-          if (isCreate.error != 1001) {
-            CountCreate = CountCreate + 1;
-          }
+        item.Created = moment(v.Dulieu.CreatedDate).format('YYYY-MM-DD')
+        console.log(item.Created);
+
+        // const isCreate = await this.create(item);
+        //   if (isCreate.error != 1001) {
+        //     CountCreate = CountCreate + 1;
+        //   }
       }));
     }
     return CountCreate;

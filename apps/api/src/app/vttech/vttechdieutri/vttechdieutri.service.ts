@@ -133,6 +133,7 @@ export class VttechdieutriService {
           item.idVttech = convertToZeroMinutesSeconds(v.CreatedDate).getTime();
           item.CustPhone = v.Phone;
           item.CustName = v.Name;
+          item.CustCode = v.Code;
           item.BranchID = v.BranchID;
           item.TabCode = v.Service.TabCode;
           item.TimeIndex = v.Service.TimeIndex;
@@ -144,30 +145,6 @@ export class VttechdieutriService {
       }));
     }
     return CountCreate;
-
-    //   const logger ={
-    //     Title:'Vttech Điều Trị',
-    //     Slug:'vttechdieutri',
-    //     Action:'create',
-    //     Mota:`[VTTECH_DIEUTRI] - Lấy Dữ Liệu Điều Trị Thành Công (${ListItems.length}) - ${moment().format("HH:mm:ss DD/MM/YYYY")}`}
-    //  this._LoggerService.create(logger)
-    //   if (ListItems.length > 0) {
-    //     ListItems.forEach(async (v: any, k: any) => {
-    //       const item: any = {};
-    //       item.Dulieu = v;
-    //       item.idVttech = convertToZeroMinutesSeconds(v.CreatedDate).getTime();
-    //       item.CustPhone = v.Phone;
-    //       item.CustName = v.Name;
-    //       item.BranchID = v.BranchID;
-    //       item.TabCode = v.Service.TabCode;
-    //       item.TimeIndex = v.Service.TimeIndex;
-    //       item.Created = moment(v.CreatedDate).format('YYYY-MM-DD');
-    //       setTimeout(async () => {
-    //         const result = await this.create(item);
-    //       }, k * 1000);
-    //     });
-    //   }
-    //   return ListItems;
     } catch (error) {
       console.error(error);
       const logger ={

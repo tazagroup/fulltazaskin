@@ -53,6 +53,8 @@ export class VttechkhachhangController {
  // @Interval(1800000)
   @Post('getkhachhang')
   async getKhachhang(@Body() data: any) {
+    console.log(data);
+
     let datamau = data;
     if (!data) {
       datamau = {
