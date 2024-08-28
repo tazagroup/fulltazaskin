@@ -27,7 +27,7 @@ export class ZnsdieutriController {
     return this.znsdieutriService.sendzns(data);
   }
   //@Interval(10000)
-  @Interval(55*60*1000)
+  //@Interval(55*60*1000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     console.error('ZNS Điều Trị Auto 3',moment().format('YYYY-MM-DD HH:mm:ss'));
@@ -67,7 +67,7 @@ export class ZnsdieutriController {
     }
   }
 
-  @Cron('00 50 21 * * *')
+  //@Cron('00 50 21 * * *')
   @Post('dieutriendday')
   async sendznsautoCron(@Body() data: any={}) {
     console.error('Gửi ZNS Điều TRị Auto Cuối Ngày 4',moment().format('YYYY-MM-DD HH:mm:ss'));
