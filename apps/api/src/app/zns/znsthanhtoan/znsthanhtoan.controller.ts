@@ -14,7 +14,7 @@ export class ZnsthanhtoanController {
   createzns(@Body() data: any={}) {
     console.error('Tạo ZNS Thanh Toán 2',moment().format('YYYY-MM-DD HH:mm:ss'));
     data.pageSize =  9999;
-    data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
+    data.CreatedBegin = moment(data.CreatedBegin).subtract(1, 'days').format('YYYY-MM-DD') || moment().subtract(1, 'days').format('YYYY-MM-DD');
     data.CreatedEnd = moment(data.CreatedEnd).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
     // data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     // data.createdEnd?data.createdEnd = moment(data.CreatedEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
@@ -29,12 +29,12 @@ export class ZnsthanhtoanController {
     console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
 
   }
-  //@Interval(60*60*1000)
+  @Interval(60*60*1000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     console.error('Gửi ZNS Thanh Toán Auto 3',moment().format('YYYY-MM-DD HH:mm:ss'));
-    data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
-    data.createdEnd = moment(data.CreatedEnd).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
+    data.CreatedBegin = moment(data.CreatedBegin).subtract(1, 'days').format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
+    data.createdEnd = moment(data.CreatedEnd).subtract(1, 'days').format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
     // data.CreatedBegin = data.CreatedBegin ? moment(data.CreatedBegin).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
     // data.createdEnd = data.createdEnd ? moment(data.CreatedEnd).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
     data.Status = 0;
@@ -61,7 +61,7 @@ export class ZnsthanhtoanController {
     }
     else  return "Không thể gửi tin nhắn vào thời gian này";
   }
-  //@Cron('00 45 21 * * *')
+  @Cron('00 45 21 * * *')
   @Post('thanhtoanenday')
   async sendznsautoCron(@Body() data: any={}) {
     console.error('Gửi ZNS Thanh Toán Auto Cuối Ngày 4',moment().format('YYYY-MM-DD HH:mm:ss'));
