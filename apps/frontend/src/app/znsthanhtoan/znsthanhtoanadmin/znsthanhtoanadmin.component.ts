@@ -121,6 +121,8 @@ export class ZnsthanhtoanadminComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
   FillDupPhone() {
+    console.log("CustPhone");
+
     this.FilterLists = findDuplicateOccurrences(this.Lists,'CustPhone');
     this.dataSource = new MatTableDataSource(this.FilterLists);
     this.dataSource.paginator = this.paginator;
