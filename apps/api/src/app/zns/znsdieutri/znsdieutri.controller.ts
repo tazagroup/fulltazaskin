@@ -9,7 +9,7 @@ export class ZnsdieutriController {
     private readonly znsdieutriService:ZnsdieutriService,
     private readonly _LoggerService:LoggerService,
   ) {}
-  @Interval(34*60*1000)
+  @Interval(45*60*1000)
   @Post('createzns')
   createzns(@Body() data: any={}) {
     console.error('Create Diều Trị 2',moment().format('YYYY-MM-DD HH:mm:ss'));
@@ -27,7 +27,7 @@ export class ZnsdieutriController {
     return this.znsdieutriService.sendzns(data);
   }
   //@Interval(10000)
-  @Interval(38*60*1000)
+  @Interval(55*60*1000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     console.error('ZNS Điều Trị Auto 3',moment().format('YYYY-MM-DD HH:mm:ss'));
