@@ -17,18 +17,17 @@ import { AuthModule } from './auth/auth.module';
 import { KhachhangsModule } from './khachhang/khachhang/khachhang.module';
 import { ChitietModule } from './khachhang/chitiet/chitiet.module';
 import { KhachhangdichvuModule } from './khachhang/khachhangdichvu/khachhangdichvu.module';
-import { VttechModule } from './vttech/vttech.module';
-// import { TasksModule } from './tasks/tasks.module';
 import { SmsModule } from './sms/sms.module';
 import { LoggerModule } from './logger/logger.module';
-import { VttechthanhtoanModule } from './vttech/vttechthanhtoan/vttechthanhtoan.module';
 import { ZaloappuudaiModule } from './zaloappuudai/zaloappuudai.module';
-import { ZnsthanhtoanModule } from './zns/znsthanhtoan/znsthanhtoan.module';
-import { ZnsdieutriModule } from './zns/znsdieutri/znsdieutri.module';
 import { ThrottlerModule } from '@nestjs/throttler'
 import { CauhinhchungModule } from './cauhinh/cauhinhchung/cauhinhchung.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
+import { VttechModule } from './vttech/vttech.module';
+import { VttechthanhtoanModule } from './vttech/vttechthanhtoan/vttechthanhtoan.module';
+import { ZnsdieutriModule } from './zns/znsdieutri/znsdieutri.module';
+import { ZnsthanhtoanModule } from './zns/znsthanhtoan/znsthanhtoan.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),

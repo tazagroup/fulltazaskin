@@ -91,5 +91,5 @@
       "style": "scss"
     }
   },
-  "defaultProject": "frontend"
+  "defaultProject": "api"
 }

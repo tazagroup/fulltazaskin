@@ -14,8 +14,8 @@ export class ZnsdieutriController {
   createzns(@Body() data: any={}) {
     console.error('Create Diều Trị 2',moment().format('YYYY-MM-DD HH:mm:ss'));
     data.pageSize =  9999;
-    data.CreatedBegin = moment(data.CreatedBegin).subtract(1, 'days').format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
-    data.CreatedEnd = moment(data.CreatedEnd).subtract(1, 'days').format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
+    data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
+    data.CreatedEnd = moment(data.CreatedEnd).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
 
     // data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     // data.createdEnd?data.createdEnd = moment(data.CreatedEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
@@ -27,12 +27,12 @@ export class ZnsdieutriController {
     return this.znsdieutriService.sendzns(data);
   }
   //@Interval(10000)
-  //@Interval(55*60*1000)
+  @Interval(55*60*1000)
   @Post('sendznsauto')
   async sendznsauto(@Body() data: any={}) {
     console.error('ZNS Điều Trị Auto 3',moment().format('YYYY-MM-DD HH:mm:ss'));
-    data.CreatedBegin = moment(data.CreatedBegin).subtract(1, 'days').format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
-    data.createdEnd = moment(data.CreatedEnd).subtract(1, 'days').format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
+    data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
+    data.createdEnd = moment(data.CreatedEnd).format('YYYY-MM-DD') || moment().format('YYYY-MM-DD');
 
     // data.CreatedBegin?data.CreatedBegin = moment(data.CreatedBegin).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
     // data.createdEnd?data.createdEnd = moment(data.CreatedEnd).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
@@ -67,7 +67,7 @@ export class ZnsdieutriController {
     }
   }
 
-  //@Cron('00 50 21 * * *')
+  @Cron('00 50 21 * * *')
   @Post('dieutriendday')
   async sendznsautoCron(@Body() data: any={}) {
     console.error('Gửi ZNS Điều TRị Auto Cuối Ngày 4',moment().format('YYYY-MM-DD HH:mm:ss'));

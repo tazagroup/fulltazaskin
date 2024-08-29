@@ -21,10 +21,8 @@ export class ZnsdieutriService {
     private _RediscacheService: RediscacheService,
   ) { }
   async createzns(data: any) {
-    console.error(data);
     const Dieutris = await this._VttechdieutriService.findQuery(data)
-    // console.error(Dieutris.length);
-    console.log('UNIDIEUTRI1',Dieutris[0]);
+    console.error(Dieutris.length);
     if (Dieutris.length > 0) {
       const uniqueDieutris = Dieutris.filter((obj, index, self) =>
         self.findIndex(other => moment(other.Created).isSame(moment(obj.Created)) && other.CustPhone == obj.CustPhone && other.BranchID == obj.BranchID) == index
@@ -39,8 +37,6 @@ export class ZnsdieutriService {
       this._LoggerService.create(logger)
       let CountCreate=0
       if (uniqueDieutris.length > 0) {
-        console.log('UNIDIEUTRI',uniqueDieutris[0]);
-
       await Promise.all(uniqueDieutris.map(async (v: any, k: any) => {
         const item: any = {}
         item.idVttech = v.idVttech
@@ -49,13 +45,11 @@ export class ZnsdieutriService {
         item.CustCode = v.CustCode
         item.CustName = v.CustName
         item.BranchID = v.BranchID
-        item.Created = moment(v.Dulieu.CreatedDate).format('YYYY-MM-DD')
-        console.log(item.Created);
-
-        // const isCreate = await this.create(item);
-        //   if (isCreate.error != 1001) {
-        //     CountCreate = CountCreate + 1;
-        //   }
+        item.Created = moment(v.Created).format('YYYY-MM-DD')
+        const isCreate = await this.create(item);
+          if (isCreate.error != 1001) {
+            CountCreate = CountCreate + 1;
+          }
       }));
     }
     return CountCreate;
