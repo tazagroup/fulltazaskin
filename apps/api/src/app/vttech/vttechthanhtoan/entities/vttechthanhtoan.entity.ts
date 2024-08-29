@@ -21,6 +21,8 @@ export class VttechthanhtoanEntity {
     @Column({ type: 'text', collation: 'utf8_general_ci' })
     TabCode: string;
     @Column({ type: 'text', collation: 'utf8_general_ci' })
+    TypeName: string;
+    @Column({ type: 'text', collation: 'utf8_general_ci' })
     BranchID: string;
     @Column({collation: "utf8_general_ci",type:"simple-json",default: () => "('{}')" })
     Dulieu: string

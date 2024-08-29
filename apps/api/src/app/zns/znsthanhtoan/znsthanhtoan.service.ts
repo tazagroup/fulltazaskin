@@ -21,7 +21,6 @@ export class ZnsthanhtoanService {
   ) { }
   async createzns(data: any) {
     const Thanhtoans = await this._VttechthanhtoanService.findQuery(data);
-    console.log(Thanhtoans[0]);
     const mergedData = Object.values(Thanhtoans.reduce((acc, obj) => {
       const { CustPhone,CustCode, Code, Paid,Created } = obj;
       const key = `${CustPhone}_${moment(Created).valueOf()}_${Code}_${CustCode}`;
@@ -47,10 +46,13 @@ export class ZnsthanhtoanService {
         item.idVttech = v.idVttech
         item.Created = moment(v.Created).format('YYYY-MM-DD');
         item.Paid = v.Paid;
-        const isCreate = await this.create(item);
-        // console.error(isCreate);
-        if (isCreate.error != 1001) {
-          CountCreate = CountCreate + 1;
+        if(v.TypeName!="Deposit")
+        {
+          const isCreate = await this.create(item);
+                  // console.error(isCreate);
+          if (isCreate.error != 1001) {
+            CountCreate = CountCreate + 1;
+          }
         }
       }));
       const logger ={
