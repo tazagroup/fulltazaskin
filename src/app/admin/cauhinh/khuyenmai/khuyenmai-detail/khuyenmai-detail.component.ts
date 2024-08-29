@@ -1,0 +1,88 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
+import { KhuyenmaiComponent } from '../khuyenmai.component';
+import { KhuyenmaiService } from '../khuyenmai.service';
+import { EditorComponent } from '@tinymce/tinymce-angular';
+import { UploadService } from 'src/app/shared/upload.service';
+import { GetImage } from 'src/app/shared/shared.utils';
+@Component({
+  selector: 'app-khuyenmai-detail',
+  templateUrl: './khuyenmai-detail.component.html',
+  styleUrls: ['./khuyenmai-detail.component.css']
+})
+export class KhuyenmaiDetailComponent implements OnInit {
+  Detail: any={}
+  List:any[] =[]
+  APITINYMCE= environment.APITINYMCE;
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private _KhuyenmaiComponent: KhuyenmaiComponent,
+    private _KhuyenmaiService: KhuyenmaiService,
+    private _UploadService: UploadService
+
+  ) {}
+  ngOnInit(): void {
+    this._KhuyenmaiService.getAllKhuyenmais().subscribe(data=> this.List= data)
+    this.route.params.subscribe((paramsId) => {
+      const id = paramsId['id'];
+      if (id) {
+        this._KhuyenmaiComponent.drawer.open();
+        this._KhuyenmaiService.getKhuyenmaiById(id).subscribe();
+        this._KhuyenmaiService.khuyenmai$.subscribe((res:any) => {
+          if (res) {
+            console.log(res);
+            this.Detail = res;
+          }
+        });
+      }
+    });
+  }
+  configTiny: EditorComponent['init'] = {
+    menubar: false,
+    resize:true,
+    toolbar_mode: 'sliding',
+    statusbar:false,
+    branding: false,
+    image_advtab: true,
+    autoresize_bottom_margin: 20,
+    autoresize_min_height: 50,
+    height:"400",
+    deprecation_warnings: false,
+    plugins: [
+      'advlist','autolink','lists','link','image','charmap','preview','anchor',
+      'searchreplace','visualblocks','code','fullscreen',
+      'insertdatetime','media','table','code','help'
+    ],
+    toolbar: 'undo redo |fontfamily fontsize blocks | bold italic underline | alignleft aligncenter alignright alignjustify | fullscreen preview code | link image media',
+    default_link_target: '_blank',
+    block_unsupported_drop: true,
+    entity_encoding: 'raw',
+        images_upload_handler: (blobInfo: any) => {
+          const file = blobInfo.blob();
+          const promise = new Promise<string>((resolve, reject) => {
+            this._UploadService.uploadDriver(file).subscribe((res) => {
+              if (res) {
+                resolve(GetImage(res.src));
+              }
+            });
+          });
+          return promise;
+        },
+  };
+  CloseDrawer()
+  {
+    this.router.navigate(['../'], { relativeTo: this.route });
+    this._KhuyenmaiComponent.drawer.close();
+  }
+  Update(data:any)
+  {
+    this._KhuyenmaiService.UpdateKhuyenmai(data).subscribe();
+  }
+  GetUpload(e:any)
+  {
+    this.Detail.Image = e
+    this._KhuyenmaiService.UpdateKhuyenmai(this.Detail).subscribe();
+  }
+}

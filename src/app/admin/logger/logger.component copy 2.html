@@ -1,0 +1,83 @@
+<mat-drawer-container class="example-container w-full h-full" autosize>
+  <mat-drawer #drawer mode="side" class="!flex flex-col flex-auto min-w-0 relative h-full w-2/3" position="end">
+    <div class="relative flex flex-col h-full w-full overflow-auto">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content class="!flex flex-col flex-auto min-w-0 relative bg-white !h-[90vh]">
+    <div class="w-full flex flex-col p-4 justify-center items-center space-y-2">
+      <div class="grid lg:grid-cols-3 grid-cols-2 gap-2">
+        <mat-form-field appearance="outline" class="lg:text-sm text-xs lg:col-span-1 col-span-2">
+          <mat-label>Tìm Kiếm</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Mô Tả">
+          <span matPrefix class="material-symbols-outlined mr-2">search</span>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="lg:text-sm text-xs">
+          <mat-label>Chọn Khoảng Thời Gian</mat-label>
+          <mat-date-range-input [rangePicker]="rangePicker">
+            <input matStartDate placeholder="Từ Ngày" [(ngModel)]="SearchParams.Batdau" [ngModelOptions]="{standalone: true}">
+            <input matEndDate placeholder="Đến Ngày" [(ngModel)]="SearchParams.Ketthuc" [ngModelOptions]="{standalone: true}">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+          <mat-date-range-picker #rangePicker>
+            <mat-date-range-picker-actions>
+              <button mat-button matDateRangePickerCancel>Huỷ</button>
+              <button mat-raised-button color="primary" matDateRangePickerApply (click)="ChoosenDate()">Đồng ý</button>
+            </mat-date-range-picker-actions>
+          </mat-date-range-picker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="relative flex flex-col items-center p-4 h-full w-full overflow-auto">
+      <div class="w-full flex flex-col lg:max-w-xl space-y-3">
+        <div class="flex flex-row justify-between items-center p-4 hover:bg-gray-200 border-b"
+          *ngFor="let item of FilterLists; let i = index">
+         <div class="flex flex-row space-x-2 items-center justify-between w-full">
+            <div class="w-full flex flex-row space-x-4 items-center">
+              <div class="w-full flex flex-col space-y-2">
+                <div class="flex flex-row justify-between">
+                  <span>{{item.Title}}</span>
+                  <span>{{item.Action}}</span>
+                </div>
+                <span  class="italic text-xs">{{item.CreateAt|date:'HH:mm:ss dd/MM/yyyy'}}</span>
+                <span class="italic text-xs" [innerHTML]="item.Mota"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="relative border-t flex flex-col">
+      <mat-paginator (page)="onPageChange($event)" [length]="Total"  [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+<ng-template #dialogTemplate>
+  <div class="min-w-[672px]">
+    <div mat-dialog-title>Thêm Mới</div>
+    <div mat-dialog-content>
+      <div class="flex flex-col w-full space-y-4 p-4">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Tiêu Đề</mat-label>
+          <input matInput [(ngModel)]="Detail.Title" [ngModelOptions]="{standalone: true}" placeholder="Tiêu Đề">
+        </mat-form-field>
+      </div>
+    </div>
+    <div mat-dialog-actions class="flex flex-row space-x-2 justify-center">
+      <button mat-button class="bg-red-400 hover:bg-red-600 text-white" mat-dialog-close="false">Huỷ</button>
+      <button mat-button class="bg-blue-400 hover:bg-blue-600 text-white" mat-dialog-close="true">Đồng Ý</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #dlgDeleteTemplate>
+  <div>
+    <div mat-dialog-title>Xoá</div>
+    <div mat-dialog-content>
+      <span class="font-bold text-red-500">Bạn Có Chắc Chắn Xoá</span>
+    </div>
+    <div mat-dialog-actions class="flex flex-row space-x-2 justify-center">
+      <button mat-button class="bg-red-400 hover:bg-red-600 text-white" mat-dialog-close="false">Huỷ</button>
+      <button mat-button class="bg-blue-400 hover:bg-blue-600 text-white" mat-dialog-close="true">Đồng Ý</button>
+    </div>
+  </div>
+</ng-template>

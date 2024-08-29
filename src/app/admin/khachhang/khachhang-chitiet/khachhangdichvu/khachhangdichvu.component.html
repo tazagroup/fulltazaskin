@@ -1,0 +1,41 @@
+<mat-drawer-container class="example-container w-full h-full" autosize>
+  <mat-drawer #drawer mode="side" class="!flex flex-col flex-auto min-w-0 relative h-full w-2/3" position="end">
+    <div class="relative flex flex-col h-full w-full overflow-auto">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content class="!flex flex-col flex-auto min-w-0 relative bg-white !h-[90vh]">
+    <div class="relative border-b flex flex-col">
+      fsdf
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+<ng-template #dialogTemplate>
+  <div class="min-w-[672px]">
+    <div mat-dialog-title>Thêm Mới</div>
+    <div mat-dialog-content>
+      <div class="flex flex-col w-full space-y-4 p-4">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Tiêu Đề</mat-label>
+          <input matInput [(ngModel)]="Detail.Title" [ngModelOptions]="{standalone: true}" placeholder="Tiêu Đề">
+        </mat-form-field>
+      </div>
+    </div>
+    <div mat-dialog-actions class="flex flex-row space-x-2 justify-center">
+      <button mat-button class="bg-red-400 hover:bg-red-600 text-white" mat-dialog-close="false">Huỷ</button>
+      <button mat-button class="bg-blue-400 hover:bg-blue-600 text-white" mat-dialog-close="true">Đồng Ý</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #dlgDeleteTemplate>
+  <div>
+    <div mat-dialog-title>Xoá</div>
+    <div mat-dialog-content>
+      <span class="font-bold text-red-500">Bạn Có Chắc Chắn Xoá</span>
+    </div>
+    <div mat-dialog-actions class="flex flex-row space-x-2 justify-center">
+      <button mat-button class="bg-red-400 hover:bg-red-600 text-white" mat-dialog-close="false">Huỷ</button>
+      <button mat-button class="bg-blue-400 hover:bg-blue-600 text-white" mat-dialog-close="true">Đồng Ý</button>
+    </div>
+  </div>
+</ng-template>

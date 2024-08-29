@@ -1,0 +1,129 @@
+<div class="!flex flex-col flex-auto min-w-0 relative bg-white">
+  <div class="relative border-b flex flex-row justify-between items-center p-3">
+    <span class="material-icons p-3 hover:bg-gray-200 rounded-full" [routerLink]="['../']" (click)="CloseDrawer()">
+      arrow_back
+    </span>
+    <div class="text-xl">{{Detail.Title}}</div>
+    <div>
+      <button mat-raised-button color="primary" (click)="Update(Detail)">Cập Nhật</button>
+    </div>
+  </div>
+  <div class="relative h-full w-full overflow-auto flex flex-col space-y-2 justify-between p-4">
+    <div class="flex flex-col space-y-3 p-4 blog tintuc-sukien">
+        <div class="w-full flex flex-col space-y-2  p-3">
+          <div class="flex flex-row space-x-2">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Tiêu Đề</mat-label>
+              <input [(ngModel)]="Detail.Title" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Tiêu Đề" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>BranchCode</mat-label>
+              <input [(ngModel)]="Detail.BranchCode" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="BranchCode" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>ID Vttech</mat-label>
+              <input [(ngModel)]="Detail.idVttech" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="ID Vttech" />
+            </mat-form-field>
+          </div>
+
+          <div class="grid lg:grid-cols-3 grid-cols-1 gap-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Địa Chỉ</mat-label>
+              <input [(ngModel)]="Detail.Address" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Địa Chỉ" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Công Ty</mat-label>
+              <input [(ngModel)]="Detail.Congty" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Công Ty" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Type</mat-label>
+              <input [(ngModel)]="Detail.Type" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Type" />
+            </mat-form-field>
+            </div>
+            <div class="grid lg:grid-cols-3 grid-cols-1 gap-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Zalo Oa ID</mat-label>
+              <input [(ngModel)]="Detail.ZaloOa.oa_id" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Zalo Oa ID" />
+                <a href="https://zalo.me/{{Detail.ZaloOa}}" matSuffix class="material-symbols-outlined">link</a>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Zalo Oa App ID</mat-label>
+              <input [(ngModel)]="Detail.ZaloOa.app_id" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Zalo Oa App ID" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Zalo Oa Secret Key</mat-label>
+              <input [(ngModel)]="Detail.ZaloOa.secret_key" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Zalo Oa Secret Key" />
+            </mat-form-field>
+            <div class="col-span-3 w-full cursor-pointer flex flex-row space-x-3 items-center text-blue-600">
+               <span matTooltip="Reset Token" class="material-symbols-outlined text-green-600" (click)="getrefreshToken(Detail)">
+                restart_alt
+                </span>
+                <span (click)="Xacthuc(Detail)" matTooltip="Get Token" class="material-symbols-outlined">
+                  key
+                </span>
+                <span class="text-red-500">{{Detail.ZaloOaToken.AuthenAt|date:'HH:mm:ss dd/MM/yyyy'}} - {{Detail.ZaloOaToken.AuthenEnd|date:'HH:mm:ss dd/MM/yyyy'}}</span>
+                <!-- <span (click)="GetFromZalo(item)" matTooltip="Đồng Bộ Đánh Giá" class="material-symbols-outlined">
+                  cloud_sync
+                </span> -->
+                <!-- <span [cdkCopyToClipboard]="item.Token.access_token" matTooltip="Sao Chép Token" class="material-symbols-outlined">
+                  content_copy
+                </span> -->
+            </div>
+            </div>
+            <div class="grid lg:grid-cols-2 grid-cols-1 gap-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Template Đánh Giá</mat-label>
+              <input [(ngModel)]="Detail.TemplateDanhgia" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Template Đánh Giá" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Template Thanh Toán</mat-label>
+              <input [(ngModel)]="Detail.TemplateThanhtoan" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Template Thanh Toán" />
+            </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline">
+              <mat-label>Link Google Map</mat-label>
+              <input [(ngModel)]="Detail.Linkmap" [ngModelOptions]="{standalone: true}" matInput type="text"
+                class="w-full" placeholder="Link Google Map" />
+            </mat-form-field>
+              <app-hinhanh class="h-full" [Image]="Detail.Image"
+              (UploadEmit)="GetUpload($event)"></app-hinhanh>
+              <div class="grid grid-cols-4 gap-2" *ngFor="let item of Detail.ListSocial;let i = index">
+                <mat-form-field appearance="outline">
+                  <mat-label>Tiêu Đề</mat-label>
+                  <input [(ngModel)]="Detail.ListSocial[i].Title" [ngModelOptions]="{standalone: true}" matInput type="text"
+                    class="w-full" placeholder="Tiêu Đề" />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Key</mat-label>
+                  <input [(ngModel)]="Detail.ListSocial[i].Key" [ngModelOptions]="{standalone: true}" matInput type="text"
+                    class="w-full" placeholder="Key" />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Value</mat-label>
+                  <input [(ngModel)]="Detail.ListSocial[i].Value" [ngModelOptions]="{standalone: true}" matInput type="text"
+                    class="w-full" placeholder="Value" />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Liên Kết</mat-label>
+                  <input [(ngModel)]="Detail.ListSocial[i].LinkUrl" [ngModelOptions]="{standalone: true}" matInput type="text"
+                    class="w-full" placeholder="Liên Kết" />
+                </mat-form-field>
+              </div> 
+              <div class="text-center"><button mat-raised-button color="primary" (click)="AddSocial()">Thêm Mới</button></div>          
+          <editor [apiKey]="APITINYMCE" [(ngModel)]="Detail.Mota" [ngModelOptions]="{standalone: true}"
+            [init]="configTiny"></editor>
+        </div>
+      </div>
+    </div>
+  </div>

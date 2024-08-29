@@ -1,0 +1,117 @@
+<div class="flex flex-col">
+  <div class="md:p-12 md:mx-6">
+    <div class="m-auto p-4" routerLink="/">
+      <img
+        class="mx-auto w-48"
+        src="/assets/image/logo.svg"
+        alt="logo"
+      />
+    </div>
+    <div class="flex flex-col space-y-2 max-w-[400px]  m-auto">
+      <mat-form-field appearance="outline">
+        <mat-label>Họ và Tên</mat-label>
+        <input matInput placeholder="Họ và Tên" type="text" [(ngModel)]="User.Hoten" [ngModelOptions]="{standalone: true}">
+        <mat-icon matPrefix class="mr-4"><span class="material-icons">account_circle</span></mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Số Điện Thoại</mat-label>
+        <input matInput placeholder="Số Điện Thoại" type="text" [(ngModel)]="User.SDT" [ngModelOptions]="{standalone: true}">
+        <mat-icon matPrefix class="mr-4"><span class="material-icons">phone_iphone</span></mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Mật Khẩu</mat-label>
+        <input matInput placeholder="Mật Khẩu" type="password" [(ngModel)]="User.password" [ngModelOptions]="{standalone: true}">
+        <mat-icon matPrefix class="mr-4"><span class="material-icons">vpn_key</span></mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Referral</mat-label>
+        <input matInput placeholder="Referral" type="text" [(ngModel)]="User.ref_id" [ngModelOptions]="{standalone: true}" disabled>
+        <mat-icon matPrefix class="mr-4"><span class="material-icons">link</span></mat-icon>
+      </mat-form-field>
+      <div class="text-center pt-1 mb-12 pb-1">
+        <button mat-raised-button color="primary" (click)="Dangky(User,dialogTemplate)">Đăng Ký</button>
+      </div>
+      <div class="flex items-center m-auto pb-6">
+        <span class="mb-0 mr-2">Đã Có Tài Khoản?</span> <span class="text-red-500" [routerLink]="['/dangnhap']" routerLinkActive="router-link-active" >Đăng Nhập</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<section class="bg-gray-200">
+  <div class="container py-12 px-6 h-full">
+    <div class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
+      <div class="xl:w-6/12">
+        <div class="block bg-white shadow-lg rounded-lg">
+          <div class="lg:flex lg:flex-wrap g-0">
+            <div class="lg:w-full px-4 md:px-0">
+              <div class="md:p-12 md:mx-6">
+                <div class="m-auto p-4" routerLink="/">
+                  <img
+                    class="mx-auto w-48"
+                    src="/assets/image/logo.svg"
+                    alt="logo"
+                  />
+                </div>
+                <div class="flex flex-col space-y-2 max-w-[400px]  m-auto">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Họ và Tên</mat-label>
+                    <input matInput placeholder="Họ và Tên" type="text" [(ngModel)]="User.Hoten" [ngModelOptions]="{standalone: true}">
+                    <mat-icon matPrefix class="mr-4"><span class="material-icons">account_circle</span></mat-icon>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Số Điện Thoại</mat-label>
+                    <input matInput placeholder="Số Điện Thoại" type="text" [(ngModel)]="User.SDT" [ngModelOptions]="{standalone: true}">
+                    <mat-icon matPrefix class="mr-4"><span class="material-icons">phone_iphone</span></mat-icon>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Mật Khẩu</mat-label>
+                    <input matInput placeholder="Mật Khẩu" type="password" [(ngModel)]="User.password" [ngModelOptions]="{standalone: true}">
+                    <mat-icon matPrefix class="mr-4"><span class="material-icons">vpn_key</span></mat-icon>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Referral</mat-label>
+                    <input matInput placeholder="Referral" type="text" [(ngModel)]="User.ref_id" [ngModelOptions]="{standalone: true}" disabled>
+                    <mat-icon matPrefix class="mr-4"><span class="material-icons">link</span></mat-icon>
+                  </mat-form-field>
+                  <div class="text-center pt-1 mb-12 pb-1">
+                    <button mat-raised-button color="primary" (click)="Dangky(User,dialogTemplate)">Đăng Ký</button>
+                  </div>
+                  <div class="flex items-center m-auto pb-6">
+                    <span class="mb-0 mr-2">Đã Có Tài Khoản?</span> <span class="text-red-500" [routerLink]="['/dangnhap']" routerLinkActive="router-link-active" >Đăng Nhập</span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- <div
+            class="lg:w-6/12 flex items-center lg:rounded-l-lg rounded-b-lg lg:rounded-br-none bg-[#3154A1]">
+            <div class="text-white px-4 py-6 md:p-12 md:mx-6">
+              <h4 class="text-xl font-semibold mb-6">Demo</h4>
+              <p class="text-sm">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat.
+              </p>
+            </div>
+          </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<ng-template #dialogTemplate>
+  <div class="text-center">
+  <h2 mat-dialog-title class="to-blue-600">Đăng Ký Thành Công</h2>
+  <mat-dialog-content>
+    <p>Chuyển Sang Đăng Nhập trong <span class="text-red-500">{{ countDown }} giây..</span></p>
+  </mat-dialog-content>
+</div>
+</ng-template>

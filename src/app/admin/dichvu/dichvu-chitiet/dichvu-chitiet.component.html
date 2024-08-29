@@ -1,0 +1,35 @@
+<div class="!flex flex-col flex-auto min-w-0 relative bg-white">
+  <div class="relative border-b-2 flex flex-row justify-between items-center p-3">
+    <span class="material-icons p-2 hover:bg-gray-200 rounded-full" [routerLink]="['../']" (click)="CloseDrawer()">
+      arrow_back
+    </span>
+    <div class="text-xl">{{Detail?.Title}}</div>
+    <div>
+      <button mat-raised-button color="primary" (click)="Update(Detail)">Cập Nhật</button>
+    </div>
+  </div>
+  <div class="relative h-full w-full overflow-auto flex flex-col space-y-2 justify-between p-4 ">
+    <div class="grid grid-cols-2 gap-4"> 
+        <mat-form-field appearance="outline" class="w-full col-span-2">
+          <mat-label>Tiêu Đề</mat-label>
+          <input type="text" matInput [(ngModel)]="Detail.Title" [ngModelOptions]="{standalone: true}"
+           class="w-full px-3 py-2 border border-gray-200 rounded"
+            [placeholder]="'Tiêu Đề'"/>
+        </mat-form-field>  
+        <editor class="col-span-2" [apiKey]="APITINYMCE" [(ngModel)]="Detail.Mota" [ngModelOptions]="{standalone: true}"
+        [init]="configTiny"></editor>  
+        <app-hinhanh class="h-full" [Image]="Detail.Image"
+        (UploadEmit)="GetUpload($event)"></app-hinhanh>
+        <div class="flex flex-col space-y-2">
+        <div class="grid grid-cols-3 gap-4">
+          <div class="flex relative" *ngFor="let item of Detail.ListImage; let i = index">
+            <app-hinhanh class="h-full" [Image]="Detail.ListImage[i]"
+            (UploadEmit)="GetUploadList($event,i)"></app-hinhanh>
+            <span (click)="DeleteImage(i)" *ngIf="CheckImage(Detail.ListImage[i])" class="material-symbols-outlined absolute top-0 right-0 text-red-500">cancel</span>
+          </div> 
+        </div>
+        <div class="text-center"> <button mat-raised-button (click)="Detail.ListImage.push({})">Thêm Hình</button></div>
+      </div>
+
+    </div>  
+  </div>
