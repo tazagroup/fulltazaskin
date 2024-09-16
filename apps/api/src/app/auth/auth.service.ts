@@ -12,7 +12,7 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
   async login(user:any): Promise<any> {
-    const data = await this.usersService.findbySDT(user); 
+    const data = await this.usersService.findbySDT(user);
     if(!data) {
       return [false,'Số Điện Thoại Chưa Đăng Ký']
     }
@@ -27,13 +27,14 @@ export class AuthService {
       const doLogin = {access_token: this.jwtService.sign({SDT: data.SDT,email: data.email}),data}
       return [true,doLogin]
       }
+
     }
     // else if(data.Status==0)
     // {
     //   return [false,'Tài Khoản Đã Bị Khóa']
     // }
   }
-  async changepass(data): Promise<any>{
+  async changepass(data:any): Promise<any>{
     const user = await this.usersService.findbySDT(data.user);
     const compare = await bcrypt.compare( data.oldpass,user.password);
     if (!compare) {
