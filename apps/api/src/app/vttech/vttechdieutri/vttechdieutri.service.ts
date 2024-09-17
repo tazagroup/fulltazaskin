@@ -33,6 +33,9 @@ export class VttechdieutriService {
   async findid(id: string) {
     return await this.VttechdieutriRepository.findOne({ where: { id: id } });
   }
+  async bycustcode(CustCode: string) {
+    return this.VttechdieutriRepository.find({ where: { CustCode: CustCode } });
+  }
   async findidVttech(id: any) {
     return await this.VttechdieutriRepository.findOne({ where: { idVttech: id } });
   }

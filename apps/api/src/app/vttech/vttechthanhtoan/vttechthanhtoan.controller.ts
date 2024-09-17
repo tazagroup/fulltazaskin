@@ -32,6 +32,10 @@ export class VttechthanhtoanController {
   async findOne(@Param('id') id: string) {
     return await this.vttechthanhtoanService.findid(id);
   }
+  @Get('bycustcode/:code')
+  async bycustcode(@Param('code') code: string) {
+    return await this.vttechthanhtoanService.bycustcode(code);
+  }
   @Get('findbycode/:code')
   async findbycode(@Param('code') CustCode: string) {
     const result = await this.vttechthanhtoanService.findbycode(CustCode);

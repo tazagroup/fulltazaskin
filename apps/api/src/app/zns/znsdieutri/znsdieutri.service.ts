@@ -201,6 +201,9 @@ export class ZnsdieutriService {
   async findid(id: string) {
     return await this.ZnsdieutriRepository.findOne({ where: { id: id } });
   }
+  async bycustcode(code: string) {
+    return await this.ZnsdieutriRepository.find({ where: { CustCode: code } });
+  }
   async findbytrackingid(trackingId: string) {
     return await this.ZnsdieutriRepository.findOne({ where: { trackingId: trackingId } });
   }

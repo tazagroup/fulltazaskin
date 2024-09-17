@@ -317,6 +317,9 @@ export class ZnsthanhtoanService {
   async findid(id: string) {
     return await this.ZnsthanhtoanRepository.findOne({ where: { id: id } });
   }
+  async bycustcode(code: string) {
+    return await this.ZnsthanhtoanRepository.find({ where: { CustCode: code } });
+  }
   async findSHD(data: any) {
     return await this.ZnsthanhtoanRepository.findOne({
       where: {

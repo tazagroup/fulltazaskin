@@ -29,6 +29,10 @@ export class VttechdieutriController {
   async findOne(@Param('id') id: string) {
     return await this.vttechdieutriService.findid(id);
   }
+  @Get('bycustcode/:code')
+  async bycustcode(@Param('code') code: string) {
+    return await this.vttechdieutriService.bycustcode(code);
+  }
   @Get('findby/:slug')
   async findslug(@Param('slug') slug: string) {
     return await this.vttechdieutriService.findby(slug);

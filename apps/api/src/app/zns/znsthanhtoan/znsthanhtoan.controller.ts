@@ -82,6 +82,10 @@ export class ZnsthanhtoanController {
   async findOne(@Param('id') id: string) {
     return await this.znsthanhtoanService.findid(id);
   }
+  @Get('bycustcode/:id')
+  async bycustcode(@Param('code') code: string) {
+    return await this.znsthanhtoanService.bycustcode(code);
+  }
   @Get('findslug/:slug')
   async findslug(@Param('slug') slug: string) {
     return await this.znsthanhtoanService.findslug(slug);

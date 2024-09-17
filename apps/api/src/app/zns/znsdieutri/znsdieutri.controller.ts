@@ -86,6 +86,10 @@ export class ZnsdieutriController {
   async findOne(@Param('id') id: string) {
     return await this.znsdieutriService.findid(id);
   }
+  @Get('bycustcode/:code')
+  async bycustcode(@Param('code') code: string) {
+    return await this.znsdieutriService.bycustcode(code);
+  }
   @Get('findslug/:slug')
   async findslug(@Param('slug') slug: string) {
     return await this.znsdieutriService.findslug(slug);
