@@ -12,6 +12,7 @@ import { VttechlichsuthanhtoanModule } from './vttechlichsuthanhtoan/vttechlichs
 import { VttechlieutrinhModule } from './vttechlieutrinh/vttechlieutrinh.module';
 import { VttechdieutriModule } from './vttechdieutri/vttechdieutri.module';
 import { VttechkhachhangModule } from './vttechkhachhang/vttechkhachhang.module';
+import { VttechkhachhangfinalModule } from './vttechkhachhangfinal/vttechkhachhangfinal.module';
 @Module({
   imports: [
     CauhinhchungModule,
@@ -23,6 +24,7 @@ import { VttechkhachhangModule } from './vttechkhachhang/vttechkhachhang.module'
     VttechlieutrinhModule,
     VttechdieutriModule,
     VttechkhachhangModule,
+    VttechkhachhangfinalModule,
   ],
   controllers: [VttechController],
   providers: [VttechService],
