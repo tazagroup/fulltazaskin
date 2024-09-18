@@ -24,6 +24,11 @@ export class VttechkhachhangController {
   async findOne(@Param('id') id: string) {
     return await this.vttechkhachhangService.findid(id);
   }
+
+  @Get('bycode/:code')
+  async bycode(@Param('code') code: string) {
+    return await this.vttechkhachhangService.bycode(code);
+  }
   @Get('findsdt/:sdt')
   async findsdt(@Param('sdt') sdt: string) {
     const result = await this.vttechkhachhangService.findsdt(sdt);

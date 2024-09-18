@@ -32,6 +32,9 @@ export class VttechkhachhangService {
   async findid(id: string) {
     return await this.VttechkhachhangRepository.findOne({ where: { id: id } });
   }
+  async bycode(code: string) {
+    return await this.VttechkhachhangRepository.findOne({ where: { Code: code } });
+  }
   async findsdt(SDT: any) {
     return await this.VttechkhachhangRepository.findOne({
       where: [
