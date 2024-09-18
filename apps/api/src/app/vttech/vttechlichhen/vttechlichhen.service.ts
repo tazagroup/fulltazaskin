@@ -30,7 +30,7 @@ export class VttechlichhenService {
     return await this.VttechlichhenRepository.find();
   }
   async findbycode(CustCode: string) {
-    return await this.VttechlichhenRepository.findAndCount({ where: { CustCode: CustCode } });
+    return await this.VttechlichhenRepository.find({ where: { CustCode: CustCode } });
   }
   async findcheck(data: any) {
     return await this.VttechlichhenRepository.findOne({
