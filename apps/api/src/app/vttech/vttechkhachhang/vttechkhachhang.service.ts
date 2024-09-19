@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Brackets, Like, Repository } from 'typeorm';
 import { VttechkhachhangEntity } from './entities/vttechkhachhang.entity';
 import { SharedService } from '../../shared/shared.service';
 import axios from 'axios';
@@ -66,6 +66,15 @@ export class VttechkhachhangService {
     }
     if (params.Title) {
       queryBuilder.andWhere('vttechkhachhang.Title LIKE :Title', { SDT: `%${params.Title}%` });
+    }
+    if (params?.query) {
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where('vttechkhachhang.SDT LIKE :query', { query: `%${params.query}%` })
+            .orWhere('vttechkhachhang.Code LIKE :query', { query: `%${params.query}%` })
+            .orWhere('vttechkhachhang.Name LIKE :query', { query: `%${params.query}%` });
+        })
+      );
     }
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided

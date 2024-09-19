@@ -70,6 +70,7 @@ export class ZnsthanhtoanController {
   // sendznsauto(@Body() data: any) {
   //   return this.znsthanhtoanService.sendznsauto(data);
   // }
+
   @Post()
   create(@Body() data: any) {
     return this.znsthanhtoanService.create(data);
