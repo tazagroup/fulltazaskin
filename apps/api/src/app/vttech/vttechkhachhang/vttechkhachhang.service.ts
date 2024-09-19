@@ -64,24 +64,23 @@ export class VttechkhachhangService {
         endDate: params.CreatedEnd,
       });
     }
+    if (params.hasOwnProperty('query')) {
+      queryBuilder.andWhere(new Brackets(qb => {
+        qb.where('vttechkhachhang.Name LIKE :Name', { Name: `%${params.query}%` })
+          .orWhere('vttechkhachhang.SDT LIKE :SDT', { SDT: `%${params.query}%` })
+          .orWhere('vttechkhachhang.Code LIKE :Code', { Code: `%${params.query}%` });
+      }));
+    }
     if (params.Title) {
       queryBuilder.andWhere('vttechkhachhang.Title LIKE :Title', { SDT: `%${params.Title}%` });
-    }
-    if (params?.query) {
-      queryBuilder.andWhere(
-        new Brackets((qb) => {
-          qb.where('vttechkhachhang.SDT LIKE :query', { query: `%${params.query}%` })
-            .orWhere('vttechkhachhang.Code LIKE :query', { query: `%${params.query}%` })
-            .orWhere('vttechkhachhang.Name LIKE :query', { query: `%${params.query}%` });
-        })
-      );
     }
     const [items, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
-   console.log(items, totalCount);
-    const result = items.map((v:any)=>({id:v.id,...v.Dulieu}))
+    let result = items.map((v:any)=>({id:v.id,...v.Dulieu})) 
+    console.log(result);
+       
     return result;
   }
   async update(id: string, UpdateVttechkhachhangDto: any) {
