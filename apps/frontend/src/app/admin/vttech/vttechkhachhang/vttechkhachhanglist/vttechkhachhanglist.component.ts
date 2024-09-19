@@ -43,7 +43,7 @@ export class VttechkhachhanglistComponent implements OnInit {
   FilterLists: any[] = []
   Sitemap: any = { loc: '', priority: '' }
   SearchParams: any = {
-    CreatedBegin: moment().format('YYYY-MM-DD'),
+    CreatedBegin: moment('2019-01-01').format('YYYY-MM-DD'),
     CreatedEnd: moment().format('YYYY-MM-DD'),
     pageSize:9999,
     pageNumber:0,
@@ -98,6 +98,21 @@ export class VttechkhachhanglistComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+  SearchServer(input:any) {
+    if(input.value.length>1)
+    {
+      delete this.SearchParams.CreatedBegin
+      delete this.SearchParams.CreatedEnd
+      this.SearchParams.query=input.value,
+      this._VttechkhachhangService.searchVttechkhachhangs(this.SearchParams).subscribe()
+      console.log(input.value);
+    }
+    else
+    {
+      this.ngOnInit()
+    }
+
   }
   openDialog(teamplate: TemplateRef<any>): void {
   //   const dialogRef = this.dialog.open(teamplate, {

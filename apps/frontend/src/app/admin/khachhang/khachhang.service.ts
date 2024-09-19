@@ -20,8 +20,9 @@ export class KhachhangService {
   }
   constructor(private http: HttpClient) { }
   getKhachhangs() {
-    return this.http.get(this.urlApi + '/khachhangs/khachhang').pipe(
-      map((data: any) => { 
+    return this.http.get(this.urlApi + '/vttechkhachhangfinal').pipe(
+      map((data: any) => {
+        console.log(data);
         this._khachhangs.next(data);
         return data;
       })
@@ -37,8 +38,10 @@ export class KhachhangService {
     );
   }
   searchKhachhang(params: SearchParams) {
-    return this.http.post(this.urlApi + `/khachhangs/khachhang/search`,params).pipe(
-      map((data: any) => { 
+    return this.http.post(this.urlApi + `/vttechkhachhangfinal/search`,params).pipe(
+      map((data: any) => {
+        console.log('search',data);
+
         return data;
       })
     );

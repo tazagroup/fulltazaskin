@@ -90,6 +90,13 @@ export class VttechthanhtoanService {
       })
     );
   }
+  getThanhtoanbycustcode(code: string) {
+    return this.http.get(environment.APIURL + `/vttechthanhtoan/bycustcode/${code}`).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
   SendZns(data: any) {
     return this.http.post(environment.APIURL + '/vttechthanhtoan/sendzns', data).pipe(
           map((result) => {

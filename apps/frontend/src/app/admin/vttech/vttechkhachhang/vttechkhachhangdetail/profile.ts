@@ -1,0 +1,43 @@
+[{
+    "ID": 997,
+    "Name": "LÊ THỊ MAI LIÊN",
+    "Code": "NHH0000997",
+    "CodeOld": "",
+    "DocCode": "",
+    "Email": "",
+    "Phone": "0972207450",
+    "Phone2": "",
+    "Birthday": "1986-12-16T00:00:00",
+    "Gender": "Nữ",
+    "Address": "705 CT3 PHƯỚC HẢI, NHA TRANG, KHÁNH HÒA",
+    "Commune": "",
+    "District": "0",
+    "City": "0",
+    "CitizenIdentity": {
+        "CitizenIdentity": "",
+        "GrantDate": "1900-01-01T00:00:00",
+        "IssuedBy": ""
+    },
+    "CustomerSource": "Khách Vãng Lai",
+    "CustomerGroup": "Team 1 - CN Nha Trang - OAZALO",
+    "BranchID": 4,
+    "DateOf": {
+        "FirstPaid": "2020-12-27T15:49:41.297",
+        "FirstCheckin": "2022-09-21T13:47:40.347",
+        "FirstTreatment": "1900-01-01T00:00:00",
+        "LastTreatment": "2024-03-28T00:00:00",
+        "LastCheckin": "2024-03-28T00:00:00"
+    },
+    "CCStaffID": 703,
+    "CaringStaffCode": "EM0703",
+    "MarStaffID": 0,
+    "MarStaffCode": "",
+    "StaffID": 110,
+    "StaffCode": "EM0110",
+    "Gclid": "",
+    "CreatedDate": "2019-11-19T00:00:00",
+    "CreatedBy": "110",
+    "ModifiedDate": "2023-05-24T21:45:20.973",
+    "ModifiedBy": "274",
+    "State": 1
+}]

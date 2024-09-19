@@ -21,7 +21,7 @@ export class VttechdieutriService {
   constructor(private http: HttpClient) { }
   getListDieutri() {
     return this.http.get(environment.APIURL + '/vttechdieutri').pipe(
-      map((data: any) => { 
+      map((data: any) => {
         this._vttechlistdieutri.next(data);
         return data;
       })
@@ -29,7 +29,7 @@ export class VttechdieutriService {
   }
   getAllVttechdieutris() {
     return this.http.get(environment.APIURL + '/vttechdieutri').pipe(
-      map((data: any) => { 
+      map((data: any) => {
         this._vttechdieutris.next(data);
         return data;
       })
@@ -37,9 +37,9 @@ export class VttechdieutriService {
   }
   searchVttechdieutri(SearchParams:any) {
     return this.http.post(environment.APIURL + `/vttechdieutri/search`,SearchParams).pipe(
-      map((data: any) => { 
+      map((data: any) => {
         console.log(data);
-        
+
         this._vttechdieutris.next(data);
         return data;
       })
@@ -70,10 +70,17 @@ export class VttechdieutriService {
       })
     );
   }
+  getDieutribycustcode(code: string) {
+    return this.http.get(environment.APIURL + `/vttechdieutri/bycustcode/${code}`).pipe(
+      map((data: any) => {
+        return data
+      })
+    );
+  }
   SendZns(data: any) {
     return this.http.post(environment.APIURL + '/vttechdieutri/sendcamon', data).pipe(
           map((result) => {
-            console.log(result); 
+            console.log(result);
             return result;
           })
         )

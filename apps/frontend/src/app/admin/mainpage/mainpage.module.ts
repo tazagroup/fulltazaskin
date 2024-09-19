@@ -1,3 +1,4 @@
+import { VttechdieutriModule } from './../vttech/vttechdieutri/vttechdieutri.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MainpageComponent } from './mainpage.component';
@@ -14,6 +15,7 @@ import { VttechthanhtoanlistComponent } from '../vttech/vttechthanhtoan/vttechth
 import { VttechdieutrilistComponent } from '../vttech/vttechdieutri/vttechdieutrilist/vttechdieutrilist.component';
 import { ZnsthanhtoanadminComponent } from '../../znsthanhtoan/znsthanhtoanadmin/znsthanhtoanadmin.component';
 import { ZnsdieutriadminComponent } from '../../znsdieutri/znsdieutriadmin/znsdieutriadmin.component';
+import { KhachhangModule } from '../khachhang/khachhang.module';
 
 @NgModule({
   imports: [
@@ -53,6 +55,7 @@ import { ZnsdieutriadminComponent } from '../../znsdieutri/znsdieutriadmin/znsdi
           {path: 'listdieutri', component: VttechdieutrilistComponent},
           {path: 'znsthanhtoan', component: ZnsthanhtoanadminComponent},
           {path: 'znsdieutri', component: ZnsdieutriadminComponent},
+          {path: 'khachhang', loadChildren: () => import('../khachhang/khachhang.module').then(m => m.KhachhangModule)},
       ]
       }
     ])

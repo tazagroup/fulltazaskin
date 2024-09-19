@@ -18,7 +18,7 @@ export class VttechkhachhangService {
 
   getAllVttechkhachhangs() {
     return this.http.get(environment.APIURL + '/vttechkhachhang').pipe(
-      map((data: any) => { 
+      map((data: any) => {
         this._vttechkhachhangs.next(data);
         return data;
       })
@@ -26,7 +26,7 @@ export class VttechkhachhangService {
   }
   searchVttechkhachhangs(SearchParams:any) {
     return this.http.post(environment.APIURL + `/vttechkhachhang/search`,SearchParams).pipe(
-      map((data: any) => { 
+      map((data: any) => {
         this._vttechkhachhangs.next(data);
         return data;
       })
@@ -50,6 +50,15 @@ export class VttechkhachhangService {
   }
   getVttechkhachhangById(id: string) {
     return this.http.get(environment.APIURL + `/vttechkhachhang/findid/${id}`).pipe(
+      map((data: any) => {
+        this._vttechkhachhang.next(data);
+        return data;
+      })
+    );
+  }
+
+  getVttechkhachhangByCode(code: string) {
+    return this.http.get(environment.APIURL + `/vttechkhachhang/bycode/${code}`).pipe(
       map((data: any) => {
         this._vttechkhachhang.next(data);
         return data;

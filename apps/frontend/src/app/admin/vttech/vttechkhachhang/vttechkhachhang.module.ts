@@ -1,3 +1,4 @@
+import { VttechkhachhangdetailComponent } from './vttechkhachhangdetail/vttechkhachhangdetail.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VttechkhachhangComponent } from './vttechkhachhang.component';
@@ -15,6 +16,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { VttechdieutrilistComponent } from '../vttechdieutri/vttechdieutrilist/vttechdieutrilist.component';
 import { VttechkhachhanglistComponent } from './vttechkhachhanglist/vttechkhachhanglist.component';
+import { VttechthanhtoanDetailComponent } from '../vttechthanhtoan/vttechthanhtoan-detail/vttechthanhtoan-detail.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,7 +33,15 @@ import { VttechkhachhanglistComponent } from './vttechkhachhanglist/vttechkhachh
     MatPaginatorModule,
     MatTableModule,
     RouterModule.forChild([
-      { path: 'vttech', component: VttechkhachhanglistComponent},
+      { path: '', redirectTo: 'vttech', pathMatch: 'full' },
+      {
+        path: 'vttech',
+        component: VttechkhachhanglistComponent,
+      },
+      {
+        path: 'vttech/:id',
+        component: VttechkhachhangdetailComponent,
+      }
       // {
       //   path: '', component: VttechkhachhangComponent,
       //   // children: [{
@@ -39,10 +49,8 @@ import { VttechkhachhanglistComponent } from './vttechkhachhanglist/vttechkhachh
       //   // }]
 
       // }
-    ])
+    ]),
   ],
-  declarations: [VttechkhachhangComponent]
+  declarations: [VttechkhachhangComponent,VttechkhachhangdetailComponent],
 })
-export class VttechkhachhangModule { }
-
-
+export class VttechkhachhangModule {}

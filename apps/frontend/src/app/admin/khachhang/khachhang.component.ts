@@ -1,4 +1,5 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { VttechkhachhangService } from './../vttech/vttechkhachhang/vttechkhachhang.service';
+import { Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { KhachhangService } from './khachhang.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -38,18 +39,22 @@ export class KhachhangComponent implements OnInit {
     private _UsersService:UsersService,
     public dialog: MatDialog
   ) {}
+  _VttechkhachhangService:VttechkhachhangService = inject(VttechkhachhangService);
   ngOnInit() {
     this._UsersService.getProfile().subscribe()
     this._UsersService.profile$.subscribe((data)=>
     {
       if(data)
       {
-        data.EditChinhanhs = data.EditChinhanhs.filter((v:any)=>v.Checked==true)  
-        this.searchParams.idChinhanh = data.EditChinhanhs[0].id     
+        data.EditChinhanhs = data.EditChinhanhs.filter((v:any)=>v.Checked==true)
+        this.searchParams.idChinhanh = data.EditChinhanhs[0].id
         this.CUser = data
         this.TimKiem(10,0)
       }
     })
+    this._VttechkhachhangService.getAllVttechkhachhangs().subscribe(data => {
+     console.log(data);
+    });
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -90,7 +95,7 @@ export class KhachhangComponent implements OnInit {
       )
   }
   onDateChange(event: any) {
-    console.log(event); 
+    console.log(event);
   }
   GetChinhanh(item:any)
   {
@@ -100,9 +105,9 @@ export class KhachhangComponent implements OnInit {
   {
     this.searchParams.Dateranger = this.dateRange
     // this.searchParams.take = take
-    // this.searchParams.take = skip    
+    // this.searchParams.take = skip
     this._KhachhangService.searchKhachhang(this.searchParams).subscribe((data)=>
-    {      
+    {
       this.Khachhangs = data
       this.dataSource = new MatTableDataSource(data.rows);
       this.paginator.length = data.count
