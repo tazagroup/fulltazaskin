@@ -160,6 +160,8 @@ export class ZalodanhgiaComponent implements OnInit {
   //   })      
   // }
   writeExcelFile(data: any) {
+    console.log(data);
+    
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
       data.map((v: any, k: any) => ({
         'STT': k + 1,
@@ -169,7 +171,7 @@ export class ZalodanhgiaComponent implements OnInit {
         'Chi Nhánh': v.Chinhanh,
         'Số Sao': v.rate,
         'Đánh Giá': v.feedbacks?.join(","),
-        'Ghi Chú': v.note
+        'Ghi Chú': v?.Dulieu?.note
       })));
     const workbook: XLSX.WorkBook = { Sheets: { 'Sheet1': worksheet }, SheetNames: ['Sheet1'] };
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
