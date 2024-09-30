@@ -55,7 +55,22 @@ export class VttechkhachhangController {
   remove(@Param('id') id: string) {
     return this.vttechkhachhangService.remove(id);
   }
- // @Interval(1800000)
+  @Interval(100*60*1000)
+  @Get('getauto')
+  async getAuto() {
+    console.error('Get Khachhang 1',moment().format('YYYY-MM-DD HH:mm:ss'));
+    const data: any = {
+      "Name": "Taza",
+      "Password": "1b9287d492b256x7taza",
+      "Type": "web",
+      "DateFrom": moment().format('YYYY-MM-DD'),
+      "DateTo": moment().format('YYYY-MM-DD'),
+      "BranchID": "0",
+      "PagingNumber": "1"
+    }
+    const getData = await this.vttechkhachhangService.getKhachhang(data);
+    return getData;
+  }
   @Post('getkhachhang')
   async getKhachhang(@Body() data: any) {
     console.log(data);

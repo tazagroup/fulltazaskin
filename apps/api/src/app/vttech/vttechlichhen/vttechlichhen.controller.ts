@@ -35,7 +35,25 @@ export class VttechlichhenController {
   remove(@Param('id') id: string) {
     return this.vttechlichhenService.remove(id);
   }
-  //@Interval(14400000)
+
+
+  @Interval(90*60*1000)
+  @Get('getauto')
+  async getAuto() {
+    console.error('Get Lịch hẹn 1',moment().format('YYYY-MM-DD HH:mm:ss'));
+    const data: any = {
+      "Name": "Taza",
+      "Password": "1b9287d492b256x7taza",
+      "Type": "web",
+      "DateFrom": moment().format('YYYY-MM-DD'),
+      "DateTo": moment().format('YYYY-MM-DD'),
+      "BranchID": "0",
+      "PagingNumber": "1"
+    }
+    const getData = await this.vttechlichhenService.getLichhen(data);
+    return getData;
+  }
+
   @Post('getlichhen')
   async getLichhen(@Body() data: any) {
     let datamau = data;
@@ -56,4 +74,5 @@ export class VttechlichhenController {
     // console.error('Getlichhen DateTo',moment().add(1, 'days').format('YYYY-MM-DD'));
     return result
   }
+
 }

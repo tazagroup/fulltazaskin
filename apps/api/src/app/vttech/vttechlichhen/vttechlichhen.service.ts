@@ -92,6 +92,8 @@ export class VttechlichhenService {
     return { deleted: true };
   }
   async getLichhen(item: any = {}) {
+    console.log(item);
+    
     const result = await this._SharedService.getToken(item);
     try {
       const response = await axios.post('https://apismsvtt.vttechsolution.com/api/Appointment/GetList', item, {
