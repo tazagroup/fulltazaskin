@@ -38,7 +38,7 @@ export class VttechdieutriService {
   searchVttechdieutri(SearchParams:any) {
     return this.http.post(environment.APIURL + `/vttechdieutri/search`,SearchParams).pipe(
       map((data: any) => {
-        console.log(data);
+        //console.log(data);
 
         this._vttechdieutris.next(data);
         return data;

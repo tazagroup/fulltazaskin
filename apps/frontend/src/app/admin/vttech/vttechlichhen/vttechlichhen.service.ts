@@ -39,7 +39,6 @@ export class VttechlichhenService {
     return this.http.post(environment.APIURL + `/vttechlichhen/search`,SearchParams).pipe(
       map((data: any) => {
         console.log(data);
-
         this._vttechlichhens.next(data);
         return data;
       })

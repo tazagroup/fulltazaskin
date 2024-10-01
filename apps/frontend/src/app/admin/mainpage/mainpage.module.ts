@@ -49,6 +49,7 @@ import { KhachhangModule } from '../khachhang/khachhang.module';
           { path: 'vttechthanhtoan', loadChildren: () => import('../vttech/vttechthanhtoan/vttechthanhtoan.module').then(m => m.VttechthanhtoanModule)},
           { path: 'vttechkhachhang', loadChildren: () => import('../vttech/vttechkhachhang/vttechkhachhang.module').then(m => m.VttechkhachhangModule)},
           { path: 'vttechdieutri', loadChildren: () => import('../vttech/vttechdieutri/vttechdieutri.module').then(m => m.VttechdieutriModule)},
+          { path: 'vttechlichhen', loadChildren: () => import('../vttech/vttechlichhen/vttechlichhen.module').then(m => m.VttechlichhenModule)},
          // { path: 'sms', loadChildren: () => import('../baocao/sms/sms.module').then(m => m.SmsModule)},
           { path: 'logger', loadChildren: () => import('../logger/logger.module').then(m => m.LoggerModule)},
           {path: 'listthanhtoan', component: VttechthanhtoanlistComponent},
