@@ -6,6 +6,7 @@ import axios from 'axios';
 import { SharedService } from '../../shared/shared.service';
 import { LoggerService } from '../../logger/logger.service';
 import moment = require('moment');
+import { VttechkhachhangService } from '../vttechkhachhang/vttechkhachhang.service';
 @Injectable()
 export class VttechlichhenService {
   constructor(
@@ -13,6 +14,7 @@ export class VttechlichhenService {
     private VttechlichhenRepository: Repository<VttechlichhenEntity>,
     private _SharedService: SharedService,
     private _LoggerService: LoggerService,
+    private _VttechkhachhangService: VttechkhachhangService,
   ) { }
   async create(data: any) {
     const check = await this.findcheck(data)
@@ -74,13 +76,24 @@ export class VttechlichhenService {
     if (params.Title) {
       queryBuilder.andWhere('vttechlichhen.Title LIKE :Title', { SDT: `%${params.Title}%` });
     }
-    const [items, totalCount] = await queryBuilder
+    const [result, totalCount] = await queryBuilder
       .limit(params.pageSize || 10) // Set a default page size if not provided
       .offset(params.pageNumber * params.pageSize || 0)
       .getManyAndCount();
-    console.log(items, totalCount);
-
-    return { items, totalCount };
+    //console.log(result, totalCount);
+    const Khachhang = await this._VttechkhachhangService.findAll();
+    const items = result.map((item: any) => {
+      const khachhang:any = Khachhang.find((v: any) => v.Code == item.CustCode);      
+      const result:any ={
+        ...item,
+        SDT:khachhang?.SDT,
+        SDT2:khachhang?.SDT2
+      };
+      console.log(result);
+      
+      return result
+    });
+    return {items,totalCount}
   }
   async update(id: string, UpdateVttechlichhenDto: any) {
     this.VttechlichhenRepository.save(UpdateVttechlichhenDto);

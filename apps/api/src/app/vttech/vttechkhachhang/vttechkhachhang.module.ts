@@ -11,6 +11,7 @@ import { LoggerModule } from '../../logger/logger.module';
   LoggerModule
 ],
   controllers: [VttechkhachhangController],
-  providers: [VttechkhachhangService,SharedService]
+  providers: [VttechkhachhangService,SharedService],
+  exports:[VttechkhachhangService]
 })
 export class VttechkhachhangModule {}

@@ -5,10 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { VttechlichhenEntity } from './entities/vttechlichhen.entity';
 import { SharedService } from '../../shared/shared.service';
 import { LoggerModule } from '../../logger/logger.module';
+import { VttechkhachhangService } from '../vttechkhachhang/vttechkhachhang.service';
+import { VttechkhachhangModule } from '../vttechkhachhang/vttechkhachhang.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([VttechlichhenEntity]),
-    LoggerModule
+    LoggerModule,
+    VttechkhachhangModule
   ],
   controllers: [VttechlichhenController],
   providers: [VttechlichhenService,SharedService],
