@@ -64,6 +64,8 @@ export class VttechlichhenlistComponent implements OnInit {
   Total: any = 0
   displayedColumns: string[] = ['CustName','Time','Content','status','branch', 'creationDate'];
   dataSource!: MatTableDataSource<any>;
+  SendZns:any
+  ListVipham=["giam gia","khuyen mai","uu dai","tang","chiet khau","co hoi nhan ngay","co hoi boc tham","giam *%","giamgia","sale off","sale","sale d","sale off","kmai","uu-dai","giam-gia","k.mai","ma km","hoc bong","co hoi nhan ngay","giamgia","mua * tang","rut tham","trung thuong","sale *%","sale * %","giam d","giamd","giam d","giam toi","giam den","giam gia","giam ngay","giam hoc phi","giam hphi","uu dai"]
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
@@ -113,14 +115,14 @@ export class VttechlichhenlistComponent implements OnInit {
 
     this._VttechdieutriService.SendZns(item).subscribe()
   }
-  async SendAllZNS(items: any) {
-    await items.forEach((v: any,k:any) => {
-      setTimeout(() => {
-        this.SendZNS(v)
-      }, Math.random()*1000 + k*100);
-    });
-    this._NotifierService.notify("success", `Đang gửi ${items.length} Tin Nhắn`)
-  }
+  // async SendAllZNS(items: any) {
+  //   await items.forEach((v: any,k:any) => {
+  //     setTimeout(() => {
+  //       this.SendZNS(v)
+  //     }, Math.random()*1000 + k*100);
+  //   });
+  //   this._NotifierService.notify("success", `Đang gửi ${items.length} Tin Nhắn`)
+  // }
   ChoosenDate() {
     console.log(this.SearchParams);
     this._VttechdieutriService.searchVttechdieutri(this.SearchParams).subscribe()
@@ -169,6 +171,19 @@ export class VttechlichhenlistComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result = "true") {
         this._VttechdieutriService.CreateVttechdieutri(this.Detail).subscribe()
+      }
+    });
+  }
+  openDialogSend(teamplate: TemplateRef<any>, item: any): void {
+    this.SendZns = "Quy Khach #CustName#  ( #CustCode# ) co lich hen vao ngay #AppDay# luc #AppHour# , tai #BranchAddress#. Hotline : #BranchHotline# . Cam on quy khach"
+console.log(this.SendZns);
+
+    const dialogRef = this.dialog.open(teamplate, {});
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == "true") {
+        console.log(item);
+        
+       // this._VttechdieutriService.SendZns(item).subscribe()
       }
     });
   }

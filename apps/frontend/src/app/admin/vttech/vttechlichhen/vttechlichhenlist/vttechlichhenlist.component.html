@@ -46,7 +46,11 @@
                           <span class="font-bold">{{item.CustName}}  </span>
                           <span>{{item.CustCode}} </span>                       
                           <span>{{item.SDT}} </span>                       
-                          <span>{{item.SDT2}} </span>                       
+                          <span>{{item.SDT2}} </span>   
+                          <div class="flex flex-row space-x-2 cursor-pointer text-xs">
+                            <span class="p-1 bg-red-500 rounded-lg text-white">Chưa gửi </span> 
+                            <span class="material-symbols-outlined text-blue-300 hover:text-blue-500" (click)="openDialogSend(dialogSendTemplate, item)">send</span> 
+                          </div>                                     
                         </div>
                       </td>
                     </ng-container>
@@ -90,7 +94,12 @@
 
                     <ng-container matColumnDef="creationDate">
                       <th class="whitespace-nowrap" mat-header-cell *matHeaderCellDef mat-sort-header> Ngày Tạo </th>
-                      <td class="whitespace-nowrap" mat-cell *matCellDef="let item">  <span>{{item?.Dulieu?.CreatedDate|date:'HH:mm:ss dd/MM/yy'}}</span>    </td>
+                      <td class="whitespace-nowrap" mat-cell *matCellDef="let item">
+                        <div class="flex flex-col space-y-2 justify-center items-center">
+                          <span>{{item?.Dulieu?.CreatedDate|date:'HH:mm:ss'}}</span>                     
+                          <span>{{item?.Dulieu?.CreatedDate|date:'dd/MM/yy'}}</span>                                                  
+                        </div> 
+                      </td>
                     </ng-container>
                                     
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -102,6 +111,7 @@
 
     </mat-drawer-content>
   </mat-drawer-container>
+
   <ng-template #dialogTemplate>
     <div class="min-w-[672px]">
       <div mat-dialog-title>Thêm Mới</div>
@@ -119,6 +129,7 @@
       </div>
     </div>
   </ng-template>
+
   <ng-template #dlgDeleteTemplate>
     <div>
       <div mat-dialog-title>Xoá</div>
@@ -131,4 +142,53 @@
       </div>
     </div>
   </ng-template>
-  
+
+  <ng-template #dialogSendTemplate>
+    <div class="">
+      <div mat-dialog-title>Gửi Tin Nhắn</div>
+      <div mat-dialog-content>
+        <div class="w-full grid lg:grid-cols-2 gap-2">
+          <div class="flex flex-col space-y-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Họ Tên</mat-label>
+              <input matInput [(ngModel)]="SendZns.Hoten" [ngModelOptions]="{standalone: true}" placeholder="Họ Tên" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Code</mat-label>
+              <input matInput [(ngModel)]="SendZns.Code" [ngModelOptions]="{standalone: true}" placeholder="Code" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>AppDay</mat-label>
+              <input matInput [(ngModel)]="SendZns.Ngay" [ngModelOptions]="{standalone: true}" placeholder="Ngay" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Gio</mat-label>
+              <input matInput [(ngModel)]="SendZns.Gio" [ngModelOptions]="{standalone: true}" placeholder="Gio" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Dia Chi</mat-label>
+              <input matInput [(ngModel)]="SendZns.Diachi" [ngModelOptions]="{standalone: true}" placeholder="Diachi" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Hotline</mat-label>
+              <input matInput [(ngModel)]="SendZns.Diachi" [ngModelOptions]="{standalone: true}" placeholder="Hotline" />
+            </mat-form-field>
+          </div>
+          <div>
+            
+            Quy Khach {{SendZns.Hoten}}  ( {{SendZns.Code}} ) co lich hen vao ngay #AppDay# luc #AppHour# , tai #BranchAddress#. Hotline : #BranchHotline# . Cam on quy khach
+          </div>
+        </div>
+        <!-- <div>
+          Quy Khach #CustName#  ( #CustCode# ) co lich hen vao ngay #AppDay# luc #AppHour# , tai #BranchAddress#. Hotline : #BranchHotline# . Cam on quy khach
+        </div>
+        <div>
+          Quy Khach CustomerName ( HOF000001 ) co lich hen vao ngay 25/05/2019 luc 13:30 , tai BranchAddress. Hotline : BranchHostline . Cam on quy khach
+        </div> -->
+      </div>
+      <div mat-dialog-actions class="flex flex-row space-x-2 justify-center">
+        <button mat-button class="bg-red-400 hover:bg-red-600 text-white" mat-dialog-close="false">Huỷ</button>
+        <button mat-button class="bg-blue-400 hover:bg-blue-600 text-white" mat-dialog-close="true">Đồng Ý</button>
+      </div>
+    </div>
+  </ng-template>
