@@ -64,7 +64,7 @@ export class VttechlichhenlistComponent implements OnInit {
   Total: any = 0
   displayedColumns: string[] = ['CustName','Time','Content','status','branch', 'creationDate'];
   dataSource!: MatTableDataSource<any>;
-  SendZns:any
+  SendZns:any={}
   ListVipham=["giam gia","khuyen mai","uu dai","tang","chiet khau","co hoi nhan ngay","co hoi boc tham","giam *%","giamgia","sale off","sale","sale d","sale off","kmai","uu-dai","giam-gia","k.mai","ma km","hoc bong","co hoi nhan ngay","giamgia","mua * tang","rut tham","trung thuong","sale *%","sale * %","giam d","giamd","giam d","giam toi","giam den","giam gia","giam ngay","giam hoc phi","giam hphi","uu dai"]
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -110,11 +110,11 @@ export class VttechlichhenlistComponent implements OnInit {
     else return 0
 
   }
-  SendZNS(item: any) {
-    console.log(item);
+  // SendZNS(item: any) {
+  //   console.log(item);
 
-    this._VttechdieutriService.SendZns(item).subscribe()
-  }
+  //   this._VttechdieutriService.SendZns(item).subscribe()
+  // }
   // async SendAllZNS(items: any) {
   //   await items.forEach((v: any,k:any) => {
   //     setTimeout(() => {
@@ -175,8 +175,13 @@ export class VttechlichhenlistComponent implements OnInit {
     });
   }
   openDialogSend(teamplate: TemplateRef<any>, item: any): void {
-    this.SendZns = "Quy Khach #CustName#  ( #CustCode# ) co lich hen vao ngay #AppDay# luc #AppHour# , tai #BranchAddress#. Hotline : #BranchHotline# . Cam on quy khach"
-console.log(this.SendZns);
+    // this.SendZns = "Quy Khach #CustName#  ( #CustCode# ) co lich hen vao ngay #AppDay# luc #AppHour# , tai #BranchAddress#. Hotline : #BranchHotline# . Cam on quy khach"
+    console.log(item);
+    this.SendZns.CustName = item?.CustName
+    this.SendZns.CustCode = item?.CustCode
+    this.SendZns.Ngayhen = moment(item?.DateFrom).format('DD-MM-YYYY')
+    this.SendZns.Giohen = moment(item?.DateFrom).format('HH:mm')
+    console.log(this.SendZns);
 
     const dialogRef = this.dialog.open(teamplate, {});
     dialogRef.afterClosed().subscribe((result) => {

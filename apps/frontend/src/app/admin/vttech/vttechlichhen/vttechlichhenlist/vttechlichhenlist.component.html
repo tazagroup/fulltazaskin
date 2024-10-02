@@ -148,22 +148,22 @@
       <div mat-dialog-title>Gửi Tin Nhắn</div>
       <div mat-dialog-content>
         <div class="w-full grid lg:grid-cols-2 gap-2">
-          <div class="flex flex-col space-y-2">
+          <div class="grid grid-cols-2 gap-2">
             <mat-form-field appearance="outline">
               <mat-label>Họ Tên</mat-label>
-              <input matInput [(ngModel)]="SendZns.Hoten" [ngModelOptions]="{standalone: true}" placeholder="Họ Tên" />
+              <input disabled matInput [(ngModel)]="SendZns.CustName" [ngModelOptions]="{standalone: true}" placeholder="Họ Tên" />
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Code</mat-label>
-              <input matInput [(ngModel)]="SendZns.Code" [ngModelOptions]="{standalone: true}" placeholder="Code" />
+              <input disabled matInput [(ngModel)]="SendZns.CustCode" [ngModelOptions]="{standalone: true}" placeholder="Code" />
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>AppDay</mat-label>
-              <input matInput [(ngModel)]="SendZns.Ngay" [ngModelOptions]="{standalone: true}" placeholder="Ngay" />
+              <mat-label>Ngày hẹn</mat-label>
+              <input matInput [(ngModel)]="SendZns.Ngayhen" [ngModelOptions]="{standalone: true}" placeholder="Ngày hẹn" />
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Gio</mat-label>
-              <input matInput [(ngModel)]="SendZns.Gio" [ngModelOptions]="{standalone: true}" placeholder="Gio" />
+              <mat-label>Giờ hẹn</mat-label>
+              <input matInput [(ngModel)]="SendZns.Giohen" [ngModelOptions]="{standalone: true}" placeholder="Giờ hẹn" />
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Dia Chi</mat-label>
@@ -174,9 +174,9 @@
               <input matInput [(ngModel)]="SendZns.Diachi" [ngModelOptions]="{standalone: true}" placeholder="Hotline" />
             </mat-form-field>
           </div>
-          <div>
+          <div class="border rounded-lg p-4 bg-slate-50">
             
-            Quy Khach {{SendZns.Hoten}}  ( {{SendZns.Code}} ) co lich hen vao ngay #AppDay# luc #AppHour# , tai #BranchAddress#. Hotline : #BranchHotline# . Cam on quy khach
+            Quy Khach {{SendZns.CustName}}  ( {{SendZns.CustCode}} ) co lich hen vao ngay {{SendZns.Ngayhen}} luc {{SendZns.Giohen}} , tai #BranchAddress#. Hotline : #BranchHotline# . Cam on quy khach
           </div>
         </div>
         <!-- <div>
