@@ -22,7 +22,19 @@ export class UsersService {
   private _user: BehaviorSubject<any | any> = new BehaviorSubject(null);
   private _profile: BehaviorSubject<any | any> = new BehaviorSubject(null);
   private APIURL: string = environment.APIURL;
-  constructor(private _httpClient: HttpClient) {}
+  constructor(private _httpClient: HttpClient) {
+    window.addEventListener('message', this.receiveMessage.bind(this), false);
+  }
+  private receiveMessage(event: MessageEvent) {
+    console.log(event);
+    
+    if (event.origin !== 'https://hrm.tazagroup.vn') return;
+
+    const { type, token } = event.data;
+    if (type === 'AUTH_SUCCESS') {
+        localStorage.setItem('authToken', token);
+    }
+}
   get users$(): Observable<any[]> {
     return this._users.asObservable();
   }

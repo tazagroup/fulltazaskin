@@ -179,8 +179,11 @@ export class VttechlichhenlistComponent implements OnInit {
     console.log(item);
     this.SendZns.CustName = item?.CustName
     this.SendZns.CustCode = item?.CustCode
-    this.SendZns.Ngayhen = moment(item?.DateFrom).format('DD-MM-YYYY')
+    //this.SendZns.Ngayhen = moment(item?.DateFrom).format('DD-MM-YYYY')
+    this.SendZns.Ngayhen =item?.DateFrom
     this.SendZns.Giohen = moment(item?.DateFrom).format('HH:mm')
+    this.SendZns.Diachi = item?.BranchName
+    this.SendZns.Hotline = item?.BranchHotline||19002664
     console.log(this.SendZns);
 
     const dialogRef = this.dialog.open(teamplate, {});

@@ -157,21 +157,31 @@
               <mat-label>Code</mat-label>
               <input disabled matInput [(ngModel)]="SendZns.CustCode" [ngModelOptions]="{standalone: true}" placeholder="Code" />
             </mat-form-field>
-            <mat-form-field appearance="outline">
+
+            <!-- <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-label>Ngày hẹn</mat-label>
               <input matInput [(ngModel)]="SendZns.Ngayhen" [ngModelOptions]="{standalone: true}" placeholder="Ngày hẹn" />
-            </mat-form-field>
-            <mat-form-field appearance="outline">
+            </mat-form-field> -->
+
+            <mat-form-field appearance="outline" class="lg:text-sm text-xs">
+              <mat-label>Ngày hẹn</mat-label>
+              <input matInput [matDatepicker]="picker" [(ngModel)]="SendZns.Ngayhen">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field> 
+
+          <mat-form-field appearance="outline"  class="lg:text-sm text-xs">
               <mat-label>Giờ hẹn</mat-label>
-              <input matInput [(ngModel)]="SendZns.Giohen" [ngModelOptions]="{standalone: true}" placeholder="Giờ hẹn" />
+              <input matInput type="time" [(ngModel)]="SendZns.Giohen" [ngModelOptions]="{standalone: true}">
             </mat-form-field>
-            <mat-form-field appearance="outline">
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-label>Dia Chi</mat-label>
               <input matInput [(ngModel)]="SendZns.Diachi" [ngModelOptions]="{standalone: true}" placeholder="Diachi" />
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Hotline</mat-label>
-              <input matInput [(ngModel)]="SendZns.Diachi" [ngModelOptions]="{standalone: true}" placeholder="Hotline" />
+              <input matInput [(ngModel)]="SendZns.Holine" [ngModelOptions]="{standalone: true}" placeholder="Hotline" />
             </mat-form-field>
           </div>
           <div class="border rounded-lg p-4 bg-slate-50">

@@ -63,4 +63,9 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
 {
   justify-content:end
 }
+.mat-input-element[type=time]::after {
+  content: " ";
+  white-space: normal !important;
+  width: 1px;
+}
 
