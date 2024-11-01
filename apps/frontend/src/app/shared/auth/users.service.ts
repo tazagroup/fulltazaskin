@@ -23,18 +23,15 @@ export class UsersService {
   private _profile: BehaviorSubject<any | any> = new BehaviorSubject(null);
   private APIURL: string = environment.APIURL;
   constructor(private _httpClient: HttpClient) {
-    window.addEventListener('message', this.receiveMessage.bind(this), false);
+    window.addEventListener('message', (event) => {      
+      const { type, token } = event.data;
+      if (type === 'AUTH_SUCCESS' && token) {
+        console.log(event);
+          localStorage.setItem('authToken', token);
+          console.log('Token received and stored:', token);
+      }
+  }, false);
   }
-  private receiveMessage(event: MessageEvent) {
-    
-    if (event.origin !== 'https://hrm.tazagroup.vn') return;
-
-    const { type, token } = event.data;
-    if (type === 'AUTH_SUCCESS') {
-      console.log(event);
-        localStorage.setItem('authToken', token);
-    }
-}
   get users$(): Observable<any[]> {
     return this._users.asObservable();
   }
