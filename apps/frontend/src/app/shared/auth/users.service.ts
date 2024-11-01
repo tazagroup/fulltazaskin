@@ -26,12 +26,12 @@ export class UsersService {
     window.addEventListener('message', this.receiveMessage.bind(this), false);
   }
   private receiveMessage(event: MessageEvent) {
-    console.log(event);
     
     if (event.origin !== 'https://hrm.tazagroup.vn') return;
 
     const { type, token } = event.data;
     if (type === 'AUTH_SUCCESS') {
+      console.log(event);
         localStorage.setItem('authToken', token);
     }
 }
