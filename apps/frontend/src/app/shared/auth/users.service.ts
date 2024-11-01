@@ -24,7 +24,7 @@ export class UsersService {
   private APIURL: string = environment.APIURL;
   constructor(private _httpClient: HttpClient) {
     window.addEventListener('message', (event) => {  
-      console.log(event.data);
+      console.log(event.data.type);
           
       const { type, token } = event.data;
       if (type === 'AUTH_SUCCESS' && token) {
