@@ -3,12 +3,12 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
 import { AuthService } from "../auth.service";
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy,'tazaskin') {
+export class JwtStrategy extends PassportStrategy(Strategy,'websitetoken') {
     constructor (private readonly authService: AuthService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: "tazaskin"
+            secretOrKey: "websitetoken"
         });
     }
     async validate(payload: any) {
@@ -24,12 +24,12 @@ export class JwtStrategy extends PassportStrategy(Strategy,'tazaskin') {
     //   }
 }
 @Injectable()
-export class JwtCustomStrategy extends PassportStrategy(Strategy,'tazaskin') {
+export class JwtCustomStrategy extends PassportStrategy(Strategy,'websitetoken') {
     constructor (private readonly authService: AuthService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: "tazaskin"
+            secretOrKey: "websitetoken"
         });
     }
     async validate(payload: any) {

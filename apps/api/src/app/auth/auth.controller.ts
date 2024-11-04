@@ -23,8 +23,9 @@ export class AuthController {
     return await this.authService.randompass(dulieu);
   }
   @Get('profile')
-  @UseGuards(AuthGuard('tazaskin'))
+  @UseGuards(AuthGuard('websitetoken'))
   async getProfile(@Request() req) {
+    console.error(req.user);
     const userPromise = this.usersService.findbySDT(req.user);
     const groupsPromise = this._UsergroupService.findAll();
     const [user, Groups] = await Promise.all([userPromise, groupsPromise]); 
