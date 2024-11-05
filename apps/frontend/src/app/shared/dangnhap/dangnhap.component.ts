@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
@@ -44,6 +44,44 @@ export class DangnhapComponent implements OnInit {
       SDT: ['', [Validators.required, Validators.pattern(this.phoneRegex)]],
       confirmPassword: ['', Validators.required],
     });
+  }
+  childWindow: Window | null = null;
+  openWindow(): void {
+    this.childWindow = window.open(
+      'http://localhost:4200/login',
+      'childWindow',
+      'width=500,height=500'
+    );
+  }
+  sendMessage(): void {
+    if (!this.childWindow) return;
+    this.childWindow.postMessage('Hello son!', 'http://localhost:4200');
+  }
+  @HostListener('window:message', ['$event'])
+  onMessage(event: MessageEvent): void {
+    if (event.origin !== 'http://localhost:4200') return;
+    console.log('Got this message from child:', event.data);
+    console.log('AUTH_SUCCESS', event.data.type);
+    if (event.data.type === 'AUTH_SUCCESS') {
+      console.log('AUTH_SUCCESS', event.data.type);
+      this.childWindow?.close();
+      this._authService.SSODangnhap(event.data.token).subscribe(data => {
+        if (!data[0]) {
+          this._notifierService.show({
+            message: data[1],
+            type: 'error',
+          });
+        }
+        else
+        {const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL');
+          if(redirectURL)
+          {
+          this._router.navigateByUrl(redirectURL);
+          }
+          else {window.location.href="/"}
+        }
+      });
+    }
   }
   Dangnhap(user: any) {
     if (user.SDT == undefined || user.SDT == '') {

@@ -107,7 +107,7 @@
           *ngFor="let item of FilterLists; let i = index">
           <div class="flex flex-row space-x-2 items-center justify-between w-full">
             <div class="flex flex-row space-x-4 items-center">
-              <img [src]="item.Image.src||'https://tazaskinclinic.com/images/taza-skin-clinic-logo.svg'" class="h-10">
+              <img [src]="item.Image.src||'https://tazaskinclinic.com/wp-content/uploads/2024/05/logo-taza-skin-clinic.svg'" class="h-10">
               <ng-container *ngIf="item.ResponWebHook.event_name == 'user_feedback'; else elseTemplate">
                 <div class="flex flex-col">
                   <span>{{GetTypeZns(item.event_name)}}</span>

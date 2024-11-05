@@ -29,6 +29,14 @@ export class AuthService {
   get accessToken(): string {
    return this._LocalStorageService.getItem('token') ?? '';
   }
+  SSODangnhap(token: any): Observable<any> {
+    if (this._authenticated) {
+      return of([false, 'User Đã Đăng Nhập']);
+    }
+    this._authenticated = true;
+    this.accessToken = token;
+    return of(true);
+  }
   Dangnhap(user: any): Observable<any> {
     if (this._authenticated) {
       return of([false, 'User Đã Đăng Nhập']);

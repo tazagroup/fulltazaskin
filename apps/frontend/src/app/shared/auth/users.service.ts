@@ -23,16 +23,16 @@ export class UsersService {
   private _profile: BehaviorSubject<any | any> = new BehaviorSubject(null);
   private APIURL: string = environment.APIURL;
   constructor(private _httpClient: HttpClient) {
-    window.addEventListener('message', (event) => {  
-      console.log(event.data.type);
+  //   window.addEventListener('message', (event) => {  
+  //     console.log(event.data.type);
           
-      const { type, token } = event.data;
-      if (type === 'AUTH_SUCCESS' && token) {
-        console.log(event);
-          localStorage.setItem('authToken', token);
-          console.log('Token received and stored:', token);
-      }
-  }, false);
+  //     const { type, token } = event.data;
+  //     if (type === 'AUTH_SUCCESS' && token) {
+  //       console.log(event);
+  //         localStorage.setItem('authToken', token);
+  //         console.log('Token received and stored:', token);
+  //     }
+  // }, false);
   }
   get users$(): Observable<any[]> {
     return this._users.asObservable();
