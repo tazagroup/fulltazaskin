@@ -28,6 +28,7 @@ import { VttechModule } from './vttech/vttech.module';
 import { VttechthanhtoanModule } from './vttech/vttechthanhtoan/vttechthanhtoan.module';
 import { ZnsdieutriModule } from './zns/znsdieutri/znsdieutri.module';
 import { ZnsthanhtoanModule } from './zns/znsthanhtoan/znsthanhtoan.module';
+import { CustfinanModule } from './custfinan/custfinan.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -69,6 +70,7 @@ import { ZnsthanhtoanModule } from './zns/znsthanhtoan/znsthanhtoan.module';
     ZaloappuudaiModule,
     ZnsthanhtoanModule,
     ZnsdieutriModule,
+    CustfinanModule,
   ],
   controllers: [AppController],
   providers: [
