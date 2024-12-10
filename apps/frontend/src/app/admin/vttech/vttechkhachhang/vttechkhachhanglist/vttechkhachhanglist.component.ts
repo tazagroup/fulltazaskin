@@ -43,7 +43,7 @@ export class VttechkhachhanglistComponent implements OnInit {
   FilterLists: any[] = []
   Sitemap: any = { loc: '', priority: '' }
   SearchParams: any = {
-    CreatedBegin: moment('2019-01-01').format('YYYY-MM-DD'),
+    CreatedBegin: moment().format('YYYY-MM-DD'),
     CreatedEnd: moment().format('YYYY-MM-DD'),
     pageSize:9999,
     pageNumber:0,
